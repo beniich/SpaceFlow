@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "inverse-primary": "#bcc7de",
+                    "on-secondary": "#ffffff",
+                    "tertiary-fixed": "#6ffbbe",
+                    "on-error-container": "#93000a",
+                    "on-secondary-container": "#fefcff",
+                    "on-primary-fixed-variant": "#3c475a",
+                    "on-error": "#ffffff",
+                    "outline": "#75777d",
+                    "surface-container-low": "#f0f4f8",
+                    "on-primary-container": "#8590a6",
+                    "tertiary-fixed-dim": "#4edea3",
+                    "surface-variant": "#dfe3e7",
+                    "secondary-container": "#2170e4",
+                    "surface-dim": "#d6dade",
+                    "inverse-surface": "#2c3134",
+                    "on-surface-variant": "#45474c",
+                    "secondary-fixed": "#d8e2ff",
+                    "surface-container-highest": "#dfe3e7",
+                    "on-surface": "#171c1f",
+                    "on-primary-fixed": "#111c2d",
+                    "error": "#ba1a1a",
+                    "surface-tint": "#545f73",
+                    "on-background": "#171c1f",
+                    "secondary-fixed-dim": "#adc6ff",
+                    "outline-variant": "#c5c6cd",
+                    "surface-container-lowest": "#ffffff",
+                    "primary-fixed": "#d8e3fb",
+                    "on-secondary-fixed-variant": "#004395",
+                    "secondary": "#0058be",
+                    "primary-container": "#1e293b",
+                    "primary": "#091426",
+                    "inverse-on-surface": "#edf1f5",
+                    "error-container": "#ffdad6",
+                    "on-tertiary": "#ffffff",
+                    "primary-fixed-dim": "#bcc7de",
+                    "tertiary": "#00190e",
+                    "surface-bright": "#f6fafe",
+                    "on-tertiary-fixed-variant": "#005236",
+                    "surface-container-high": "#e4e9ed",
+                    "surface": "#f6fafe",
+                    "on-tertiary-fixed": "#002113",
+                    "tertiary-container": "#00301e",
+                    "surface-container": "#eaeef2",
+                    "on-tertiary-container": "#00a472",
+                    "background": "#f6fafe",
+                    "on-secondary-fixed": "#001a42",
+                    "on-primary": "#ffffff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "stack-lg": "32px",
+                    "sidebar-width": "280px",
+                    "unit": "4px",
+                    "stack-md": "16px",
+                    "margin-page": "40px",
+                    "gutter": "24px",
+                    "stack-sm": "8px"
+            },
+            "fontFamily": {
+                    "mono-data": ["JetBrains+Mono"],
+                    "headline-lg": ["Inter"],
+                    "mono-status": ["JetBrains+Mono"],
+                    "body-md": ["Inter"],
+                    "headline-xl": ["Inter"],
+                    "label-caps": ["Inter"]
+            },
+            "fontSize": {
+                    "mono-data": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "headline-lg": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "mono-status": ["12px", {"lineHeight": "16px", "fontWeight": "700"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-xl": ["30px", {"lineHeight": "36px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        body {
+            background-color: #f1f5f9;
+        }
+    </style>
+</head>
+<body class="font-body-md text-on-background antialiased overflow-x-hidden">
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-0 h-full w-[280px] z-50 bg-white border-r border-slate-200 flex flex-col py-4 space-y-1">
+<div class="px-6 py-8">
+<h1 class="text-lg font-black text-slate-900 tracking-tighter uppercase">AuditMaster</h1>
+<p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest mt-1">Enterprise Security</p>
+</div>
+<nav class="flex-1">
+<a class="flex items-center gap-3 px-6 py-3 text-slate-500 hover:bg-slate-50 transition-all duration-200 font-sans text-[13px] font-semibold uppercase tracking-wider" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span>Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-6 py-3 text-slate-500 hover:bg-slate-50 transition-all duration-200 font-sans text-[13px] font-semibold uppercase tracking-wider" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span>Forensics</span>
+</a>
+<a class="flex items-center gap-3 px-6 py-3 text-slate-500 hover:bg-slate-50 transition-all duration-200 font-sans text-[13px] font-semibold uppercase tracking-wider" href="#">
+<span class="material-symbols-outlined">shield</span>
+<span>Security</span>
+</a>
+<a class="flex items-center gap-3 px-6 py-3 text-slate-500 hover:bg-slate-50 transition-all duration-200 font-sans text-[13px] font-semibold uppercase tracking-wider" href="#">
+<span class="material-symbols-outlined">gavel</span>
+<span>Compliance</span>
+</a>
+<a class="flex items-center gap-3 px-6 py-3 bg-slate-50 text-blue-600 border-r-4 border-blue-600 font-sans text-[13px] font-semibold uppercase tracking-wider" href="#">
+<span class="material-symbols-outlined">settings_applications</span>
+<span>Administration</span>
+</a>
+<a class="flex items-center gap-3 px-6 py-3 text-slate-500 hover:bg-slate-50 transition-all duration-200 font-sans text-[13px] font-semibold uppercase tracking-wider" href="#">
+<span class="material-symbols-outlined">group_add</span>
+<span>Onboarding</span>
+</a>
+</nav>
+<div class="mt-auto border-t border-slate-100 pt-4">
+<a class="flex items-center gap-3 px-6 py-3 text-slate-500 hover:bg-slate-50 transition-all duration-200 font-sans text-[13px] font-semibold uppercase tracking-wider" href="#">
+<span class="material-symbols-outlined">help_outline</span>
+<span>Support</span>
+</a>
+<a class="flex items-center gap-3 px-6 py-3 text-slate-500 hover:bg-slate-50 transition-all duration-200 font-sans text-[13px] font-semibold uppercase tracking-wider" href="#">
+<span class="material-symbols-outlined">list_alt</span>
+<span>Audit Logs</span>
+</a>
+</div>
+</aside>
+<!-- TopAppBar -->
+<header class="fixed top-0 right-0 left-0 h-16 bg-white border-b border-slate-200 flex justify-between items-center px-10 z-40 ml-[280px]">
+<div class="flex items-center gap-4">
+<span class="font-headline-lg text-headline-lg text-slate-900">Lab Settings</span>
+<div class="h-6 w-[1px] bg-slate-200 mx-2"></div>
+<div class="relative group">
+<input class="bg-slate-50 border-none rounded-lg text-sm px-10 py-2 w-64 focus:ring-1 focus:ring-blue-600 transition-all" placeholder="Search feature flags..." type="text"/>
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">search</span>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-4">
+<button class="text-slate-500 hover:bg-slate-50 p-2 rounded-lg transition-colors"><span class="material-symbols-outlined">notifications</span></button>
+<button class="text-slate-500 hover:bg-slate-50 p-2 rounded-lg transition-colors"><span class="material-symbols-outlined">security</span></button>
+<button class="text-slate-500 hover:bg-slate-50 p-2 rounded-lg transition-colors"><span class="material-symbols-outlined">history</span></button>
+</div>
+<button class="bg-blue-600 text-white font-label-caps text-label-caps px-6 py-2 rounded-lg hover:opacity-90 transition-opacity">
+                New Audit
+            </button>
+<div class="flex items-center gap-3 pl-4 border-l border-slate-100">
+<img alt="Administrator Avatar" class="w-8 h-8 rounded-full border border-slate-200 object-cover" data-alt="Close up portrait of a professional male administrator in a clean office setting, sharp focus, professional lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDBrW55jLbCS0Qj9ltJeaip9gbRPB15Gs4ZNWErsBJD30dPUknxTmWbPqKuB1f1opqWjl0iJFR4yCjfnqJ87QrtQdxOL4AZhtagVBGInlqBK7q6dbTq5Y_Ye-3CO7XU-Hdod1OQ-U0eoYCR6WVhVqpHJZ8j1AJjvQNm1UdJslhiWAtRNh6ua7BP9e2Wl16qNTgvmypWPIrX-lmophCS8StEl1BINHr0V2ywg9zidz0xz6pZPFtvuo1ftGg6_72nK95-sRhp_cGEoJo"/>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="ml-[280px] pt-16 min-h-screen">
+<div class="max-w-[1440px] mx-auto p-margin-page space-y-stack-lg">
+<!-- Hero / Header Section -->
+<section class="flex justify-between items-end">
+<div class="space-y-unit">
+<h2 class="font-headline-xl text-headline-xl text-slate-900">Experimental Platform Features</h2>
+<p class="text-slate-500 max-w-2xl">Modify advanced configurations and early-access modules. Changes here affect platform behavior at the core cryptographic layer. Proceed with caution.</p>
+</div>
+<div class="flex gap-stack-sm">
+<button class="flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 rounded text-sm font-semibold text-slate-600 hover:bg-slate-50 transition-colors">
+<span class="material-symbols-outlined text-[18px]">cloud_sync</span>
+                        Sync Flags
+                    </button>
+<button class="flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 rounded text-sm font-semibold text-slate-600 hover:bg-slate-50 transition-colors">
+<span class="material-symbols-outlined text-[18px]">restore</span>
+                        Reset All
+                    </button>
+</div>
+</section>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-12 gap-gutter">
+<!-- Large Feature Card: High Contrast/Modern -->
+<div class="col-span-12 lg:col-span-8 bg-white border border-slate-200 rounded-lg overflow-hidden flex flex-col">
+<div class="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
+<div>
+<span class="font-mono-status text-mono-status text-blue-600 uppercase tracking-tighter mb-1 block">Primary Experiment</span>
+<h3 class="font-headline-lg text-headline-lg text-slate-900">AI-Driven Forensic Pattern Analysis</h3>
+</div>
+<div class="flex items-center gap-3">
+<span class="bg-emerald-100 text-emerald-800 font-mono-status text-[10px] px-2 py-0.5 rounded flex items-center gap-1">
+<span class="material-symbols-outlined text-[12px]" style="font-variation-settings: 'FILL' 1;">verified</span>
+                                STABLE BETA
+                            </span>
+<!-- Toggle -->
+<button class="w-12 h-6 bg-blue-600 rounded-full relative p-1 transition-colors">
+<div class="w-4 h-4 bg-white rounded-full absolute right-1 top-1"></div>
+</button>
+</div>
+</div>
+<div class="flex-1 grid grid-cols-1 md:grid-cols-2">
+<div class="p-6 border-r border-slate-100 space-y-4">
+<p class="text-slate-600 text-sm leading-relaxed">Enable autonomous agent processing for massive datasets. Reduces time-to-detection by approximately 40% using specialized LLM-based verification logs.</p>
+<ul class="space-y-2">
+<li class="flex items-center gap-2 text-xs text-slate-500">
+<span class="material-symbols-outlined text-[14px] text-blue-500">check_circle</span>
+                                    Enhanced anomaly detection
+                                </li>
+<li class="flex items-center gap-2 text-xs text-slate-500">
+<span class="material-symbols-outlined text-[14px] text-blue-500">check_circle</span>
+                                    Natural language audit querying
+                                </li>
+<li class="flex items-center gap-2 text-xs text-slate-500">
+<span class="material-symbols-outlined text-[14px] text-blue-500">check_circle</span>
+                                    Auto-tagging of compliance violations
+                                </li>
+</ul>
+</div>
+<div class="p-6 bg-slate-50/30 flex items-center justify-center">
+<div class="w-full aspect-video rounded-xl border-2 border-dashed border-slate-200 flex flex-col items-center justify-center relative overflow-hidden group">
+<img alt="Forensic Pattern Analysis UI" class="absolute inset-0 w-full h-full object-cover opacity-10 group-hover:opacity-20 transition-opacity" data-alt="Digital representation of complex data networks and glowing nodes connected by lines in a dark technical environment" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB2W5iF-fL7h_20_ZGW7F-pPuxg-B0zYlL6h4Lr3-zhCWwQK71HOi4dgtW-3lKOcqFM-jQL4n8fZDEEozaAGsyMii9KM_ccwaIpF-aRXwF-wr-sS5MM11kKnl8n0vTceK8GQUW5NljI1b7nzswDjOGz5tDG4gZSlK9CKXtp5Xvc0jnqfxjBOKQ5ivNl8Izb_I0d1kHgTsDzF4yzfgkJe2cNtQmzz9WwGn1Kkc_QOWeWv8WF-8iUmY-aWY0d4OpKlRKkmEkCaHoi1G0"/>
+<span class="material-symbols-outlined text-4xl text-slate-300 mb-2">monitoring</span>
+<span class="font-mono-data text-mono-data text-slate-400">Visualization Active</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Vertical Quick Stats -->
+<div class="col-span-12 lg:col-span-4 space-y-gutter">
+<div class="bg-primary text-white p-6 rounded-lg shadow-xl relative overflow-hidden">
+<div class="relative z-10">
+<h4 class="font-mono-status text-[10px] uppercase tracking-[0.2em] opacity-60 mb-4">Laboratory Health</h4>
+<div class="space-y-4">
+<div class="flex justify-between items-end">
+<span class="text-sm font-medium">Active Experiments</span>
+<span class="text-3xl font-bold font-mono-data">14</span>
+</div>
+<div class="w-full bg-white/10 h-1.5 rounded-full overflow-hidden">
+<div class="bg-blue-400 h-full w-2/3"></div>
+</div>
+<div class="flex justify-between items-center text-[11px] text-blue-200/70 font-mono-data">
+<span>SYSTEM CAPACITY</span>
+<span>67% UTILIZED</span>
+</div>
+</div>
+</div>
+<div class="absolute -bottom-8 -right-8 opacity-10">
+<span class="material-symbols-outlined text-[120px]">science</span>
+</div>
+</div>
+<div class="bg-white border border-slate-200 p-6 rounded-lg space-y-4">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-amber-500">warning</span>
+<h4 class="font-headline-lg text-sm uppercase tracking-tight">Access Log</h4>
+</div>
+<div class="space-y-3">
+<div class="flex gap-3 text-xs border-l-2 border-slate-100 pl-3 py-1">
+<span class="font-mono-data text-slate-400">14:02:11</span>
+<span class="text-slate-600">User <strong class="text-slate-900">ADMIN_01</strong> modified <code class="bg-slate-100 px-1">DEBUG_OVERLAY</code></span>
+</div>
+<div class="flex gap-3 text-xs border-l-2 border-slate-100 pl-3 py-1">
+<span class="font-mono-data text-slate-400">13:45:50</span>
+<span class="text-slate-600">Feature <code class="bg-slate-100 px-1">HYPER_GRAPH</code> auto-disabled due to latency</span>
+</div>
+<div class="flex gap-3 text-xs border-l-2 border-slate-100 pl-3 py-1">
+<span class="font-mono-data text-slate-400">09:12:04</span>
+<span class="text-slate-600">Global sync initiated from Master-Node</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Feature Flag Grid -->
+<div class="col-span-12">
+<div class="bg-white border border-slate-200 rounded-lg overflow-hidden">
+<div class="px-8 py-6 border-b border-slate-100 flex justify-between items-center">
+<h3 class="font-headline-lg text-slate-900">Advanced Feature Repository</h3>
+<div class="flex gap-2">
+<button class="px-3 py-1 bg-slate-50 text-slate-600 rounded border border-slate-200 text-xs font-bold uppercase">All</button>
+<button class="px-3 py-1 text-slate-400 rounded hover:bg-slate-50 text-xs font-bold uppercase">Security</button>
+<button class="px-3 py-1 text-slate-400 rounded hover:bg-slate-50 text-xs font-bold uppercase">UI/UX</button>
+<button class="px-3 py-1 text-slate-400 rounded hover:bg-slate-50 text-xs font-bold uppercase">Network</button>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 divide-x divide-y divide-slate-100">
+<!-- Toggle Item 1 -->
+<div class="p-8 hover:bg-slate-50/50 transition-colors group">
+<div class="flex justify-between items-start mb-4">
+<div class="w-10 h-10 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center">
+<span class="material-symbols-outlined">data_object</span>
+</div>
+<button class="w-10 h-5 bg-slate-200 rounded-full relative p-0.5 transition-colors">
+<div class="w-4 h-4 bg-white rounded-full"></div>
+</button>
+</div>
+<h4 class="font-semibold text-slate-900 mb-1 group-hover:text-blue-600 transition-colors">Raw JSON Auditor</h4>
+<p class="text-xs text-slate-500 leading-relaxed mb-6">Expose raw response bodies in the audit trail for deep debugging of API integrations.</p>
+<div class="flex items-center justify-between mt-auto">
+<span class="font-mono-status text-[10px] text-slate-400">ID: RAW_JSON_X_44</span>
+<span class="bg-slate-100 text-slate-500 text-[10px] px-2 py-0.5 rounded font-bold uppercase">Experimental</span>
+</div>
+</div>
+<!-- Toggle Item 2 -->
+<div class="p-8 hover:bg-slate-50/50 transition-colors group">
+<div class="flex justify-between items-start mb-4">
+<div class="w-10 h-10 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center">
+<span class="material-symbols-outlined">bolt</span>
+</div>
+<button class="w-10 h-5 bg-blue-600 rounded-full relative p-0.5 transition-colors flex justify-end">
+<div class="w-4 h-4 bg-white rounded-full"></div>
+</button>
+</div>
+<h4 class="font-semibold text-slate-900 mb-1 group-hover:text-blue-600 transition-colors">Turbo Engine V3</h4>
+<p class="text-xs text-slate-500 leading-relaxed mb-6">Enables multi-threaded scanning for compliance checks. May consume additional CPU cycles.</p>
+<div class="flex items-center justify-between mt-auto">
+<span class="font-mono-status text-[10px] text-slate-400">ID: SCAN_TURBO_MOD</span>
+<span class="bg-blue-100 text-blue-600 text-[10px] px-2 py-0.5 rounded font-bold uppercase">Performance</span>
+</div>
+</div>
+<!-- Toggle Item 3 -->
+<div class="p-8 hover:bg-slate-50/50 transition-colors group">
+<div class="flex justify-between items-start mb-4">
+<div class="w-10 h-10 rounded-lg bg-purple-50 text-purple-600 flex items-center justify-center">
+<span class="material-symbols-outlined">visibility_off</span>
+</div>
+<button class="w-10 h-5 bg-slate-200 rounded-full relative p-0.5 transition-colors">
+<div class="w-4 h-4 bg-white rounded-full"></div>
+</button>
+</div>
+<h4 class="font-semibold text-slate-900 mb-1 group-hover:text-blue-600 transition-colors">Stealth Mode Logs</h4>
+<p class="text-xs text-slate-500 leading-relaxed mb-6">Prevents internal logging of specific high-priority forensic sessions for extreme privacy.</p>
+<div class="flex items-center justify-between mt-auto">
+<span class="font-mono-status text-[10px] text-slate-400">ID: SEC_STEALTH_V8</span>
+<span class="bg-purple-100 text-purple-600 text-[10px] px-2 py-0.5 rounded font-bold uppercase">Security</span>
+</div>
+</div>
+<!-- Toggle Item 4 -->
+<div class="p-8 hover:bg-slate-50/50 transition-colors group">
+<div class="flex justify-between items-start mb-4">
+<div class="w-10 h-10 rounded-lg bg-orange-50 text-orange-600 flex items-center justify-center">
+<span class="material-symbols-outlined">hub</span>
+</div>
+<button class="w-10 h-5 bg-slate-200 rounded-full relative p-0.5 transition-colors">
+<div class="w-4 h-4 bg-white rounded-full"></div>
+</button>
+</div>
+<h4 class="font-semibold text-slate-900 mb-1 group-hover:text-blue-600 transition-colors">Blockchain Notarization</h4>
+<p class="text-xs text-slate-500 leading-relaxed mb-6">Anchor every audit log entry to the public ledger for immutable cryptographic proof.</p>
+<div class="flex items-center justify-between mt-auto">
+<span class="font-mono-status text-[10px] text-slate-400">ID: CHAIN_NOTARY_PRO</span>
+<span class="bg-orange-100 text-orange-600 text-[10px] px-2 py-0.5 rounded font-bold uppercase">Integrity</span>
+</div>
+</div>
+<!-- Toggle Item 5 -->
+<div class="p-8 hover:bg-slate-50/50 transition-colors group">
+<div class="flex justify-between items-start mb-4">
+<div class="w-10 h-10 rounded-lg bg-sky-50 text-sky-600 flex items-center justify-center">
+<span class="material-symbols-outlined">palette</span>
+</div>
+<button class="w-10 h-5 bg-blue-600 rounded-full relative p-0.5 transition-colors flex justify-end">
+<div class="w-4 h-4 bg-white rounded-full"></div>
+</button>
+</div>
+<h4 class="font-semibold text-slate-900 mb-1 group-hover:text-blue-600 transition-colors">Modern Glass UI</h4>
+<p class="text-xs text-slate-500 leading-relaxed mb-6">Enable frosted glass effects and high-depth shadows across the entire platform.</p>
+<div class="flex items-center justify-between mt-auto">
+<span class="font-mono-status text-[10px] text-slate-400">ID: UI_GLASS_MODERN</span>
+<span class="bg-sky-100 text-sky-600 text-[10px] px-2 py-0.5 rounded font-bold uppercase">UI/UX</span>
+</div>
+</div>
+<!-- Toggle Item 6 -->
+<div class="p-8 hover:bg-slate-50/50 transition-colors group">
+<div class="flex justify-between items-start mb-4">
+<div class="w-10 h-10 rounded-lg bg-pink-50 text-pink-600 flex items-center justify-center">
+<span class="material-symbols-outlined">bug_report</span>
+</div>
+<button class="w-10 h-5 bg-slate-200 rounded-full relative p-0.5 transition-colors">
+<div class="w-4 h-4 bg-white rounded-full"></div>
+</button>
+</div>
+<h4 class="font-semibold text-slate-900 mb-1 group-hover:text-blue-600 transition-colors">Verbose Debugging</h4>
+<p class="text-xs text-slate-500 leading-relaxed mb-6">Display internal system stack traces in the frontend console for developers.</p>
+<div class="flex items-center justify-between mt-auto">
+<span class="font-mono-status text-[10px] text-slate-400">ID: DEV_VERBOSE_LOGS</span>
+<span class="bg-pink-100 text-pink-600 text-[10px] px-2 py-0.5 rounded font-bold uppercase">Technical</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Audit Trail Footer for Labs -->
+<div class="col-span-12">
+<div class="bg-white border border-slate-200 rounded-lg">
+<div class="px-8 py-4 border-b border-slate-100 flex items-center gap-3">
+<span class="material-symbols-outlined text-slate-400">history_edu</span>
+<h5 class="text-sm font-bold text-slate-900 uppercase tracking-widest">Configuration Change History</h5>
+</div>
+<div class="p-0">
+<table class="w-full text-left">
+<thead>
+<tr class="text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-50 bg-slate-50/50">
+<th class="px-8 py-3">Timestamp</th>
+<th class="px-8 py-3">Administrator</th>
+<th class="px-8 py-3">Feature Key</th>
+<th class="px-8 py-3">Action</th>
+<th class="px-8 py-3">Status</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-50">
+<tr class="hover:bg-slate-50/30 transition-colors">
+<td class="px-8 py-4 font-mono-data text-xs text-slate-500">2023-11-24 10:22:45</td>
+<td class="px-8 py-4 text-xs font-semibold text-slate-900">John Doe (Root)</td>
+<td class="px-8 py-4 font-mono-data text-xs text-blue-600">UI_GLASS_MODERN</td>
+<td class="px-8 py-4 text-xs text-slate-600">Value Set: <code class="bg-slate-100 px-1 rounded">TRUE</code></td>
+<td class="px-8 py-4">
+<span class="bg-emerald-50 text-emerald-700 font-mono-status text-[10px] px-2 py-0.5 rounded border border-emerald-100">SUCCESS</span>
+</td>
+</tr>
+<tr class="hover:bg-slate-50/30 transition-colors">
+<td class="px-8 py-4 font-mono-data text-xs text-slate-500">2023-11-24 09:14:12</td>
+<td class="px-8 py-4 text-xs font-semibold text-slate-900">System (Auto)</td>
+<td class="px-8 py-4 font-mono-data text-xs text-blue-600">SCAN_TURBO_MOD</td>
+<td class="px-8 py-4 text-xs text-slate-600">System Reset Triggered</td>
+<td class="px-8 py-4">
+<span class="bg-slate-50 text-slate-500 font-mono-status text-[10px] px-2 py-0.5 rounded border border-slate-200">COMPLETED</span>
+</td>
+</tr>
+<tr class="hover:bg-slate-50/30 transition-colors">
+<td class="px-8 py-4 font-mono-data text-xs text-slate-500">2023-11-23 18:05:33</td>
+<td class="px-8 py-4 text-xs font-semibold text-slate-900">Sarah Connor</td>
+<td class="px-8 py-4 font-mono-data text-xs text-blue-600">SEC_STEALTH_V8</td>
+<td class="px-8 py-4 text-xs text-slate-600">Value Set: <code class="bg-slate-100 px-1 rounded">FALSE</code></td>
+<td class="px-8 py-4">
+<span class="bg-emerald-50 text-emerald-700 font-mono-status text-[10px] px-2 py-0.5 rounded border border-emerald-100">SUCCESS</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>

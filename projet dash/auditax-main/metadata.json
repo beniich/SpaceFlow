@@ -1,0 +1,6 @@
+{
+  "name": "AuditMaster Global",
+  "description": "Plateforme d'audit interne global basée sur le Domain-Driven Design et l'Event-Sourcing pour une traçabilité totale.",
+  "requestFramePermissions": ["camera", "geolocation"],
+  "majorCapabilities": ["audit-trail", "evidence-management", "workflow-engine"]
+}

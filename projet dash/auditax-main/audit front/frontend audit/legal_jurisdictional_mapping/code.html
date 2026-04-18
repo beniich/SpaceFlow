@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Legal &amp; Jurisdictional Mapping | AuditMaster Global</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f6fafe;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+            height: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #dfe3e7;
+            border-radius: 10px;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-primary": "#ffffff",
+                      "surface-container-low": "#f0f4f8",
+                      "surface-bright": "#f6fafe",
+                      "outline-variant": "#c5c6cd",
+                      "secondary": "#0058be",
+                      "surface-variant": "#dfe3e7",
+                      "on-surface": "#171c1f",
+                      "surface-container": "#eaeef2",
+                      "surface-container-highest": "#dfe3e7",
+                      "on-primary-fixed-variant": "#3c475a",
+                      "error-container": "#ffdad6",
+                      "primary-fixed": "#d8e3fb",
+                      "surface-container-high": "#e4e9ed",
+                      "on-tertiary-container": "#00a472",
+                      "surface-container-lowest": "#ffffff",
+                      "on-tertiary": "#ffffff",
+                      "on-secondary-fixed": "#001a42",
+                      "error": "#ba1a1a",
+                      "surface-tint": "#545f73",
+                      "surface-dim": "#d6dade",
+                      "secondary-fixed-dim": "#adc6ff",
+                      "on-primary-fixed": "#111c2d",
+                      "outline": "#75777d",
+                      "background": "#f6fafe",
+                      "on-tertiary-fixed": "#002113",
+                      "on-error": "#ffffff",
+                      "secondary-container": "#2170e4",
+                      "on-secondary-container": "#fefcff",
+                      "inverse-primary": "#bcc7de",
+                      "on-secondary-fixed-variant": "#004395",
+                      "tertiary-fixed": "#6ffbbe",
+                      "secondary-fixed": "#d8e2ff",
+                      "inverse-surface": "#2c3134",
+                      "on-tertiary-fixed-variant": "#005236",
+                      "on-primary-container": "#8590a6",
+                      "primary-fixed-dim": "#bcc7de",
+                      "primary": "#091426",
+                      "on-error-container": "#93000a",
+                      "inverse-on-surface": "#edf1f5",
+                      "tertiary-container": "#00301e",
+                      "on-secondary": "#ffffff",
+                      "primary-container": "#1e293b",
+                      "tertiary-fixed-dim": "#4edea3",
+                      "on-surface-variant": "#45474c",
+                      "tertiary": "#00190e",
+                      "surface": "#f6fafe",
+                      "on-background": "#171c1f"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "stack-sm": "8px",
+                      "unit": "4px",
+                      "margin-page": "40px",
+                      "gutter": "24px",
+                      "stack-md": "16px",
+                      "stack-lg": "32px",
+                      "sidebar-width": "280px"
+              },
+              "fontFamily": {
+                      "label-caps": ["Inter"],
+                      "mono-data": ["JetBrains Mono"],
+                      "headline-xl": ["Inter"],
+                      "headline-lg": ["Inter"],
+                      "body-md": ["Inter"],
+                      "mono-status": ["JetBrains Mono"]
+              },
+              "fontSize": {
+                      "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                      "mono-data": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                      "headline-xl": ["30px", {"lineHeight": "36px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "headline-lg": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                      "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "mono-status": ["12px", {"lineHeight": "16px", "fontWeight": "700"}]
+              }
+            },
+          },
+        }
+      </script>
+</head>
+<body class="bg-background overflow-hidden">
+<!-- TopAppBar -->
+<header class="sticky top-0 w-full flex justify-between items-center h-16 px-10 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 shadow-sm z-40 font-sans antialiased text-sm font-medium tracking-tight">
+<div class="flex items-center gap-8">
+<span class="text-lg font-bold tracking-tighter text-slate-900 dark:text-white">AuditMaster Global</span>
+<div class="relative">
+<span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-400">
+<span class="material-symbols-outlined text-sm">search</span>
+</span>
+<input class="bg-slate-50 border-none rounded-lg pl-10 pr-4 py-2 w-80 text-xs focus:ring-2 focus:ring-blue-600 transition-all" placeholder="Search laws, controls, or jurisdictions..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex gap-4">
+<button class="text-slate-500 hover:text-slate-900 transition-colors p-2 rounded-full hover:bg-slate-50">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="text-slate-500 hover:text-slate-900 transition-colors p-2 rounded-full hover:bg-slate-50">
+<span class="material-symbols-outlined">history_edu</span>
+</button>
+<button class="text-slate-500 hover:text-slate-900 transition-colors p-2 rounded-full hover:bg-slate-50">
+<span class="material-symbols-outlined">account_tree</span>
+</button>
+</div>
+<button class="bg-blue-600 text-white px-4 py-2 rounded-lg text-xs font-bold hover:bg-blue-700 transition-colors">
+                New Audit
+            </button>
+<img alt="User Profile Avatar" class="w-8 h-8 rounded-full border border-slate-200" data-alt="Professional headshot of a corporate executive in a light blue shirt with a clean minimalist office background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA4_5UWAfVNFCWnhETv1oMGQKsn2aFg_ILFGsvVAF_Yyttvs5js62JlvW5NCkqpetqViXW_HTEaEoOCeSbfEfMZAB0amW_8nJBbMTASq6ohmZY5b7LaIv2SUi141k7Ru9acbh33akRZchOuHs36bILd_2WEuUlE_B94uusWUyi-TO8E7ibsTypVdRceEVCWDIShyWF1yqWXWy5zrE4j1qe9W5uexc6rSlQSsofyu-2qveJErd-rgbvnDy-CRQ_LNh50S0cpjclPI6Y"/>
+</div>
+</header>
+<div class="flex h-[calc(100vh-64px)]">
+<!-- SideNavBar -->
+<aside class="flex flex-col h-full border-r border-slate-200 bg-slate-50 dark:bg-slate-950 w-[280px] fixed left-0">
+<div class="px-6 py-8">
+<h2 class="text-xl font-black text-slate-900 dark:text-white">AuditMaster</h2>
+<p class="text-xs font-sans text-xs uppercase tracking-widest font-semibold text-slate-500 mt-1">Global Compliance</p>
+</div>
+<nav class="flex-1 overflow-y-auto custom-scrollbar">
+<div class="space-y-1 px-3">
+<!-- Regulator Portal: Active for Jurisdictional Mapping -->
+<a class="bg-white dark:bg-slate-900 border-r-4 border-blue-600 text-blue-600 flex items-center px-6 py-4 shadow-sm transition-all duration-150 font-sans text-xs uppercase tracking-widest font-semibold" href="#">
+<span class="material-symbols-outlined mr-4">gavel</span>
+                        Regulator Portal
+                    </a>
+<a class="flex items-center px-6 py-4 text-slate-500 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-900 transition-all font-sans text-xs uppercase tracking-widest font-semibold" href="#">
+<span class="material-symbols-outlined mr-4">report_problem</span>
+                        Exceptions
+                    </a>
+<a class="flex items-center px-6 py-4 text-slate-500 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-900 transition-all font-sans text-xs uppercase tracking-widest font-semibold" href="#">
+<span class="material-symbols-outlined mr-4">account_tree</span>
+                        ICF Explorer
+                    </a>
+<a class="flex items-center px-6 py-4 text-slate-500 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-900 transition-all font-sans text-xs uppercase tracking-widest font-semibold" href="#">
+<span class="material-symbols-outlined mr-4">biotech</span>
+                        Integrity Diagnostics
+                    </a>
+<a class="flex items-center px-6 py-4 text-slate-500 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-900 transition-all font-sans text-xs uppercase tracking-widest font-semibold" href="#">
+<span class="material-symbols-outlined mr-4">unarchive</span>
+                        Batch Center
+                    </a>
+<a class="flex items-center px-6 py-4 text-slate-500 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-900 transition-all font-sans text-xs uppercase tracking-widest font-semibold" href="#">
+<span class="material-symbols-outlined mr-4">timeline</span>
+                        Incident Workspace
+                    </a>
+</div>
+</nav>
+<div class="p-6 border-t border-slate-200">
+<button class="w-full bg-slate-900 text-white py-3 rounded text-xs font-bold uppercase tracking-widest hover:bg-slate-800 transition-all">
+                    Generate Report
+                </button>
+<div class="mt-6 space-y-4">
+<a class="flex items-center text-slate-500 hover:text-slate-900 transition-colors text-xs font-bold uppercase tracking-widest" href="#">
+<span class="material-symbols-outlined mr-4 text-sm">description</span>
+                        Documentation
+                    </a>
+<a class="flex items-center text-slate-500 hover:text-slate-900 transition-colors text-xs font-bold uppercase tracking-widest" href="#">
+<span class="material-symbols-outlined mr-4 text-sm">help_outline</span>
+                        Support
+                    </a>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="ml-[280px] flex-1 overflow-y-auto p-10 bg-[#f6fafe]">
+<div class="max-w-[1440px] mx-auto space-y-10">
+<!-- Header & Filters -->
+<div class="flex justify-between items-end">
+<div>
+<h1 class="font-headline-xl text-headline-xl text-on-surface">Legal &amp; Jurisdictional Mapping</h1>
+<p class="text-on-surface-variant font-body-md text-body-md mt-2">Cross-reference internal controls against global regulatory frameworks and regional statutes.</p>
+</div>
+<div class="flex gap-4">
+<div class="flex flex-col gap-1">
+<span class="text-[10px] font-bold uppercase text-slate-400 tracking-widest">Jurisdiction</span>
+<select class="bg-white border border-slate-200 rounded px-4 py-2 text-xs focus:ring-blue-600">
+<option>All Regions (Global)</option>
+<option>North America (CCPA/NYDFS)</option>
+<option>European Union (GDPR/DORA)</option>
+<option>Global Banking (Basel III)</option>
+</select>
+</div>
+<div class="flex flex-col gap-1">
+<span class="text-[10px] font-bold uppercase text-slate-400 tracking-widest">Law/Framework</span>
+<select class="bg-white border border-slate-200 rounded px-4 py-2 text-xs focus:ring-blue-600">
+<option>Combined View</option>
+<option>GDPR Article 32</option>
+<option>Basel III Pillar 1</option>
+<option>ISO 27001:2022</option>
+</select>
+</div>
+</div>
+</div>
+<!-- Bento Grid Dashboard -->
+<div class="grid grid-cols-12 gap-gutter">
+<!-- Compliance Overview Card -->
+<div class="col-span-8 bg-white border border-slate-200 p-6 rounded-lg shadow-sm">
+<div class="flex justify-between items-center mb-6">
+<h3 class="font-headline-lg text-headline-lg">Global Compliance Matrix</h3>
+<span class="font-mono-status text-mono-status px-2 py-1 bg-emerald-50 text-emerald-700 rounded border border-emerald-100 flex items-center gap-1">
+<span class="material-symbols-outlined text-xs">verified</span> VERIFIED 24H AGO
+                            </span>
+</div>
+<div class="overflow-x-auto custom-scrollbar">
+<table class="w-full text-left">
+<thead class="border-b border-slate-100">
+<tr class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+<th class="py-4 font-normal">Control ID</th>
+<th class="py-4 font-normal">Internal Control Name</th>
+<th class="py-4 font-normal text-center">GDPR</th>
+<th class="py-4 font-normal text-center">CCPA</th>
+<th class="py-4 font-normal text-center">BASEL III</th>
+<th class="py-4 font-normal text-center">SOC2</th>
+</tr>
+</thead>
+<tbody class="font-mono-data text-mono-data">
+<tr class="hover:bg-slate-50 transition-colors group">
+<td class="py-4 border-b border-slate-50 text-blue-600 font-bold">CTRL-882</td>
+<td class="py-4 border-b border-slate-50">Data Encryption at Rest (AES-256)</td>
+<td class="py-4 border-b border-slate-50 text-center">
+<span class="material-symbols-outlined text-emerald-500" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</td>
+<td class="py-4 border-b border-slate-50 text-center">
+<span class="material-symbols-outlined text-emerald-500" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</td>
+<td class="py-4 border-b border-slate-50 text-center">
+<span class="material-symbols-outlined text-amber-500">pending</span>
+</td>
+<td class="py-4 border-b border-slate-50 text-center">
+<span class="material-symbols-outlined text-emerald-500" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</td>
+</tr>
+<tr class="bg-slate-50/50 hover:bg-slate-50 transition-colors group">
+<td class="py-4 border-b border-slate-50 text-blue-600 font-bold">CTRL-104</td>
+<td class="py-4 border-b border-slate-50">Identity Access Management (IAM)</td>
+<td class="py-4 border-b border-slate-50 text-center">
+<span class="material-symbols-outlined text-emerald-500" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</td>
+<td class="py-4 border-b border-slate-50 text-center">
+<span class="material-symbols-outlined text-error">cancel</span>
+</td>
+<td class="py-4 border-b border-slate-50 text-center">
+<span class="material-symbols-outlined text-emerald-500" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</td>
+<td class="py-4 border-b border-slate-50 text-center">
+<span class="material-symbols-outlined text-emerald-500" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</td>
+</tr>
+<tr class="hover:bg-slate-50 transition-colors group">
+<td class="py-4 border-b border-slate-50 text-blue-600 font-bold">CTRL-921</td>
+<td class="py-4 border-b border-slate-50">Cross-Border Data Transfer Logs</td>
+<td class="py-4 border-b border-slate-50 text-center">
+<span class="material-symbols-outlined text-error">cancel</span>
+</td>
+<td class="py-4 border-b border-slate-50 text-center">
+<span class="material-symbols-outlined text-slate-200">do_not_disturb_on</span>
+</td>
+<td class="py-4 border-b border-slate-50 text-center">
+<span class="material-symbols-outlined text-slate-200">do_not_disturb_on</span>
+</td>
+<td class="py-4 border-b border-slate-50 text-center">
+<span class="material-symbols-outlined text-emerald-500" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</td>
+</tr>
+<tr class="bg-slate-50/50 hover:bg-slate-50 transition-colors group">
+<td class="py-4 border-b border-slate-50 text-blue-600 font-bold">CTRL-443</td>
+<td class="py-4 border-b border-slate-50">Automated Audit Log Rotation</td>
+<td class="py-4 border-b border-slate-50 text-center">
+<span class="material-symbols-outlined text-emerald-500" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</td>
+<td class="py-4 border-b border-slate-50 text-center">
+<span class="material-symbols-outlined text-emerald-500" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</td>
+<td class="py-4 border-b border-slate-50 text-center">
+<span class="material-symbols-outlined text-emerald-500" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</td>
+<td class="py-4 border-b border-slate-50 text-center">
+<span class="material-symbols-outlined text-emerald-500" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Side Stats & Breakdown -->
+<div class="col-span-4 space-y-gutter">
+<!-- Law Breakdown -->
+<div class="bg-white border border-slate-200 p-6 rounded-lg shadow-sm">
+<h4 class="font-label-caps text-label-caps text-slate-400 mb-4 uppercase">Risk exposure by Jurisdiction</h4>
+<div class="space-y-6">
+<div class="space-y-2">
+<div class="flex justify-between items-end">
+<span class="text-xs font-bold text-slate-900">European Union (GDPR)</span>
+<span class="font-mono-data text-xs text-blue-600">92% Compliance</span>
+</div>
+<div class="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden">
+<div class="h-full bg-blue-600 w-[92%]"></div>
+</div>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between items-end">
+<span class="text-xs font-bold text-slate-900">United States (CCPA/SEC)</span>
+<span class="font-mono-data text-xs text-amber-600">64% Compliance</span>
+</div>
+<div class="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden">
+<div class="h-full bg-amber-500 w-[64%]"></div>
+</div>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between items-end">
+<span class="text-xs font-bold text-slate-900">Switzerland (FINMA)</span>
+<span class="font-mono-data text-xs text-emerald-600">100% Compliance</span>
+</div>
+<div class="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden">
+<div class="h-full bg-emerald-500 w-[100%]"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Audit Trail Integration -->
+<div class="bg-white border border-slate-200 rounded-lg shadow-sm">
+<div class="p-4 border-b border-slate-100 bg-slate-50/50">
+<h4 class="font-label-caps text-label-caps text-slate-900 uppercase">Recent Mapping Changes</h4>
+</div>
+<div class="p-6">
+<div class="relative border-l-2 border-slate-100 pl-6 space-y-8">
+<div class="relative">
+<span class="absolute -left-[31px] top-0 bg-blue-600 w-2.5 h-2.5 rounded-full ring-4 ring-white"></span>
+<p class="font-mono-data text-xs text-slate-900 font-bold">2023-11-20 14:02:11</p>
+<p class="text-xs text-slate-500 mt-1">GDPR Art. 32 mapping updated for <span class="text-blue-600">CTRL-882</span> by J. Miller</p>
+</div>
+<div class="relative">
+<span class="absolute -left-[31px] top-0 bg-slate-200 w-2.5 h-2.5 rounded-full ring-4 ring-white"></span>
+<p class="font-mono-data text-xs text-slate-900 font-bold">2023-11-19 09:15:44</p>
+<p class="text-xs text-slate-500 mt-1">Basel III Pillar 2 requirements refreshed via automated API hook.</p>
+</div>
+<div class="relative">
+<span class="absolute -left-[31px] top-0 bg-slate-200 w-2.5 h-2.5 rounded-full ring-4 ring-white"></span>
+<p class="font-mono-data text-xs text-slate-900 font-bold">2023-11-18 16:40:00</p>
+<p class="text-xs text-slate-500 mt-1">New jurisdiction added: <span class="font-bold">India (DPDP Act)</span>.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Deep Dive Selection -->
+<div class="grid grid-cols-3 gap-gutter">
+<div class="bg-white border border-slate-200 rounded-lg overflow-hidden group cursor-pointer hover:border-blue-300 transition-all">
+<div class="h-32 bg-slate-900 relative overflow-hidden">
+<img alt="Jurisdictional Law" class="w-full h-full object-cover opacity-50 grayscale group-hover:grayscale-0 transition-all duration-500" data-alt="Close-up of a marble statue of Lady Justice in a classical architectural setting with high contrast lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCwD9lUTudtJaHkZ3Z7AX4MjU37SdOpxBUG5euoSDCOW1spuRxR_vJ3buzwgadGJJymX7FygakM6WyYbA8hdwC4aUUbZiYFERkqSYI0_3QER6ImCAnQcFbbclQ85m1lt2U40gfMu7TupSp9ktRZLQwe9224fpp8tijhqyiOpdpYyrJrAZNcbgjNFEDDenfIccigxrP0Jua6DyHPBxk2goJVREqtE1tv7Qhtvr03FZM771VYV__rCUnHImmydE790xytBmEZCRNnvnI"/>
+<div class="absolute inset-0 bg-gradient-to-t from-slate-900 to-transparent"></div>
+<div class="absolute bottom-4 left-6">
+<span class="bg-blue-600 text-white text-[10px] px-2 py-0.5 rounded font-bold uppercase tracking-widest">Framework</span>
+<h5 class="text-white font-bold mt-1">EU General Data Protection Regulation</h5>
+</div>
+</div>
+<div class="p-6">
+<p class="text-xs text-slate-500 leading-relaxed">Article-by-article cross-mapping against NIST 800-53 and internal data privacy controls.</p>
+<button class="mt-4 text-blue-600 font-bold text-xs flex items-center gap-2 group-hover:gap-4 transition-all">
+                                VIEW CROSS-REFERENCE <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+</div>
+</div>
+<div class="bg-white border border-slate-200 rounded-lg overflow-hidden group cursor-pointer hover:border-blue-300 transition-all">
+<div class="h-32 bg-slate-900 relative overflow-hidden">
+<img alt="Banking Compliance" class="w-full h-full object-cover opacity-50 grayscale group-hover:grayscale-0 transition-all duration-500" data-alt="Macro view of binary code sequences on a glass screen with teal and blue light reflections" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAus81mXF1XerESpioiUnNoV8_778ErfwcJFkxMsDK-raQth055eW6D_gaBNFh8oe9jYISuwkjj8pyw6swJLKNGV_0zfPu-YCjmPZvl5F8wPHAVgon_30YWvmdB9R7Nnjsuzf1-xPp91BFOM4fefn6NoOyCncuO_WEW1_Qg2388YJFijIA5qdsasMtXL2Spu_egNw9_dwc5LGy5JA-mXns282gQVZCHuoxvNdppz3SSrQ3URrqo_ALUAUUgURwRZdUqubHolN5YCkQ"/>
+<div class="absolute inset-0 bg-gradient-to-t from-slate-900 to-transparent"></div>
+<div class="absolute bottom-4 left-6">
+<span class="bg-blue-600 text-white text-[10px] px-2 py-0.5 rounded font-bold uppercase tracking-widest">Global</span>
+<h5 class="text-white font-bold mt-1">Basel III Capital Accords</h5>
+</div>
+</div>
+<div class="p-6">
+<p class="text-xs text-slate-500 leading-relaxed">Risk-weighted asset calculations and reporting requirements mapped to global treasury ops.</p>
+<button class="mt-4 text-blue-600 font-bold text-xs flex items-center gap-2 group-hover:gap-4 transition-all">
+                                VIEW CROSS-REFERENCE <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+</div>
+</div>
+<div class="bg-white border border-slate-200 rounded-lg overflow-hidden group cursor-pointer hover:border-blue-300 transition-all">
+<div class="h-32 bg-slate-900 relative overflow-hidden">
+<img alt="California Law" class="w-full h-full object-cover opacity-50 grayscale group-hover:grayscale-0 transition-all duration-500" data-alt="Wide angle view of a modern clean courtroom with warm wood tones and professional lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDt6TxwwVX-5dZ4wL7zQExgTIKKMz6TlZ8UZEiQbyR1nBPplZ7HNkQdOIXdZW9R0Tlvf2pNNglxPc3o9qmmoQw1RGfMnyuEDwq0LQ4s7vT5bsVg4Z2bTgiwKteciRVtpn3z1uq0yLP6zU1lEYwgQS0G6qf774L8gJm_p1Aa_Kys1AuIx6_PODQTXpjdpr7JxcEwLIkOUEWlHoTx1oFyd4xWSDLe8h7LpcRlbdpFNSToXGAT6U43sSl_OM2IJbSY3DdoZJKmkZbomwA"/>
+<div class="absolute inset-0 bg-gradient-to-t from-slate-900 to-transparent"></div>
+<div class="absolute bottom-4 left-6">
+<span class="bg-blue-600 text-white text-[10px] px-2 py-0.5 rounded font-bold uppercase tracking-widest">Regional</span>
+<h5 class="text-white font-bold mt-1">California Consumer Privacy Act</h5>
+</div>
+</div>
+<div class="p-6">
+<p class="text-xs text-slate-500 leading-relaxed">State-specific data residency and consumer right-to-forget mapping for North American nodes.</p>
+<button class="mt-4 text-blue-600 font-bold text-xs flex items-center gap-2 group-hover:gap-4 transition-all">
+                                VIEW CROSS-REFERENCE <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

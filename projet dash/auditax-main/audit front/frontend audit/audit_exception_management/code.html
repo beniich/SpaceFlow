@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary": "#00190e",
+                        "error": "#ba1a1a",
+                        "on-error-container": "#93000a",
+                        "on-primary-fixed-variant": "#3c475a",
+                        "error-container": "#ffdad6",
+                        "on-tertiary-container": "#00a472",
+                        "on-secondary-container": "#fefcff",
+                        "secondary-fixed": "#d8e2ff",
+                        "outline": "#75777d",
+                        "surface-container-lowest": "#ffffff",
+                        "inverse-on-surface": "#edf1f5",
+                        "surface-tint": "#545f73",
+                        "on-secondary-fixed": "#001a42",
+                        "secondary": "#0058be",
+                        "on-surface": "#171c1f",
+                        "on-tertiary-fixed": "#002113",
+                        "surface": "#f6fafe",
+                        "surface-bright": "#f6fafe",
+                        "on-primary-fixed": "#111c2d",
+                        "tertiary-container": "#00301e",
+                        "on-primary": "#ffffff",
+                        "inverse-primary": "#bcc7de",
+                        "on-surface-variant": "#45474c",
+                        "inverse-surface": "#2c3134",
+                        "on-tertiary-fixed-variant": "#005236",
+                        "surface-container": "#eaeef2",
+                        "on-error": "#ffffff",
+                        "surface-container-highest": "#dfe3e7",
+                        "surface-container-low": "#f0f4f8",
+                        "surface-dim": "#d6dade",
+                        "tertiary-fixed": "#6ffbbe",
+                        "on-secondary": "#ffffff",
+                        "on-secondary-fixed-variant": "#004395",
+                        "primary-fixed-dim": "#bcc7de",
+                        "on-primary-container": "#8590a6",
+                        "surface-container-high": "#e4e9ed",
+                        "on-background": "#171c1f",
+                        "background": "#f6fafe",
+                        "on-tertiary": "#ffffff",
+                        "tertiary-fixed-dim": "#4edea3",
+                        "primary": "#091426",
+                        "outline-variant": "#c5c6cd",
+                        "primary-fixed": "#d8e3fb",
+                        "secondary-fixed-dim": "#adc6ff",
+                        "primary-container": "#1e293b",
+                        "surface-variant": "#dfe3e7",
+                        "secondary-container": "#2170e4"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "stack-lg": "32px",
+                        "margin-page": "40px",
+                        "stack-sm": "8px",
+                        "unit": "4px",
+                        "gutter": "24px",
+                        "stack-md": "16px",
+                        "sidebar-width": "280px"
+                    },
+                    "fontFamily": {
+                        "mono-data": ["JetBrains Mono"],
+                        "mono-status": ["JetBrains Mono"],
+                        "body-md": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "headline-xl": ["Inter"],
+                        "label-caps": ["Inter"]
+                    },
+                    "fontSize": {
+                        "mono-data": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "mono-status": ["12px", {"lineHeight": "16px", "fontWeight": "700"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "headline-lg": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "headline-xl": ["30px", {"lineHeight": "36px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .step-active::before { content: ''; position: absolute; left: -25px; top: 0; bottom: 0; width: 4px; background: #3b82f6; border-radius: 2px; }
+    </style>
+</head>
+<body class="bg-surface font-body-md text-on-surface">
+<!-- TopAppBar Shell -->
+<header class="bg-white sticky top-0 w-full flex justify-between items-center h-16 px-10 border-b border-slate-200 shadow-sm z-40 font-sans antialiased text-sm font-medium tracking-tight">
+<div class="flex items-center gap-8">
+<span class="text-lg font-bold tracking-tighter text-slate-900">AuditMaster Global</span>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">search</span>
+<input class="pl-10 pr-4 py-2 bg-slate-50 border-none rounded-lg focus:ring-2 focus:ring-secondary text-xs w-64" placeholder="Search exceptions..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex gap-4 text-slate-500">
+<button class="hover:bg-slate-50 transition-colors p-2 rounded-full"><span class="material-symbols-outlined" data-icon="notifications">notifications</span></button>
+<button class="hover:bg-slate-50 transition-colors p-2 rounded-full"><span class="material-symbols-outlined" data-icon="history_edu">history_edu</span></button>
+<button class="hover:bg-slate-50 transition-colors p-2 rounded-full"><span class="material-symbols-outlined" data-icon="account_tree">account_tree</span></button>
+</div>
+<button class="bg-primary text-white px-4 py-2 rounded font-bold hover:opacity-90 active:opacity-80 transition-opacity">New Audit</button>
+<img alt="User Profile Avatar" class="w-8 h-8 rounded-full border border-slate-200" data-alt="professional headshot of a compliance officer in a minimalist office setting with clean lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAmkgzIABTuJ7flCKrJ9kXB6esBJ7afEJcS5E4E6g0EQd2K6OWOBMaF7D6YYsGbwM_eyRx-w4N_OpuaMuUM1qsHRz5oac2MsAN2A01bNBZWrMbjLVkvxkMe9t3_22p6w6gajnMrUl9rnD-REAvfaEKvW2LEvf0jR_qbI9GFLDP1h2isZpOBWfU1axBNawoBc569bMvXj-kgg-eo_3JPksNWVS1VUzQ5GpGZHuw_T_j4jlfUYkj1d1mN1mF7DgHQRKPnYSeBpE4fcaI"/>
+</div>
+</header>
+<div class="flex h-[calc(100vh-64px)] overflow-hidden">
+<!-- SideNavBar Shell -->
+<nav class="flex flex-col h-full border-r border-slate-200 bg-slate-50 w-[280px] fixed left-0 shrink-0">
+<div class="p-6">
+<div class="text-xl font-black text-slate-900">AuditMaster</div>
+<div class="text-[10px] uppercase tracking-widest font-bold text-slate-400">Global Compliance</div>
+</div>
+<div class="flex-1 overflow-y-auto py-4">
+<a class="flex items-center px-6 py-4 text-slate-500 hover:text-slate-900 hover:bg-slate-100 transition-all font-sans text-xs uppercase tracking-widest font-semibold" href="#">
+<span class="material-symbols-outlined mr-4" data-icon="gavel">gavel</span>Regulator Portal
+                </a>
+<a class="bg-white border-r-4 border-blue-600 text-blue-600 flex items-center px-6 py-4 shadow-sm font-sans text-xs uppercase tracking-widest font-semibold" href="#">
+<span class="material-symbols-outlined mr-4" data-icon="report_problem">report_problem</span>Exceptions
+                </a>
+<a class="flex items-center px-6 py-4 text-slate-500 hover:text-slate-900 hover:bg-slate-100 transition-all font-sans text-xs uppercase tracking-widest font-semibold" href="#">
+<span class="material-symbols-outlined mr-4" data-icon="account_tree">account_tree</span>ICF Explorer
+                </a>
+<a class="flex items-center px-6 py-4 text-slate-500 hover:text-slate-900 hover:bg-slate-100 transition-all font-sans text-xs uppercase tracking-widest font-semibold" href="#">
+<span class="material-symbols-outlined mr-4" data-icon="biotech">biotech</span>Integrity Diagnostics
+                </a>
+<a class="flex items-center px-6 py-4 text-slate-500 hover:text-slate-900 hover:bg-slate-100 transition-all font-sans text-xs uppercase tracking-widest font-semibold" href="#">
+<span class="material-symbols-outlined mr-4" data-icon="unarchive">unarchive</span>Batch Center
+                </a>
+<a class="flex items-center px-6 py-4 text-slate-500 hover:text-slate-900 hover:bg-slate-100 transition-all font-sans text-xs uppercase tracking-widest font-semibold" href="#">
+<span class="material-symbols-outlined mr-4" data-icon="timeline">timeline</span>Incident Workspace
+                </a>
+</div>
+<div class="p-6 border-t border-slate-200">
+<button class="w-full bg-secondary text-white py-3 px-4 rounded font-bold text-xs uppercase tracking-widest hover:opacity-90 transition-opacity">Generate Report</button>
+<div class="mt-6 flex flex-col gap-4">
+<a class="flex items-center text-slate-500 text-xs font-semibold uppercase tracking-widest hover:text-slate-900" href="#">
+<span class="material-symbols-outlined mr-3 text-sm" data-icon="description">description</span>Documentation
+                    </a>
+<a class="flex items-center text-slate-500 text-xs font-semibold uppercase tracking-widest hover:text-slate-900" href="#">
+<span class="material-symbols-outlined mr-3 text-sm" data-icon="help_outline">help_outline</span>Support
+                    </a>
+</div>
+</div>
+</nav>
+<!-- Main Workspace Canvas -->
+<main class="ml-[280px] flex-1 overflow-y-auto bg-surface">
+<div class="p-margin-page max-w-[1440px] mx-auto">
+<!-- Page Header -->
+<div class="flex justify-between items-end mb-stack-lg">
+<div>
+<div class="flex items-center gap-stack-sm mb-unit">
+<span class="bg-blue-100 text-blue-700 font-mono-status text-mono-status px-2 py-0.5 rounded">ID: EXC-992-ALPHA</span>
+<span class="bg-error-container text-on-error-container font-mono-status text-mono-status px-2 py-0.5 rounded uppercase flex items-center">
+<span class="material-symbols-outlined text-[14px] mr-1" data-weight="fill">warning</span>CRITICAL
+                            </span>
+</div>
+<h1 class="font-headline-xl text-headline-xl text-primary">Exception Management Workspace</h1>
+</div>
+<div class="flex gap-stack-md">
+<button class="px-gutter py-stack-sm bg-white border border-outline-variant text-primary font-semibold rounded hover:bg-slate-50 transition-colors">Defer Action</button>
+<button class="px-gutter py-stack-sm bg-secondary text-white font-semibold rounded shadow-sm hover:opacity-95 active:scale-95 transition-all">Resolve Exception</button>
+</div>
+</div>
+<div class="grid grid-cols-12 gap-gutter">
+<!-- Left Panel: Exception Details -->
+<div class="col-span-12 lg:col-span-7 flex flex-col gap-gutter">
+<!-- Question vs Answer Card -->
+<div class="bg-white border border-outline-variant rounded-lg overflow-hidden">
+<div class="bg-slate-50 px-gutter py-stack-md border-b border-outline-variant flex justify-between items-center">
+<h3 class="font-label-caps text-label-caps text-slate-500">Forensic Discrepancy Analysis</h3>
+<span class="font-mono-data text-[11px] text-slate-400">Timestamp: 2023-10-27T14:22:01.004Z</span>
+</div>
+<div class="p-gutter grid grid-cols-1 md:grid-cols-2 gap-gutter relative">
+<div class="absolute left-1/2 top-gutter bottom-gutter w-px bg-slate-100 hidden md:block"></div>
+<!-- Audit Question -->
+<div class="space-y-stack-md">
+<div class="flex items-center gap-stack-sm text-slate-400">
+<span class="material-symbols-outlined text-sm">quiz</span>
+<span class="font-label-caps text-[10px]">Audit Control Point</span>
+</div>
+<p class="font-headline-lg text-headline-lg leading-snug">Does the transaction volume exceed the allocated department liquidity threshold?</p>
+<div class="bg-slate-50 p-stack-md rounded border border-dashed border-slate-200">
+<span class="font-label-caps text-[10px] text-slate-400 block mb-unit">EXPECTED VALUE</span>
+<span class="font-mono-data text-mono-data text-primary">≤ $250,000.00 USD</span>
+</div>
+</div>
+<!-- Observed Answer -->
+<div class="space-y-stack-md">
+<div class="flex items-center gap-stack-sm text-error">
+<span class="material-symbols-outlined text-sm" data-weight="fill">error</span>
+<span class="font-label-caps text-[10px]">System Response</span>
+</div>
+<p class="font-headline-lg text-headline-lg text-error leading-snug">$842,500.00 USD</p>
+<div class="bg-error-container/20 p-stack-md rounded border border-error/10">
+<span class="font-label-caps text-[10px] text-error block mb-unit">DELTA OBSERVED</span>
+<span class="font-mono-data text-mono-data text-on-error-container">+$592,500.00 (237% Over Limit)</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Root Cause Analysis Section -->
+<div class="bg-white border border-outline-variant rounded-lg p-gutter">
+<div class="flex items-center justify-between mb-gutter">
+<h3 class="font-headline-lg text-headline-lg text-primary">Root Cause Analysis</h3>
+<button class="text-secondary font-semibold text-sm flex items-center hover:underline">
+<span class="material-symbols-outlined text-sm mr-1">add_circle</span>Add Tag
+                                </button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-stack-md mb-gutter">
+<div class="p-stack-md bg-slate-50 border border-outline-variant rounded group cursor-pointer hover:border-secondary transition-colors">
+<span class="material-symbols-outlined text-slate-400 group-hover:text-secondary mb-unit" data-icon="dns">dns</span>
+<div class="font-bold text-sm">System Latency</div>
+<div class="text-[11px] text-slate-500">API Timeout during validation</div>
+</div>
+<div class="p-stack-md bg-slate-50 border border-secondary rounded ring-1 ring-secondary">
+<span class="material-symbols-outlined text-secondary mb-unit" data-icon="person_alert">person_alert</span>
+<div class="font-bold text-sm">Manual Override</div>
+<div class="text-[11px] text-slate-500">Privileged user bypassed lock</div>
+</div>
+<div class="p-stack-md bg-slate-50 border border-outline-variant rounded group cursor-pointer hover:border-secondary transition-colors">
+<span class="material-symbols-outlined text-slate-400 group-hover:text-secondary mb-unit" data-icon="policy">policy</span>
+<div class="font-bold text-sm">Policy Conflict</div>
+<div class="text-[11px] text-slate-500">Contradicting regional rules</div>
+</div>
+</div>
+<div class="space-y-stack-md">
+<label class="font-label-caps text-label-caps text-slate-500">Forensic Commentary</label>
+<textarea class="w-full bg-slate-50 border border-outline-variant rounded p-stack-md font-body-md text-sm min-h-[120px] focus:ring-1 focus:ring-secondary focus:border-secondary outline-none" placeholder="Provide detailed investigative findings here..."></textarea>
+</div>
+</div>
+<!-- Audit Trail Component -->
+<div class="space-y-stack-md">
+<h4 class="font-label-caps text-label-caps text-slate-500">Timeline &amp; Evidence Chain</h4>
+<div class="relative pl-gutter space-y-gutter">
+<div class="absolute left-2.5 top-0 bottom-0 w-px bg-slate-200"></div>
+<div class="relative">
+<div class="absolute -left-[1.6rem] top-1 w-3 h-3 rounded-full bg-blue-600 border-2 border-white"></div>
+<div class="flex justify-between items-start">
+<div>
+<div class="font-bold text-sm">Exception Flagged</div>
+<div class="text-xs text-slate-500">System automatically identified threshold violation</div>
+</div>
+<span class="font-mono-data text-[11px] text-slate-400">Oct 27, 14:22</span>
+</div>
+</div>
+<div class="relative">
+<div class="absolute -left-[1.6rem] top-1 w-3 h-3 rounded-full bg-slate-300 border-2 border-white"></div>
+<div class="flex justify-between items-start">
+<div>
+<div class="font-bold text-sm">Initial Triage</div>
+<div class="text-xs text-slate-500">Assigned to Lead Auditor: Sarah Jenkins</div>
+</div>
+<span class="font-mono-data text-[11px] text-slate-400">Oct 27, 15:10</span>
+</div>
+</div>
+<div class="relative">
+<div class="absolute -left-[1.6rem] top-1 w-3 h-3 rounded-full bg-slate-300 border-2 border-white"></div>
+<div class="flex justify-between items-start">
+<div>
+<div class="font-bold text-sm">Evidence Attached</div>
+<div class="text-xs text-slate-500 flex items-center mt-1">
+<span class="material-symbols-outlined text-sm mr-1">attach_file</span>
+<span class="text-secondary font-mono-data">TXN_LOG_0912.csv</span>
+</div>
+</div>
+<span class="font-mono-data text-[11px] text-slate-400">Oct 27, 16:45</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Panel: Resolution Workflow -->
+<div class="col-span-12 lg:col-span-5">
+<div class="bg-white border border-outline-variant rounded-lg sticky top-stack-lg">
+<div class="p-gutter border-b border-outline-variant">
+<h3 class="font-headline-lg text-headline-lg text-primary">Resolution Workflow</h3>
+<div class="mt-stack-md flex gap-2">
+<div class="h-1 flex-1 bg-secondary rounded"></div>
+<div class="h-1 flex-1 bg-secondary/30 rounded"></div>
+<div class="h-1 flex-1 bg-slate-100 rounded"></div>
+</div>
+</div>
+<div class="p-gutter space-y-stack-lg">
+<!-- Step 1: Investigation -->
+<div class="relative pl-gutter opacity-50">
+<div class="absolute left-0 top-0 text-slate-400 font-bold text-xs">01</div>
+<div class="flex items-center justify-between mb-unit">
+<h4 class="font-bold text-sm uppercase tracking-wider">Investigation</h4>
+<span class="material-symbols-outlined text-secondary text-sm" data-weight="fill">check_circle</span>
+</div>
+<p class="text-xs text-slate-500">Verify system logs and transaction authenticity.</p>
+</div>
+<!-- Step 2: Justification -->
+<div class="relative pl-gutter step-active">
+<div class="absolute left-0 top-0 text-secondary font-bold text-xs">02</div>
+<div class="flex items-center justify-between mb-unit">
+<h4 class="font-bold text-sm uppercase tracking-wider text-primary">Justification</h4>
+<span class="bg-blue-50 text-blue-700 text-[10px] font-bold px-2 py-0.5 rounded uppercase">In Progress</span>
+</div>
+<p class="text-xs text-slate-500 mb-stack-md">Provide mandatory reasoning for the exception override.</p>
+<div class="space-y-stack-md bg-slate-50 p-stack-md rounded border border-outline-variant">
+<div class="space-y-unit">
+<label class="font-label-caps text-[10px] text-slate-500 uppercase">Justification Type</label>
+<select class="w-full bg-white border border-outline-variant rounded text-xs p-2 focus:ring-1 focus:ring-secondary">
+<option>Urgent Operational Requirement</option>
+<option>Pre-approved Bulk Batch</option>
+<option>System Error / False Positive</option>
+<option>Emergency Recovery Action</option>
+</select>
+</div>
+<div class="space-y-unit">
+<label class="font-label-caps text-[10px] text-slate-500 uppercase">Supporting Evidence</label>
+<div class="border-2 border-dashed border-slate-200 rounded p-stack-md text-center hover:border-secondary transition-colors cursor-pointer group">
+<span class="material-symbols-outlined text-slate-400 group-hover:text-secondary block mb-1">upload_file</span>
+<span class="text-[10px] text-slate-400">Drag &amp; drop files or click to browse</span>
+</div>
+</div>
+<button class="w-full bg-primary text-white text-xs font-bold py-2 rounded uppercase tracking-widest hover:bg-slate-800 transition-colors">Submit for Approval</button>
+</div>
+</div>
+<!-- Step 3: Approval -->
+<div class="relative pl-gutter">
+<div class="absolute left-0 top-0 text-slate-300 font-bold text-xs">03</div>
+<div class="flex items-center justify-between mb-unit">
+<h4 class="font-bold text-sm uppercase tracking-wider text-slate-300">Approval</h4>
+<span class="material-symbols-outlined text-slate-200 text-sm">lock</span>
+</div>
+<p class="text-xs text-slate-300">Final sign-off by Compliance Officer and Risk Lead.</p>
+</div>
+</div>
+<div class="p-gutter border-t border-outline-variant bg-slate-50 rounded-b-lg">
+<div class="flex items-center gap-stack-md">
+<img class="w-10 h-10 rounded-full border border-white shadow-sm" data-alt="close up of a professional reviewer with neutral background and sharp focus" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDzkLWmsSanaJo3nCUJi_T6C3JzQBcqXFOO2amTSISJug0QSVWbOIk9KnautY-gJhg7EbT3SEnwogIJ8CzwraAntV3kF01DuVOSZ6b7kL3EZGdOpEs0UflW_FA5OH3mLV9zPxG9-X7MvWD1VgOiqR-SSqe8CREHt8_OddUW7Lc_7s955YW43fwyWawb5iPs9OIXmy-xTDh4IJ-G7faTA0otQYdHHPBdUXRL6n58aoonzh70bghz9Qjj6IO1Y50ogvdwG5hnAhSZxrs"/>
+<div>
+<div class="text-[10px] text-slate-400 font-bold uppercase tracking-tight">Active Reviewer</div>
+<div class="text-sm font-bold">Marcus Thorne</div>
+<div class="text-[11px] text-slate-500">Senior Compliance Analyst</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-primary": "#ffffff",
+                    "surface-container-low": "#f0f4f8",
+                    "surface-bright": "#f6fafe",
+                    "outline-variant": "#c5c6cd",
+                    "secondary": "#0058be",
+                    "surface-variant": "#dfe3e7",
+                    "on-surface": "#171c1f",
+                    "surface-container": "#eaeef2",
+                    "surface-container-highest": "#dfe3e7",
+                    "on-primary-fixed-variant": "#3c475a",
+                    "error-container": "#ffdad6",
+                    "primary-fixed": "#d8e3fb",
+                    "surface-container-high": "#e4e9ed",
+                    "on-tertiary-container": "#00a472",
+                    "surface-container-lowest": "#ffffff",
+                    "on-tertiary": "#ffffff",
+                    "on-secondary-fixed": "#001a42",
+                    "error": "#ba1a1a",
+                    "surface-tint": "#545f73",
+                    "surface-dim": "#d6dade",
+                    "secondary-fixed-dim": "#adc6ff",
+                    "on-primary-fixed": "#111c2d",
+                    "outline": "#75777d",
+                    "background": "#f6fafe",
+                    "on-tertiary-fixed": "#002113",
+                    "on-error": "#ffffff",
+                    "secondary-container": "#2170e4",
+                    "on-secondary-container": "#fefcff",
+                    "inverse-primary": "#bcc7de",
+                    "on-secondary-fixed-variant": "#004395",
+                    "tertiary-fixed": "#6ffbbe",
+                    "secondary-fixed": "#d8e2ff",
+                    "inverse-surface": "#2c3134",
+                    "on-tertiary-fixed-variant": "#005236",
+                    "on-primary-container": "#8590a6",
+                    "primary-fixed-dim": "#bcc7de",
+                    "primary": "#091426",
+                    "on-error-container": "#93000a",
+                    "inverse-on-surface": "#edf1f5",
+                    "tertiary-container": "#00301e",
+                    "on-secondary": "#ffffff",
+                    "primary-container": "#1e293b",
+                    "tertiary-fixed-dim": "#4edea3",
+                    "on-surface-variant": "#45474c",
+                    "tertiary": "#00190e",
+                    "surface": "#f6fafe",
+                    "on-background": "#171c1f"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "stack-sm": "8px",
+                    "unit": "4px",
+                    "margin-page": "40px",
+                    "gutter": "24px",
+                    "stack-md": "16px",
+                    "stack-lg": "32px",
+                    "sidebar-width": "280px"
+            },
+            "fontFamily": {
+                    "label-caps": ["Inter"],
+                    "mono-data": ["JetBrains Mono"],
+                    "headline-xl": ["Inter"],
+                    "headline-lg": ["Inter"],
+                    "body-md": ["Inter"],
+                    "mono-status": ["JetBrains Mono"]
+            },
+            "fontSize": {
+                    "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "mono-data": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "headline-xl": ["30px", {"lineHeight": "36px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "headline-lg": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "mono-status": ["12px", {"lineHeight": "16px", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body { font-family: 'Inter', sans-serif; }
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; height: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #dfe3e7; border-radius: 10px; }
+    </style>
+</head>
+<body class="bg-background text-on-surface">
+<!-- SideNavBar -->
+<aside class="fixed left-0 h-screen w-[280px] border-r border-slate-200 bg-slate-50 flex flex-col z-50">
+<div class="px-8 py-10">
+<h1 class="text-xl font-black text-slate-900 tracking-tight">AuditMaster</h1>
+<p class="font-sans text-xs uppercase tracking-widest font-semibold text-blue-600 mt-1">Global Compliance</p>
+</div>
+<nav class="flex-1 overflow-y-auto custom-scrollbar">
+<div class="space-y-1 px-2">
+<a class="flex items-center px-6 py-4 text-slate-500 hover:text-slate-900 transition-all hover:bg-slate-100" href="#">
+<span class="material-symbols-outlined mr-4" data-icon="gavel">gavel</span>
+<span class="font-sans text-xs uppercase tracking-widest font-semibold">Regulator Portal</span>
+</a>
+<a class="bg-white border-r-4 border-blue-600 text-blue-600 flex items-center px-6 py-4 shadow-sm" href="#">
+<span class="material-symbols-outlined mr-4" data-icon="report_problem">report_problem</span>
+<span class="font-sans text-xs uppercase tracking-widest font-semibold">Exceptions</span>
+</a>
+<a class="flex items-center px-6 py-4 text-slate-500 hover:text-slate-900 transition-all hover:bg-slate-100" href="#">
+<span class="material-symbols-outlined mr-4" data-icon="account_tree">account_tree</span>
+<span class="font-sans text-xs uppercase tracking-widest font-semibold">ICF Explorer</span>
+</a>
+<a class="flex items-center px-6 py-4 text-slate-500 hover:text-slate-900 transition-all hover:bg-slate-100" href="#">
+<span class="material-symbols-outlined mr-4" data-icon="biotech">biotech</span>
+<span class="font-sans text-xs uppercase tracking-widest font-semibold">Integrity Diagnostics</span>
+</a>
+<a class="flex items-center px-6 py-4 text-slate-500 hover:text-slate-900 transition-all hover:bg-slate-100" href="#">
+<span class="material-symbols-outlined mr-4" data-icon="unarchive">unarchive</span>
+<span class="font-sans text-xs uppercase tracking-widest font-semibold">Batch Center</span>
+</a>
+<a class="flex items-center px-6 py-4 text-slate-500 hover:text-slate-900 transition-all hover:bg-slate-100" href="#">
+<span class="material-symbols-outlined mr-4" data-icon="timeline">timeline</span>
+<span class="font-sans text-xs uppercase tracking-widest font-semibold">Incident Workspace</span>
+</a>
+<a class="flex items-center px-6 py-4 text-slate-500 hover:text-slate-900 transition-all hover:bg-slate-100" href="#">
+<span class="material-symbols-outlined mr-4" data-icon="event_available">event_available</span>
+<span class="font-sans text-xs uppercase tracking-widest font-semibold">Milestones</span>
+</a>
+<a class="flex items-center px-6 py-4 text-slate-500 hover:text-slate-900 transition-all hover:bg-slate-100" href="#">
+<span class="material-symbols-outlined mr-4" data-icon="settings_input_component">settings_input_component</span>
+<span class="font-sans text-xs uppercase tracking-widest font-semibold">Evidence Config</span>
+</a>
+<a class="flex items-center px-6 py-4 text-slate-500 hover:text-slate-900 transition-all hover:bg-slate-100" href="#">
+<span class="material-symbols-outlined mr-4" data-icon="fact_check">fact_check</span>
+<span class="font-sans text-xs uppercase tracking-widest font-semibold">QA Review</span>
+</a>
+<a class="flex items-center px-6 py-4 text-slate-500 hover:text-slate-900 transition-all hover:bg-slate-100" href="#">
+<span class="material-symbols-outlined mr-4" data-icon="security">security</span>
+<span class="font-sans text-xs uppercase tracking-widest font-semibold">System Logs</span>
+</a>
+</div>
+</nav>
+<div class="p-6 mt-auto border-t border-slate-200">
+<button class="w-full bg-blue-600 text-white font-label-caps text-label-caps py-4 rounded shadow-md hover:bg-blue-700 transition-all active:opacity-80">
+                Generate Report
+            </button>
+<div class="mt-6 flex flex-col gap-2">
+<a class="flex items-center gap-3 text-slate-500 hover:text-slate-900 text-xs font-semibold tracking-widest uppercase" href="#">
+<span class="material-symbols-outlined text-sm" data-icon="description">description</span> Documentation
+                </a>
+<a class="flex items-center gap-3 text-slate-500 hover:text-slate-900 text-xs font-semibold tracking-widest uppercase" href="#">
+<span class="material-symbols-outlined text-sm" data-icon="help_outline">help_outline</span> Support
+                </a>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="ml-[280px] min-h-screen">
+<!-- TopAppBar -->
+<header class="sticky top-0 w-full flex justify-between items-center h-16 px-10 bg-white border-b border-slate-200 z-40 shadow-sm font-sans antialiased text-sm font-medium tracking-tight">
+<div class="flex items-center gap-8">
+<div class="relative flex items-center">
+<span class="material-symbols-outlined absolute left-3 text-slate-400" data-icon="search">search</span>
+<input class="pl-10 pr-4 py-2 bg-slate-50 border-none rounded-lg w-80 text-xs focus:ring-1 focus:ring-blue-600 outline-none" placeholder="Global Remediation Search..." type="text"/>
+</div>
+<nav class="flex gap-6">
+<a class="text-blue-600 border-b-2 border-blue-600 pb-5 pt-5 transition-colors" href="#">Overview</a>
+<a class="text-slate-500 hover:text-slate-900 pb-5 pt-5 transition-colors" href="#">Kanban Board</a>
+<a class="text-slate-500 hover:text-slate-900 pb-5 pt-5 transition-colors" href="#">CapEx Linkage</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined text-slate-500 hover:bg-slate-50 p-2 rounded transition-colors" data-icon="notifications">notifications</button>
+<button class="material-symbols-outlined text-slate-500 hover:bg-slate-50 p-2 rounded transition-colors" data-icon="history_edu">history_edu</button>
+<button class="material-symbols-outlined text-slate-500 hover:bg-slate-50 p-2 rounded transition-colors" data-icon="account_tree">account_tree</button>
+<div class="h-6 w-[1px] bg-slate-200 mx-2"></div>
+<button class="bg-blue-600 text-white px-4 py-2 rounded text-xs font-bold hover:bg-blue-700 transition-colors shadow-sm">New Audit</button>
+<img alt="User Profile Avatar" class="h-8 w-8 rounded-full border border-slate-200 object-cover" data-alt="Close up portrait of a middle-aged male executive in a professional setting with soft office lighting and neutral background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC1SwPPF-8eHhddn3TiKTaLIu9K0W7lYFfnCDhzycdo4ZhCV69ENH1EFLiRvQjo-kzrrKYhel57oFmQRvC8z32pdTtcZ7-5e4YG917Cw0Bz6IN0g7tUQSsgroPmco4yLOtk53KUF8RoHH07BJ5nom3fUxBZhSnPWkcpK-ZIucdjVx27lpBIzZryIQ6FJyoTbrmgovnKv87AioCrkmouIDGOhNTLZLoijyaenKG0OVLsaFP724OV0i0kYevAkDw4LHAZGKZoOyIGs-M"/>
+</div>
+</header>
+<!-- Page Canvas -->
+<div class="p-margin-page max-w-[1440px] mx-auto">
+<!-- Breadcrumbs & Title -->
+<div class="mb-stack-lg">
+<div class="flex items-center text-xs font-mono-status text-slate-400 gap-2 mb-2">
+<span>REMEDIATION</span>
+<span class="material-symbols-outlined text-[10px]" data-icon="chevron_right">chevron_right</span>
+<span class="text-blue-600">STRUCTURAL_WORKFLOW_2024</span>
+</div>
+<h2 class="font-headline-xl text-headline-xl text-primary tracking-tight">Audit Remediation Workflow</h2>
+<p class="text-on-surface-variant font-body-md mt-2">Managing structural fixes for multi-quarter initiatives and capital expenditure alignment.</p>
+</div>
+<!-- Bento Grid - Strategic Metrics -->
+<div class="grid grid-cols-12 gap-gutter mb-stack-lg">
+<div class="col-span-8 bg-white border border-slate-200 p-stack-md rounded shadow-sm">
+<div class="flex justify-between items-center mb-6">
+<h3 class="font-headline-lg text-headline-lg text-primary">Multi-Quarter Initiatives</h3>
+<div class="flex gap-2">
+<span class="bg-emerald-50 text-on-tertiary-container px-3 py-1 rounded-full font-mono-status text-mono-status flex items-center gap-1">
+<span class="material-symbols-outlined text-xs" data-icon="check_circle" style="font-variation-settings: 'FILL' 1;">check_circle</span> VERIFIED_LOG
+                            </span>
+</div>
+</div>
+<div class="space-y-6">
+<!-- Initiative 1 -->
+<div>
+<div class="flex justify-between items-end mb-2">
+<div>
+<h4 class="font-label-caps text-label-caps text-primary uppercase">Tier-1 Data Center Migration (CapEx: $4.2M)</h4>
+<p class="text-xs text-slate-500 font-mono-data mt-1">Audit Finding ID: ADT-2023-902 (Security Ingress Vulnerability)</p>
+</div>
+<span class="font-mono-data text-blue-600">68% COMPLETE</span>
+</div>
+<div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+<div class="bg-blue-600 h-full w-[68%]"></div>
+</div>
+<div class="flex gap-4 mt-3">
+<div class="px-2 py-1 bg-slate-50 border border-slate-100 rounded text-[10px] font-mono-data text-slate-600 uppercase">Q3 Start</div>
+<div class="px-2 py-1 bg-slate-50 border border-slate-100 rounded text-[10px] font-mono-data text-slate-600 uppercase">Infrastructure Cluster</div>
+</div>
+</div>
+<!-- Initiative 2 -->
+<div>
+<div class="flex justify-between items-end mb-2">
+<div>
+<h4 class="font-label-caps text-label-caps text-primary uppercase">Legacy Mainframe Encryption (CapEx: $1.8M)</h4>
+<p class="text-xs text-slate-500 font-mono-data mt-1">Audit Finding ID: ADT-2024-011 (AES-256 Compliance Gap)</p>
+</div>
+<span class="font-mono-data text-blue-600">24% COMPLETE</span>
+</div>
+<div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+<div class="bg-blue-600 h-full w-[24%]"></div>
+</div>
+<div class="flex gap-4 mt-3">
+<div class="px-2 py-1 bg-slate-50 border border-slate-100 rounded text-[10px] font-mono-data text-slate-600 uppercase">Q1 2025 Goal</div>
+<div class="px-2 py-1 bg-slate-50 border border-slate-100 rounded text-[10px] font-mono-data text-slate-600 uppercase">Core Systems</div>
+</div>
+</div>
+</div>
+</div>
+<div class="col-span-4 bg-primary text-white p-stack-md rounded shadow-md flex flex-col justify-between">
+<div>
+<h3 class="font-headline-lg text-white mb-2">CapEx Utilization</h3>
+<p class="text-blue-300 text-xs font-mono-status tracking-widest uppercase mb-6">Structural Fix Budgeting</p>
+<div class="space-y-4">
+<div class="flex justify-between items-center pb-2 border-b border-slate-700">
+<span class="text-xs text-slate-300 font-label-caps">Total Budget Allocation</span>
+<span class="font-mono-data text-lg">$12.5M</span>
+</div>
+<div class="flex justify-between items-center pb-2 border-b border-slate-700">
+<span class="text-xs text-slate-300 font-label-caps">Committed CapEx</span>
+<span class="font-mono-data text-lg">$8.9M</span>
+</div>
+<div class="flex justify-between items-center pb-2 border-b border-slate-700">
+<span class="text-xs text-slate-300 font-label-caps">Variance Analysis</span>
+<span class="font-mono-data text-lg text-emerald-400">+1.2%</span>
+</div>
+</div>
+</div>
+<div class="mt-8">
+<img alt="Financial Chart Dashboard" class="rounded border border-slate-700 opacity-80" data-alt="Abstract glowing data visualization showing financial growth and expenditure lines on a dark interface with neon accents" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDWBpqrBZFk8axQVH_j2z35JLpTiBcJtmczmYMDIXoGt6p3Wqplx9pX-7uqPAK7lA626PvB1dg1_r35XASJIvDrVMw1_LM-ch8QZU_VtFb52VAQ9dIKPyv0OIgUqCUoxkTceI2jUebgqRSDU-ksBbF-qNfD351TQEepIoDqMLWQjs_69NQmWbtfEQgiwuAdxKciJOMCjpdXByUARadOZvsV3FeDl15jAoy7Bb6o_NdkypJU9IJ20454g08K58VCOa5Mo0Apej2MsD4"/>
+</div>
+</div>
+</div>
+<!-- Kanban Section -->
+<div class="mb-stack-lg">
+<div class="flex items-center justify-between mb-stack-md">
+<h3 class="font-headline-lg text-headline-lg text-primary">Remediation Task Board</h3>
+<div class="flex gap-4">
+<button class="flex items-center gap-2 px-3 py-1 bg-white border border-slate-200 text-slate-600 rounded text-xs font-semibold hover:bg-slate-50">
+<span class="material-symbols-outlined text-sm" data-icon="filter_list">filter_list</span> Filter
+                        </button>
+<button class="flex items-center gap-2 px-3 py-1 bg-white border border-slate-200 text-slate-600 rounded text-xs font-semibold hover:bg-slate-50">
+<span class="material-symbols-outlined text-sm" data-icon="sort">sort</span> Group By Priority
+                        </button>
+</div>
+</div>
+<div class="grid grid-cols-3 gap-6">
+<!-- Column 1: Backlog -->
+<div class="space-y-4">
+<div class="flex items-center justify-between px-2">
+<span class="font-label-caps text-label-caps text-slate-500 uppercase">Backlog (4)</span>
+<span class="material-symbols-outlined text-slate-400 cursor-pointer" data-icon="add">add</span>
+</div>
+<!-- Task Card -->
+<div class="bg-white border border-slate-200 p-4 rounded hover:shadow-md transition-all group">
+<div class="flex justify-between items-start mb-2">
+<span class="bg-slate-100 text-slate-600 px-2 py-0.5 rounded text-[10px] font-mono-status">HIGH_PRIORITY</span>
+<span class="material-symbols-outlined text-slate-300 group-hover:text-slate-500" data-icon="more_horiz">more_horiz</span>
+</div>
+<h5 class="font-body-md font-semibold text-sm mb-1">Update Core Firewall Rulesets</h5>
+<p class="text-xs text-slate-500 mb-4">Relates to ADT-2023-772: Perimeter Control Deficit.</p>
+<div class="flex justify-between items-center">
+<div class="flex -space-x-2">
+<img class="w-6 h-6 rounded-full border-2 border-white object-cover" data-alt="Portrait of a young professional man wearing glasses" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCwpAcUYpcF3uQEkTWAHqyRi3lg_cK8zgTm4A9k9FG29Q-DfIJ9lo9qPXirIAI_9p-8n8vzboC4ia-a4uf4kiK5pOdshq_8ZtiWRAQ6Qsn3KVN3zyEVe5jATFrd2zgB5GDWPqKtSfm-8hX-cyofjMWLhHKA0MMBaP2KK86kngNe2BmlNFLAC_CHcdjnnfaCC8o7uCuE6AUFb9zB1uWXCtRumPq6J5oHc-KSGr4-g7tguGKAxSH7_2bV9D_LBWRN5RwpJ5a50pcV1eM"/>
+<img class="w-6 h-6 rounded-full border-2 border-white object-cover" data-alt="Portrait of a professional woman in an office environment" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDDw-IOyt_o9ks_a3amguKEkOv32DbLZoQdBQidf8HwA-7nc7foMtIw4xFhzv9lhMRoNNR8-vb3hRlYAL_Wzk3yXqItUaZbnRuLwrazH0SXQYZ8Da8pl-AnAxAyiL2lLwGAEyFCT86zqaJkMff-f_sxKYvaF9XIRV0tSFtXwQrZRa9SWICgbiR5IUJY0pc-nN55DZ27wCIR_EbsdQ2cg4mYAZtK__Z-1w3y-VM-ra6ac4Be44AySHOCDd_JBDFp5rlPRXSJWjS4k1M"/>
+</div>
+<span class="text-[10px] font-mono-data text-slate-400">EST: 2W</span>
+</div>
+</div>
+<div class="bg-white border border-slate-200 p-4 rounded hover:shadow-md transition-all group">
+<div class="flex justify-between items-start mb-2">
+<span class="bg-slate-100 text-slate-600 px-2 py-0.5 rounded text-[10px] font-mono-status">STRUCTURAL</span>
+<span class="material-symbols-outlined text-slate-300 group-hover:text-slate-500" data-icon="more_horiz">more_horiz</span>
+</div>
+<h5 class="font-body-md font-semibold text-sm mb-1">Backup Power Grid Hardware</h5>
+<p class="text-xs text-slate-500 mb-4">Linked to CapEx #INFRA-2024-CAP-08.</p>
+<div class="flex justify-between items-center">
+<span class="text-[10px] font-mono-data text-blue-600 uppercase flex items-center gap-1">
+<span class="material-symbols-outlined text-[12px]" data-icon="attach_money">attach_money</span> Pending Approval
+                                </span>
+</div>
+</div>
+</div>
+<!-- Column 2: In Progress -->
+<div class="space-y-4">
+<div class="flex items-center justify-between px-2">
+<span class="font-label-caps text-label-caps text-slate-500 uppercase">In Progress (2)</span>
+</div>
+<div class="bg-white border-l-4 border-blue-600 p-4 rounded border border-slate-200 shadow-sm transition-all group">
+<div class="flex justify-between items-start mb-2">
+<span class="bg-blue-50 text-blue-600 px-2 py-0.5 rounded text-[10px] font-mono-status uppercase">In Review</span>
+<span class="material-symbols-outlined text-slate-300 group-hover:text-slate-500" data-icon="more_horiz">more_horiz</span>
+</div>
+<h5 class="font-body-md font-semibold text-sm mb-1">Patch SAP R/3 Kernel</h5>
+<p class="text-xs text-slate-500 mb-4">Remediating Finding ID: SAP-FIN-881. Critical vulnerability in legacy module.</p>
+<div class="flex justify-between items-center">
+<div class="flex items-center gap-1 text-[10px] font-mono-data text-slate-400">
+<span class="material-symbols-outlined text-[12px]" data-icon="attachment">attachment</span> 3 Files
+                                </div>
+<span class="text-[10px] font-mono-data text-slate-400">DUE: OCT 12</span>
+</div>
+</div>
+</div>
+<!-- Column 3: Ready for Evidence -->
+<div class="space-y-4">
+<div class="flex items-center justify-between px-2">
+<span class="font-label-caps text-label-caps text-slate-500 uppercase">Ready for Evidence (1)</span>
+</div>
+<div class="bg-emerald-50/30 border border-dashed border-emerald-200 p-4 rounded transition-all group relative overflow-hidden">
+<div class="absolute top-0 right-0 p-2">
+<span class="material-symbols-outlined text-emerald-400" data-icon="verified_user" style="font-variation-settings: 'FILL' 1;">verified_user</span>
+</div>
+<h5 class="font-body-md font-semibold text-sm mb-1">SSO Deployment Phase II</h5>
+<p class="text-xs text-slate-600 mb-6">Final implementation of Azure AD integration completed. Upload evidence logs.</p>
+<div class="border-2 border-dashed border-emerald-200 rounded-lg p-6 bg-white/50 text-center cursor-pointer hover:bg-white transition-colors">
+<span class="material-symbols-outlined text-emerald-500 text-3xl mb-2" data-icon="upload_file">upload_file</span>
+<p class="text-xs font-semibold text-emerald-700">Click to Upload Evidence</p>
+<p class="text-[10px] text-slate-400 mt-1">Accepts .PDF, .LOG, .CSV (Max 50MB)</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Audit Trail Section -->
+<div class="bg-white border border-slate-200 rounded p-stack-md">
+<div class="flex items-center justify-between mb-6">
+<h3 class="font-headline-lg text-headline-lg text-primary">Workflow Audit Trail</h3>
+<button class="text-blue-600 text-xs font-semibold tracking-widest uppercase flex items-center gap-2">
+                        Export Full Log <span class="material-symbols-outlined text-sm" data-icon="download">download</span>
+</button>
+</div>
+<div class="relative">
+<div class="absolute left-[7px] top-2 bottom-2 w-[2px] bg-slate-100"></div>
+<div class="space-y-8 relative">
+<div class="flex gap-6 items-start">
+<div class="w-4 h-4 rounded-full bg-blue-600 border-4 border-white ring-1 ring-blue-200 z-10 mt-1"></div>
+<div>
+<p class="text-sm font-mono-data text-slate-900">Initiative <span class="font-bold text-blue-600">TIER-1_MIGRATION</span> CapEx budget adjusted by +15%.</p>
+<div class="flex gap-3 items-center mt-2">
+<span class="text-[10px] font-mono-data text-slate-400">2024-05-22 14:02:11 UTC</span>
+<span class="text-[10px] font-mono-data bg-slate-50 px-2 py-0.5 rounded border border-slate-100">USER: ADMIN_S_CHEN</span>
+</div>
+</div>
+</div>
+<div class="flex gap-6 items-start">
+<div class="w-4 h-4 rounded-full bg-slate-200 border-4 border-white ring-1 ring-slate-100 z-10 mt-1"></div>
+<div>
+<p class="text-sm font-mono-data text-slate-600">Task <span class="font-bold">PATCH_SAP_KERNEL</span> moved from BACKLOG to IN_PROGRESS.</p>
+<div class="flex gap-3 items-center mt-2">
+<span class="text-[10px] font-mono-data text-slate-400">2024-05-22 09:15:44 UTC</span>
+<span class="text-[10px] font-mono-data bg-slate-50 px-2 py-0.5 rounded border border-slate-100">USER: SYS_AUTOMATION</span>
+</div>
+</div>
+</div>
+<div class="flex gap-6 items-start">
+<div class="w-4 h-4 rounded-full bg-emerald-500 border-4 border-white ring-1 ring-emerald-100 z-10 mt-1"></div>
+<div>
+<p class="text-sm font-mono-data text-slate-900">Evidence <span class="font-bold text-emerald-600">SSO_DEPLOY_PH1_LOGS.PDF</span> verified and locked.</p>
+<div class="flex gap-3 items-center mt-2">
+<span class="text-[10px] font-mono-data text-slate-400">2024-05-21 17:55:01 UTC</span>
+<span class="text-[10px] font-mono-data bg-slate-50 px-2 py-0.5 rounded border border-slate-100">USER: COMPLIANCE_ROBOT</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>

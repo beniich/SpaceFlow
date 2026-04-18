@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Global Policy Library | AuditMaster Global</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-primary": "#ffffff",
+                        "surface-container-low": "#f0f4f8",
+                        "surface-bright": "#f6fafe",
+                        "outline-variant": "#c5c6cd",
+                        "secondary": "#0058be",
+                        "surface-variant": "#dfe3e7",
+                        "on-surface": "#171c1f",
+                        "surface-container": "#eaeef2",
+                        "surface-container-highest": "#dfe3e7",
+                        "on-primary-fixed-variant": "#3c475a",
+                        "error-container": "#ffdad6",
+                        "primary-fixed": "#d8e3fb",
+                        "surface-container-high": "#e4e9ed",
+                        "on-tertiary-container": "#00a472",
+                        "surface-container-lowest": "#ffffff",
+                        "on-tertiary": "#ffffff",
+                        "on-secondary-fixed": "#001a42",
+                        "error": "#ba1a1a",
+                        "surface-tint": "#545f73",
+                        "surface-dim": "#d6dade",
+                        "secondary-fixed-dim": "#adc6ff",
+                        "on-primary-fixed": "#111c2d",
+                        "outline": "#75777d",
+                        "background": "#f6fafe",
+                        "on-tertiary-fixed": "#002113",
+                        "on-error": "#ffffff",
+                        "secondary-container": "#2170e4",
+                        "on-secondary-container": "#fefcff",
+                        "inverse-primary": "#bcc7de",
+                        "on-secondary-fixed-variant": "#004395",
+                        "tertiary-fixed": "#6ffbbe",
+                        "secondary-fixed": "#d8e2ff",
+                        "inverse-surface": "#2c3134",
+                        "on-tertiary-fixed-variant": "#005236",
+                        "on-primary-container": "#8590a6",
+                        "primary-fixed-dim": "#bcc7de",
+                        "primary": "#091426",
+                        "on-error-container": "#93000a",
+                        "inverse-on-surface": "#edf1f5",
+                        "tertiary-container": "#00301e",
+                        "on-secondary": "#ffffff",
+                        "primary-container": "#1e293b",
+                        "tertiary-fixed-dim": "#4edea3",
+                        "on-surface-variant": "#45474c",
+                        "tertiary": "#00190e",
+                        "surface": "#f6fafe",
+                        "on-background": "#171c1f"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "stack-sm": "8px",
+                        "unit": "4px",
+                        "margin-page": "40px",
+                        "gutter": "24px",
+                        "stack-md": "16px",
+                        "stack-lg": "32px",
+                        "sidebar-width": "280px"
+                    },
+                    "fontFamily": {
+                        "label-caps": ["Inter"],
+                        "mono-data": ["JetBrains Mono"],
+                        "headline-xl": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "body-md": ["Inter"],
+                        "mono-status": ["JetBrains Mono"]
+                    },
+                    "fontSize": {
+                        "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "mono-data": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "headline-xl": ["30px", {"lineHeight": "36px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "headline-lg": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "mono-status": ["12px", {"lineHeight": "16px", "fontWeight": "700"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .sidebar-scroll::-webkit-scrollbar { width: 4px; }
+        .sidebar-scroll::-webkit-scrollbar-track { background: transparent; }
+        .sidebar-scroll::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
+    </style>
+</head>
+<body class="bg-background font-body-md text-on-surface antialiased">
+<aside class="fixed left-0 h-screen w-[280px] bg-slate-50 border-r border-slate-200 flex flex-col z-50">
+<div class="px-6 py-8">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 bg-primary flex items-center justify-center rounded">
+<span class="material-symbols-outlined text-on-primary" data-icon="gavel">gavel</span>
+</div>
+<div>
+<h1 class="text-xl font-black text-slate-900 leading-none">AuditMaster</h1>
+<p class="font-sans text-[10px] uppercase tracking-widest font-semibold text-slate-500 mt-1">Global Compliance</p>
+</div>
+</div>
+</div>
+<nav class="flex-1 overflow-y-auto sidebar-scroll px-2 space-y-1">
+<div class="px-4 py-2 text-slate-400 font-label-caps text-[10px] uppercase tracking-widest">Core Portals</div>
+<a class="flex items-center px-6 py-4 text-slate-500 hover:bg-slate-100 hover:text-slate-900 transition-all scale-98 duration-150" href="#">
+<span class="material-symbols-outlined mr-3 text-lg" data-icon="gavel">gavel</span>
+<span class="font-sans text-xs uppercase tracking-widest font-semibold">Regulator Portal</span>
+</a>
+<a class="bg-white border-r-4 border-blue-600 text-blue-600 flex items-center px-6 py-4 shadow-sm transition-all scale-98 duration-150" href="#">
+<span class="material-symbols-outlined mr-3 text-lg" data-icon="library_books">library_books</span>
+<span class="font-sans text-xs uppercase tracking-widest font-semibold">Policy Library</span>
+</a>
+<a class="flex items-center px-6 py-4 text-slate-500 hover:bg-slate-100 hover:text-slate-900 transition-all scale-98 duration-150" href="#">
+<span class="material-symbols-outlined mr-3 text-lg" data-icon="report_problem">report_problem</span>
+<span class="font-sans text-xs uppercase tracking-widest font-semibold">Exceptions</span>
+</a>
+<a class="flex items-center px-6 py-4 text-slate-500 hover:bg-slate-100 hover:text-slate-900 transition-all scale-98 duration-150" href="#">
+<span class="material-symbols-outlined mr-3 text-lg" data-icon="account_tree">account_tree</span>
+<span class="font-sans text-xs uppercase tracking-widest font-semibold">ICF Explorer</span>
+</a>
+<a class="flex items-center px-6 py-4 text-slate-500 hover:bg-slate-100 hover:text-slate-900 transition-all scale-98 duration-150" href="#">
+<span class="material-symbols-outlined mr-3 text-lg" data-icon="biotech">biotech</span>
+<span class="font-sans text-xs uppercase tracking-widest font-semibold">Integrity Diagnostics</span>
+</a>
+<a class="flex items-center px-6 py-4 text-slate-500 hover:bg-slate-100 hover:text-slate-900 transition-all scale-98 duration-150" href="#">
+<span class="material-symbols-outlined mr-3 text-lg" data-icon="unarchive">unarchive</span>
+<span class="font-sans text-xs uppercase tracking-widest font-semibold">Batch Center</span>
+</a>
+<a class="flex items-center px-6 py-4 text-slate-500 hover:bg-slate-100 hover:text-slate-900 transition-all scale-98 duration-150" href="#">
+<span class="material-symbols-outlined mr-3 text-lg" data-icon="timeline">timeline</span>
+<span class="font-sans text-xs uppercase tracking-widest font-semibold">Incident Workspace</span>
+</a>
+<a class="flex items-center px-6 py-4 text-slate-500 hover:bg-slate-100 hover:text-slate-900 transition-all scale-98 duration-150" href="#">
+<span class="material-symbols-outlined mr-3 text-lg" data-icon="event_available">event_available</span>
+<span class="font-sans text-xs uppercase tracking-widest font-semibold">Milestones</span>
+</a>
+</nav>
+<div class="p-4 border-t border-slate-200">
+<button class="w-full bg-blue-600 text-white py-3 font-label-caps text-xs rounded hover:bg-blue-700 transition-colors shadow-sm">
+                Generate Report
+            </button>
+<div class="mt-4 space-y-1">
+<a class="flex items-center px-4 py-2 text-slate-500 hover:text-slate-900 text-xs font-semibold uppercase tracking-widest" href="#">
+<span class="material-symbols-outlined mr-3 text-sm" data-icon="description">description</span>
+                    Documentation
+                </a>
+<a class="flex items-center px-4 py-2 text-slate-500 hover:text-slate-900 text-xs font-semibold uppercase tracking-widest" href="#">
+<span class="material-symbols-outlined mr-3 text-sm" data-icon="help_outline">help_outline</span>
+                    Support
+                </a>
+</div>
+</div>
+</aside>
+<header class="sticky top-0 w-full flex justify-between items-center h-16 px-10 bg-white border-b border-slate-200 z-40 ml-[280px] w-[calc(100%-280px)] shadow-sm">
+<div class="flex items-center flex-1 max-w-xl">
+<div class="relative w-full">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" data-icon="search">search</span>
+<input class="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-200 rounded font-body-md text-sm focus:outline-none focus:ring-1 focus:ring-blue-600 transition-all" placeholder="High-speed search across policy documents..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-4 text-slate-500">
+<button class="hover:bg-slate-50 p-2 rounded transition-colors relative">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-blue-600 rounded-full border-2 border-white"></span>
+</button>
+<button class="hover:bg-slate-50 p-2 rounded transition-colors">
+<span class="material-symbols-outlined" data-icon="history_edu">history_edu</span>
+</button>
+<button class="hover:bg-slate-50 p-2 rounded transition-colors">
+<span class="material-symbols-outlined" data-icon="account_tree">account_tree</span>
+</button>
+</div>
+<div class="h-8 w-px bg-slate-200"></div>
+<button class="bg-blue-600 text-white px-4 py-2 font-label-caps text-xs rounded hover:bg-blue-700 transition-colors shadow-sm active:opacity-80">
+                New Audit
+            </button>
+<div class="flex items-center gap-3">
+<img alt="User Profile Avatar" class="w-8 h-8 rounded-full border border-slate-200" data-alt="professional portrait of a compliance officer in a clean office setting, soft professional lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBsLP_b1qpI7kN3e4bdSshokLB0o_cyUVSPNpEDgzyrW9V7hoodrqzLabkqdEDevqHBTBuVCq4TiRjOcC471Daka9P5vvlcE3ToN2rNXBp0OgH7d40cRzFy0DDbGQGWhdP4-mBSyde9hLCWAi_jFzj3DrBfmwMZSVyXdN3wHhtX-sfju23JVKRjA-q6BykR4ODYUQGjJf92m9XKN-HUS9YAVt_Ag-pv0b0p4_yLmwJE4aSUx2IwbIRieGdhA83FsmrjeLjVLbL1mwM"/>
+</div>
+</div>
+</header>
+<main class="ml-[280px] p-margin-page max-w-[1440px]">
+<div class="mb-stack-lg flex justify-between items-end">
+<div>
+<nav class="flex items-center gap-2 text-xs font-mono-data text-slate-400 mb-2">
+<span>Repository</span>
+<span class="material-symbols-outlined text-[10px]" data-icon="chevron_right">chevron_right</span>
+<span>Global Policy Library</span>
+</nav>
+<h2 class="font-headline-xl text-primary">Global Policy Library</h2>
+<p class="text-slate-500 mt-2 max-w-2xl">Central repository for all organizational policies linked directly to cryptographic audit controls and compliance milestones.</p>
+</div>
+<div class="flex gap-3">
+<button class="flex items-center gap-2 border border-slate-200 px-4 py-2 bg-white text-xs font-label-caps hover:bg-slate-50 transition-colors">
+<span class="material-symbols-outlined text-sm" data-icon="filter_list">filter_list</span>
+                    Filter
+                </button>
+<button class="flex items-center gap-2 border border-slate-200 px-4 py-2 bg-white text-xs font-label-caps hover:bg-slate-50 transition-colors">
+<span class="material-symbols-outlined text-sm" data-icon="file_download">file_download</span>
+                    Export Archive
+                </button>
+</div>
+</div>
+<div class="grid grid-cols-12 gap-gutter">
+<!-- Sidebar: Navigation & Controls -->
+<div class="col-span-3 space-y-gutter">
+<div class="bg-white border border-slate-200 p-6">
+<h3 class="font-label-caps text-[10px] uppercase text-slate-400 mb-4 tracking-widest">Policy Hierarchies</h3>
+<ul class="space-y-1">
+<li>
+<div class="flex items-center justify-between p-2 hover:bg-slate-50 rounded cursor-pointer group">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-slate-400 text-lg" data-icon="folder">folder</span>
+<span class="text-sm font-medium text-slate-700">Financial Controls</span>
+</div>
+<span class="text-[10px] font-mono-data text-slate-400">12</span>
+</div>
+</li>
+<li>
+<div class="flex items-center justify-between p-2 bg-blue-50/50 rounded cursor-pointer group">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-blue-600 text-lg" data-icon="folder_open">folder_open</span>
+<span class="text-sm font-bold text-blue-600">IT &amp; Cybersecurity</span>
+</div>
+<span class="text-[10px] font-mono-data text-blue-600">08</span>
+</div>
+<ul class="ml-6 mt-1 border-l border-slate-100 space-y-1">
+<li class="p-2 hover:text-blue-600 text-slate-500 text-sm cursor-pointer border-l-2 border-transparent hover:border-blue-600 pl-4">Network Security</li>
+<li class="p-2 hover:text-blue-600 text-slate-500 text-sm cursor-pointer border-l-2 border-transparent hover:border-blue-600 pl-4">Data Privacy</li>
+<li class="p-2 text-blue-600 font-semibold text-sm cursor-pointer border-l-2 border-blue-600 pl-4 bg-blue-50/20">Access Governance</li>
+</ul>
+</li>
+<li>
+<div class="flex items-center justify-between p-2 hover:bg-slate-50 rounded cursor-pointer group">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-slate-400 text-lg" data-icon="folder">folder</span>
+<span class="text-sm font-medium text-slate-700">Ethics &amp; Conduct</span>
+</div>
+<span class="text-[10px] font-mono-data text-slate-400">05</span>
+</div>
+</li>
+</ul>
+</div>
+<div class="bg-white border border-slate-200 p-6">
+<h3 class="font-label-caps text-[10px] uppercase text-slate-400 mb-4 tracking-widest">Library Health</h3>
+<div class="space-y-4">
+<div>
+<div class="flex justify-between items-center mb-1">
+<span class="text-xs text-slate-600">Policy Read Compliance</span>
+<span class="text-xs font-mono-data font-bold">94%</span>
+</div>
+<div class="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden">
+<div class="h-full bg-emerald-500 w-[94%]"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between items-center mb-1">
+<span class="text-xs text-slate-600">Pending Approvals</span>
+<span class="text-xs font-mono-data font-bold">03</span>
+</div>
+<div class="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden">
+<div class="h-full bg-blue-500 w-[15%]"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Main Library View -->
+<div class="col-span-9 space-y-gutter">
+<!-- Highlight/Pinned Policies -->
+<div class="grid grid-cols-2 gap-gutter">
+<div class="bg-white border border-slate-200 p-6 hover:shadow-sm transition-shadow group relative overflow-hidden">
+<div class="absolute top-0 right-0 p-4">
+<span class="material-symbols-outlined text-slate-200 text-4xl group-hover:text-blue-50" data-icon="verified_user">verified_user</span>
+</div>
+<div class="flex items-center gap-2 mb-4">
+<span class="bg-emerald-100 text-emerald-800 font-mono-status text-[10px] px-2 py-0.5 rounded leading-none uppercase">Verified</span>
+<span class="bg-slate-100 text-slate-600 font-mono-status text-[10px] px-2 py-0.5 rounded leading-none uppercase">v4.2</span>
+</div>
+<h4 class="font-headline-lg text-primary mb-2">IT Access Control Framework</h4>
+<p class="text-slate-500 text-sm mb-4">Governance protocols for privileged access and MFA enforcement across global cloud infrastructure.</p>
+<div class="flex items-center justify-between border-t border-slate-100 pt-4 mt-4">
+<div class="flex -space-x-2">
+<img alt="Team member" class="w-6 h-6 rounded-full border-2 border-white" data-alt="close up of professional headshot of male executive" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBx37VEyP3bRWPNTn_FZcFHyBd8rWNU_cVXjWdTMyydGOMtzmDUExZuf7f9FF-eZIOUxE2VUq2MSWxMF5k_FJqhurMxfaxcug9eAVpjULowrPped_l8k9RMtbqjr6geo_VgzgpODTcLvCiI3txhsrCqJ4UxM-wHYTRfu8h9Xi0RFQ16yaIeZimqugnLg7Shq06SzcZioIQValikCdRlVpLpzNflmI0EF91JmOWAuuzvmasm90Sed605g-L7kIDcwvNkzkvmxabBPz4"/>
+<img alt="Team member" class="w-6 h-6 rounded-full border-2 border-white" data-alt="close up of professional headshot of female executive" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCGJ21zZD8rFDDRfKX0Efsy-MtCjwaBtYYJ1MbZ7uLmUE1lIcQioVmafSHnmhAZSbbwCw4JYViGAdPHl4K3qtQpVogulvH9eZj0I51pheGKbMY-XaUwzLjCIEt3Ea1iy5uqsFEp8jS51PIHn2-4Q5T20FkRTnklgzOq8MgH_73YNWPQ9H5kJXjEkQQtqrbD_S_Z80I4-dCYYbDV4NeJeHKRSZZJ0nKuNtooAmlPIBr_VXusoBbA5XjIEccGJNWzHWmphGJJi_5tsUU"/>
+<div class="w-6 h-6 rounded-full border-2 border-white bg-slate-100 flex items-center justify-center text-[10px] font-bold text-slate-500">+4</div>
+</div>
+<span class="text-[10px] font-mono-data text-slate-400 uppercase tracking-widest">Modified 2d ago</span>
+</div>
+</div>
+<div class="bg-white border border-slate-200 p-6 hover:shadow-sm transition-shadow group relative overflow-hidden">
+<div class="absolute top-0 right-0 p-4">
+<span class="material-symbols-outlined text-slate-200 text-4xl group-hover:text-blue-50" data-icon="security">security</span>
+</div>
+<div class="flex items-center gap-2 mb-4">
+<span class="bg-blue-100 text-blue-800 font-mono-status text-[10px] px-2 py-0.5 rounded leading-none uppercase">In Review</span>
+<span class="bg-slate-100 text-slate-600 font-mono-status text-[10px] px-2 py-0.5 rounded leading-none uppercase">v3.0 Draft</span>
+</div>
+<h4 class="font-headline-lg text-primary mb-2">Cybersecurity Incident Protocol</h4>
+<p class="text-slate-500 text-sm mb-4">Escalation matrices and legal notification timelines for cross-border data breach events.</p>
+<div class="flex items-center justify-between border-t border-slate-100 pt-4 mt-4">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-amber-500 text-sm" data-icon="pending">pending</span>
+<span class="text-[10px] font-label-caps text-slate-500">Awaiting Legal Dept</span>
+</div>
+<span class="text-[10px] font-mono-data text-slate-400 uppercase tracking-widest">Modified 6h ago</span>
+</div>
+</div>
+</div>
+<!-- Detailed Policy Table -->
+<div class="bg-white border border-slate-200 overflow-hidden">
+<div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
+<h3 class="font-label-caps text-xs text-slate-900 uppercase tracking-widest">Policy Index: Access Governance</h3>
+<div class="flex gap-4">
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-emerald-500"></div>
+<span class="text-[10px] font-label-caps text-slate-500">Active</span>
+</div>
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-blue-500"></div>
+<span class="text-[10px] font-label-caps text-slate-500">Draft</span>
+</div>
+</div>
+</div>
+<table class="w-full text-left border-collapse">
+<thead class="bg-white border-b border-slate-200">
+<tr>
+<th class="px-6 py-4 font-label-caps text-[10px] uppercase text-slate-400 tracking-widest">Document Name</th>
+<th class="px-6 py-4 font-label-caps text-[10px] uppercase text-slate-400 tracking-widest">Audit Control Link</th>
+<th class="px-6 py-4 font-label-caps text-[10px] uppercase text-slate-400 tracking-widest">Version</th>
+<th class="px-6 py-4 font-label-caps text-[10px] uppercase text-slate-400 tracking-widest">Read Track</th>
+<th class="px-6 py-4 font-label-caps text-[10px] uppercase text-slate-400 tracking-widest text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-100">
+<tr class="hover:bg-slate-50/80 transition-colors group">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-slate-400 group-hover:text-blue-600 transition-colors" data-icon="description">description</span>
+<div>
+<p class="text-sm font-semibold text-slate-900">Privileged Admin Policy</p>
+<p class="text-[10px] text-slate-400 font-mono-data">DOC-IT-8821</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="font-mono-data text-xs text-blue-600 bg-blue-50 px-2 py-0.5 rounded">ISO-27001-A.9.4</span>
+</td>
+<td class="px-6 py-4">
+<span class="font-mono-data text-xs text-slate-600">v5.1.0</span>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<span class="text-xs font-mono-data text-emerald-600 font-bold">100%</span>
+<span class="material-symbols-outlined text-emerald-500 text-xs" data-icon="check_circle" data-weight="fill">check_circle</span>
+</div>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="text-slate-400 hover:text-blue-600 transition-colors"><span class="material-symbols-outlined" data-icon="more_vert">more_vert</span></button>
+</td>
+</tr>
+<tr class="bg-slate-50/50 hover:bg-slate-50 transition-colors group">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-slate-400 group-hover:text-blue-600 transition-colors" data-icon="description">description</span>
+<div>
+<p class="text-sm font-semibold text-slate-900">Remote Access Standard</p>
+<p class="text-[10px] text-slate-400 font-mono-data">DOC-IT-8840</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="font-mono-data text-xs text-blue-600 bg-blue-50 px-2 py-0.5 rounded">NIST-SP-800-AC-17</span>
+</td>
+<td class="px-6 py-4">
+<span class="font-mono-data text-xs text-slate-600">v2.4.1</span>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<span class="text-xs font-mono-data text-slate-600 font-bold">82%</span>
+<div class="w-16 h-1.5 bg-slate-200 rounded-full overflow-hidden">
+<div class="h-full bg-blue-500 w-[82%]"></div>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="text-slate-400 hover:text-blue-600 transition-colors"><span class="material-symbols-outlined" data-icon="more_vert">more_vert</span></button>
+</td>
+</tr>
+<tr class="hover:bg-slate-50/80 transition-colors group">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-slate-400 group-hover:text-blue-600 transition-colors" data-icon="description">description</span>
+<div>
+<p class="text-sm font-semibold text-slate-900">Cryptographic Key Policy</p>
+<p class="text-[10px] text-slate-400 font-mono-data">DOC-IT-9102</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="font-mono-data text-xs text-blue-600 bg-blue-50 px-2 py-0.5 rounded">FIPS-140-2</span>
+</td>
+<td class="px-6 py-4">
+<span class="font-mono-data text-xs text-slate-600">v1.2.0</span>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<span class="text-xs font-mono-data text-emerald-600 font-bold">98%</span>
+<span class="material-symbols-outlined text-emerald-500 text-xs" data-icon="check_circle" data-weight="fill">check_circle</span>
+</div>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="text-slate-400 hover:text-blue-600 transition-colors"><span class="material-symbols-outlined" data-icon="more_vert">more_vert</span></button>
+</td>
+</tr>
+<tr class="bg-slate-50/50 hover:bg-slate-50 transition-colors group">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-slate-400 group-hover:text-blue-600 transition-colors" data-icon="description">description</span>
+<div>
+<p class="text-sm font-semibold text-slate-900">Third-Party Onboarding</p>
+<p class="text-[10px] text-slate-400 font-mono-data">DOC-VND-001</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="font-mono-data text-xs text-blue-600 bg-blue-50 px-2 py-0.5 rounded">SOC2-CC2.1</span>
+</td>
+<td class="px-6 py-4">
+<span class="font-mono-data text-xs text-slate-600">v3.0.0</span>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<span class="text-xs font-mono-data text-slate-600 font-bold">45%</span>
+<div class="w-16 h-1.5 bg-slate-200 rounded-full overflow-hidden">
+<div class="h-full bg-amber-500 w-[45%]"></div>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="text-slate-400 hover:text-blue-600 transition-colors"><span class="material-symbols-outlined" data-icon="more_vert">more_vert</span></button>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="px-6 py-3 border-t border-slate-100 flex items-center justify-between text-[10px] font-mono-data text-slate-400 uppercase tracking-widest">
+<span>Showing 4 of 288 Global Policies</span>
+<div class="flex gap-2">
+<button class="px-3 py-1 border border-slate-200 hover:bg-slate-50">Prev</button>
+<button class="px-3 py-1 border border-slate-200 bg-blue-600 text-white border-blue-600">1</button>
+<button class="px-3 py-1 border border-slate-200 hover:bg-slate-50">2</button>
+<button class="px-3 py-1 border border-slate-200 hover:bg-slate-50">Next</button>
+</div>
+</div>
+</div>
+<!-- Version History & Audit Trail Bento Section -->
+<div class="grid grid-cols-12 gap-gutter">
+<div class="col-span-8 bg-white border border-slate-200 p-6">
+<div class="flex items-center justify-between mb-6">
+<h3 class="font-label-caps text-xs text-slate-900 uppercase tracking-widest">Cryptographic Audit Trail</h3>
+<span class="text-[10px] font-mono-data text-slate-400">LEDGER SYNC: 14:02 UTC</span>
+</div>
+<div class="space-y-6">
+<div class="flex gap-4">
+<div class="flex flex-col items-center">
+<div class="w-2 h-2 rounded-full bg-blue-600 ring-4 ring-blue-50"></div>
+<div class="w-px flex-1 bg-slate-100 my-2"></div>
+</div>
+<div>
+<p class="text-xs font-mono-data text-slate-400">MAY 24, 2024 — 14:10</p>
+<p class="text-sm font-semibold text-slate-900 mt-1">Policy Update Published</p>
+<p class="text-xs text-slate-500 mt-1">DOC-IT-8821 version v5.1.0 promoted to Active. Ledger hash: <span class="font-mono-data bg-slate-100 px-1">0x88f...2e11</span></p>
+<div class="mt-2 flex items-center gap-2">
+<img alt="User" class="w-5 h-5 rounded-full" data-alt="professional corporate headshot" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAVwzTYiT8KcisGzbL2QtHeEzJsC0EREbkibH0VjQmHJWv7B6NeZrSwIhVJeE6pBH1GJ2OcDxZ4XXNGK3cEEoKIhNt2IQL2MCTEjJADYwAr6QsrQD3yRgYupzM1hPLPq42DUn5cc_q3UuZU2Gb1WWinPoshh9J-012Xb8r-owpiyKShIk8tXudhxqpBBp0PUKaAGNrgFsHZLm7ehy5h8WAvA6WTg6g8LsbdOjyOkU5w2JpOFK93JySqNrLa4w_-EGU9J2wvRPxNxQQ"/>
+<span class="text-[10px] font-label-caps text-slate-400">Action by: Sarah Chen (Compliance Dir.)</span>
+</div>
+</div>
+</div>
+<div class="flex gap-4">
+<div class="flex flex-col items-center">
+<div class="w-2 h-2 rounded-full bg-slate-300"></div>
+<div class="w-px flex-1 bg-slate-100 my-2"></div>
+</div>
+<div>
+<p class="text-xs font-mono-data text-slate-400">MAY 24, 2024 — 09:30</p>
+<p class="text-sm font-semibold text-slate-900 mt-1">Workflow Approval: Legal</p>
+<p class="text-xs text-slate-500 mt-1">Legal department approved revision v5.1.0 with 0 findings.</p>
+</div>
+</div>
+<div class="flex gap-4">
+<div class="flex flex-col items-center">
+<div class="w-2 h-2 rounded-full bg-slate-300"></div>
+</div>
+<div>
+<p class="text-xs font-mono-data text-slate-400">MAY 23, 2024 — 16:45</p>
+<p class="text-sm font-semibold text-slate-900 mt-1">New Draft Revision Created</p>
+<p class="text-xs text-slate-500 mt-1">Initial draft for DOC-IT-8821 v5.1.0 initialized.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="col-span-4 bg-primary text-white p-6 relative overflow-hidden">
+<div class="relative z-10">
+<h3 class="font-label-caps text-xs text-blue-400 uppercase tracking-widest mb-6">Read Acknowledgement</h3>
+<div class="text-4xl font-headline-xl mb-2">2,481</div>
+<p class="text-sm text-slate-400 mb-8">Pending 'Read and Understood' confirmations across all departments.</p>
+<div class="space-y-4">
+<button class="w-full bg-white text-primary py-3 font-label-caps text-xs hover:bg-slate-100 transition-colors shadow-lg">
+                                    Send Bulk Reminders
+                                </button>
+<button class="w-full border border-slate-700 text-slate-300 py-3 font-label-caps text-xs hover:bg-white/5 transition-colors">
+                                    View Deficit Report
+                                </button>
+</div>
+</div>
+<!-- Abstract decorative graphic -->
+<div class="absolute bottom-0 right-0 w-32 h-32 opacity-10">
+<span class="material-symbols-outlined text-[160px]" data-icon="fact_check">fact_check</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>

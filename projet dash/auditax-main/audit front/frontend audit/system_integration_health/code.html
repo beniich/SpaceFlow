@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>System Integration Health | AuditMaster Global</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-primary": "#ffffff",
+                    "surface-container-low": "#f0f4f8",
+                    "surface-bright": "#f6fafe",
+                    "outline-variant": "#c5c6cd",
+                    "secondary": "#0058be",
+                    "surface-variant": "#dfe3e7",
+                    "on-surface": "#171c1f",
+                    "surface-container": "#eaeef2",
+                    "surface-container-highest": "#dfe3e7",
+                    "on-primary-fixed-variant": "#3c475a",
+                    "error-container": "#ffdad6",
+                    "primary-fixed": "#d8e3fb",
+                    "surface-container-high": "#e4e9ed",
+                    "on-tertiary-container": "#00a472",
+                    "surface-container-lowest": "#ffffff",
+                    "on-tertiary": "#ffffff",
+                    "on-secondary-fixed": "#001a42",
+                    "error": "#ba1a1a",
+                    "surface-tint": "#545f73",
+                    "surface-dim": "#d6dade",
+                    "secondary-fixed-dim": "#adc6ff",
+                    "on-primary-fixed": "#111c2d",
+                    "outline": "#75777d",
+                    "background": "#f6fafe",
+                    "on-tertiary-fixed": "#002113",
+                    "on-error": "#ffffff",
+                    "secondary-container": "#2170e4",
+                    "on-secondary-container": "#fefcff",
+                    "inverse-primary": "#bcc7de",
+                    "on-secondary-fixed-variant": "#004395",
+                    "tertiary-fixed": "#6ffbbe",
+                    "secondary-fixed": "#d8e2ff",
+                    "inverse-surface": "#2c3134",
+                    "on-tertiary-fixed-variant": "#005236",
+                    "on-primary-container": "#8590a6",
+                    "primary-fixed-dim": "#bcc7de",
+                    "primary": "#091426",
+                    "on-error-container": "#93000a",
+                    "inverse-on-surface": "#edf1f5",
+                    "tertiary-container": "#00301e",
+                    "on-secondary": "#ffffff",
+                    "primary-container": "#1e293b",
+                    "tertiary-fixed-dim": "#4edea3",
+                    "on-surface-variant": "#45474c",
+                    "tertiary": "#00190e",
+                    "surface": "#f6fafe",
+                    "on-background": "#171c1f"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "stack-sm": "8px",
+                    "unit": "4px",
+                    "margin-page": "40px",
+                    "gutter": "24px",
+                    "stack-md": "16px",
+                    "stack-lg": "32px",
+                    "sidebar-width": "280px"
+            },
+            "fontFamily": {
+                    "label-caps": ["Inter"],
+                    "mono-data": ["JetBrains Mono"],
+                    "headline-xl": ["Inter"],
+                    "headline-lg": ["Inter"],
+                    "body-md": ["Inter"],
+                    "mono-status": ["JetBrains Mono"]
+            },
+            "fontSize": {
+                    "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "mono-data": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "headline-xl": ["30px", {"lineHeight": "36px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "headline-lg": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "mono-status": ["12px", {"lineHeight": "16px", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .sidebar-active {
+            background-color: #ffffff;
+            border-right: 4px solid #3b82f6;
+            color: #3b82f6;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        }
+    </style>
+</head>
+<body class="bg-background font-body-md text-on-background">
+<!-- TopAppBar -->
+<header class="sticky top-0 w-full flex justify-between items-center h-16 px-10 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 shadow-sm z-40">
+<div class="flex items-center gap-gutter">
+<span class="text-lg font-bold tracking-tighter text-slate-900 dark:text-white">AuditMaster Global</span>
+<div class="hidden md:flex items-center bg-surface-container px-3 py-1.5 rounded-lg border border-outline-variant">
+<span class="material-symbols-outlined text-on-surface-variant text-sm mr-2">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-sm w-64 p-0 font-sans" placeholder="Search data streams..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-stack-md">
+<div class="flex gap-stack-sm">
+<button class="p-2 text-slate-500 hover:text-slate-900 hover:bg-slate-50 transition-colors rounded-lg">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="p-2 text-slate-500 hover:text-slate-900 hover:bg-slate-50 transition-colors rounded-lg">
+<span class="material-symbols-outlined">history_edu</span>
+</button>
+<button class="p-2 text-slate-500 hover:text-slate-900 hover:bg-slate-50 transition-colors rounded-lg">
+<span class="material-symbols-outlined">account_tree</span>
+</button>
+</div>
+<div class="h-6 w-px bg-slate-200 mx-2"></div>
+<button class="bg-secondary text-on-primary px-4 py-2 rounded font-label-caps text-label-caps hover:opacity-90 transition-opacity">
+                New Audit
+            </button>
+<img alt="User Profile Avatar" class="w-8 h-8 rounded-full border border-slate-200 ml-2" data-alt="professional headshot of a senior compliance officer in a modern corporate setting with soft natural lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBCsiGEsFrxyylMiXULq0Fx-GdV1R9Ow4DfrJy3U8ZPiepwHuHtL0zyta7dwIgnXw8ki_iDVyfl507A1Gpu51D_vS6_06Ja2EedYRgbPvCuOM8eDRkwq0V7K10PttKm2C-dEU0AUsuo-QrC7hpWUnAQx9BBUG7iIlziW5y0Kp97-DWl_U-O7QEYdj7Sqt8Aj5Jfwv0vGQv6TuhQE_K8Ls2N1qh2bE8fICaQwgeW3z6V6PRpCHNgIERmB6bU8NevJ8YulvXAod0dq1s"/>
+</div>
+</header>
+<div class="flex">
+<!-- SideNavBar -->
+<aside class="fixed left-0 h-screen w-[280px] bg-slate-50 dark:bg-slate-950 border-r border-slate-200 dark:border-slate-800 flex flex-col z-30">
+<div class="p-margin-page">
+<h1 class="text-xl font-black text-slate-900 dark:text-white uppercase tracking-tighter">AuditMaster</h1>
+<p class="text-xs font-semibold text-slate-500 uppercase tracking-widest mt-1">Global Compliance</p>
+</div>
+<nav class="flex-1 overflow-y-auto py-2">
+<a class="flex items-center px-6 py-4 text-slate-500 hover:text-slate-900 dark:hover:text-slate-100 transition-all" href="#">
+<span class="material-symbols-outlined mr-4">gavel</span>
+<span class="font-label-caps text-label-caps">Regulator Portal</span>
+</a>
+<a class="flex items-center px-6 py-4 text-slate-500 hover:text-slate-900 dark:hover:text-slate-100 transition-all" href="#">
+<span class="material-symbols-outlined mr-4">report_problem</span>
+<span class="font-label-caps text-label-caps">Exceptions</span>
+</a>
+<a class="flex items-center px-6 py-4 text-slate-500 hover:text-slate-900 dark:hover:text-slate-100 transition-all" href="#">
+<span class="material-symbols-outlined mr-4">account_tree</span>
+<span class="font-label-caps text-label-caps">ICF Explorer</span>
+</a>
+<!-- Active Tab: Integrity Diagnostics -->
+<a class="flex items-center px-6 py-4 bg-white dark:bg-slate-900 border-r-4 border-blue-600 text-blue-600 shadow-sm transition-all" href="#">
+<span class="material-symbols-outlined mr-4">biotech</span>
+<span class="font-label-caps text-label-caps">Integrity Diagnostics</span>
+</a>
+<a class="flex items-center px-6 py-4 text-slate-500 hover:text-slate-900 dark:hover:text-slate-100 transition-all" href="#">
+<span class="material-symbols-outlined mr-4">unarchive</span>
+<span class="font-label-caps text-label-caps">Batch Center</span>
+</a>
+<a class="flex items-center px-6 py-4 text-slate-500 hover:text-slate-900 dark:hover:text-slate-100 transition-all" href="#">
+<span class="material-symbols-outlined mr-4">timeline</span>
+<span class="font-label-caps text-label-caps">Incident Workspace</span>
+</a>
+<a class="flex items-center px-6 py-4 text-slate-500 hover:text-slate-900 dark:hover:text-slate-100 transition-all" href="#">
+<span class="material-symbols-outlined mr-4">event_available</span>
+<span class="font-label-caps text-label-caps">Milestones</span>
+</a>
+<a class="flex items-center px-6 py-4 text-slate-500 hover:text-slate-900 dark:hover:text-slate-100 transition-all" href="#">
+<span class="material-symbols-outlined mr-4">settings_input_component</span>
+<span class="font-label-caps text-label-caps">Evidence Config</span>
+</a>
+<a class="flex items-center px-6 py-4 text-slate-500 hover:text-slate-900 dark:hover:text-slate-100 transition-all" href="#">
+<span class="material-symbols-outlined mr-4">fact_check</span>
+<span class="font-label-caps text-label-caps">QA Review</span>
+</a>
+<a class="flex items-center px-6 py-4 text-slate-500 hover:text-slate-900 dark:hover:text-slate-100 transition-all" href="#">
+<span class="material-symbols-outlined mr-4">security</span>
+<span class="font-label-caps text-label-caps">System Logs</span>
+</a>
+</nav>
+<div class="mt-auto p-6 space-y-4">
+<button class="w-full bg-secondary text-on-primary py-3 rounded font-label-caps text-label-caps flex items-center justify-center gap-2 hover:opacity-95 transition-opacity">
+<span class="material-symbols-outlined text-sm">description</span>
+                    Generate Report
+                </button>
+<div class="pt-4 border-t border-slate-200">
+<a class="flex items-center text-slate-500 hover:text-slate-900 mb-4 transition-colors" href="#">
+<span class="material-symbols-outlined mr-4">description</span>
+<span class="font-label-caps text-label-caps">Documentation</span>
+</a>
+<a class="flex items-center text-slate-500 hover:text-slate-900 transition-colors" href="#">
+<span class="material-symbols-outlined mr-4">help_outline</span>
+<span class="font-label-caps text-label-caps">Support</span>
+</a>
+</div>
+</div>
+</aside>
+<!-- Main Canvas -->
+<main class="ml-[280px] flex-1 p-margin-page max-w-[1440px]">
+<!-- Header Section -->
+<div class="mb-stack-lg flex justify-between items-end">
+<div>
+<h2 class="font-headline-xl text-headline-xl text-primary">System Integration Health</h2>
+<p class="text-on-primary-container font-body-md mt-unit">Monitoring forensic data integrity across ERP and HRIS environments.</p>
+</div>
+<div class="flex gap-stack-sm">
+<button class="flex items-center gap-2 px-4 py-2 bg-white border border-outline-variant rounded font-label-caps text-label-caps text-primary hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-sm">refresh</span>
+                        Re-sync All
+                    </button>
+<div class="bg-surface-container-high px-4 py-2 rounded flex items-center gap-2 border border-outline-variant">
+<span class="w-2 h-2 rounded-full bg-on-tertiary-container animate-pulse"></span>
+<span class="font-mono-status text-mono-status text-on-tertiary-container">ALL SYSTEMS NOMINAL</span>
+</div>
+</div>
+</div>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-12 gap-gutter">
+<!-- System Status Summary -->
+<div class="col-span-12 lg:col-span-8 grid grid-cols-1 md:grid-cols-3 gap-gutter">
+<div class="bg-white border border-outline-variant p-stack-md rounded shadow-sm">
+<div class="flex justify-between items-start mb-stack-md">
+<span class="font-label-caps text-label-caps text-on-surface-variant">ERP API GATEWAY</span>
+<span class="material-symbols-outlined text-on-tertiary-container">check_circle</span>
+</div>
+<div class="text-2xl font-mono-data font-bold text-primary">99.98%</div>
+<div class="text-xs text-on-surface-variant mt-1">Uptime (Last 30 Days)</div>
+<div class="mt-stack-md h-1.5 bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-on-tertiary-container w-[99.9%]"></div>
+</div>
+</div>
+<div class="bg-white border border-outline-variant p-stack-md rounded shadow-sm">
+<div class="flex justify-between items-start mb-stack-md">
+<span class="font-label-caps text-label-caps text-on-surface-variant">HRIS DATA SYNC</span>
+<span class="material-symbols-outlined text-on-tertiary-container">sync</span>
+</div>
+<div class="text-2xl font-mono-data font-bold text-primary">1.2s</div>
+<div class="text-xs text-on-surface-variant mt-1">Avg. Latency</div>
+<div class="mt-stack-md h-1.5 bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-secondary w-[45%]"></div>
+</div>
+</div>
+<div class="bg-white border border-outline-variant p-stack-md rounded shadow-sm">
+<div class="flex justify-between items-start mb-stack-md">
+<span class="font-label-caps text-label-caps text-on-surface-variant">ACTIVE CONNECTORS</span>
+<span class="material-symbols-outlined text-secondary">lan</span>
+</div>
+<div class="text-2xl font-mono-data font-bold text-primary">42 / 44</div>
+<div class="text-xs text-on-surface-variant mt-1">Operational Nodes</div>
+<div class="mt-stack-md h-1.5 bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-secondary w-[95%]"></div>
+</div>
+</div>
+</div>
+<!-- Network Topology Preview -->
+<div class="col-span-12 lg:col-span-4 row-span-2 bg-white border border-outline-variant rounded shadow-sm overflow-hidden flex flex-col">
+<div class="p-stack-md border-b border-surface-variant flex justify-between items-center">
+<h3 class="font-label-caps text-label-caps text-primary">Network Topology</h3>
+<span class="material-symbols-outlined text-on-surface-variant">zoom_in</span>
+</div>
+<div class="flex-1 bg-surface-container-lowest relative flex items-center justify-center p-gutter">
+<!-- Abstract Visual Representation -->
+<div class="relative w-full h-48 border border-dashed border-outline-variant rounded flex items-center justify-center">
+<div class="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-secondary via-transparent to-transparent"></div>
+<div class="z-10 flex flex-col items-center gap-4">
+<div class="w-12 h-12 rounded-lg bg-primary flex items-center justify-center text-on-primary">
+<span class="material-symbols-outlined">hub</span>
+</div>
+<div class="flex gap-stack-lg">
+<div class="w-8 h-8 rounded-full bg-on-tertiary-container flex items-center justify-center text-white text-xs">A1</div>
+<div class="w-8 h-8 rounded-full bg-on-tertiary-container flex items-center justify-center text-white text-xs">B2</div>
+<div class="w-8 h-8 rounded-full bg-error flex items-center justify-center text-white text-xs">C3</div>
+</div>
+</div>
+<svg class="absolute inset-0 w-full h-full pointer-events-none" viewbox="0 0 400 200">
+<line stroke="#c5c6cd" stroke-dasharray="4" stroke-width="1" x1="200" x2="140" y1="60" y2="120"></line>
+<line stroke="#c5c6cd" stroke-dasharray="4" stroke-width="1" x1="200" x2="200" y1="60" y2="120"></line>
+<line stroke="#c5c6cd" stroke-dasharray="4" stroke-width="1" x1="200" x2="260" y1="60" y2="120"></line>
+</svg>
+</div>
+</div>
+<div class="p-stack-md bg-surface-bright border-t border-surface-variant">
+<div class="flex justify-between text-xs font-mono-status mb-1">
+<span>REGIONAL HUB: NA-EAST</span>
+<span class="text-on-tertiary-container">ENCRYPTED</span>
+</div>
+<p class="text-[10px] text-on-surface-variant">Last verified: 2023-10-24 14:22:01 UTC</p>
+</div>
+</div>
+<!-- Integration Feeds Table -->
+<div class="col-span-12 lg:col-span-8 bg-white border border-outline-variant rounded shadow-sm">
+<div class="p-stack-md border-b border-surface-variant flex justify-between items-center">
+<h3 class="font-label-caps text-label-caps text-primary">Critical Data Streams</h3>
+<div class="flex gap-2">
+<button class="text-xs font-label-caps text-secondary px-2 py-1 hover:bg-blue-50 rounded transition-colors">View All Streams</button>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low border-b border-surface-variant">
+<th class="px-stack-md py-3 font-label-caps text-label-caps text-on-surface-variant">Stream ID</th>
+<th class="px-stack-md py-3 font-label-caps text-label-caps text-on-surface-variant">Source System</th>
+<th class="px-stack-md py-3 font-label-caps text-label-caps text-on-surface-variant">Connection</th>
+<th class="px-stack-md py-3 font-label-caps text-label-caps text-on-surface-variant">Latency</th>
+<th class="px-stack-md py-3 font-label-caps text-label-caps text-on-surface-variant">Last Sync</th>
+<th class="px-stack-md py-3 font-label-caps text-label-caps text-on-surface-variant">Action</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-variant">
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="px-stack-md py-4 font-mono-data text-primary">ERP-GL-01</td>
+<td class="px-stack-md py-4">SAP S/4HANA Cloud</td>
+<td class="px-stack-md py-4">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-on-tertiary-container"></span>
+<span class="bg-tertiary-fixed text-on-tertiary-fixed-variant px-2 py-0.5 rounded font-mono-status text-[10px]">ACTIVE</span>
+</div>
+</td>
+<td class="px-stack-md py-4 font-mono-data">240ms</td>
+<td class="px-stack-md py-4 font-mono-data text-xs text-on-surface-variant">Today 09:45:12</td>
+<td class="px-stack-md py-4">
+<button class="p-1 hover:bg-slate-200 rounded">
+<span class="material-symbols-outlined text-slate-500 text-sm">sync</span>
+</button>
+</td>
+</tr>
+<tr class="bg-surface-container-low/30 hover:bg-surface-container-low transition-colors">
+<td class="px-stack-md py-4 font-mono-data text-primary">HRIS-PAY-A</td>
+<td class="px-stack-md py-4">Workday Core HR</td>
+<td class="px-stack-md py-4">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-on-tertiary-container"></span>
+<span class="bg-tertiary-fixed text-on-tertiary-fixed-variant px-2 py-0.5 rounded font-mono-status text-[10px]">ACTIVE</span>
+</div>
+</td>
+<td class="px-stack-md py-4 font-mono-data">850ms</td>
+<td class="px-stack-md py-4 font-mono-data text-xs text-on-surface-variant">Today 09:44:00</td>
+<td class="px-stack-md py-4">
+<button class="p-1 hover:bg-slate-200 rounded">
+<span class="material-symbols-outlined text-slate-500 text-sm">sync</span>
+</button>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="px-stack-md py-4 font-mono-data text-primary">CRM-SALES-V2</td>
+<td class="px-stack-md py-4">Salesforce Revenue</td>
+<td class="px-stack-md py-4">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-error animate-pulse"></span>
+<span class="bg-error-container text-on-error-container px-2 py-0.5 rounded font-mono-status text-[10px]">DEGRADED</span>
+</div>
+</td>
+<td class="px-stack-md py-4 font-mono-data text-error">4.8s</td>
+<td class="px-stack-md py-4 font-mono-data text-xs text-on-surface-variant">Yesterday 23:12:05</td>
+<td class="px-stack-md py-4">
+<button class="p-1 bg-secondary text-white rounded shadow-sm">
+<span class="material-symbols-outlined text-sm">replay</span>
+</button>
+</td>
+</tr>
+<tr class="bg-surface-container-low/30 hover:bg-surface-container-low transition-colors">
+<td class="px-stack-md py-4 font-mono-data text-primary">AUTH-LDAP-PX</td>
+<td class="px-stack-md py-4">Azure AD Connector</td>
+<td class="px-stack-md py-4">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-on-tertiary-container"></span>
+<span class="bg-tertiary-fixed text-on-tertiary-fixed-variant px-2 py-0.5 rounded font-mono-status text-[10px]">ACTIVE</span>
+</div>
+</td>
+<td class="px-stack-md py-4 font-mono-data">12ms</td>
+<td class="px-stack-md py-4 font-mono-data text-xs text-on-surface-variant">Just now</td>
+<td class="px-stack-md py-4">
+<button class="p-1 hover:bg-slate-200 rounded">
+<span class="material-symbols-outlined text-slate-500 text-sm">sync</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Error Logs / Audit Trail -->
+<div class="col-span-12 lg:col-span-12 bg-white border border-outline-variant rounded shadow-sm p-0">
+<div class="p-stack-md border-b border-surface-variant flex justify-between items-center">
+<div class="flex items-center gap-stack-sm">
+<span class="material-symbols-outlined text-error">bug_report</span>
+<h3 class="font-label-caps text-label-caps text-primary">Forensic Sync Failure Logs</h3>
+</div>
+<span class="font-mono-status text-xs text-on-surface-variant">7 unresolved issues</span>
+</div>
+<div class="p-gutter">
+<div class="space-y-4 border-l-2 border-surface-variant ml-4 pl-8 relative">
+<!-- Timeline Entry 1 -->
+<div class="relative">
+<span class="absolute -left-[41px] top-0 w-4 h-4 rounded-full border-4 border-white bg-error"></span>
+<div class="flex flex-col md:flex-row md:items-center gap-stack-sm mb-1">
+<span class="font-mono-data text-xs text-on-surface-variant">2023-10-24 14:02:44</span>
+<span class="bg-error-container text-on-error-container px-2 py-0.5 rounded font-mono-status text-[10px] uppercase">Connection Refused</span>
+<span class="font-mono-data text-sm font-bold">NODE: CRM-SALES-V2</span>
+</div>
+<p class="text-sm text-on-surface-variant bg-surface-container-low p-stack-sm rounded border border-surface-variant">
+                                    Exception trace: <code class="font-mono-data text-xs">SocketTimeoutException: Connect timed out at api.salesforce.cloud:443. Attempt 3 of 5.</code>
+</p>
+</div>
+<!-- Timeline Entry 2 -->
+<div class="relative">
+<span class="absolute -left-[41px] top-0 w-4 h-4 rounded-full border-4 border-white bg-on-tertiary-container"></span>
+<div class="flex flex-col md:flex-row md:items-center gap-stack-sm mb-1">
+<span class="font-mono-data text-xs text-on-surface-variant">2023-10-24 13:58:12</span>
+<span class="bg-tertiary-fixed text-on-tertiary-fixed-variant px-2 py-0.5 rounded font-mono-status text-[10px] uppercase">Auth Verified</span>
+<span class="font-mono-data text-sm font-bold">NODE: ERP-GL-01</span>
+</div>
+<p class="text-sm text-on-surface-variant">
+                                    JWT token rotated successfully for service account <code class="font-mono-data text-xs">svc-audit-master-prd-01</code>.
+                                </p>
+</div>
+<!-- Timeline Entry 3 -->
+<div class="relative opacity-60">
+<span class="absolute -left-[41px] top-0 w-4 h-4 rounded-full border-4 border-white bg-secondary"></span>
+<div class="flex flex-col md:flex-row md:items-center gap-stack-sm mb-1">
+<span class="font-mono-data text-xs text-on-surface-variant">2023-10-24 13:30:00</span>
+<span class="bg-secondary-fixed text-on-secondary-fixed-variant px-2 py-0.5 rounded font-mono-status text-[10px] uppercase">Manual Re-Sync</span>
+<span class="font-mono-data text-sm font-bold">USER: j.chen@auditmaster.com</span>
+</div>
+<p class="text-sm text-on-surface-variant">
+                                    Triggered full reconciliation for <code class="font-mono-data text-xs">HRIS-PAY-A</code> (Workday). Result: Success.
+                                </p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+<!-- Floating Tooltip / Global Status (Contextual suppression applied to detail screens, but shown here as a dashboard) -->
+<div class="fixed bottom-margin-page right-margin-page flex flex-col items-end gap-stack-sm pointer-events-none">
+<div class="bg-primary text-on-primary px-4 py-2 rounded-xl shadow-2xl flex items-center gap-3 border border-primary-container pointer-events-auto">
+<span class="material-symbols-outlined text-on-tertiary-container animate-spin" style="animation-duration: 3s;">settings_heart</span>
+<div>
+<div class="text-[10px] font-label-caps uppercase opacity-70">Heartbeat</div>
+<div class="text-xs font-mono-data">Healthy @ 162ms</div>
+</div>
+</div>
+</div>
+</body></html>

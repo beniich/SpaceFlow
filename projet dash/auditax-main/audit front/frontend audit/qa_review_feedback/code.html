@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AuditMaster Global - QA Review</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary": "#00190e",
+                        "error": "#ba1a1a",
+                        "on-error-container": "#93000a",
+                        "on-primary-fixed-variant": "#3c475a",
+                        "error-container": "#ffdad6",
+                        "on-tertiary-container": "#00a472",
+                        "on-secondary-container": "#fefcff",
+                        "secondary-fixed": "#d8e2ff",
+                        "outline": "#75777d",
+                        "surface-container-lowest": "#ffffff",
+                        "inverse-on-surface": "#edf1f5",
+                        "surface-tint": "#545f73",
+                        "on-secondary-fixed": "#001a42",
+                        "secondary": "#0058be",
+                        "on-surface": "#171c1f",
+                        "on-tertiary-fixed": "#002113",
+                        "surface": "#f6fafe",
+                        "surface-bright": "#f6fafe",
+                        "on-primary-fixed": "#111c2d",
+                        "tertiary-container": "#00301e",
+                        "on-primary": "#ffffff",
+                        "inverse-primary": "#bcc7de",
+                        "on-surface-variant": "#45474c",
+                        "inverse-surface": "#2c3134",
+                        "on-tertiary-fixed-variant": "#005236",
+                        "surface-container": "#eaeef2",
+                        "on-error": "#ffffff",
+                        "surface-container-highest": "#dfe3e7",
+                        "surface-container-low": "#f0f4f8",
+                        "surface-dim": "#d6dade",
+                        "tertiary-fixed": "#6ffbbe",
+                        "on-secondary": "#ffffff",
+                        "on-secondary-fixed-variant": "#004395",
+                        "primary-fixed-dim": "#bcc7de",
+                        "on-primary-container": "#8590a6",
+                        "surface-container-high": "#e4e9ed",
+                        "on-background": "#171c1f",
+                        "background": "#f6fafe",
+                        "on-tertiary": "#ffffff",
+                        "tertiary-fixed-dim": "#4edea3",
+                        "primary": "#091426",
+                        "outline-variant": "#c5c6cd",
+                        "primary-fixed": "#d8e3fb",
+                        "secondary-fixed-dim": "#adc6ff",
+                        "primary-container": "#1e293b",
+                        "surface-variant": "#dfe3e7",
+                        "secondary-container": "#2170e4"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "stack-lg": "32px",
+                        "margin-page": "40px",
+                        "stack-sm": "8px",
+                        "unit": "4px",
+                        "gutter": "24px",
+                        "stack-md": "16px",
+                        "sidebar-width": "280px"
+                    },
+                    "fontFamily": {
+                        "mono-data": ["JetBrains Mono"],
+                        "mono-status": ["JetBrains Mono"],
+                        "body-md": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "headline-xl": ["Inter"],
+                        "label-caps": ["Inter"]
+                    },
+                    "fontSize": {
+                        "mono-data": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "mono-status": ["12px", {"lineHeight": "16px", "fontWeight": "700"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "headline-lg": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "headline-xl": ["30px", {"lineHeight": "36px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            line-height: 1;
+        }
+        body {
+            background-color: #f1f5f9;
+        }
+    </style>
+</head>
+<body class="font-body-md text-on-surface">
+<!-- Sidebar Navigation -->
+<aside class="fixed left-0 h-screen w-[280px] bg-slate-50 dark:bg-slate-950 border-r border-slate-200 dark:border-slate-800 flex flex-col z-50">
+<div class="px-6 py-8">
+<h1 class="text-xl font-black text-slate-900 dark:text-white tracking-tighter">AuditMaster</h1>
+<p class="text-[10px] uppercase tracking-[0.2em] font-bold text-slate-400 mt-1">Global Compliance</p>
+</div>
+<nav class="flex-1 overflow-y-auto">
+<div class="space-y-1">
+<a class="flex items-center px-6 py-4 text-slate-500 hover:text-slate-900 transition-all font-sans text-xs uppercase tracking-widest font-semibold" href="#">
+<span class="material-symbols-outlined mr-3">gavel</span>
+                    Regulator Portal
+                </a>
+<a class="flex items-center px-6 py-4 text-slate-500 hover:text-slate-900 transition-all font-sans text-xs uppercase tracking-widest font-semibold" href="#">
+<span class="material-symbols-outlined mr-3">report_problem</span>
+                    Exceptions
+                </a>
+<a class="flex items-center px-6 py-4 text-slate-500 hover:text-slate-900 transition-all font-sans text-xs uppercase tracking-widest font-semibold" href="#">
+<span class="material-symbols-outlined mr-3">account_tree</span>
+                    ICF Explorer
+                </a>
+<a class="flex items-center px-6 py-4 text-slate-500 hover:text-slate-900 transition-all font-sans text-xs uppercase tracking-widest font-semibold" href="#">
+<span class="material-symbols-outlined mr-3">biotech</span>
+                    Integrity Diagnostics
+                </a>
+<a class="bg-white dark:bg-slate-900 border-r-4 border-blue-600 text-blue-600 flex items-center px-6 py-4 shadow-sm font-sans text-xs uppercase tracking-widest font-semibold" href="#">
+<span class="material-symbols-outlined mr-3">fact_check</span>
+                    QA Review
+                </a>
+<a class="flex items-center px-6 py-4 text-slate-500 hover:text-slate-900 transition-all font-sans text-xs uppercase tracking-widest font-semibold" href="#">
+<span class="material-symbols-outlined mr-3">unarchive</span>
+                    Batch Center
+                </a>
+<a class="flex items-center px-6 py-4 text-slate-500 hover:text-slate-900 transition-all font-sans text-xs uppercase tracking-widest font-semibold" href="#">
+<span class="material-symbols-outlined mr-3">timeline</span>
+                    Incident Workspace
+                </a>
+<a class="flex items-center px-6 py-4 text-slate-500 hover:text-slate-900 transition-all font-sans text-xs uppercase tracking-widest font-semibold" href="#">
+<span class="material-symbols-outlined mr-3">event_available</span>
+                    Milestones
+                </a>
+</div>
+</nav>
+<div class="p-6 border-t border-slate-200">
+<button class="w-full bg-blue-600 text-white py-3 rounded-lg font-bold text-sm tracking-tight hover:bg-blue-700 transition-colors">
+                Generate Report
+            </button>
+</div>
+</aside>
+<!-- Top App Bar -->
+<header class="fixed top-0 right-0 left-[280px] h-16 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 flex justify-between items-center px-10 z-40 shadow-sm">
+<div class="flex items-center gap-4">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">search</span>
+<input class="pl-10 pr-4 py-2 bg-slate-50 border-none rounded-full text-xs w-64 focus:ring-2 focus:ring-blue-500" placeholder="Search Audit IDs..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex gap-4">
+<span class="material-symbols-outlined text-slate-500 hover:text-blue-600 cursor-pointer">notifications</span>
+<span class="material-symbols-outlined text-slate-500 hover:text-blue-600 cursor-pointer">history_edu</span>
+<span class="material-symbols-outlined text-slate-500 hover:text-blue-600 cursor-pointer">account_tree</span>
+</div>
+<button class="bg-blue-600 text-white px-4 py-2 rounded font-sans text-sm font-medium hover:opacity-90 active:opacity-80 transition-all">
+                New Audit
+            </button>
+<div class="w-8 h-8 rounded-full bg-slate-200 overflow-hidden">
+<img alt="User Profile Avatar" class="w-full h-full object-cover" data-alt="professional headshot of a corporate executive in a business suit against a neutral office background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCHxT-Bc2MAI5Kn2fLWwg-DbO4pY8X87A06KlcZXDeHXp-Ir8bcPB5z1uvy6UNPfOzj6V6RSjuIGkIN6_oVn-l8U8A3tCXAeGBfn1HG8d4X4N67ZCeE-uU0iPsDpnqRdHzRoN_iuZS7NdoZxR64NuD21TzbE0DCZCnjjMqUV5rReDS50bwJ-T37GdXNgoFPlbvkZ4zUNDG6TcNTe6YV-leUWw3kMnIrIkX83RPvdmqAnMyQAiHA3XF2N5OeMm5NiLTKSpRmgdMCVr8"/>
+</div>
+</div>
+</header>
+<!-- Main Content Area -->
+<main class="ml-[280px] pt-16 min-h-screen">
+<div class="max-w-[1440px] mx-auto p-margin-page">
+<!-- Page Header -->
+<div class="mb-stack-lg flex justify-between items-end">
+<div>
+<nav class="flex items-center gap-2 text-xs font-mono-status text-slate-400 mb-2">
+<span>QA_ENGINE</span>
+<span class="material-symbols-outlined text-[10px]">chevron_right</span>
+<span>SESSION_772A</span>
+<span class="material-symbols-outlined text-[10px]">chevron_right</span>
+<span class="text-blue-600 font-bold">AUDITING_THE_AUDITOR</span>
+</nav>
+<h2 class="font-headline-xl text-primary tracking-tight">QA Quality Assurance Review</h2>
+<p class="text-on-surface-variant mt-1">Cross-verification of Audit Entity #9921-XPR: Financial Integrity Protocol</p>
+</div>
+<div class="flex gap-stack-sm">
+<div class="flex flex-col items-end">
+<span class="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-1">Overall Confidence</span>
+<div class="flex gap-1">
+<div class="w-8 h-1.5 bg-blue-600 rounded-full"></div>
+<div class="w-8 h-1.5 bg-blue-600 rounded-full"></div>
+<div class="w-8 h-1.5 bg-blue-600 rounded-full"></div>
+<div class="w-8 h-1.5 bg-blue-600 rounded-full"></div>
+<div class="w-8 h-1.5 bg-slate-200 rounded-full"></div>
+<span class="ml-2 font-mono-status text-blue-600 -mt-1.5">82%</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Side-by-Side Review Section -->
+<div class="grid grid-cols-2 gap-gutter">
+<!-- Auditor's Content -->
+<div class="space-y-stack-md">
+<div class="flex items-center justify-between px-4 py-2 bg-slate-100 rounded-t-lg border border-slate-200">
+<span class="font-label-caps text-slate-500 uppercase">Auditor Submission</span>
+<span class="font-mono-status text-[10px] text-slate-400">ID: AUD_RESP_044</span>
+</div>
+<div class="bg-white border border-slate-200 p-8 min-h-[600px] flex flex-col gap-stack-lg">
+<section>
+<h4 class="font-label-caps text-blue-600 mb-stack-sm">01. OBSERVATION SUMMARY</h4>
+<p class="text-body-md text-on-surface leading-relaxed">
+                                Upon reviewing the transaction logs for Q3, the entity displayed consistent adherence to the 'Separation of Duties' mandate. However, a 48-hour lag was noted in the reconciliation of automated clearinghouse (ACH) transfers. This appears to be a systemic bottleneck rather than a compliance failure.
+                            </p>
+</section>
+<section>
+<h4 class="font-label-caps text-blue-600 mb-stack-sm">02. EVIDENCE ARTIFACTS</h4>
+<div class="grid grid-cols-2 gap-stack-sm">
+<div class="p-4 border border-slate-100 bg-slate-50 rounded flex items-center gap-3">
+<span class="material-symbols-outlined text-slate-400">description</span>
+<div>
+<p class="text-xs font-bold text-slate-700">ACH_LOG_Q3.csv</p>
+<p class="text-[10px] text-slate-400">12.4 MB • CSV Ledger</p>
+</div>
+</div>
+<div class="p-4 border border-slate-100 bg-slate-50 rounded flex items-center gap-3">
+<span class="material-symbols-outlined text-slate-400">description</span>
+<div>
+<p class="text-xs font-bold text-slate-700">AUTH_MATRIX.pdf</p>
+<p class="text-[10px] text-slate-400">1.2 MB • Verification Matrix</p>
+</div>
+</div>
+</div>
+</section>
+<section>
+<h4 class="font-label-caps text-blue-600 mb-stack-sm">03. RECOMMENDED REMEDIATION</h4>
+<div class="bg-slate-50 p-4 border-l-4 border-blue-200">
+<p class="text-body-md italic text-slate-600">
+                                    "Implement a real-time API monitoring tool for ACH settlements to reduce the current 48-hour manual verification window."
+                                </p>
+</div>
+</section>
+<div class="mt-auto pt-8 border-t border-slate-100 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 bg-slate-200 rounded-full overflow-hidden">
+<img alt="Auditor Avatar" class="w-full h-full object-cover" data-alt="close up headshot of a middle-aged male auditor with glasses looking professional and focused" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBQeZnI9l_v_8mv5u9NW3HPQLObw34OaOYNwEqckV0mrUGj2DsMzBUvnkBTHhV6_ECbH-ejyOOUoXad0wDbk8pfJkc00aSF0Ks4AZPg4uI8dFWrhAhfFLG7re__igKXvY9NF7GqvOnBsMFt7YNB-n7YmdAp3lQADBEIHwcNfl2MTZhEy8oilBLK3-k5F45U3yxyNi1diWS63dFy0xblSJyX8WI-4ZQzdfa0IOcZt5AJdylYqJxnLPLBsndstv-d_tKyRoQC6ZYk0bc"/>
+</div>
+<div>
+<p class="text-sm font-bold text-on-surface">Mark S. Henderson</p>
+<p class="text-[10px] font-mono-status text-slate-400 uppercase">Senior Lead Auditor</p>
+</div>
+</div>
+<span class="px-2 py-1 bg-emerald-50 text-emerald-700 text-[10px] font-mono-status font-bold rounded border border-emerald-100">VERIFIED_SIGNED</span>
+</div>
+</div>
+</div>
+<!-- QA Scorecard -->
+<div class="space-y-stack-md">
+<div class="flex items-center justify-between px-4 py-2 bg-slate-100 rounded-t-lg border border-slate-200">
+<span class="font-label-caps text-slate-500 uppercase">QA Reviewer Scorecard</span>
+<span class="font-mono-status text-[10px] text-slate-400">SESSION: QA_772A</span>
+</div>
+<div class="bg-white border border-slate-200 p-8 min-h-[600px] flex flex-col gap-stack-lg shadow-sm">
+<!-- Scoring Matrix -->
+<div>
+<h4 class="font-label-caps text-slate-900 mb-stack-md flex justify-between">
+<span>Verification Metrics</span>
+<span class="text-blue-600">4 / 5 PASSED</span>
+</h4>
+<div class="space-y-stack-sm">
+<div class="flex items-center justify-between p-3 border border-slate-100 rounded">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-emerald-500" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="text-sm font-medium">Compliance with Standard 10.4</span>
+</div>
+<select class="text-xs border-none bg-transparent focus:ring-0 font-bold text-blue-600">
+<option>EXCELLENT</option>
+<option>SATISFACTORY</option>
+<option>MARGINAL</option>
+</select>
+</div>
+<div class="flex items-center justify-between p-3 border border-slate-100 rounded">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-emerald-500" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="text-sm font-medium">Evidence Sufficiency</span>
+</div>
+<select class="text-xs border-none bg-transparent focus:ring-0 font-bold text-blue-600">
+<option>EXCELLENT</option>
+<option>SATISFACTORY</option>
+<option>MARGINAL</option>
+</select>
+</div>
+<div class="flex items-center justify-between p-3 border border-slate-100 rounded bg-red-50 border-red-100">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-error" style="font-variation-settings: 'FILL' 1;">cancel</span>
+<span class="text-sm font-medium text-on-error-container">Forensic Depth of Analysis</span>
+</div>
+<select class="text-xs border-none bg-transparent focus:ring-0 font-bold text-error">
+<option>FAIL</option>
+<option>MARGINAL</option>
+<option>NEEDS_REVISION</option>
+</select>
+</div>
+</div>
+</div>
+<!-- Feedback Loop -->
+<div class="flex-1">
+<h4 class="font-label-caps text-slate-900 mb-stack-sm">QA CRITICAL FEEDBACK</h4>
+<textarea class="w-full h-32 border-slate-200 rounded-lg text-sm p-4 focus:ring-blue-500 focus:border-blue-500 placeholder:text-slate-300" placeholder="Enter detailed corrective actions..."></textarea>
+<div class="mt-stack-md p-4 bg-slate-50 rounded border border-slate-100">
+<h5 class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Confidence Assessment</h5>
+<input class="w-full h-1 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-blue-600" type="range"/>
+<div class="flex justify-between mt-2 font-mono-status text-[10px] text-slate-400">
+<span>SKEPTICAL</span>
+<span>NEUTRAL</span>
+<span class="text-blue-600 font-bold">CERTAIN (85%)</span>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<button class="py-3 border border-slate-200 rounded text-sm font-bold text-slate-600 hover:bg-slate-50 transition-colors uppercase tracking-tight">
+                                Flag for Re-Audit
+                            </button>
+<button class="py-3 bg-primary text-white rounded text-sm font-bold hover:bg-slate-800 transition-colors uppercase tracking-tight">
+                                Finalize QA Review
+                            </button>
+</div>
+</div>
+</div>
+</div>
+<!-- Audit Trail / Timeline -->
+<div class="mt-stack-lg bg-white border border-slate-200 rounded-lg overflow-hidden">
+<div class="px-6 py-4 bg-slate-50 border-b border-slate-200 flex justify-between items-center">
+<h3 class="font-label-caps text-slate-900">Chain of Custody &amp; Audit Trail</h3>
+<span class="material-symbols-outlined text-slate-400">security</span>
+</div>
+<div class="p-6">
+<div class="relative space-y-stack-md before:content-[''] before:absolute before:left-2 before:top-2 before:bottom-2 before:w-[1px] before:bg-slate-200">
+<div class="relative pl-8">
+<div class="absolute left-[5px] top-1.5 w-1.5 h-1.5 bg-blue-600 rounded-full ring-4 ring-blue-50"></div>
+<div class="flex justify-between items-start">
+<div>
+<p class="text-sm font-bold text-on-surface">QA Review Initiated</p>
+<p class="text-xs text-on-surface-variant">Reviewer ID: Sarah Jennings assigned to session 772A</p>
+</div>
+<span class="font-mono-data text-[10px] text-slate-400">OCT 12, 14:32:01 UTC</span>
+</div>
+</div>
+<div class="relative pl-8">
+<div class="absolute left-[5px] top-1.5 w-1.5 h-1.5 bg-slate-300 rounded-full"></div>
+<div class="flex justify-between items-start">
+<div>
+<p class="text-sm font-bold text-on-surface">Submission Received</p>
+<p class="text-xs text-on-surface-variant">Mark Henderson submitted response set AUD_RESP_044</p>
+</div>
+<span class="font-mono-data text-[10px] text-slate-400">OCT 12, 09:15:44 UTC</span>
+</div>
+</div>
+<div class="relative pl-8">
+<div class="absolute left-[5px] top-1.5 w-1.5 h-1.5 bg-slate-300 rounded-full"></div>
+<div class="flex justify-between items-start">
+<div>
+<p class="text-sm font-bold text-on-surface">Audit Framework Locked</p>
+<p class="text-xs text-on-surface-variant">System hash: 0x882A...F01 verified</p>
+</div>
+<span class="font-mono-data text-[10px] text-slate-400">OCT 11, 23:59:59 UTC</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>

@@ -1,0 +1,29 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+
+  /* AuditMaster Premium Palette */
+  --color-brand-bg: #f6fafe;
+  --color-brand-sidebar: #091426;
+  --color-brand-accent: #0058be;
+  --color-brand-success: #00a472;
+  --color-brand-warning: #f59e0b;
+  --color-brand-danger: #ba1a1a;
+  --color-brand-border: #dfe3e7;
+  --color-brand-text-main: #171c1f;
+  --color-brand-text-muted: #45474c;
+}
+
+@layer base {
+  body {
+    @apply font-sans bg-brand-bg text-brand-text-main;
+  }
+}
+
+.audit-grid {
+  background-size: 20px 20px;
+  background-image: radial-gradient(circle, #e2e8f0 1px, transparent 1px);
+}

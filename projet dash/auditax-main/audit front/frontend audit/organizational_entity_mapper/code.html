@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Organizational Entity Mapper | AuditMaster Global</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-primary": "#ffffff",
+                        "surface-container-low": "#f0f4f8",
+                        "surface-bright": "#f6fafe",
+                        "outline-variant": "#c5c6cd",
+                        "secondary": "#0058be",
+                        "surface-variant": "#dfe3e7",
+                        "on-surface": "#171c1f",
+                        "surface-container": "#eaeef2",
+                        "surface-container-highest": "#dfe3e7",
+                        "on-primary-fixed-variant": "#3c475a",
+                        "error-container": "#ffdad6",
+                        "primary-fixed": "#d8e3fb",
+                        "surface-container-high": "#e4e9ed",
+                        "on-tertiary-container": "#00a472",
+                        "surface-container-lowest": "#ffffff",
+                        "on-tertiary": "#ffffff",
+                        "on-secondary-fixed": "#001a42",
+                        "error": "#ba1a1a",
+                        "surface-tint": "#545f73",
+                        "surface-dim": "#d6dade",
+                        "secondary-fixed-dim": "#adc6ff",
+                        "on-primary-fixed": "#111c2d",
+                        "outline": "#75777d",
+                        "background": "#f6fafe",
+                        "on-tertiary-fixed": "#002113",
+                        "on-error": "#ffffff",
+                        "secondary-container": "#2170e4",
+                        "on-secondary-container": "#fefcff",
+                        "inverse-primary": "#bcc7de",
+                        "on-secondary-fixed-variant": "#004395",
+                        "tertiary-fixed": "#6ffbbe",
+                        "secondary-fixed": "#d8e2ff",
+                        "inverse-surface": "#2c3134",
+                        "on-tertiary-fixed-variant": "#005236",
+                        "on-primary-container": "#8590a6",
+                        "primary-fixed-dim": "#bcc7de",
+                        "primary": "#091426",
+                        "on-error-container": "#93000a",
+                        "inverse-on-surface": "#edf1f5",
+                        "tertiary-container": "#00301e",
+                        "on-secondary": "#ffffff",
+                        "primary-container": "#1e293b",
+                        "tertiary-fixed-dim": "#4edea3",
+                        "on-surface-variant": "#45474c",
+                        "tertiary": "#00190e",
+                        "surface": "#f6fafe",
+                        "on-background": "#171c1f"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "stack-sm": "8px",
+                        "unit": "4px",
+                        "margin-page": "40px",
+                        "gutter": "24px",
+                        "stack-md": "16px",
+                        "stack-lg": "32px",
+                        "sidebar-width": "280px"
+                    },
+                    "fontFamily": {
+                        "label-caps": ["Inter"],
+                        "mono-data": ["JetBrains Mono"],
+                        "headline-xl": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "body-md": ["Inter"],
+                        "mono-status": ["JetBrains Mono"]
+                    },
+                    "fontSize": {
+                        "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "mono-data": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "headline-xl": ["30px", {"lineHeight": "36px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "headline-lg": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "mono-status": ["12px", {"lineHeight": "16px", "fontWeight": "700"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .audit-line {
+            background-image: radial-gradient(#c5c6cd 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md antialiased min-h-screen flex flex-col">
+<!-- TopAppBar -->
+<header class="sticky top-0 w-full flex justify-between items-center h-16 px-10 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 shadow-sm z-40 font-sans antialiased text-sm font-medium tracking-tight">
+<div class="flex items-center gap-8">
+<span class="text-lg font-bold tracking-tighter text-slate-900 dark:text-white">AuditMaster Global</span>
+<div class="hidden md:flex items-center space-x-6">
+<nav class="flex gap-6">
+<a class="text-slate-500 hover:text-slate-900 transition-colors" href="#">Overview</a>
+<a class="text-blue-600 border-b-2 border-blue-600 py-5" href="#">ICF Explorer</a>
+<a class="text-slate-500 hover:text-slate-900 transition-colors" href="#">Integrity Diagnostics</a>
+</nav>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">search</span>
+<input class="pl-10 pr-4 py-1.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded text-xs focus:ring-1 focus:ring-blue-600 outline-none" placeholder="Search entities..." type="text"/>
+</div>
+<div class="flex gap-2">
+<button class="p-2 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors rounded">
+<span class="material-symbols-outlined text-slate-600 dark:text-slate-300">notifications</span>
+</button>
+<button class="p-2 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors rounded">
+<span class="material-symbols-outlined text-slate-600 dark:text-slate-300">history_edu</span>
+</button>
+</div>
+<button class="bg-blue-600 text-white px-4 py-1.5 rounded font-semibold text-xs active:opacity-80 transition-opacity">New Audit</button>
+<div class="w-8 h-8 rounded-full overflow-hidden border border-slate-200">
+<img alt="User Profile Avatar" data-alt="close-up professional headshot of a corporate executive in a neutral grey background with soft studio lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDYVSo2g1GBf2AQjDwWoog2J3fjhuLQd8QfLtdQq3IKDHF9RYrvKT-tKzho1hOy_j6_gqvplz57tvI4ZKKX12dZNveZSYS7c3cVr7YwuQMJrabQ-euOkb2TaSSXk_7nl8BFNpI1e7q0_yDUTQWN3THVYELSD2Wx343VsRyAJOtzZmVcfj6QfdD4g3SK3pUeyD8I-7uSSuRPNytCsJK0HUvu0tEDnFgqd3bmBVUjxTSVSGNt4AfDq-xb5LiI7AbHJ-H0iEj5OAzwH_4"/>
+</div>
+</div>
+</header>
+<div class="flex flex-1 overflow-hidden">
+<!-- SideNavBar -->
+<aside class="fixed left-0 h-screen w-[280px] border-r border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 flex flex-col z-30">
+<div class="p-6">
+<div class="flex items-center gap-3 mb-8">
+<div class="w-10 h-10 bg-blue-600 flex items-center justify-center rounded">
+<span class="material-symbols-outlined text-white" style="font-variation-settings: 'FILL' 1;">account_tree</span>
+</div>
+<div>
+<h1 class="text-xl font-black text-slate-900 dark:text-white leading-none">AuditMaster</h1>
+<p class="text-[10px] uppercase tracking-widest text-slate-500 font-bold mt-1">Global Compliance</p>
+</div>
+</div>
+<nav class="space-y-1">
+<div class="text-[10px] uppercase tracking-[0.15em] text-slate-400 font-bold mb-3 px-6">Navigation</div>
+<a class="flex items-center px-6 py-3 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-900 transition-all text-xs font-semibold uppercase tracking-widest" href="#">
+<span class="material-symbols-outlined mr-3 text-lg">gavel</span> Regulator Portal
+                    </a>
+<a class="flex items-center px-6 py-3 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-900 transition-all text-xs font-semibold uppercase tracking-widest" href="#">
+<span class="material-symbols-outlined mr-3 text-lg">report_problem</span> Exceptions
+                    </a>
+<a class="bg-white dark:bg-slate-900 border-r-4 border-blue-600 text-blue-600 flex items-center px-6 py-4 shadow-sm text-xs font-semibold uppercase tracking-widest" href="#">
+<span class="material-symbols-outlined mr-3 text-lg">account_tree</span> ICF Explorer
+                    </a>
+<a class="flex items-center px-6 py-3 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-900 transition-all text-xs font-semibold uppercase tracking-widest" href="#">
+<span class="material-symbols-outlined mr-3 text-lg">biotech</span> Integrity Diagnostics
+                    </a>
+<a class="flex items-center px-6 py-3 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-900 transition-all text-xs font-semibold uppercase tracking-widest" href="#">
+<span class="material-symbols-outlined mr-3 text-lg">timeline</span> Incident Workspace
+                    </a>
+</nav>
+<div class="mt-8 pt-8 border-t border-slate-200 dark:border-slate-800">
+<div class="text-[10px] uppercase tracking-[0.15em] text-slate-400 font-bold mb-3 px-6">Filters</div>
+<div class="px-6 space-y-4">
+<div>
+<label class="text-[10px] font-bold text-slate-500 mb-2 block uppercase">Region Selection</label>
+<select class="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs rounded p-2 outline-none focus:border-blue-600">
+<option>North America (EMEA)</option>
+<option>European Union</option>
+<option>Asia Pacific</option>
+<option>LATAM</option>
+</select>
+</div>
+<div class="flex items-center gap-2">
+<input checked="" class="rounded border-slate-300 text-blue-600 focus:ring-blue-500" type="checkbox"/>
+<span class="text-xs text-slate-600">Show Joint Ventures</span>
+</div>
+</div>
+</div>
+</div>
+<div class="mt-auto p-6 border-t border-slate-200 dark:border-slate-800">
+<button class="w-full bg-slate-900 dark:bg-blue-600 text-white py-3 rounded text-[10px] font-bold uppercase tracking-widest hover:opacity-90 transition-opacity">Generate Report</button>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 ml-[280px] p-margin-page bg-surface overflow-auto audit-line">
+<div class="max-w-[1440px] mx-auto">
+<!-- Page Header -->
+<div class="mb-stack-lg flex justify-between items-end">
+<div>
+<h2 class="font-headline-xl text-headline-xl text-on-surface mb-2">Organizational Entity Mapper</h2>
+<p class="text-body-md text-on-surface-variant max-w-2xl">Visualizing parent-child hierarchies across 42 global subsidiaries with real-time audit status and ownership verification.</p>
+</div>
+<div class="flex gap-4">
+<div class="flex flex-col items-end">
+<span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Last Synced</span>
+<span class="font-mono-data text-mono-data text-on-surface">2023-10-27 14:22:01 UTC</span>
+</div>
+</div>
+</div>
+<!-- Entity Diagram (Bento Layout) -->
+<div class="grid grid-cols-12 gap-gutter">
+<!-- Root Node Card -->
+<div class="col-span-12 lg:col-span-4 bg-white border border-slate-200 p-stack-md flex flex-col justify-between min-h-[200px]">
+<div>
+<div class="flex justify-between items-start mb-4">
+<span class="bg-blue-50 text-blue-700 px-2 py-1 font-mono-status text-mono-status border border-blue-100 uppercase">Ultimate Parent</span>
+<span class="material-symbols-outlined text-slate-300">verified</span>
+</div>
+<h3 class="font-headline-lg text-headline-lg text-on-surface">AuditMaster Global Holdings</h3>
+<p class="font-mono-data text-mono-data text-slate-500 mt-1">LEI: 549300V9876XYZ54321</p>
+</div>
+<div class="pt-4 border-t border-slate-100 flex justify-between items-center">
+<span class="text-xs font-bold text-slate-400 uppercase tracking-tighter">Jurisdiction</span>
+<span class="text-sm font-semibold text-slate-800">Delaware, US</span>
+</div>
+</div>
+<!-- Metric Cards -->
+<div class="col-span-12 lg:col-span-2 bg-white border border-slate-200 p-stack-md flex flex-col justify-center items-center">
+<span class="text-4xl font-bold text-on-surface mb-1">42</span>
+<span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest text-center">Active Entities</span>
+</div>
+<div class="col-span-12 lg:col-span-2 bg-white border border-slate-200 p-stack-md flex flex-col justify-center items-center">
+<span class="text-4xl font-bold text-on-tertiary-container mb-1">38</span>
+<span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest text-center">Audits Verified</span>
+</div>
+<div class="col-span-12 lg:col-span-4 bg-slate-900 p-stack-md flex flex-col justify-between">
+<div class="flex justify-between items-center">
+<span class="text-white font-mono-status text-mono-status">SYSTEM_HEALTH</span>
+<div class="flex gap-1">
+<div class="w-1 h-3 bg-blue-500"></div>
+<div class="w-1 h-3 bg-blue-500"></div>
+<div class="w-1 h-3 bg-blue-500"></div>
+<div class="w-1 h-3 bg-blue-500"></div>
+</div>
+</div>
+<p class="text-slate-400 text-xs mt-4">Node-link diagram synchronized with Global Entity Management System (GEMS). All ownership percentages recalculated post-reorg.</p>
+</div>
+<!-- Interactive Map/Hierarchy Container -->
+<div class="col-span-12 lg:col-span-9 bg-white border border-slate-200 relative min-h-[600px] overflow-hidden">
+<div class="absolute top-6 left-6 z-10">
+<div class="flex gap-2 mb-4">
+<button class="bg-slate-100 p-2 hover:bg-slate-200 transition-colors"><span class="material-symbols-outlined">zoom_in</span></button>
+<button class="bg-slate-100 p-2 hover:bg-slate-200 transition-colors"><span class="material-symbols-outlined">zoom_out</span></button>
+<button class="bg-slate-100 p-2 hover:bg-slate-200 transition-colors"><span class="material-symbols-outlined">filter_center_focus</span></button>
+</div>
+</div>
+<!-- Mock Node-Link SVG Visualization (Static Representation) -->
+<div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+<svg class="opacity-30" height="100%" width="100%">
+<line stroke="#3b82f6" stroke-dasharray="4" stroke-width="2" x1="50%" x2="25%" y1="20%" y2="50%"></line>
+<line stroke="#3b82f6" stroke-width="2" x1="50%" x2="50%" y1="20%" y2="50%"></line>
+<line stroke="#3b82f6" stroke-width="2" x1="50%" x2="75%" y1="20%" y2="50%"></line>
+<line stroke="#3b82f6" stroke-width="1" x1="25%" x2="15%" y1="50%" y2="80%"></line>
+<line stroke="#3b82f6" stroke-width="1" x1="25%" x2="35%" y1="50%" y2="80%"></line>
+</svg>
+</div>
+<!-- Nodes (Absolute Positioned for UI effect) -->
+<div class="absolute top-[15%] left-1/2 -translate-x-1/2 w-64 p-4 bg-white border-2 border-blue-600 shadow-lg">
+<div class="flex justify-between items-center mb-2">
+<span class="font-mono-status text-[10px] text-blue-600 uppercase">Level 0</span>
+<span class="font-mono-data text-[10px] text-slate-400">ID: 001-HQ</span>
+</div>
+<p class="text-xs font-bold text-slate-900 uppercase">AuditMaster Global</p>
+</div>
+<div class="absolute top-[45%] left-[20%] w-56 p-4 bg-white border border-slate-200 hover:border-blue-600 transition-all cursor-pointer group">
+<div class="flex justify-between items-center mb-2">
+<span class="bg-emerald-50 text-emerald-700 px-1.5 py-0.5 rounded text-[9px] font-bold">100% OWNED</span>
+<span class="material-symbols-outlined text-emerald-500 text-sm" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<p class="text-xs font-bold text-slate-900 mb-1">AMG EMEA Ltd</p>
+<p class="text-[10px] text-slate-500 font-mono-data">UK | VAT: GB987654321</p>
+</div>
+<div class="absolute top-[45%] left-[45%] w-56 p-4 bg-white border border-slate-200">
+<div class="flex justify-between items-center mb-2">
+<span class="bg-amber-50 text-amber-700 px-1.5 py-0.5 rounded text-[9px] font-bold">75% OWNED</span>
+<span class="material-symbols-outlined text-amber-500 text-sm">warning</span>
+</div>
+<p class="text-xs font-bold text-slate-900 mb-1">AMG Asia-Pac Pte</p>
+<p class="text-[10px] text-slate-500 font-mono-data">SG | UEN: 201234567M</p>
+</div>
+<div class="absolute top-[45%] left-[70%] w-56 p-4 bg-white border border-slate-200">
+<div class="flex justify-between items-center mb-2">
+<span class="bg-red-50 text-red-700 px-1.5 py-0.5 rounded text-[9px] font-bold">JOINT VENTURE</span>
+<span class="material-symbols-outlined text-red-500 text-sm">error</span>
+</div>
+<p class="text-xs font-bold text-slate-900 mb-1">AMG Brasil Servicos</p>
+<p class="text-[10px] text-slate-500 font-mono-data">BR | CNPJ: 12.345.678/0001</p>
+</div>
+</div>
+<!-- Audit Trail / Sidebar for Details -->
+<aside class="col-span-12 lg:col-span-3 space-y-gutter">
+<div class="bg-white border border-slate-200 p-stack-md">
+<h4 class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-4">Entity Details</h4>
+<div class="space-y-4">
+<div class="bg-slate-50 p-3">
+<span class="text-[10px] font-bold text-slate-500 block mb-1">SELECTED ENTITY</span>
+<span class="text-sm font-bold text-slate-900">AMG EMEA Ltd</span>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div>
+<span class="text-[10px] font-bold text-slate-400 block mb-1 uppercase">Local Auditor</span>
+<span class="text-xs font-semibold">PwC London</span>
+</div>
+<div>
+<span class="text-[10px] font-bold text-slate-400 block mb-1 uppercase">Year End</span>
+<span class="text-xs font-semibold">Dec 31</span>
+</div>
+</div>
+<div>
+<span class="text-[10px] font-bold text-slate-400 block mb-2 uppercase">Compliance Status</span>
+<div class="h-2 w-full bg-slate-100 rounded-full overflow-hidden">
+<div class="h-full bg-emerald-500 w-[92%]"></div>
+</div>
+<div class="flex justify-between mt-1">
+<span class="text-[10px] font-bold text-emerald-600">92% COMPLETE</span>
+<span class="text-[10px] text-slate-400">8 OF 9 TASKS</span>
+</div>
+</div>
+</div>
+</div>
+<div class="bg-white border border-slate-200 p-stack-md">
+<h4 class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-4">Verification Audit Trail</h4>
+<div class="relative pl-6 space-y-6 before:content-[''] before:absolute before:left-[5px] before:top-2 before:bottom-2 before:w-[2px] before:bg-slate-100">
+<div class="relative">
+<div class="absolute -left-[25px] top-1 w-2.5 h-2.5 rounded-full bg-blue-600 ring-4 ring-white"></div>
+<p class="text-[11px] font-mono-data text-slate-800"><span class="font-bold">E. THOMPSON</span> verified ownership certificates for EMEA region.</p>
+<span class="text-[9px] text-slate-400 font-bold uppercase mt-1 block">2 HOURS AGO</span>
+</div>
+<div class="relative">
+<div class="absolute -left-[25px] top-1 w-2.5 h-2.5 rounded-full bg-slate-300 ring-4 ring-white"></div>
+<p class="text-[11px] font-mono-data text-slate-800"><span class="font-bold">SYSTEM</span> synchronized GEMS database records.</p>
+<span class="text-[9px] text-slate-400 font-bold uppercase mt-1 block">OCT 26, 09:12</span>
+</div>
+<div class="relative">
+<div class="absolute -left-[25px] top-1 w-2.5 h-2.5 rounded-full bg-slate-300 ring-4 ring-white"></div>
+<p class="text-[11px] font-mono-data text-slate-800"><span class="font-bold">LEGAL DEP.</span> uploaded new AoA for Brasil JV.</p>
+<span class="text-[9px] text-slate-400 font-bold uppercase mt-1 block">OCT 24, 15:45</span>
+</div>
+</div>
+</div>
+</aside>
+<!-- Bottom Grid Rows -->
+<div class="col-span-12 lg:col-span-12">
+<div class="bg-white border border-slate-200 overflow-hidden">
+<div class="p-6 border-b border-slate-100 flex justify-between items-center">
+<h3 class="text-sm font-bold uppercase tracking-widest text-slate-900">Entity Ledger View</h3>
+<button class="text-xs text-blue-600 font-bold hover:underline">Export CSV</button>
+</div>
+<table class="w-full text-left">
+<thead class="bg-slate-50 border-b border-slate-200">
+<tr>
+<th class="px-6 py-3 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Entity Name</th>
+<th class="px-6 py-3 text-[10px] font-bold text-slate-400 uppercase tracking-widest text-right">Ownership</th>
+<th class="px-6 py-3 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Jurisdiction</th>
+<th class="px-6 py-3 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Tax ID</th>
+<th class="px-6 py-3 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Audit Status</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-100">
+<tr class="hover:bg-slate-50 transition-colors">
+<td class="px-6 py-4 text-xs font-bold text-slate-900">AMG EMEA Ltd</td>
+<td class="px-6 py-4 text-xs font-mono-data text-right">100.00%</td>
+<td class="px-6 py-4 text-xs text-slate-600">United Kingdom</td>
+<td class="px-6 py-4 text-xs font-mono-data text-slate-500">GB987654321</td>
+<td class="px-6 py-4">
+<span class="bg-emerald-50 text-emerald-700 px-2 py-0.5 font-mono-status text-[10px] uppercase border border-emerald-100">VERIFIED</span>
+</td>
+</tr>
+<tr class="bg-slate-50/50 hover:bg-slate-50 transition-colors">
+<td class="px-6 py-4 text-xs font-bold text-slate-900">AMG Asia-Pac Pte</td>
+<td class="px-6 py-4 text-xs font-mono-data text-right">75.00%</td>
+<td class="px-6 py-4 text-xs text-slate-600">Singapore</td>
+<td class="px-6 py-4 text-xs font-mono-data text-slate-500">201234567M</td>
+<td class="px-6 py-4">
+<span class="bg-amber-50 text-amber-700 px-2 py-0.5 font-mono-status text-[10px] uppercase border border-amber-100">IN PROGRESS</span>
+</td>
+</tr>
+<tr class="hover:bg-slate-50 transition-colors">
+<td class="px-6 py-4 text-xs font-bold text-slate-900">AMG Brasil Servicos</td>
+<td class="px-6 py-4 text-xs font-mono-data text-right">51.00%</td>
+<td class="px-6 py-4 text-xs text-slate-600">Brazil</td>
+<td class="px-6 py-4 text-xs font-mono-data text-slate-500">12.345.678/0001</td>
+<td class="px-6 py-4">
+<span class="bg-red-50 text-red-700 px-2 py-0.5 font-mono-status text-[10px] uppercase border border-red-100">CRITICAL ACTION</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

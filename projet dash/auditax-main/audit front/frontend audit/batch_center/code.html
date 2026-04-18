@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AuditMaster Global - Batch Center</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "tertiary": "#00190e",
+                    "error": "#ba1a1a",
+                    "on-error-container": "#93000a",
+                    "on-primary-fixed-variant": "#3c475a",
+                    "error-container": "#ffdad6",
+                    "on-tertiary-container": "#00a472",
+                    "on-secondary-container": "#fefcff",
+                    "secondary-fixed": "#d8e2ff",
+                    "outline": "#75777d",
+                    "surface-container-lowest": "#ffffff",
+                    "inverse-on-surface": "#edf1f5",
+                    "surface-tint": "#545f73",
+                    "on-secondary-fixed": "#001a42",
+                    "secondary": "#0058be",
+                    "on-surface": "#171c1f",
+                    "on-tertiary-fixed": "#002113",
+                    "surface": "#f6fafe",
+                    "surface-bright": "#f6fafe",
+                    "on-primary-fixed": "#111c2d",
+                    "tertiary-container": "#00301e",
+                    "on-primary": "#ffffff",
+                    "inverse-primary": "#bcc7de",
+                    "on-surface-variant": "#45474c",
+                    "inverse-surface": "#2c3134",
+                    "on-tertiary-fixed-variant": "#005236",
+                    "surface-container": "#eaeef2",
+                    "on-error": "#ffffff",
+                    "surface-container-highest": "#dfe3e7",
+                    "surface-container-low": "#f0f4f8",
+                    "surface-dim": "#d6dade",
+                    "tertiary-fixed": "#6ffbbe",
+                    "on-secondary": "#ffffff",
+                    "on-secondary-fixed-variant": "#004395",
+                    "primary-fixed-dim": "#bcc7de",
+                    "on-primary-container": "#8590a6",
+                    "surface-container-high": "#e4e9ed",
+                    "on-background": "#171c1f",
+                    "background": "#f6fafe",
+                    "on-tertiary": "#ffffff",
+                    "tertiary-fixed-dim": "#4edea3",
+                    "primary": "#091426",
+                    "outline-variant": "#c5c6cd",
+                    "primary-fixed": "#d8e3fb",
+                    "secondary-fixed-dim": "#adc6ff",
+                    "primary-container": "#1e293b",
+                    "surface-variant": "#dfe3e7",
+                    "secondary-container": "#2170e4"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "stack-lg": "32px",
+                    "margin-page": "40px",
+                    "stack-sm": "8px",
+                    "unit": "4px",
+                    "gutter": "24px",
+                    "stack-md": "16px",
+                    "sidebar-width": "280px"
+            },
+            "fontFamily": {
+                    "mono-data": ["JetBrains Mono"],
+                    "mono-status": ["JetBrains Mono"],
+                    "body-md": ["Inter"],
+                    "headline-lg": ["Inter"],
+                    "headline-xl": ["Inter"],
+                    "label-caps": ["Inter"]
+            },
+            "fontSize": {
+                    "mono-data": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "mono-status": ["12px", {"lineHeight": "16px", "fontWeight": "700"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-lg": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "headline-xl": ["30px", {"lineHeight": "36px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .sidebar-scroll::-webkit-scrollbar { width: 4px; }
+        .sidebar-scroll::-webkit-scrollbar-track { background: transparent; }
+        .sidebar-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    </style>
+</head>
+<body class="bg-surface font-body-md text-on-surface antialiased">
+<!-- TopAppBar -->
+<header class="sticky top-0 w-full flex justify-between items-center h-16 px-10 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 shadow-sm z-40 font-sans antialiased text-sm font-medium tracking-tight">
+<div class="flex items-center gap-8">
+<span class="text-lg font-bold tracking-tighter text-slate-900 dark:text-white">AuditMaster Global</span>
+<div class="hidden md:flex items-center gap-1 bg-slate-50 dark:bg-slate-800 px-3 py-1.5 rounded border border-slate-200 dark:border-slate-700">
+<span class="material-symbols-outlined text-slate-400 text-sm">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-xs w-64" placeholder="Search operations..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-4 text-slate-500">
+<button class="hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors p-2 rounded">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors p-2 rounded">
+<span class="material-symbols-outlined">history_edu</span>
+</button>
+<button class="hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors p-2 rounded">
+<span class="material-symbols-outlined">account_tree</span>
+</button>
+</div>
+<button class="bg-secondary text-on-secondary px-4 py-2 rounded font-semibold text-xs tracking-wide uppercase active:opacity-80 transition-opacity">
+                New Audit
+            </button>
+<div class="h-8 w-8 rounded-full overflow-hidden border border-slate-200">
+<img class="h-full w-full object-cover" data-alt="Professional headshot of a senior compliance officer in a corporate office setting, clean lighting, blurred architectural background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBtHq41Ohy_yCKU2CAdz33D0NtIQj4w_NT0pugT3SqyYLvZd_zhgToKlUh6eadHL4mMRC-R6r258SORPGj9m3ijnvvjRhdDzXICylSbAdPdNGvockb5vv1tC0iB4JkPFaRA8ESFZDHHTaGx85DPtUECSx5iKT4vDZkct8Q0ShPYohWhao3Xyrl9iVtA47cX-RxMYM_5TBHzpuVU4E0KEdaiKRJn1aJI12L-ub5AV7Hudc1xFcjvr9naWbgNqR-1Z-w7m-UwTYghwKM"/>
+</div>
+</div>
+</header>
+<div class="flex">
+<!-- SideNavBar -->
+<aside class="fixed left-0 h-screen w-[280px] flex flex-col border-r border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 z-30">
+<div class="p-6">
+<div class="flex items-center gap-3 mb-8">
+<div class="w-10 h-10 bg-primary flex items-center justify-center rounded">
+<span class="material-symbols-outlined text-white" style="font-variation-settings: 'FILL' 1;">security</span>
+</div>
+<div>
+<div class="text-xl font-black text-slate-900 dark:text-white leading-tight">AuditMaster</div>
+<div class="text-[10px] uppercase tracking-widest text-slate-400 font-bold">Global Compliance</div>
+</div>
+</div>
+<nav class="space-y-1 sidebar-scroll overflow-y-auto max-h-[calc(100vh-280px)]">
+<a class="flex items-center px-6 py-4 text-slate-500 hover:text-slate-900 dark:hover:text-slate-100 font-sans text-xs uppercase tracking-widest font-semibold hover:bg-slate-100 dark:hover:bg-slate-900 transition-all" href="#">
+<span class="material-symbols-outlined mr-3">gavel</span> Regulator Portal
+                    </a>
+<a class="flex items-center px-6 py-4 text-slate-500 hover:text-slate-900 dark:hover:text-slate-100 font-sans text-xs uppercase tracking-widest font-semibold hover:bg-slate-100 dark:hover:bg-slate-900 transition-all" href="#">
+<span class="material-symbols-outlined mr-3">report_problem</span> Exceptions
+                    </a>
+<a class="flex items-center px-6 py-4 text-slate-500 hover:text-slate-900 dark:hover:text-slate-100 font-sans text-xs uppercase tracking-widest font-semibold hover:bg-slate-100 dark:hover:bg-slate-900 transition-all" href="#">
+<span class="material-symbols-outlined mr-3">account_tree</span> ICF Explorer
+                    </a>
+<a class="flex items-center px-6 py-4 text-slate-500 hover:text-slate-900 dark:hover:text-slate-100 font-sans text-xs uppercase tracking-widest font-semibold hover:bg-slate-100 dark:hover:bg-slate-900 transition-all" href="#">
+<span class="material-symbols-outlined mr-3">biotech</span> Integrity Diagnostics
+                    </a>
+<!-- Active Navigation Item -->
+<a class="bg-white dark:bg-slate-900 border-r-4 border-blue-600 text-blue-600 flex items-center px-6 py-4 shadow-sm font-sans text-xs uppercase tracking-widest font-semibold" href="#">
+<span class="material-symbols-outlined mr-3">unarchive</span> Batch Center
+                    </a>
+<a class="flex items-center px-6 py-4 text-slate-500 hover:text-slate-900 dark:hover:text-slate-100 font-sans text-xs uppercase tracking-widest font-semibold hover:bg-slate-100 dark:hover:bg-slate-900 transition-all" href="#">
+<span class="material-symbols-outlined mr-3">timeline</span> Incident Workspace
+                    </a>
+<a class="flex items-center px-6 py-4 text-slate-500 hover:text-slate-900 dark:hover:text-slate-100 font-sans text-xs uppercase tracking-widest font-semibold hover:bg-slate-100 dark:hover:bg-slate-900 transition-all" href="#">
+<span class="material-symbols-outlined mr-3">event_available</span> Milestones
+                    </a>
+<a class="flex items-center px-6 py-4 text-slate-500 hover:text-slate-900 dark:hover:text-slate-100 font-sans text-xs uppercase tracking-widest font-semibold hover:bg-slate-100 dark:hover:bg-slate-900 transition-all" href="#">
+<span class="material-symbols-outlined mr-3">settings_input_component</span> Evidence Config
+                    </a>
+<a class="flex items-center px-6 py-4 text-slate-500 hover:text-slate-900 dark:hover:text-slate-100 font-sans text-xs uppercase tracking-widest font-semibold hover:bg-slate-100 dark:hover:bg-slate-900 transition-all" href="#">
+<span class="material-symbols-outlined mr-3">fact_check</span> QA Review
+                    </a>
+<a class="flex items-center px-6 py-4 text-slate-500 hover:text-slate-900 dark:hover:text-slate-100 font-sans text-xs uppercase tracking-widest font-semibold hover:bg-slate-100 dark:hover:bg-slate-900 transition-all" href="#">
+<span class="material-symbols-outlined mr-3">security</span> System Logs
+                    </a>
+</nav>
+</div>
+<div class="mt-auto p-6 border-t border-slate-200 dark:border-slate-800">
+<button class="w-full bg-slate-900 text-white py-3 rounded font-bold text-xs uppercase tracking-tighter mb-6 hover:bg-black transition-colors">
+                    Generate Report
+                </button>
+<div class="space-y-1">
+<a class="flex items-center px-4 py-2 text-slate-500 hover:text-slate-900 font-sans text-[10px] uppercase tracking-widest font-semibold" href="#">
+<span class="material-symbols-outlined mr-3 text-sm">description</span> Documentation
+                    </a>
+<a class="flex items-center px-4 py-2 text-slate-500 hover:text-slate-900 font-sans text-[10px] uppercase tracking-widest font-semibold" href="#">
+<span class="material-symbols-outlined mr-3 text-sm">help_outline</span> Support
+                    </a>
+</div>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="ml-[280px] w-full min-h-screen p-margin-page bg-surface">
+<div class="max-w-[1440px] mx-auto">
+<header class="mb-stack-lg">
+<h1 class="font-headline-xl text-headline-xl text-primary mb-2">Batch Import/Export Center</h1>
+<p class="text-on-surface-variant font-body-md max-w-2xl text-sm">Orchestrate high-volume compliance data migrations and audits. Secure, signed, and validated for regulatory submission.</p>
+</header>
+<!-- Top Row: Summary Stats & Active Jobs -->
+<div class="grid grid-cols-12 gap-gutter mb-stack-lg">
+<div class="col-span-8 bg-surface-container-lowest border border-outline-variant p-stack-md rounded-lg shadow-sm">
+<div class="flex justify-between items-end mb-stack-md">
+<div>
+<h3 class="font-headline-lg text-headline-lg text-primary mb-1">Active Transfers</h3>
+<p class="text-xs text-on-surface-variant font-medium">Monitoring 4 concurrent background processes</p>
+</div>
+<div class="text-right">
+<span class="text-xs font-mono-status text-on-secondary-fixed-variant bg-secondary-fixed px-2 py-1 rounded">SYSTEM_HEALTH: NOMINAL</span>
+</div>
+</div>
+<div class="space-y-stack-md">
+<!-- Job 1 -->
+<div class="p-stack-sm bg-surface-container rounded border border-outline-variant">
+<div class="flex justify-between items-center mb-2">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-secondary">cloud_upload</span>
+<span class="font-mono-data text-mono-data">Q4_FINANCIAL_RECON_V2.csv</span>
+</div>
+<span class="font-mono-status text-mono-status text-secondary">78% COMPLETE</span>
+</div>
+<div class="w-full bg-surface-container-highest h-1 rounded-full overflow-hidden">
+<div class="bg-secondary h-full" style="width: 78%"></div>
+</div>
+</div>
+<!-- Job 2 -->
+<div class="p-stack-sm bg-surface-container rounded border border-outline-variant">
+<div class="flex justify-between items-center mb-2">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-tertiary-fixed-dim">verified_user</span>
+<span class="font-mono-data text-mono-data">EVIDENCE_SIGNED_HASH_LOGS.json</span>
+</div>
+<span class="font-mono-status text-mono-status text-on-tertiary-fixed-variant">SIGNING...</span>
+</div>
+<div class="w-full bg-surface-container-highest h-1 rounded-full overflow-hidden">
+<div class="bg-on-tertiary-container h-full" style="width: 42%"></div>
+</div>
+</div>
+</div>
+</div>
+<div class="col-span-4 grid grid-rows-2 gap-gutter">
+<div class="bg-primary text-white p-stack-md rounded-lg flex flex-col justify-between">
+<span class="text-xs font-label-caps uppercase text-on-primary-container">Total Records Processed</span>
+<div class="text-4xl font-bold font-mono-data">1,204,551</div>
+<div class="flex items-center text-xs text-on-tertiary-fixed-variant">
+<span class="material-symbols-outlined text-xs mr-1">trending_up</span> +12.4% vs last week
+                            </div>
+</div>
+<div class="bg-surface-container-lowest border border-outline-variant p-stack-md rounded-lg flex flex-col justify-between">
+<span class="text-xs font-label-caps uppercase text-on-surface-variant">Validation Health</span>
+<div class="text-4xl font-bold font-mono-data text-error">99.2%</div>
+<div class="text-xs text-error font-medium">9,421 failed validations detected</div>
+</div>
+</div>
+</div>
+<!-- Main Content Area: Staging and Export -->
+<div class="grid grid-cols-12 gap-gutter items-start">
+<!-- Staging Area (Left) -->
+<div class="col-span-8 bg-white border border-outline-variant rounded-lg overflow-hidden shadow-sm">
+<div class="p-stack-md border-b border-outline-variant bg-surface-container-low flex justify-between items-center">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">analytics</span>
+<h2 class="font-headline-lg text-headline-lg">Import Staging Area</h2>
+</div>
+<div class="flex gap-2">
+<button class="px-3 py-1.5 bg-white border border-outline-variant text-xs font-bold rounded flex items-center gap-2 hover:bg-slate-50">
+<span class="material-symbols-outlined text-sm">filter_list</span> Filter Errors
+                                </button>
+<button class="px-3 py-1.5 bg-primary text-white text-xs font-bold rounded flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">publish</span> Commit Batch
+                                </button>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-slate-50 border-b border-outline-variant text-[10px] font-label-caps uppercase text-on-surface-variant tracking-wider">
+<th class="px-4 py-3 font-semibold">Row ID</th>
+<th class="px-4 py-3 font-semibold">Legal Entity</th>
+<th class="px-4 py-3 font-semibold">Transaction ID</th>
+<th class="px-4 py-3 font-semibold">Timestamp</th>
+<th class="px-4 py-3 font-semibold">Value (USD)</th>
+<th class="px-4 py-3 font-semibold">Status</th>
+</tr>
+</thead>
+<tbody class="font-mono-data text-mono-data text-xs">
+<tr class="border-b border-slate-100 hover:bg-slate-50 transition-colors">
+<td class="px-4 py-4">#00441</td>
+<td class="px-4 py-4">Global_Corp_EMEA</td>
+<td class="px-4 py-4">TX-88219-B</td>
+<td class="px-4 py-4">2023-10-24 14:22</td>
+<td class="px-4 py-4">42,500.00</td>
+<td class="px-4 py-4">
+<span class="bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded-full text-[10px] font-bold border border-emerald-200 uppercase">Valid</span>
+</td>
+</tr>
+<tr class="border-b border-slate-100 bg-red-50 hover:bg-red-100 transition-colors">
+<td class="px-4 py-4 text-error">#00442</td>
+<td class="px-4 py-4">Global_Corp_APAC</td>
+<td class="px-4 py-4 font-bold text-error">NULL_PTR_ERR</td>
+<td class="px-4 py-4">2023-10-24 14:25</td>
+<td class="px-4 py-4">--</td>
+<td class="px-4 py-4">
+<span class="bg-error-container text-on-error-container px-2 py-0.5 rounded-full text-[10px] font-bold border border-error uppercase">Missing ID</span>
+</td>
+</tr>
+<tr class="border-b border-slate-100 hover:bg-slate-50 transition-colors">
+<td class="px-4 py-4">#00443</td>
+<td class="px-4 py-4">Americas_Retail_Div</td>
+<td class="px-4 py-4">TX-91122-C</td>
+<td class="px-4 py-4">2023-10-24 14:28</td>
+<td class="px-4 py-4">1,120.40</td>
+<td class="px-4 py-4">
+<span class="bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded-full text-[10px] font-bold border border-emerald-200 uppercase">Valid</span>
+</td>
+</tr>
+<tr class="border-b border-slate-100 bg-red-50 hover:bg-red-100 transition-colors">
+<td class="px-4 py-4 text-error">#00444</td>
+<td class="px-4 py-4">Global_Corp_EMEA</td>
+<td class="px-4 py-4">TX-88220-A</td>
+<td class="px-4 py-4 text-error">INVALID_ISO_DATE</td>
+<td class="px-4 py-4">99,000.00</td>
+<td class="px-4 py-4">
+<span class="bg-error-container text-on-error-container px-2 py-0.5 rounded-full text-[10px] font-bold border border-error uppercase">Schema Mismatch</span>
+</td>
+</tr>
+<tr class="border-b border-slate-100 hover:bg-slate-50 transition-colors">
+<td class="px-4 py-4">#00445</td>
+<td class="px-4 py-4">Nordic_Solutions_SA</td>
+<td class="px-4 py-4">TX-44512-Z</td>
+<td class="px-4 py-4">2023-10-24 15:02</td>
+<td class="px-4 py-4">304.50</td>
+<td class="px-4 py-4">
+<span class="bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded-full text-[10px] font-bold border border-emerald-200 uppercase">Valid</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="p-stack-sm bg-slate-50 text-center">
+<button class="text-xs font-semibold text-secondary hover:underline">View 826 more rows...</button>
+</div>
+</div>
+<!-- Export Configuration (Right) -->
+<div class="col-span-4 space-y-gutter">
+<div class="bg-white border border-outline-variant p-stack-md rounded-lg shadow-sm">
+<h3 class="font-headline-lg text-headline-lg mb-4">Export Configuration</h3>
+<div class="space-y-4">
+<label class="block">
+<span class="text-xs font-label-caps text-on-surface-variant block mb-2">Export Format</span>
+<div class="grid grid-cols-3 gap-2">
+<button class="border-2 border-secondary bg-blue-50 py-3 rounded flex flex-col items-center gap-1">
+<span class="material-symbols-outlined text-secondary">csv</span>
+<span class="text-[10px] font-bold">CSV</span>
+</button>
+<button class="border border-outline-variant py-3 rounded flex flex-col items-center gap-1 hover:bg-slate-50">
+<span class="material-symbols-outlined text-slate-400">javascript</span>
+<span class="text-[10px] font-bold">JSON</span>
+</button>
+<button class="border border-outline-variant py-3 rounded flex flex-col items-center gap-1 hover:bg-slate-50">
+<span class="material-symbols-outlined text-slate-400">picture_as_pdf</span>
+<span class="text-[10px] font-bold">PDF</span>
+</button>
+</div>
+</label>
+<div class="bg-slate-50 p-4 rounded border border-dashed border-outline-variant">
+<div class="flex items-start gap-3">
+<div class="mt-1">
+<input checked="" class="h-4 w-4 rounded border-slate-300 text-secondary focus:ring-secondary" type="checkbox"/>
+</div>
+<div>
+<div class="text-xs font-bold flex items-center gap-1">
+                                                Attach Cryptographic Signature
+                                                <span class="material-symbols-outlined text-xs text-secondary" style="font-variation-settings: 'FILL' 1;">verified</span>
+</div>
+<p class="text-[10px] text-slate-500 mt-1 leading-relaxed">Appends a SHA-256 HMAC signature using the organization's root certificate for chain-of-custody verification.</p>
+</div>
+</div>
+</div>
+<button class="w-full bg-secondary text-white py-3 rounded font-bold text-xs uppercase tracking-widest flex justify-center items-center gap-2 hover:bg-blue-700 transition-colors shadow-md">
+<span class="material-symbols-outlined text-sm">file_download</span> Start Secure Export
+                                </button>
+</div>
+</div>
+<!-- Audit Trail Component -->
+<div class="bg-white border border-outline-variant p-stack-md rounded-lg shadow-sm">
+<h3 class="text-xs font-label-caps text-on-surface-variant mb-4 flex items-center justify-between">
+                                BATCH AUDIT TRAIL
+                                <span class="material-symbols-outlined text-sm">history</span>
+</h3>
+<div class="space-y-4 relative before:content-[''] before:absolute before:left-[11px] before:top-2 before:bottom-2 before:w-px before:bg-slate-200">
+<div class="relative pl-8">
+<div class="absolute left-0 top-1 w-6 h-6 bg-white border border-secondary rounded-full flex items-center justify-center z-10">
+<div class="w-2 h-2 bg-secondary rounded-full"></div>
+</div>
+<div class="text-[10px] font-mono-status text-on-surface-variant">2023-10-24 16:10:04</div>
+<div class="text-xs font-bold">Export Q3_RECON initiated by admin_77</div>
+</div>
+<div class="relative pl-8">
+<div class="absolute left-0 top-1 w-6 h-6 bg-white border border-outline rounded-full flex items-center justify-center z-10">
+<div class="w-2 h-2 bg-slate-400 rounded-full"></div>
+</div>
+<div class="text-[10px] font-mono-status text-on-surface-variant">2023-10-24 15:45:21</div>
+<div class="text-xs font-bold">Import failed at row #442 (Missing ID)</div>
+</div>
+<div class="relative pl-8">
+<div class="absolute left-0 top-1 w-6 h-6 bg-white border border-outline rounded-full flex items-center justify-center z-10">
+<div class="w-2 h-2 bg-slate-400 rounded-full"></div>
+</div>
+<div class="text-[10px] font-mono-status text-on-surface-variant">2023-10-24 15:40:00</div>
+<div class="text-xs font-bold">Staging manifest uploaded (12,400 records)</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer Visual Decoration -->
+<div class="mt-stack-lg border-t border-slate-200 pt-8 flex items-center justify-between">
+<div class="flex items-center gap-4">
+<img class="h-10 w-32 object-cover rounded grayscale opacity-50" data-alt="Abstract macro photography of digital server nodes with blue and emerald glowing lights on dark background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB_7GSZUB0_gOLlOisZHRCUJAnl3VwQ8Ctv0Jtjl6NtTrDm3tuU_2FeMcAkda_9PI_ax7IAFaB6E595EBkHHX0RKQglaCPj3AxLOFrDcx7xVXeMkx2CXCC_RCH_F5y3810KACsKSDS68hl14A2Y6znwyAXScd2aptU_cFtMyj3YxW4-cpToqSupOQFPsqsImWmz6dzmTxs5OnW3fqyfJt6HdlYPaExyFZjtELa9Ra709yQ2fWV1PnOJVbjNIf5NsslZly4lgZHEa5I"/>
+<div class="text-[10px] text-slate-400 font-mono-status uppercase">
+                            Secure Transfer Protocol: AES-256-GCM / TLS 1.3
+                        </div>
+</div>
+<div class="text-[10px] text-slate-400 font-mono-status">
+                        BUILD v4.2.1-STABLE // SYSTEM_EPOCH: 1698163200
+                    </div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AuditMaster Global | Real-Time Anomaly Detection</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-primary": "#ffffff",
+                      "surface-container-low": "#f0f4f8",
+                      "surface-bright": "#f6fafe",
+                      "outline-variant": "#c5c6cd",
+                      "secondary": "#0058be",
+                      "surface-variant": "#dfe3e7",
+                      "on-surface": "#171c1f",
+                      "surface-container": "#eaeef2",
+                      "surface-container-highest": "#dfe3e7",
+                      "on-primary-fixed-variant": "#3c475a",
+                      "error-container": "#ffdad6",
+                      "primary-fixed": "#d8e3fb",
+                      "surface-container-high": "#e4e9ed",
+                      "on-tertiary-container": "#00a472",
+                      "surface-container-lowest": "#ffffff",
+                      "on-tertiary": "#ffffff",
+                      "on-secondary-fixed": "#001a42",
+                      "error": "#ba1a1a",
+                      "surface-tint": "#545f73",
+                      "surface-dim": "#d6dade",
+                      "secondary-fixed-dim": "#adc6ff",
+                      "on-primary-fixed": "#111c2d",
+                      "outline": "#75777d",
+                      "background": "#f6fafe",
+                      "on-tertiary-fixed": "#002113",
+                      "on-error": "#ffffff",
+                      "secondary-container": "#2170e4",
+                      "on-secondary-container": "#fefcff",
+                      "inverse-primary": "#bcc7de",
+                      "on-secondary-fixed-variant": "#004395",
+                      "tertiary-fixed": "#6ffbbe",
+                      "secondary-fixed": "#d8e2ff",
+                      "inverse-surface": "#2c3134",
+                      "on-tertiary-fixed-variant": "#005236",
+                      "on-primary-container": "#8590a6",
+                      "primary-fixed-dim": "#bcc7de",
+                      "primary": "#091426",
+                      "on-error-container": "#93000a",
+                      "inverse-on-surface": "#edf1f5",
+                      "tertiary-container": "#00301e",
+                      "on-secondary": "#ffffff",
+                      "primary-container": "#1e293b",
+                      "tertiary-fixed-dim": "#4edea3",
+                      "on-surface-variant": "#45474c",
+                      "tertiary": "#00190e",
+                      "surface": "#f6fafe",
+                      "on-background": "#171c1f"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "stack-sm": "8px",
+                      "unit": "4px",
+                      "margin-page": "40px",
+                      "gutter": "24px",
+                      "stack-md": "16px",
+                      "stack-lg": "32px",
+                      "sidebar-width": "280px"
+              },
+              "fontFamily": {
+                      "label-caps": ["Inter"],
+                      "mono-data": ["JetBrains Mono"],
+                      "headline-xl": ["Inter"],
+                      "headline-lg": ["Inter"],
+                      "body-md": ["Inter"],
+                      "mono-status": ["JetBrains Mono"]
+              },
+              "fontSize": {
+                      "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                      "mono-data": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                      "headline-xl": ["30px", {"lineHeight": "36px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "headline-lg": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                      "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "mono-status": ["12px", {"lineHeight": "16px", "fontWeight": "700"}]
+              }
+            },
+          },
+        }
+      </script>
+</head>
+<body class="bg-background font-body-md text-on-surface">
+<div class="flex min-h-screen">
+<!-- SideNavBar -->
+<aside class="fixed left-0 h-screen w-[280px] border-r border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 z-50 flex flex-col">
+<div class="p-8">
+<div class="flex items-center gap-3 mb-1">
+<span class="material-symbols-outlined text-secondary text-2xl" data-icon="account_tree">account_tree</span>
+<h1 class="text-xl font-black text-slate-900 dark:text-white tracking-tight">AuditMaster</h1>
+</div>
+<p class="font-sans text-xs uppercase tracking-widest font-semibold text-slate-500">Global Compliance</p>
+</div>
+<nav class="flex-1 overflow-y-auto">
+<div class="space-y-1">
+<a class="flex items-center px-6 py-4 text-slate-500 hover:text-slate-900 transition-all hover:bg-slate-100" href="#">
+<span class="material-symbols-outlined mr-4" data-icon="gavel">gavel</span>
+<span class="font-sans text-xs uppercase tracking-widest font-semibold">Regulator Portal</span>
+</a>
+<a class="bg-white dark:bg-slate-900 border-r-4 border-secondary text-secondary flex items-center px-6 py-4 shadow-sm" href="#">
+<span class="material-symbols-outlined mr-4" data-icon="report_problem">report_problem</span>
+<span class="font-sans text-xs uppercase tracking-widest font-semibold">Exceptions</span>
+</a>
+<a class="flex items-center px-6 py-4 text-slate-500 hover:text-slate-900 transition-all hover:bg-slate-100" href="#">
+<span class="material-symbols-outlined mr-4" data-icon="account_tree">account_tree</span>
+<span class="font-sans text-xs uppercase tracking-widest font-semibold">ICF Explorer</span>
+</a>
+<a class="flex items-center px-6 py-4 text-slate-500 hover:text-slate-900 transition-all hover:bg-slate-100" href="#">
+<span class="material-symbols-outlined mr-4" data-icon="biotech">biotech</span>
+<span class="font-sans text-xs uppercase tracking-widest font-semibold">Integrity Diagnostics</span>
+</a>
+<a class="flex items-center px-6 py-4 text-slate-500 hover:text-slate-900 transition-all hover:bg-slate-100" href="#">
+<span class="material-symbols-outlined mr-4" data-icon="unarchive">unarchive</span>
+<span class="font-sans text-xs uppercase tracking-widest font-semibold">Batch Center</span>
+</a>
+<a class="flex items-center px-6 py-4 text-slate-500 hover:text-slate-900 transition-all hover:bg-slate-100" href="#">
+<span class="material-symbols-outlined mr-4" data-icon="timeline">timeline</span>
+<span class="font-sans text-xs uppercase tracking-widest font-semibold">Incident Workspace</span>
+</a>
+</div>
+</nav>
+<div class="p-6 mt-auto border-t border-slate-200">
+<button class="w-full bg-secondary text-white font-sans text-xs uppercase tracking-widest font-bold py-4 rounded-lg shadow-md hover:opacity-90 transition-opacity">
+                    Generate Report
+                </button>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 ml-[280px] min-w-0">
+<!-- TopAppBar -->
+<header class="sticky top-0 w-full flex justify-between items-center h-16 px-10 bg-white border-b border-slate-200 z-40 shadow-sm">
+<div class="flex items-center gap-6">
+<div class="relative">
+<span class="absolute inset-y-0 left-3 flex items-center text-slate-400">
+<span class="material-symbols-outlined" data-icon="search">search</span>
+</span>
+<input class="pl-10 pr-4 py-2 border border-slate-200 rounded-lg text-sm font-sans focus:outline-none focus:ring-2 focus:ring-secondary/20 w-80" placeholder="Search Audit Logs..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex gap-4 border-r border-slate-200 pr-6">
+<button class="text-slate-500 hover:text-slate-900 transition-colors"><span class="material-symbols-outlined" data-icon="notifications">notifications</span></button>
+<button class="text-slate-500 hover:text-slate-900 transition-colors"><span class="material-symbols-outlined" data-icon="history_edu">history_edu</span></button>
+<button class="text-slate-500 hover:text-slate-900 transition-colors"><span class="material-symbols-outlined" data-icon="account_tree">account_tree</span></button>
+</div>
+<button class="bg-primary px-4 py-2 rounded-lg text-white font-medium text-sm flex items-center gap-2 hover:opacity-90">
+<span class="material-symbols-outlined text-sm" data-icon="add">add</span>
+                        New Audit
+                    </button>
+<div class="w-8 h-8 rounded-full bg-slate-200 overflow-hidden">
+<img alt="User Profile" data-alt="Close up portrait of professional male auditor with glasses in clean office environment soft lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCk7rFaFo8rQEhpGj86VFKMUqHYD93iYbzf9comYBQl9NtlSbIyVsRf4eUV-1yO7-bctvbztNlHMThwXUI7K1pNnomBrVOyM0i5TmlEBqgzdQQpUGI0uQV0BOm-YNurKUipCwBBeNFgHMrogY7fy6ZOGqMF8Yjsq1_N5H0TtlMiEZqHmHWWekNTEehLd-auEv--X-xa2Me602iJ4tG3I5Tf0oFng9WiTuchCWmT3rpJb2EcCti1ZmF4sPVHKSVghr3-c3e9mpd2IJ4"/>
+</div>
+</div>
+</header>
+<div class="p-margin-page">
+<div class="flex justify-between items-end mb-stack-lg">
+<div>
+<h2 class="font-headline-xl text-headline-xl text-primary mb-2">Real-Time Anomaly Detection</h2>
+<p class="text-on-primary-container flex items-center gap-2">
+<span class="relative flex h-2 w-2">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-error opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2 w-2 bg-error"></span>
+</span>
+                            Monitoring live transaction stream for forensic irregularities.
+                        </p>
+</div>
+<div class="flex gap-3">
+<div class="bg-surface-container px-4 py-2 rounded-lg border border-outline-variant flex items-center gap-3">
+<span class="text-label-caps font-label-caps text-on-surface-variant">Active Stream:</span>
+<span class="text-mono-status font-mono-status text-secondary bg-secondary-fixed px-2 py-0.5 rounded">TX_GLOBAL_SECURE_01</span>
+</div>
+</div>
+</div>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-12 gap-gutter">
+<!-- Live Feed Column -->
+<div class="col-span-8 space-y-gutter">
+<!-- High Contrast Alerts Panel -->
+<div class="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm">
+<div class="px-6 py-4 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
+<h3 class="font-label-caps text-label-caps text-primary uppercase">Flagged Events Stream</h3>
+<div class="flex gap-2">
+<span class="bg-error-container text-on-error-container text-[10px] font-bold px-2 py-0.5 rounded uppercase tracking-tighter">3 High Risk</span>
+<span class="bg-surface-container-highest text-on-surface-variant text-[10px] font-bold px-2 py-0.5 rounded uppercase tracking-tighter">12 Normal</span>
+</div>
+</div>
+<div class="divide-y divide-slate-100">
+<!-- Alert Row 1 (High Risk) -->
+<div class="p-6 hover:bg-slate-50/80 transition-colors group cursor-pointer border-l-4 border-error">
+<div class="flex justify-between items-start mb-2">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-error" data-icon="warning" style="font-variation-settings: 'FILL' 1;">warning</span>
+<div>
+<h4 class="font-bold text-slate-900">Irregular Velocity Spike</h4>
+<p class="text-xs text-slate-500 font-mono-data uppercase">TX-ID: 992-KLA-X99</p>
+</div>
+</div>
+<div class="text-right">
+<span class="text-mono-status font-mono-status text-error text-lg">94% Deviation</span>
+<p class="text-[10px] text-slate-400 font-medium">TIMESTAMP: 14:22:01.002</p>
+</div>
+</div>
+<div class="flex gap-4 mt-4">
+<div class="flex-1 bg-surface-container-low p-3 rounded border border-slate-100">
+<p class="text-[10px] uppercase text-slate-400 font-bold mb-1">Baseline Pattern</p>
+<div class="h-1.5 w-full bg-slate-200 rounded-full overflow-hidden">
+<div class="h-full bg-secondary w-[15%]"></div>
+</div>
+</div>
+<div class="flex-1 bg-error-container/20 p-3 rounded border border-error/10">
+<p class="text-[10px] uppercase text-error font-bold mb-1">Current Event</p>
+<div class="h-1.5 w-full bg-slate-200 rounded-full overflow-hidden">
+<div class="h-full bg-error w-[94%]"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Alert Row 2 (Medium Risk) -->
+<div class="p-6 hover:bg-slate-50/80 transition-colors group cursor-pointer border-l-4 border-amber-500">
+<div class="flex justify-between items-start mb-2">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-amber-500" data-icon="shield_with_heart">shield_with_heart</span>
+<div>
+<h4 class="font-bold text-slate-900">Credential Tunneling detected</h4>
+<p class="text-xs text-slate-500 font-mono-data uppercase">USER: SVC_COMP_SYNC</p>
+</div>
+</div>
+<div class="text-right">
+<span class="text-mono-status font-mono-status text-amber-600 text-lg">62% Deviation</span>
+<p class="text-[10px] text-slate-400 font-medium">TIMESTAMP: 14:19:44.821</p>
+</div>
+</div>
+</div>
+<!-- Alert Row 3 -->
+<div class="p-6 hover:bg-slate-50/80 transition-colors group cursor-pointer border-l-4 border-slate-200">
+<div class="flex justify-between items-start mb-2">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-slate-400" data-icon="check_circle">check_circle</span>
+<div>
+<h4 class="font-bold text-slate-700">Standard Reconquest Batch</h4>
+<p class="text-xs text-slate-500 font-mono-data uppercase">TX-ID: 102-MZA-B01</p>
+</div>
+</div>
+<div class="text-right">
+<span class="text-mono-status font-mono-status text-slate-500 text-lg">2% Deviation</span>
+<p class="text-[10px] text-slate-400 font-medium">TIMESTAMP: 14:15:30.115</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Forensics Log Component -->
+<div class="bg-primary text-white p-6 rounded-xl shadow-lg font-mono-data text-xs leading-relaxed overflow-hidden relative">
+<div class="flex justify-between items-center mb-4 pb-2 border-b border-slate-700">
+<span class="uppercase tracking-widest text-slate-400 font-bold">SYSTEM_FORENSIC_KERNEL_LOG</span>
+<span class="bg-slate-800 px-2 py-1 rounded text-emerald-400">ENCRYPTED_LINK_ACTIVE</span>
+</div>
+<div class="space-y-1 opacity-80">
+<p><span class="text-slate-500">[14:22:01]</span> <span class="text-blue-400">AUTH_SUCCESS</span> | SHA-256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855</p>
+<p><span class="text-slate-500">[14:22:02]</span> <span class="text-error">ANOMALY_TRIGGER</span> | EVENT_TYPE: VELOCITY_SPIKE | SOURCE_IP: 192.168.1.104</p>
+<p><span class="text-slate-500">[14:22:02]</span> <span class="text-amber-400">INFO</span> | PACKET_HEADER_MISMATCH | OFFSET: 0x000F4</p>
+<p><span class="text-slate-500">[14:22:03]</span> <span class="text-emerald-400">TRACE</span> | RECURSIVE_LOOKUP_INITIATED | DEPTH: 12</p>
+<p><span class="text-slate-500">[14:22:04]</span> <span class="text-slate-500">DEBUG</span> | CACHE_FLUSH_COMPLETED</p>
+</div>
+<div class="absolute bottom-0 right-0 p-4 opacity-10">
+<span class="material-symbols-outlined text-8xl" data-icon="terminal">terminal</span>
+</div>
+</div>
+</div>
+<!-- Details Pane Column -->
+<div class="col-span-4 sticky top-24 space-y-gutter">
+<div class="bg-white border border-slate-200 rounded-xl p-8 shadow-md">
+<div class="flex items-center justify-between mb-8">
+<span class="text-label-caps font-label-caps text-on-surface-variant uppercase">Anomaly Investigation</span>
+<span class="bg-error-container text-on-error-container font-mono-status text-[10px] px-3 py-1 rounded-full">CRITICAL</span>
+</div>
+<div class="text-center mb-8">
+<div class="inline-flex items-center justify-center w-24 h-24 rounded-full bg-error/5 border border-error/20 mb-4">
+<span class="text-4xl font-bold text-error">94%</span>
+</div>
+<h3 class="font-headline-lg text-headline-lg text-primary">Deviation Delta</h3>
+<p class="text-slate-500 text-sm mt-1">Relative to 30-day moving average</p>
+</div>
+<div class="space-y-6 mb-10">
+<div class="flex justify-between items-center py-3 border-b border-slate-100">
+<span class="text-xs font-semibold text-slate-400 uppercase">Entity ID</span>
+<span class="font-mono-data text-sm font-bold">XF-9022-DELTA</span>
+</div>
+<div class="flex justify-between items-center py-3 border-b border-slate-100">
+<span class="text-xs font-semibold text-slate-400 uppercase">Origin Node</span>
+<span class="font-mono-data text-sm font-bold">Singapore-B4</span>
+</div>
+<div class="flex justify-between items-center py-3 border-b border-slate-100">
+<span class="text-xs font-semibold text-slate-400 uppercase">Protocol</span>
+<span class="font-mono-data text-sm font-bold">TLS 1.3 / QUIC</span>
+</div>
+</div>
+<!-- Forensic Visualization Placeholder -->
+<div class="bg-slate-50 rounded-lg p-4 mb-10 border border-slate-100">
+<p class="text-[10px] font-bold text-slate-400 uppercase mb-3">Pattern Matching Analysis</p>
+<div class="flex items-end gap-1 h-20">
+<div class="w-full bg-slate-200 h-[40%] rounded-t-sm"></div>
+<div class="w-full bg-slate-200 h-[35%] rounded-t-sm"></div>
+<div class="w-full bg-slate-200 h-[45%] rounded-t-sm"></div>
+<div class="w-full bg-error h-[98%] rounded-t-sm"></div>
+<div class="w-full bg-slate-200 h-[50%] rounded-t-sm"></div>
+<div class="w-full bg-slate-200 h-[42%] rounded-t-sm"></div>
+</div>
+</div>
+<div class="grid grid-cols-1 gap-3">
+<button class="w-full bg-secondary text-white font-label-caps text-label-caps py-4 rounded-lg flex items-center justify-center gap-2 hover:bg-on-secondary-fixed-variant transition-colors">
+<span class="material-symbols-outlined text-base" data-icon="search_insights">search_insights</span>
+                                    Investigate
+                                </button>
+<button class="w-full bg-white border border-slate-200 text-slate-600 font-label-caps text-label-caps py-4 rounded-lg flex items-center justify-center gap-2 hover:bg-slate-50 transition-colors">
+<span class="material-symbols-outlined text-base" data-icon="close">close</span>
+                                    Dismiss as False Positive
+                                </button>
+</div>
+</div>
+<!-- System Health Card -->
+<div class="bg-surface-container-high p-6 rounded-xl border border-outline-variant">
+<div class="flex items-center gap-3 mb-4">
+<span class="material-symbols-outlined text-on-tertiary-container" data-icon="verified" style="font-variation-settings: 'FILL' 1;">verified</span>
+<h4 class="font-bold text-primary text-sm">Engine Integrity</h4>
+</div>
+<div class="flex justify-between mb-2">
+<span class="text-xs text-slate-500">Latency</span>
+<span class="text-xs font-mono-data font-bold">14ms</span>
+</div>
+<div class="h-1 bg-slate-300 rounded-full overflow-hidden">
+<div class="h-full bg-on-tertiary-container w-[92%]"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

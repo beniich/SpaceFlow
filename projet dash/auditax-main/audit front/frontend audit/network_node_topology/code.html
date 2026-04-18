@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AuditMaster | Network Forensic Node Topology</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                "inverse-primary": "#bcc7de",
+                "on-secondary": "#ffffff",
+                "tertiary-fixed": "#6ffbbe",
+                "on-error-container": "#93000a",
+                "on-secondary-container": "#fefcff",
+                "on-primary-fixed-variant": "#3c475a",
+                "on-error": "#ffffff",
+                "outline": "#75777d",
+                "surface-container-low": "#f0f4f8",
+                "on-primary-container": "#8590a6",
+                "tertiary-fixed-dim": "#4edea3",
+                "surface-variant": "#dfe3e7",
+                "secondary-container": "#2170e4",
+                "surface-dim": "#d6dade",
+                "inverse-surface": "#2c3134",
+                "on-surface-variant": "#45474c",
+                "secondary-fixed": "#d8e2ff",
+                "surface-container-highest": "#dfe3e7",
+                "on-surface": "#171c1f",
+                "on-primary-fixed": "#111c2d",
+                "error": "#ba1a1a",
+                "surface-tint": "#545f73",
+                "on-background": "#171c1f",
+                "secondary-fixed-dim": "#adc6ff",
+                "outline-variant": "#c5c6cd",
+                "surface-container-lowest": "#ffffff",
+                "primary-fixed": "#d8e3fb",
+                "on-secondary-fixed-variant": "#004395",
+                "secondary": "#0058be",
+                "primary-container": "#1e293b",
+                "primary": "#091426",
+                "inverse-on-surface": "#edf1f5",
+                "error-container": "#ffdad6",
+                "on-tertiary": "#ffffff",
+                "primary-fixed-dim": "#bcc7de",
+                "tertiary": "#00190e",
+                "surface-bright": "#f6fafe",
+                "on-tertiary-fixed-variant": "#005236",
+                "surface-container-high": "#e4e9ed",
+                "surface": "#f6fafe",
+                "on-tertiary-fixed": "#002113",
+                "tertiary-container": "#00301e",
+                "surface-container": "#eaeef2",
+                "on-tertiary-container": "#00a472",
+                "background": "#f6fafe",
+                "on-secondary-fixed": "#001a42",
+                "on-primary": "#ffffff"
+            },
+            "borderRadius": {
+                "DEFAULT": "0.125rem",
+                "lg": "0.25rem",
+                "xl": "0.5rem",
+                "full": "0.75rem"
+            },
+            "spacing": {
+                "stack-lg": "32px",
+                "sidebar-width": "280px",
+                "unit": "4px",
+                "stack-md": "16px",
+                "margin-page": "40px",
+                "gutter": "24px",
+                "stack-sm": "8px"
+            },
+            "fontFamily": {
+                "mono-data": ["JetBrains Mono"],
+                "headline-lg": ["Inter"],
+                "mono-status": ["JetBrains Mono"],
+                "body-md": ["Inter"],
+                "headline-xl": ["Inter"],
+                "label-caps": ["Inter"]
+            },
+            "fontSize": {
+                "mono-data": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                "headline-lg": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                "mono-status": ["12px", {"lineHeight": "16px", "fontWeight": "700"}],
+                "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                "headline-xl": ["30px", {"lineHeight": "36px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .topology-grid {
+            background-image: radial-gradient(circle, #e2e8f0 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md overflow-x-hidden">
+<!-- SideNavBar Component -->
+<nav class="fixed left-0 top-0 h-full w-[280px] z-50 bg-white border-r border-slate-200 flex flex-col h-full py-4 space-y-1">
+<div class="text-lg font-black text-slate-900 px-6 py-8">
+<span class="text-secondary">Audit</span>Master
+            <div class="font-label-caps text-[10px] text-slate-400 tracking-[0.2em] mt-1 uppercase">Enterprise Security</div>
+</div>
+<div class="flex-1">
+<a class="flex items-center gap-3 px-6 py-3 text-slate-500 hover:bg-slate-50 transition-all duration-200" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-sans text-[13px] font-semibold uppercase tracking-wider">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-6 py-3 bg-slate-50 text-blue-600 border-r-4 border-blue-600 transition-all duration-200" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span class="font-sans text-[13px] font-semibold uppercase tracking-wider">Forensics</span>
+</a>
+<a class="flex items-center gap-3 px-6 py-3 text-slate-500 hover:bg-slate-50 transition-all duration-200" href="#">
+<span class="material-symbols-outlined">shield</span>
+<span class="font-sans text-[13px] font-semibold uppercase tracking-wider">Security</span>
+</a>
+<a class="flex items-center gap-3 px-6 py-3 text-slate-500 hover:bg-slate-50 transition-all duration-200" href="#">
+<span class="material-symbols-outlined">gavel</span>
+<span class="font-sans text-[13px] font-semibold uppercase tracking-wider">Compliance</span>
+</a>
+<a class="flex items-center gap-3 px-6 py-3 text-slate-500 hover:bg-slate-50 transition-all duration-200" href="#">
+<span class="material-symbols-outlined">settings_applications</span>
+<span class="font-sans text-[13px] font-semibold uppercase tracking-wider">Administration</span>
+</a>
+<a class="flex items-center gap-3 px-6 py-3 text-slate-500 hover:bg-slate-50 transition-all duration-200" href="#">
+<span class="material-symbols-outlined">group_add</span>
+<span class="font-sans text-[13px] font-semibold uppercase tracking-wider">Onboarding</span>
+</a>
+</div>
+<div class="border-t border-slate-100 pt-4">
+<a class="flex items-center gap-3 px-6 py-3 text-slate-500 hover:bg-slate-50 transition-all duration-200" href="#">
+<span class="material-symbols-outlined">help_outline</span>
+<span class="font-sans text-[13px] font-semibold uppercase tracking-wider">Support</span>
+</a>
+<a class="flex items-center gap-3 px-6 py-3 text-slate-500 hover:bg-slate-50 transition-all duration-200" href="#">
+<span class="material-symbols-outlined">list_alt</span>
+<span class="font-sans text-[13px] font-semibold uppercase tracking-wider">Audit Logs</span>
+</a>
+</div>
+</nav>
+<!-- TopAppBar Component -->
+<header class="fixed top-0 right-0 h-16 bg-white border-b border-slate-200 z-40 flex justify-between items-center px-10 ml-[280px] w-[calc(100%-280px)]">
+<div class="flex items-center gap-4">
+<span class="font-headline-lg text-slate-900">Forensic Node Topology</span>
+<span class="px-2 py-0.5 bg-secondary-container text-white text-[10px] font-bold rounded-sm uppercase tracking-widest">Live View</span>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-4 text-slate-500">
+<span class="material-symbols-outlined cursor-pointer hover:text-blue-600 transition-colors">notifications</span>
+<span class="material-symbols-outlined cursor-pointer hover:text-blue-600 transition-colors">security</span>
+<span class="material-symbols-outlined cursor-pointer hover:text-blue-600 transition-colors">history</span>
+</div>
+<button class="bg-blue-600 text-white px-4 py-2 rounded-lg font-sans text-sm font-medium hover:bg-blue-700 transition-colors">
+                New Audit
+            </button>
+<div class="w-8 h-8 rounded-full bg-slate-200 overflow-hidden border border-slate-300">
+<img alt="Administrator Avatar" data-alt="Close-up professional portrait of a tech administrator with clean studio lighting and neutral background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAKLKf1j6_FF7pSz03bIZaQOoFvFT7qDc8qL1qKtV8Un5EILnInARDbRzUw4ymYwpNo8BmnXfJBEfz70f_bpcA77ook2xFFui02pMQ9QeQEs897SPq7TkAfrHykevPy3NyAbJwErllYcA4OCZ4_l-WbqN3RNZlQsWuf3xIueKcFndfFCGjG2vXdgu2j2n1jL6Ax_IyeAchyu9Um59JCehAL7JZkJuVKB4BsCc0igqaXZjgmf_tgyle212C1ctlBF_YjY8yZ8jtg39I"/>
+</div>
+</div>
+</header>
+<!-- Main Content Area -->
+<main class="ml-[280px] pt-16 min-h-screen">
+<div class="max-w-[1440px] mx-auto p-[40px] space-y-[32px]">
+<!-- Global Stats Ribbon -->
+<div class="grid grid-cols-4 gap-[24px]">
+<div class="bg-white border border-slate-200 p-[24px] rounded-lg">
+<div class="font-label-caps text-slate-400 mb-1">TOTAL ACTIVE NODES</div>
+<div class="flex items-baseline gap-2">
+<span class="font-headline-xl text-slate-900">42</span>
+<span class="text-on-tertiary-container font-mono-status text-[10px] bg-tertiary-fixed px-1">+2 New</span>
+</div>
+</div>
+<div class="bg-white border border-slate-200 p-[24px] rounded-lg">
+<div class="font-label-caps text-slate-400 mb-1">AVG. LATENCY</div>
+<div class="flex items-baseline gap-2">
+<span class="font-headline-xl text-slate-900">14ms</span>
+<span class="text-on-tertiary-container font-mono-status text-[10px] bg-tertiary-fixed px-1">Optimal</span>
+</div>
+</div>
+<div class="bg-white border border-slate-200 p-[24px] rounded-lg">
+<div class="font-label-caps text-slate-400 mb-1">SYNC STATUS</div>
+<div class="flex items-baseline gap-2">
+<span class="font-headline-xl text-slate-900">98.4%</span>
+<span class="text-on-error-container font-mono-status text-[10px] bg-error-container px-1">-0.2%</span>
+</div>
+</div>
+<div class="bg-white border border-slate-200 p-[24px] rounded-lg">
+<div class="font-label-caps text-slate-400 mb-1">DEGRADED NODES</div>
+<div class="flex items-baseline gap-2">
+<span class="font-headline-xl text-error">03</span>
+<span class="text-on-error-container font-mono-status text-[10px] bg-error-container px-1">Critical</span>
+</div>
+</div>
+</div>
+<!-- Topology Visualization Map -->
+<div class="bg-white border border-slate-200 rounded-lg overflow-hidden flex flex-col h-[700px] relative">
+<div class="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-2">
+<div class="w-3 h-3 rounded-full bg-tertiary-fixed-dim"></div>
+<span class="text-xs font-semibold text-slate-600">Synchronized</span>
+</div>
+<div class="flex items-center gap-2">
+<div class="w-3 h-3 rounded-full bg-error animate-pulse"></div>
+<span class="text-xs font-semibold text-slate-600">Degraded</span>
+</div>
+<div class="flex items-center gap-2">
+<div class="w-3 h-3 rounded-full bg-secondary-fixed-dim"></div>
+<span class="text-xs font-semibold text-slate-600">Primary Hub</span>
+</div>
+</div>
+<div class="flex bg-slate-200 p-1 rounded-lg">
+<button class="px-3 py-1 bg-white shadow-sm rounded-md text-xs font-bold">GRAPH</button>
+<button class="px-3 py-1 text-xs font-bold text-slate-500">GEOGRAPHIC</button>
+</div>
+</div>
+<!-- The "Map" Canvas -->
+<div class="flex-1 topology-grid relative overflow-hidden bg-slate-50">
+<!-- Connection Lines (Simulated with SVG) -->
+<svg class="absolute inset-0 w-full h-full pointer-events-none opacity-40">
+<line stroke="#2170e4" stroke-dasharray="4" stroke-width="1.5" x1="20%" x2="50%" y1="30%" y2="50%"></line>
+<line stroke="#2170e4" stroke-width="1.5" x1="80%" x2="50%" y1="20%" y2="50%"></line>
+<line stroke="#ba1a1a" stroke-width="2" x1="75%" x2="50%" y1="70%" y2="50%"></line>
+<line stroke="#2170e4" stroke-width="1.5" x1="30%" x2="50%" y1="80%" y2="50%"></line>
+<line stroke="#75777d" stroke-width="1" x1="20%" x2="30%" y1="30%" y2="80%"></line>
+<line stroke="#75777d" stroke-width="1" x1="80%" x2="75%" y1="20%" y2="70%"></line>
+</svg>
+<!-- Nodes -->
+<!-- Central Hub -->
+<div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 group cursor-pointer">
+<div class="w-24 h-24 rounded-full border-2 border-secondary-container flex items-center justify-center bg-white shadow-lg relative z-10">
+<span class="material-symbols-outlined text-secondary text-4xl">dns</span>
+</div>
+<div class="absolute top-full mt-2 left-1/2 -translate-x-1/2 text-center whitespace-nowrap">
+<div class="font-mono-data text-xs font-bold text-primary">HUB-ALPHA-01</div>
+<div class="font-mono-status text-[10px] text-on-tertiary-container bg-tertiary-fixed px-2 rounded-full inline-block">STABLE</div>
+</div>
+</div>
+<!-- Node 1 (Degraded) -->
+<div class="absolute left-[75%] top-[70%] group cursor-pointer">
+<div class="w-16 h-16 rounded-full border-2 border-error flex items-center justify-center bg-white shadow-lg relative z-10 animate-pulse">
+<span class="material-symbols-outlined text-error text-2xl">error</span>
+</div>
+<div class="absolute top-full mt-2 left-1/2 -translate-x-1/2 text-center whitespace-nowrap">
+<div class="font-mono-data text-xs font-bold text-error">NODE-FRA-04</div>
+<div class="font-mono-status text-[10px] text-white bg-error px-2 rounded-full inline-block">DEGRADED (124ms)</div>
+</div>
+</div>
+<!-- Node 2 (Healthy) -->
+<div class="absolute left-[20%] top-[30%] group cursor-pointer">
+<div class="w-14 h-14 rounded-full border border-slate-200 flex items-center justify-center bg-white shadow-md relative z-10">
+<span class="material-symbols-outlined text-slate-400 text-xl">memory</span>
+</div>
+<div class="absolute top-full mt-2 left-1/2 -translate-x-1/2 text-center whitespace-nowrap">
+<div class="font-mono-data text-[10px] font-bold text-slate-600">NODE-LON-01</div>
+<div class="font-mono-status text-[10px] text-on-tertiary-container bg-tertiary-fixed px-2 rounded-full inline-block">8ms</div>
+</div>
+</div>
+<!-- Node 3 (Healthy) -->
+<div class="absolute left-[80%] top-[20%] group cursor-pointer">
+<div class="w-14 h-14 rounded-full border border-slate-200 flex items-center justify-center bg-white shadow-md relative z-10">
+<span class="material-symbols-outlined text-slate-400 text-xl">memory</span>
+</div>
+<div class="absolute top-full mt-2 left-1/2 -translate-x-1/2 text-center whitespace-nowrap">
+<div class="font-mono-data text-[10px] font-bold text-slate-600">NODE-SGP-02</div>
+<div class="font-mono-status text-[10px] text-on-tertiary-container bg-tertiary-fixed px-2 rounded-full inline-block">16ms</div>
+</div>
+</div>
+<!-- Node 4 (Syncing) -->
+<div class="absolute left-[30%] top-[80%] group cursor-pointer">
+<div class="w-14 h-14 rounded-full border border-secondary-fixed flex items-center justify-center bg-white shadow-md relative z-10">
+<span class="material-symbols-outlined text-secondary-fixed-dim text-xl">sync</span>
+</div>
+<div class="absolute top-full mt-2 left-1/2 -translate-x-1/2 text-center whitespace-nowrap">
+<div class="font-mono-data text-[10px] font-bold text-slate-600">NODE-TKY-09</div>
+<div class="font-mono-status text-[10px] text-blue-600 bg-blue-50 px-2 rounded-full inline-block">SYNCING...</div>
+</div>
+</div>
+<!-- Controls Overlay -->
+<div class="absolute bottom-6 right-6 flex flex-col gap-2">
+<button class="w-10 h-10 bg-white border border-slate-200 rounded flex items-center justify-center shadow-sm hover:bg-slate-50 transition-colors">
+<span class="material-symbols-outlined text-slate-600">add</span>
+</button>
+<button class="w-10 h-10 bg-white border border-slate-200 rounded flex items-center justify-center shadow-sm hover:bg-slate-50 transition-colors">
+<span class="material-symbols-outlined text-slate-600">remove</span>
+</button>
+<button class="w-10 h-10 bg-white border border-slate-200 rounded flex items-center justify-center shadow-sm hover:bg-slate-50 transition-colors mt-4">
+<span class="material-symbols-outlined text-slate-600">my_location</span>
+</button>
+</div>
+<!-- Inspect Panel -->
+<div class="absolute top-6 right-6 w-72 bg-white/95 backdrop-blur-sm border border-slate-200 rounded-lg shadow-xl p-6 hidden md:block">
+<h3 class="font-headline-lg text-lg mb-4">Node Inspector</h3>
+<div class="space-y-4">
+<div class="pb-3 border-b border-slate-100">
+<div class="font-label-caps text-slate-400 text-[10px]">SELECTED NODE</div>
+<div class="font-mono-data font-bold text-slate-900">NODE-FRA-04</div>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between items-center">
+<span class="text-xs text-slate-500">Latency</span>
+<span class="text-xs font-mono-data text-error font-bold">124ms</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="text-xs text-slate-500">Storage Load</span>
+<span class="text-xs font-mono-data">92%</span>
+</div>
+<div class="w-full bg-slate-100 h-1 rounded-full overflow-hidden">
+<div class="bg-error w-[92%] h-full"></div>
+</div>
+</div>
+<div class="pt-2">
+<div class="font-label-caps text-slate-400 text-[10px] mb-2">RECENT ALERTS</div>
+<div class="text-[11px] bg-error-container text-on-error-container p-2 rounded flex items-start gap-2">
+<span class="material-symbols-outlined text-xs mt-0.5">warning</span>
+<span>Parity mismatch detected during block #192,201 verification.</span>
+</div>
+</div>
+<button class="w-full py-2 bg-slate-900 text-white text-xs font-bold rounded mt-4 hover:bg-slate-800 transition-colors">REBOOT NODE</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Audit Trail Section -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-[32px]">
+<div class="md:col-span-2 bg-white border border-slate-200 rounded-lg p-6">
+<div class="flex justify-between items-center mb-6">
+<h3 class="font-headline-lg text-lg">Network Synchronization Logs</h3>
+<span class="material-symbols-outlined text-slate-400 cursor-pointer">filter_list</span>
+</div>
+<div class="space-y-0">
+<div class="flex items-center gap-4 py-3 border-b border-slate-50 hover:bg-slate-50 px-2 -mx-2 transition-colors">
+<span class="font-mono-status text-[10px] text-slate-400 w-24">14:22:01.002</span>
+<span class="w-2 h-2 rounded-full bg-tertiary-fixed-dim"></span>
+<span class="flex-1 font-mono-data text-xs text-slate-700">Block parity verified across 39 nodes</span>
+<span class="font-mono-status text-[10px] text-on-tertiary-container bg-tertiary-fixed px-1 rounded-sm">0.00ms Δ</span>
+</div>
+<div class="flex items-center gap-4 py-3 border-b border-slate-50 hover:bg-slate-50 px-2 -mx-2 transition-colors">
+<span class="font-mono-status text-[10px] text-slate-400 w-24">14:21:58.452</span>
+<span class="w-2 h-2 rounded-full bg-error"></span>
+<span class="flex-1 font-mono-data text-xs text-slate-700">Connection timeout: HUB-ALPHA-01 -&gt; NODE-FRA-04</span>
+<span class="font-mono-status text-[10px] text-on-error-container bg-error-container px-1 rounded-sm">RETRIEVING</span>
+</div>
+<div class="flex items-center gap-4 py-3 border-b border-slate-50 hover:bg-slate-50 px-2 -mx-2 transition-colors">
+<span class="font-mono-status text-[10px] text-slate-400 w-24">14:21:44.209</span>
+<span class="w-2 h-2 rounded-full bg-secondary-fixed-dim"></span>
+<span class="flex-1 font-mono-data text-xs text-slate-700">New forensic node joined: NODE-TKY-09 (Tokyo Region)</span>
+<span class="font-mono-status text-[10px] text-on-primary-container bg-primary-fixed px-1 rounded-sm">AUTHED</span>
+</div>
+<div class="flex items-center gap-4 py-3 border-b border-slate-50 hover:bg-slate-50 px-2 -mx-2 transition-colors">
+<span class="font-mono-status text-[10px] text-slate-400 w-24">14:21:30.881</span>
+<span class="w-2 h-2 rounded-full bg-tertiary-fixed-dim"></span>
+<span class="flex-1 font-mono-data text-xs text-slate-700">Cryptographic audit complete for epoch #4882</span>
+<span class="font-mono-status text-[10px] text-on-tertiary-container bg-tertiary-fixed px-1 rounded-sm">SUCCESS</span>
+</div>
+</div>
+</div>
+<div class="bg-white border border-slate-200 rounded-lg p-6">
+<h3 class="font-headline-lg text-lg mb-6">Regional Distribution</h3>
+<div class="space-y-6">
+<div class="space-y-2">
+<div class="flex justify-between items-center text-xs">
+<span class="font-semibold text-slate-600">North America (AWS-US-EAST)</span>
+<span class="font-mono-data">18 Nodes</span>
+</div>
+<div class="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
+<div class="bg-secondary h-full" style="width: 45%"></div>
+</div>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between items-center text-xs">
+<span class="font-semibold text-slate-600">Europe (Azure-EU-CENTRAL)</span>
+<span class="font-mono-data">12 Nodes</span>
+</div>
+<div class="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
+<div class="bg-secondary h-full" style="width: 30%"></div>
+</div>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between items-center text-xs">
+<span class="font-semibold text-slate-600">Asia Pacific (GCP-ASIA-SE)</span>
+<span class="font-mono-data">12 Nodes</span>
+</div>
+<div class="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
+<div class="bg-secondary h-full" style="width: 25%"></div>
+</div>
+</div>
+<div class="pt-6 border-t border-slate-100">
+<div class="p-4 bg-slate-50 rounded-lg border border-slate-100">
+<div class="flex items-center gap-3 text-slate-900 mb-2">
+<span class="material-symbols-outlined text-secondary">info</span>
+<span class="text-xs font-bold uppercase tracking-wider">Topology Recommendation</span>
+</div>
+<p class="text-[11px] text-slate-500 leading-relaxed">
+                                    High latency detected in the Frankfurt cluster. Recommend spinning up 2 additional observer nodes in FRA-2 zone to balance verification load.
+                                </p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Map View Background Style (Decorative Hidden Map Texture) -->
+<div class="fixed inset-0 pointer-events-none opacity-[0.03] z-[-1]">
+<img alt="World Map Texture" class="w-full h-full object-cover" data-alt="Faint technical world map schematic with thin white grid lines on a light slate blue background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBgiyio4DVI7akyrjkVScshO-ykkmWK-aYhILXbMjm1-_Aiak_fq1gngx-V_JYayfa85LOL3O6nFBc3Z7dOMs5U7Cyt0Yz5z9E6HglRkKzsB7-g26W9DzBexbf92HnWzHg9LwDA4McAe32U62Qm8w5NyCr_PNpS8tD2SIDobCMhkcCJwX41EBdeqXAqMqJMk-w72-O_syXUDqjow7GK1Tlvxcv8cRuZDBdzVUk5Ad2D7xUcKFoQOSgEPypteMAqbXP-q0oHH7YKB9Y"/>
+</div>
+</body></html>

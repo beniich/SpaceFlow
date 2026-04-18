@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>API Management | AuditMaster Global</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "inverse-primary": "#bcc7de",
+                    "on-secondary": "#ffffff",
+                    "tertiary-fixed": "#6ffbbe",
+                    "on-error-container": "#93000a",
+                    "on-secondary-container": "#fefcff",
+                    "on-primary-fixed-variant": "#3c475a",
+                    "on-error": "#ffffff",
+                    "outline": "#75777d",
+                    "surface-container-low": "#f0f4f8",
+                    "on-primary-container": "#8590a6",
+                    "tertiary-fixed-dim": "#4edea3",
+                    "surface-variant": "#dfe3e7",
+                    "secondary-container": "#2170e4",
+                    "surface-dim": "#d6dade",
+                    "inverse-surface": "#2c3134",
+                    "on-surface-variant": "#45474c",
+                    "secondary-fixed": "#d8e2ff",
+                    "surface-container-highest": "#dfe3e7",
+                    "on-surface": "#171c1f",
+                    "on-primary-fixed": "#111c2d",
+                    "error": "#ba1a1a",
+                    "surface-tint": "#545f73",
+                    "on-background": "#171c1f",
+                    "secondary-fixed-dim": "#adc6ff",
+                    "outline-variant": "#c5c6cd",
+                    "surface-container-lowest": "#ffffff",
+                    "primary-fixed": "#d8e3fb",
+                    "on-secondary-fixed-variant": "#004395",
+                    "secondary": "#0058be",
+                    "primary-container": "#1e293b",
+                    "primary": "#091426",
+                    "inverse-on-surface": "#edf1f5",
+                    "error-container": "#ffdad6",
+                    "on-tertiary": "#ffffff",
+                    "primary-fixed-dim": "#bcc7de",
+                    "tertiary": "#00190e",
+                    "surface-bright": "#f6fafe",
+                    "on-tertiary-fixed-variant": "#005236",
+                    "surface-container-high": "#e4e9ed",
+                    "surface": "#f6fafe",
+                    "on-tertiary-fixed": "#002113",
+                    "tertiary-container": "#00301e",
+                    "surface-container": "#eaeef2",
+                    "on-tertiary-container": "#00a472",
+                    "background": "#f6fafe",
+                    "on-secondary-fixed": "#001a42",
+                    "on-primary": "#ffffff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "stack-lg": "32px",
+                    "sidebar-width": "280px",
+                    "unit": "4px",
+                    "stack-md": "16px",
+                    "margin-page": "40px",
+                    "gutter": "24px",
+                    "stack-sm": "8px"
+            },
+            "fontFamily": {
+                    "mono-data": ["JetBrains Mono"],
+                    "headline-lg": ["Inter"],
+                    "mono-status": ["JetBrains Mono"],
+                    "body-md": ["Inter"],
+                    "headline-xl": ["Inter"],
+                    "label-caps": ["Inter"]
+            },
+            "fontSize": {
+                    "mono-data": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "headline-lg": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "mono-status": ["12px", {"lineHeight": "16px", "fontWeight": "700"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-xl": ["30px", {"lineHeight": "36px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #f1f5f9;
+            font-family: 'Inter', sans-serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            vertical-align: middle;
+        }
+        .audit-card {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            transition: box-shadow 0.2s ease-in-out;
+        }
+        .audit-card:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+        .timeline-thread::before {
+            content: '';
+            position: absolute;
+            left: 7px;
+            top: 24px;
+            bottom: 0;
+            width: 2px;
+            background-color: #e2e8f0;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background">
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-0 h-full w-[280px] z-50 bg-white border-r border-slate-200 flex flex-col py-4 space-y-1">
+<div class="text-lg font-black text-slate-900 px-6 py-8">
+            AuditMaster
+            <span class="block font-sans text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-400 mt-1">Enterprise Security</span>
+</div>
+<nav class="flex-1 px-3 space-y-1">
+<a class="flex items-center gap-3 px-6 py-3 text-slate-500 hover:bg-slate-50 transition-all duration-200 font-sans text-[13px] font-semibold uppercase tracking-wider" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+                Dashboard
+            </a>
+<a class="flex items-center gap-3 px-6 py-3 text-slate-500 hover:bg-slate-50 transition-all duration-200 font-sans text-[13px] font-semibold uppercase tracking-wider" href="#">
+<span class="material-symbols-outlined">analytics</span>
+                Forensics
+            </a>
+<a class="flex items-center gap-3 px-6 py-3 text-slate-500 hover:bg-slate-50 transition-all duration-200 font-sans text-[13px] font-semibold uppercase tracking-wider" href="#">
+<span class="material-symbols-outlined">shield</span>
+                Security
+            </a>
+<a class="flex items-center gap-3 px-6 py-3 text-slate-500 hover:bg-slate-50 transition-all duration-200 font-sans text-[13px] font-semibold uppercase tracking-wider" href="#">
+<span class="material-symbols-outlined">gavel</span>
+                Compliance
+            </a>
+<a class="flex items-center gap-3 px-6 py-3 bg-slate-50 text-blue-600 border-r-4 border-blue-600 font-sans text-[13px] font-semibold uppercase tracking-wider" href="#">
+<span class="material-symbols-outlined">settings_applications</span>
+                Administration
+            </a>
+<a class="flex items-center gap-3 px-6 py-3 text-slate-500 hover:bg-slate-50 transition-all duration-200 font-sans text-[13px] font-semibold uppercase tracking-wider" href="#">
+<span class="material-symbols-outlined">group_add</span>
+                Onboarding
+            </a>
+</nav>
+<div class="px-3 pt-4 border-t border-slate-100">
+<a class="flex items-center gap-3 px-6 py-3 text-slate-500 hover:bg-slate-50 transition-all duration-200 font-sans text-[13px] font-semibold uppercase tracking-wider" href="#">
+<span class="material-symbols-outlined">help_outline</span>
+                Support
+            </a>
+<a class="flex items-center gap-3 px-6 py-3 text-slate-500 hover:bg-slate-50 transition-all duration-200 font-sans text-[13px] font-semibold uppercase tracking-wider" href="#">
+<span class="material-symbols-outlined">list_alt</span>
+                Audit Logs
+            </a>
+</div>
+</aside>
+<!-- TopAppBar -->
+<header class="fixed top-0 right-0 left-[280px] h-16 bg-white border-b border-slate-200 z-40 flex justify-between items-center px-10">
+<div class="flex items-center gap-4">
+<h1 class="font-headline-lg text-headline-lg text-primary">API &amp; Access Management</h1>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-4 text-slate-500">
+<span class="material-symbols-outlined cursor-pointer hover:text-blue-600 transition-colors">notifications</span>
+<span class="material-symbols-outlined cursor-pointer hover:text-blue-600 transition-colors">security</span>
+<span class="material-symbols-outlined cursor-pointer hover:text-blue-600 transition-colors">history</span>
+</div>
+<button class="bg-blue-600 text-white px-5 py-2 font-medium text-sm flex items-center gap-2 hover:bg-blue-700 transition-opacity">
+<span class="material-symbols-outlined text-[18px]">add</span>
+                New Audit
+            </button>
+<div class="h-8 w-8 rounded-full overflow-hidden border border-slate-200">
+<img alt="Administrator Avatar" data-alt="Close up portrait of a professional male administrator in a clean office setting, sharp focus, professional lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB9SZE9JDdGSvc3_jeoyNxxmWA5g7g6UrVpPuDUkCS_w7UZY_ixxoaEU3aL9tMr6XbJti4lC26QLT_ErfAtZ-TksqCXXzHSXQldxBeaHXoUEhxi628l9PpDvcm0k9psPEJqd9oC8an143Dr0FGRSAtw_QDIvNvBwrLx29O-ia-Sr4kQFaDObm8QB5uBXDJ6KOt6IwVd4RTcS72Krsdn296R7kwyN_dQoaYsojzTbmVLfnct-PQsIWIMzoXNsNJZ3jypfCI4WViLrso"/>
+</div>
+</div>
+</header>
+<!-- Main Content -->
+<main class="ml-[280px] mt-16 p-margin-page max-w-[1440px]">
+<!-- Header Info -->
+<div class="mb-stack-lg flex justify-between items-end">
+<div>
+<p class="font-body-md text-on-surface-variant max-w-2xl">
+                    Manage programmatic access to the AuditMaster Global infrastructure. API keys provide full or scoped access to forensic data, compliance logs, and administrative controls.
+                </p>
+</div>
+<div class="flex gap-stack-md">
+<button class="px-4 py-2 border border-slate-200 bg-white text-on-surface font-medium text-sm hover:bg-slate-50 flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">terminal</span>
+                    Documentation
+                </button>
+<button class="px-4 py-2 bg-blue-600 text-white font-semibold text-sm hover:opacity-90 flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">vpn_key</span>
+                    Generate New Key
+                </button>
+</div>
+</div>
+<div class="grid grid-cols-12 gap-gutter">
+<!-- Summary Stats (Bento Style) -->
+<div class="col-span-12 md:col-span-4 audit-card p-6 flex flex-col justify-between">
+<div>
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase mb-2 block">Active Integrations</span>
+<h3 class="font-headline-xl text-headline-xl">12</h3>
+</div>
+<div class="mt-4 flex items-center text-tertiary-container font-mono-status text-mono-status gap-1">
+<span class="material-symbols-outlined text-[16px]">trending_up</span>
+<span>+3 from last month</span>
+</div>
+</div>
+<div class="col-span-12 md:col-span-4 audit-card p-6 flex flex-col justify-between">
+<div>
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase mb-2 block">API Calls (24h)</span>
+<h3 class="font-headline-xl text-headline-xl">842,109</h3>
+</div>
+<div class="mt-4 flex items-center text-slate-500 font-mono-status text-mono-status gap-1">
+<span class="material-symbols-outlined text-[16px]">check_circle</span>
+<span>99.9% Success Rate</span>
+</div>
+</div>
+<div class="col-span-12 md:col-span-4 audit-card p-6 bg-slate-900 text-white flex flex-col justify-between">
+<div>
+<span class="font-label-caps text-label-caps text-slate-400 uppercase mb-2 block">Security Posture</span>
+<h3 class="font-headline-xl text-headline-xl text-blue-400">HARDENED</h3>
+</div>
+<div class="mt-4 flex items-center text-emerald-400 font-mono-status text-mono-status gap-1">
+<span class="material-symbols-outlined text-[16px]">verified_user</span>
+<span>All keys scoped per-org</span>
+</div>
+</div>
+<!-- API Key Table -->
+<div class="col-span-12 audit-card">
+<div class="px-6 py-4 border-b border-slate-100 flex justify-between items-center">
+<h2 class="font-headline-lg text-[18px] text-primary">Active Access Tokens</h2>
+<div class="flex gap-2">
+<div class="relative">
+<span class="absolute left-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-slate-400 text-[18px]">search</span>
+<input class="pl-10 pr-4 py-1.5 border border-slate-200 text-sm focus:ring-1 focus:ring-blue-500 outline-none w-64" placeholder="Search keys..." type="text"/>
+</div>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead>
+<tr class="bg-slate-50 text-on-surface-variant font-label-caps text-label-caps uppercase">
+<th class="px-6 py-3 font-semibold">Key Name &amp; ID</th>
+<th class="px-6 py-3 font-semibold">Token / Secret</th>
+<th class="px-6 py-3 font-semibold">Scope</th>
+<th class="px-6 py-3 font-semibold">Last Used</th>
+<th class="px-6 py-3 font-semibold">Status</th>
+<th class="px-6 py-3 font-semibold text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-100">
+<!-- Key Row 1 -->
+<tr class="hover:bg-slate-50 transition-colors">
+<td class="px-6 py-4">
+<div class="font-medium text-slate-900">SIEM Integration (Prod)</div>
+<div class="font-mono-data text-xs text-slate-400">ID: key_01H2X...92K</div>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<code class="font-mono-data text-sm bg-slate-100 px-2 py-0.5 rounded">am_••••••••••••••••</code>
+<button class="text-blue-600 hover:text-blue-800 flex items-center gap-1">
+<span class="material-symbols-outlined text-[18px]">visibility_off</span>
+</button>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex px-2 py-0.5 bg-blue-50 text-blue-700 text-[11px] font-bold rounded-sm border border-blue-100 uppercase tracking-tighter">READ_ONLY</span>
+</td>
+<td class="px-6 py-4 font-mono-data text-sm text-slate-600">2023-10-24 14:22:10</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-1.5 text-emerald-600 font-mono-status text-mono-status uppercase">
+<span class="h-2 w-2 rounded-full bg-emerald-500"></span>
+                                        Active
+                                    </div>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="text-slate-400 hover:text-error transition-colors">
+<span class="material-symbols-outlined">delete</span>
+</button>
+</td>
+</tr>
+<!-- Key Row 2 -->
+<tr class="hover:bg-slate-50 transition-colors">
+<td class="px-6 py-4">
+<div class="font-medium text-slate-900">Automation Script v2</div>
+<div class="font-mono-data text-xs text-slate-400">ID: key_01J9W...33L</div>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<code class="font-mono-data text-sm bg-slate-100 px-2 py-0.5 rounded">am_9j2k...m4n1</code>
+<button class="text-blue-600 hover:text-blue-800 flex items-center gap-1">
+<span class="material-symbols-outlined text-[18px]">visibility</span>
+</button>
+</div>
+</td>
+<td class="px-6 py-4 flex gap-1">
+<span class="inline-flex px-2 py-0.5 bg-purple-50 text-purple-700 text-[11px] font-bold rounded-sm border border-purple-100 uppercase tracking-tighter">WRITE</span>
+<span class="inline-flex px-2 py-0.5 bg-blue-50 text-blue-700 text-[11px] font-bold rounded-sm border border-blue-100 uppercase tracking-tighter">LOGS</span>
+</td>
+<td class="px-6 py-4 font-mono-data text-sm text-slate-600">2023-10-24 12:05:44</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-1.5 text-emerald-600 font-mono-status text-mono-status uppercase">
+<span class="h-2 w-2 rounded-full bg-emerald-500"></span>
+                                        Active
+                                    </div>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="text-slate-400 hover:text-error transition-colors">
+<span class="material-symbols-outlined">delete</span>
+</button>
+</td>
+</tr>
+<!-- Key Row 3 -->
+<tr class="hover:bg-slate-50 transition-colors opacity-60">
+<td class="px-6 py-4">
+<div class="font-medium text-slate-900">External Auditor Access</div>
+<div class="font-mono-data text-xs text-slate-400">ID: key_01G3B...11P</div>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<code class="font-mono-data text-sm bg-slate-100 px-2 py-0.5 rounded">am_••••••••••••••••</code>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex px-2 py-0.5 bg-slate-100 text-slate-700 text-[11px] font-bold rounded-sm border border-slate-200 uppercase tracking-tighter">READ_ONLY</span>
+</td>
+<td class="px-6 py-4 font-mono-data text-sm text-slate-400">2023-09-12 09:00:00</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-1.5 text-slate-500 font-mono-status text-mono-status uppercase">
+<span class="h-2 w-2 rounded-full bg-slate-400"></span>
+                                        Revoked
+                                    </div>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="text-slate-400 cursor-not-allowed">
+<span class="material-symbols-outlined">restore</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Audit Trail & Security Panel -->
+<div class="col-span-12 md:col-span-8 audit-card overflow-hidden">
+<div class="px-6 py-4 bg-slate-50 border-b border-slate-200">
+<h3 class="font-headline-lg text-[16px] text-primary">Recent Key Activity</h3>
+</div>
+<div class="p-6 relative timeline-thread">
+<div class="flex gap-4 mb-stack-lg relative">
+<div class="h-4 w-4 rounded-full bg-blue-600 border-4 border-white shadow-sm shrink-0 z-10 mt-1"></div>
+<div class="flex-1">
+<div class="flex justify-between">
+<span class="font-medium text-slate-900 text-sm">New API Key Created: "Automation Script v2"</span>
+<span class="font-mono-data text-xs text-slate-400">10:02 AM</span>
+</div>
+<p class="text-sm text-on-surface-variant mt-1">Authorized by Admin: admin@auditmaster.global</p>
+</div>
+</div>
+<div class="flex gap-4 mb-stack-lg relative">
+<div class="h-4 w-4 rounded-full bg-error border-4 border-white shadow-sm shrink-0 z-10 mt-1"></div>
+<div class="flex-1">
+<div class="flex justify-between">
+<span class="font-medium text-slate-900 text-sm">Key Revoked: "External Auditor Access"</span>
+<span class="font-mono-data text-xs text-slate-400">Yesterday, 11:45 PM</span>
+</div>
+<p class="text-sm text-on-surface-variant mt-1">Revocation triggered by expiration policy (90 days).</p>
+</div>
+</div>
+<div class="flex gap-4 relative">
+<div class="h-4 w-4 rounded-full bg-slate-200 border-4 border-white shadow-sm shrink-0 z-10 mt-1"></div>
+<div class="flex-1">
+<div class="flex justify-between">
+<span class="font-medium text-slate-900 text-sm">Key Secret Rotated: "SIEM Integration"</span>
+<span class="font-mono-data text-xs text-slate-400">Oct 22, 16:30</span>
+</div>
+<p class="text-sm text-on-surface-variant mt-1">Manual rotation via Administration dashboard.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="col-span-12 md:col-span-4 flex flex-col gap-gutter">
+<div class="audit-card p-6 bg-blue-50 border-blue-100">
+<h4 class="font-headline-lg text-[14px] text-blue-900 mb-2 flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">info</span>
+                        Best Practices
+                    </h4>
+<ul class="text-xs text-blue-800 space-y-2 list-disc list-inside">
+<li>Use scoped tokens instead of full access.</li>
+<li>Rotate production keys every 90 days.</li>
+<li>Never share keys via insecure channels.</li>
+<li>Monitor IP logs for suspicious activity.</li>
+</ul>
+</div>
+<div class="audit-card p-6">
+<h4 class="font-headline-lg text-[14px] text-primary mb-4 uppercase">Network Restrictions</h4>
+<div class="space-y-3">
+<label class="flex items-center gap-2">
+<input checked="" class="rounded-sm border-slate-300 text-blue-600 focus:ring-blue-500" type="checkbox"/>
+<span class="text-sm text-slate-700">Enforce IP Whitelisting</span>
+</label>
+<div class="mt-2">
+<div class="font-mono-data text-xs text-slate-400 mb-1 uppercase">Whitelisted IPs</div>
+<div class="flex flex-wrap gap-2">
+<span class="bg-white border border-slate-200 px-2 py-1 text-xs font-mono-data">192.168.1.104</span>
+<span class="bg-white border border-slate-200 px-2 py-1 text-xs font-mono-data">10.0.0.45</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Footer (Semantic suppression of FAB since this is Management) -->
+<footer class="ml-[280px] p-6 text-center border-t border-slate-200 mt-12 bg-white">
+<p class="font-mono-status text-[10px] text-slate-400 uppercase tracking-widest">
+            AuditMaster v4.2.1-stable • System Integrity: <span class="text-emerald-500">Verified</span> • Latency: 14ms
+        </p>
+</footer>
+</body></html>

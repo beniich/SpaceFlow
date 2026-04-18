@@ -1,0 +1,226 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+// -----------------------------------------------------------------------------
+// IDENTITY & MULTI-TENANCY
+// -----------------------------------------------------------------------------
+
+model Organization {
+  id          String   @id @default(uuid())
+  name        String
+  domain      String?  @unique
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  users       User[]
+  audits      Audit[]
+  incidents   Incident[]
+  nodes       NetworkNode[]
+  policies    Policy[]
+}
+
+model User {
+  id             String       @id @default(uuid())
+  clerkId        String       @unique
+  email          String       @unique
+  firstName      String?
+  lastName       String?
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  role           SystemRole   @default(AUDITOR)
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  auditEvents    AuditEvent[]
+  assignedTasks  CAPATask[]   @relation("TaskAssignee")
+}
+
+enum SystemRole {
+  ADMIN
+  AUDITOR
+  COMPLIANCE_OFFICER
+  IT_MANAGER
+  VIEWER
+}
+
+// -----------------------------------------------------------------------------
+// CORE AUDIT & FORENSICS (Immutable Ledger Pattern)
+// -----------------------------------------------------------------------------
+
+model Audit {
+  id             String        @id @default(uuid())
+  organizationId String
+  organization   Organization  @relation(fields: [organizationId], references: [id])
+  templateId     String
+  template       AuditTemplate @relation(fields: [templateId], references: [id])
+  status         AuditStatus   @default(DRAFT)
+  startedAt      DateTime      @default(now())
+  completedAt    DateTime?
+  
+  events         AuditEvent[]
+}
+
+enum AuditStatus {
+  DRAFT
+  IN_PROGRESS
+  IN_REVIEW
+  SUBMITTED
+  CLOSED
+}
+
+model AuditTemplate {
+  id          String   @id @default(uuid())
+  title       String
+  description String?
+  version     Int      @default(1)
+  content     Json     // Dynamic schema for audit structure
+  createdAt   DateTime @default(now())
+  
+  audits      Audit[]
+}
+
+model AuditEvent {
+  id          String   @id @default(uuid())
+  auditId     String
+  audit       Audit    @relation(fields: [auditId], references: [id])
+  type        String   // e.g., 'DATA_ENTRY', 'SIGNATURE', 'EVIDENCE_UPLOAD'
+  timestamp   DateTime @default(now())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  payload     Json
+  sha256Hash  String   @unique
+  previousHash String? // Blockchain-style chained hashes for forensics
+
+  @@index([auditId, timestamp])
+}
+
+// -----------------------------------------------------------------------------
+// INFRASTRUCTURE & TOPOLOGY
+// -----------------------------------------------------------------------------
+
+model NetworkNode {
+  id             String       @id @default(uuid())
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  name           String
+  region         String
+  type           NodeType
+  status         NodeStatus   @default(HEALTHY)
+  ipAddress      String?
+  lastSync       DateTime?
+  createdAt      DateTime     @default(now())
+  
+  incidents      Incident[]
+}
+
+enum NodeType {
+  VIRTUAL_MACHINE
+  DATABASE
+  KUBERNETES_CLUSTER
+  API_GATEWAY
+  FIREWALL
+}
+
+enum NodeStatus {
+  HEALTHY
+  DEGRADED
+  DOWN
+  MAINTENANCE
+}
+
+// -----------------------------------------------------------------------------
+// COMPLIANCE & RISK
+// -----------------------------------------------------------------------------
+
+model Policy {
+  id             String       @id @default(uuid())
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  title          String
+  framework      String       // e.g., 'ISO-27001', 'SOC2', 'GDPR'
+  content        String
+  active         Boolean      @default(true)
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  controls       Control[]
+}
+
+model Control {
+  id          String   @id @default(uuid())
+  policyId    String
+  policy      Policy   @relation(fields: [policyId], references: [id])
+  name        String
+  description String
+  frequency   String   // e.g., 'ANNUAL', 'CONTINUOUS'
+  status      String   // e.g., 'COMPLIANT', 'NON_COMPLIANT', 'NOT_TESTED'
+}
+
+model RiskAssessment {
+  id             String   @id @default(uuid())
+  jurisdiction   String
+  riskScore      Float
+  category       String
+  details        String
+  assessedAt     DateTime @default(now())
+}
+
+// -----------------------------------------------------------------------------
+// INCIDENTS & REMEDIATION (CAPA)
+// -----------------------------------------------------------------------------
+
+model Incident {
+  id             String       @id @default(uuid())
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  nodeId         String?
+  node           NetworkNode? @relation(fields: [nodeId], references: [id])
+  title          String
+  severity       Severity
+  status         IncidentStatus @default(OPEN)
+  detectedAt     DateTime     @default(now())
+  resolvedAt     DateTime?
+  
+  tasks          CAPATask[]
+}
+
+model CAPATask {
+  id          String       @id @default(uuid())
+  incidentId  String
+  incident    Incident     @relation(fields: [incidentId], references: [id])
+  title       String
+  description String
+  assigneeId  String?
+  assignee    User?        @relation("TaskAssignee", fields: [assigneeId], references: [id])
+  status      TaskStatus   @default(TODO)
+  dueDate     DateTime?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+}
+
+enum Severity {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum IncidentStatus {
+  OPEN
+  INVESTIGATING
+  MITIGATED
+  RESOLVED
+}
+
+enum TaskStatus {
+  TODO
+  IN_PROGRESS
+  REVIEW
+  DONE
+}

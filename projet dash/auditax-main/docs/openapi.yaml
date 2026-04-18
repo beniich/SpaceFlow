@@ -1,0 +1,40 @@
+openapi: 3.0.0
+info:
+  title: AuditAX Enterprise API
+  description: Industrial-grade audit and compliance management API.
+  version: 4.5.0
+servers:
+  - url: http://localhost:3000/api
+    description: Development Server
+paths:
+  /infrastructure/nodes:
+    get:
+      summary: List all network nodes
+      responses:
+        '200':
+          description: A list of nodes
+  /incidents:
+    get:
+      summary: List forensic incidents
+    post:
+      summary: Create new forensic incident
+  /storage/upload:
+    post:
+      summary: Upload evidence file
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                auditId:
+                  type: string
+components:
+  securitySchemes:
+    ClerkAuth:
+      type: apiKey
+      in: header
+      name: Authorization

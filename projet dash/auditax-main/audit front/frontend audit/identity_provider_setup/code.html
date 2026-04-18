@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "inverse-primary": "#bcc7de",
+                    "on-secondary": "#ffffff",
+                    "tertiary-fixed": "#6ffbbe",
+                    "on-error-container": "#93000a",
+                    "on-secondary-container": "#fefcff",
+                    "on-primary-fixed-variant": "#3c475a",
+                    "on-error": "#ffffff",
+                    "outline": "#75777d",
+                    "surface-container-low": "#f0f4f8",
+                    "on-primary-container": "#8590a6",
+                    "tertiary-fixed-dim": "#4edea3",
+                    "surface-variant": "#dfe3e7",
+                    "secondary-container": "#2170e4",
+                    "surface-dim": "#d6dade",
+                    "inverse-surface": "#2c3134",
+                    "on-surface-variant": "#45474c",
+                    "secondary-fixed": "#d8e2ff",
+                    "surface-container-highest": "#dfe3e7",
+                    "on-surface": "#171c1f",
+                    "on-primary-fixed": "#111c2d",
+                    "error": "#ba1a1a",
+                    "surface-tint": "#545f73",
+                    "on-background": "#171c1f",
+                    "secondary-fixed-dim": "#adc6ff",
+                    "outline-variant": "#c5c6cd",
+                    "surface-container-lowest": "#ffffff",
+                    "primary-fixed": "#d8e3fb",
+                    "on-secondary-fixed-variant": "#004395",
+                    "secondary": "#0058be",
+                    "primary-container": "#1e293b",
+                    "primary": "#091426",
+                    "inverse-on-surface": "#edf1f5",
+                    "error-container": "#ffdad6",
+                    "on-tertiary": "#ffffff",
+                    "primary-fixed-dim": "#bcc7de",
+                    "tertiary": "#00190e",
+                    "surface-bright": "#f6fafe",
+                    "on-tertiary-fixed-variant": "#005236",
+                    "surface-container-high": "#e4e9ed",
+                    "surface": "#f6fafe",
+                    "on-tertiary-fixed": "#002113",
+                    "tertiary-container": "#00301e",
+                    "surface-container": "#eaeef2",
+                    "on-tertiary-container": "#00a472",
+                    "background": "#f6fafe",
+                    "on-secondary-fixed": "#001a42",
+                    "on-primary": "#ffffff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "stack-lg": "32px",
+                    "sidebar-width": "280px",
+                    "unit": "4px",
+                    "stack-md": "16px",
+                    "margin-page": "40px",
+                    "gutter": "24px",
+                    "stack-sm": "8px"
+            },
+            "fontFamily": {
+                    "mono-data": ["JetBrains Mono"],
+                    "headline-lg": ["Inter"],
+                    "mono-status": ["JetBrains Mono"],
+                    "body-md": ["Inter"],
+                    "headline-xl": ["Inter"],
+                    "label-caps": ["Inter"]
+            },
+            "fontSize": {
+                    "mono-data": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "headline-lg": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "mono-status": ["12px", {"lineHeight": "16px", "fontWeight": "700"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-xl": ["30px", {"lineHeight": "36px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body { font-family: 'Inter', sans-serif; background-color: #f6fafe; }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen">
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-0 h-full w-[280px] z-50 bg-white border-r border-slate-200 flex flex-col h-full py-4 space-y-1">
+<div class="text-lg font-black text-slate-900 px-6 py-8">
+            AuditMaster
+            <span class="block text-[10px] font-medium uppercase tracking-[0.2em] text-slate-400 mt-1">Enterprise Security</span>
+</div>
+<nav class="flex-1 px-2 space-y-1">
+<a class="flex items-center gap-3 px-6 py-3 text-slate-500 hover:bg-slate-50 transition-all duration-200 font-sans text-[13px] font-semibold uppercase tracking-wider" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+                Dashboard
+            </a>
+<a class="flex items-center gap-3 px-6 py-3 text-slate-500 hover:bg-slate-50 transition-all duration-200 font-sans text-[13px] font-semibold uppercase tracking-wider" href="#">
+<span class="material-symbols-outlined" data-icon="analytics">analytics</span>
+                Forensics
+            </a>
+<a class="flex items-center gap-3 px-6 py-3 text-slate-500 hover:bg-slate-50 transition-all duration-200 font-sans text-[13px] font-semibold uppercase tracking-wider" href="#">
+<span class="material-symbols-outlined" data-icon="shield">shield</span>
+                Security
+            </a>
+<a class="flex items-center gap-3 px-6 py-3 text-slate-500 hover:bg-slate-50 transition-all duration-200 font-sans text-[13px] font-semibold uppercase tracking-wider" href="#">
+<span class="material-symbols-outlined" data-icon="gavel">gavel</span>
+                Compliance
+            </a>
+<a class="flex items-center gap-3 px-6 py-3 bg-slate-50 text-blue-600 border-r-4 border-blue-600 font-sans text-[13px] font-semibold uppercase tracking-wider" href="#">
+<span class="material-symbols-outlined" data-icon="settings_applications">settings_applications</span>
+                Administration
+            </a>
+<a class="flex items-center gap-3 px-6 py-3 text-slate-500 hover:bg-slate-50 transition-all duration-200 font-sans text-[13px] font-semibold uppercase tracking-wider" href="#">
+<span class="material-symbols-outlined" data-icon="group_add">group_add</span>
+                Onboarding
+            </a>
+</nav>
+<div class="mt-auto px-2 border-t border-slate-100 pt-4">
+<a class="flex items-center gap-3 px-6 py-3 text-slate-500 hover:bg-slate-50 transition-all duration-200 font-sans text-[13px] font-semibold uppercase tracking-wider" href="#">
+<span class="material-symbols-outlined" data-icon="help_outline">help_outline</span>
+                Support
+            </a>
+<a class="flex items-center gap-3 px-6 py-3 text-slate-500 hover:bg-slate-50 transition-all duration-200 font-sans text-[13px] font-semibold uppercase tracking-wider" href="#">
+<span class="material-symbols-outlined" data-icon="list_alt">list_alt</span>
+                Audit Logs
+            </a>
+</div>
+</aside>
+<!-- TopAppBar -->
+<header class="fixed top-0 left-[280px] right-0 h-16 bg-white border-b border-slate-200 z-40 flex justify-between items-center px-10">
+<div class="flex items-center gap-4">
+<h1 class="font-headline-lg text-headline-lg text-primary">IDP Configuration</h1>
+<span class="bg-tertiary-fixed text-on-tertiary-container text-mono-status font-mono-status px-2 py-0.5 rounded-full uppercase">Secure Environment</span>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-4 text-slate-500">
+<button class="material-symbols-outlined hover:text-blue-600 transition-colors" data-icon="notifications">notifications</button>
+<button class="material-symbols-outlined hover:text-blue-600 transition-colors" data-icon="security">security</button>
+<button class="material-symbols-outlined hover:text-blue-600 transition-colors" data-icon="history">history</button>
+</div>
+<div class="h-8 w-px bg-slate-200"></div>
+<button class="bg-secondary text-on-secondary px-4 py-2 text-label-caps font-label-caps rounded-lg hover:opacity-90 transition-opacity">
+                New Audit
+            </button>
+<div class="flex items-center gap-3">
+<img alt="Administrator Avatar" class="w-8 h-8 rounded-full border border-slate-200" data-alt="professional headshot of an executive administrator in a clean office setting with soft natural lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA5i4iT0ADbb3w93on8sVx2-hYAI8GBRk72pO7j5ZOAhIUQTxxKt6SACCxgQgbFT0E7vPW_1jVO0NivTzBCoLBHD1634Z9LJFpgqOcbjNPBMVbHxJl0J0bOUtcu7UmAix3yRBPB_iKL1IAQHZkM27ed_ohBF7VvCHbOzMZGUN_jvDRUKg5_1IBj5GoDufUKoZfGdTfbUESJZYSUigyEKz-YihQ3HUiLqtg_tuXYqQvpEz5d9ycwWDUg6f7WA2udelxJD-FNkoRI23w"/>
+</div>
+</div>
+</header>
+<!-- Main Content -->
+<main class="ml-[280px] pt-16 p-margin-page max-w-[1440px]">
+<div class="space-y-stack-lg">
+<!-- Breadcrumbs & Header Section -->
+<div class="flex justify-between items-end">
+<div class="space-y-unit">
+<div class="flex items-center gap-2 text-slate-500 font-label-caps text-label-caps">
+<span>ADMINISTRATION</span>
+<span class="material-symbols-outlined text-[14px]" data-icon="chevron_right">chevron_right</span>
+<span class="text-secondary">SSO &amp; IDENTITY PROVIDERS</span>
+</div>
+<h2 class="font-headline-xl text-headline-xl text-primary">Identity Provider Mapping</h2>
+<p class="text-body-md text-slate-500 max-w-2xl">Configure enterprise-grade SSO connections using SAML 2.0 or OIDC. Map IDP groups directly to internal AuditMaster roles with cryptographic verification.</p>
+</div>
+<div class="flex gap-stack-md">
+<button class="flex items-center gap-2 px-4 py-2 border border-outline-variant bg-white text-primary font-label-caps text-label-caps rounded-lg hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined" data-icon="download">download</span>
+                        EXPORT METADATA
+                    </button>
+<button class="flex items-center gap-2 px-4 py-2 bg-secondary text-on-secondary font-label-caps text-label-caps rounded-lg hover:opacity-90 transition-opacity">
+<span class="material-symbols-outlined" data-icon="add">add</span>
+                        CONNECT NEW IDP
+                    </button>
+</div>
+</div>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-12 gap-gutter">
+<!-- IDP Settings Card -->
+<div class="col-span-8 bg-white border border-outline-variant rounded-lg p-stack-lg shadow-sm">
+<div class="flex items-center justify-between border-b border-slate-100 pb-stack-md mb-stack-md">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-secondary" data-icon="settings_ethernet">settings_ethernet</span>
+<h3 class="font-headline-lg text-headline-lg">Connection Details</h3>
+</div>
+<div class="flex items-center gap-2 text-mono-status font-mono-status text-on-tertiary-container bg-tertiary-fixed px-3 py-1 rounded">
+<span class="material-symbols-outlined text-[16px]" data-icon="verified_user" data-weight="fill" style="font-variation-settings: 'FILL' 1;">verified_user</span>
+                            ACTIVE
+                        </div>
+</div>
+<form class="space-y-stack-md">
+<div class="grid grid-cols-2 gap-gutter">
+<div class="space-y-unit">
+<label class="text-label-caps font-label-caps text-slate-500">PROVIDER NAME</label>
+<input class="w-full border-outline-variant rounded-lg focus:ring-secondary focus:border-secondary font-body-md text-body-md" type="text" value="Okta Corporate"/>
+</div>
+<div class="space-y-unit">
+<label class="text-label-caps font-label-caps text-slate-500">PROTOCOL</label>
+<select class="w-full border-outline-variant rounded-lg focus:ring-secondary focus:border-secondary font-body-md text-body-md">
+<option>SAML 2.0</option>
+<option>OIDC (OpenID Connect)</option>
+</select>
+</div>
+</div>
+<div class="space-y-unit">
+<label class="text-label-caps font-label-caps text-slate-500">SSO ENDPOINT URL (ASSERTION CONSUMER SERVICE)</label>
+<div class="relative">
+<input class="w-full bg-surface-container-low border-outline-variant rounded-lg font-mono-data text-mono-data pr-10" readonly="" type="text" value="https://auditmaster.enterprise.com/api/v1/sso/saml/callback/okta-001"/>
+<button class="absolute right-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-slate-400 hover:text-secondary" data-icon="content_copy">content_copy</button>
+</div>
+</div>
+<div class="space-y-unit">
+<label class="text-label-caps font-label-caps text-slate-500">IDENTITY PROVIDER ISSUER (ENTITY ID)</label>
+<input class="w-full border-outline-variant rounded-lg focus:ring-secondary focus:border-secondary font-mono-data text-mono-data" placeholder="http://www.okta.com/exk123456..." type="text"/>
+</div>
+<div class="space-y-unit">
+<label class="text-label-caps font-label-caps text-slate-500">X.509 CERTIFICATE</label>
+<div class="border-2 border-dashed border-outline-variant rounded-lg p-stack-md bg-surface-container-lowest text-center">
+<span class="material-symbols-outlined text-slate-400 text-3xl mb-2" data-icon="upload_file">upload_file</span>
+<p class="text-body-md text-slate-500">Drop certificate file or <span class="text-secondary font-semibold cursor-pointer">browse</span></p>
+<p class="text-mono-status font-mono-status text-slate-400 mt-1">SUPPORTED: .PEM, .CER, .CRT</p>
+</div>
+</div>
+</form>
+</div>
+<!-- Test Connection Sidebar -->
+<div class="col-span-4 space-y-gutter">
+<div class="bg-primary-container text-white rounded-lg p-stack-lg shadow-sm">
+<div class="flex items-center gap-3 mb-stack-md">
+<span class="material-symbols-outlined text-tertiary-fixed" data-icon="biotech">biotech</span>
+<h3 class="font-headline-lg text-headline-lg">Diagnostics</h3>
+</div>
+<p class="text-slate-300 font-body-md text-body-md mb-stack-md">Perform a real-time validation of your SSO configuration without affecting current users.</p>
+<div class="space-y-stack-sm mb-stack-lg">
+<div class="flex items-center justify-between text-mono-status font-mono-status">
+<span class="text-slate-400">ENDPOINT REACHABILITY</span>
+<span class="text-tertiary-fixed">SUCCESS</span>
+</div>
+<div class="flex items-center justify-between text-mono-status font-mono-status">
+<span class="text-slate-400">CERTIFICATE VALIDITY</span>
+<span class="text-tertiary-fixed">VALID</span>
+</div>
+<div class="flex items-center justify-between text-mono-status font-mono-status">
+<span class="text-slate-400">LATENCY</span>
+<span class="text-slate-300">42ms</span>
+</div>
+</div>
+<button class="w-full bg-secondary text-white py-3 rounded-lg font-label-caps text-label-caps hover:bg-opacity-90 flex items-center justify-center gap-2">
+<span class="material-symbols-outlined" data-icon="play_circle">play_circle</span>
+                            TEST CONNECTION
+                        </button>
+</div>
+<!-- Identity Stats Card -->
+<div class="bg-white border border-outline-variant rounded-lg p-stack-lg shadow-sm">
+<h4 class="font-label-caps text-label-caps text-slate-500 mb-stack-md">PROVISIONING INSIGHTS</h4>
+<div class="flex items-center gap-4 mb-stack-md">
+<div class="p-3 bg-secondary-fixed rounded-lg text-secondary">
+<span class="material-symbols-outlined" data-icon="groups">groups</span>
+</div>
+<div>
+<p class="font-headline-lg text-headline-lg">1,248</p>
+<p class="text-mono-status font-mono-status text-slate-500 uppercase">Synchronized Users</p>
+</div>
+</div>
+<div class="w-full bg-surface-container rounded-full h-1.5 mb-2">
+<div class="bg-secondary h-1.5 rounded-full" style="width: 75%"></div>
+</div>
+<p class="text-mono-status font-mono-status text-slate-400">75% of total organization mapped</p>
+</div>
+</div>
+<!-- Attribute Mapping Section -->
+<div class="col-span-12 bg-white border border-outline-variant rounded-lg overflow-hidden shadow-sm">
+<div class="p-stack-lg border-b border-slate-100 flex justify-between items-center bg-surface-bright">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-secondary" data-icon="account_tree">account_tree</span>
+<div>
+<h3 class="font-headline-lg text-headline-lg">Attribute Mapping</h3>
+<p class="text-mono-status font-mono-status text-slate-500 uppercase">SAML Claims to AuditMaster Properties</p>
+</div>
+</div>
+<button class="text-secondary font-label-caps text-label-caps flex items-center gap-1 hover:underline">
+<span class="material-symbols-outlined" data-icon="add_circle">add_circle</span>
+                            ADD CUSTOM MAPPING
+                        </button>
+</div>
+<table class="w-full text-left border-collapse">
+<thead class="bg-slate-50 border-b border-slate-200">
+<tr>
+<th class="px-stack-lg py-3 text-label-caps font-label-caps text-slate-500">IDP CLAIM (SOURCE)</th>
+<th class="px-stack-lg py-3 text-label-caps font-label-caps text-slate-500">AUDITMASTER FIELD (TARGET)</th>
+<th class="px-stack-lg py-3 text-label-caps font-label-caps text-slate-500">FALLBACK VALUE</th>
+<th class="px-stack-lg py-3 text-label-caps font-label-caps text-slate-500">STATUS</th>
+<th class="px-stack-lg py-3"></th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-100">
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="px-stack-lg py-4 font-mono-data text-mono-data text-primary">http://schemas.xmlsoap.org/.../email</td>
+<td class="px-stack-lg py-4 font-body-md text-body-md font-semibold">User Email</td>
+<td class="px-stack-lg py-4 font-mono-data text-mono-data text-slate-400">—</td>
+<td class="px-stack-lg py-4">
+<span class="flex items-center gap-1 text-mono-status font-mono-status text-on-tertiary-container">
+<span class="w-1.5 h-1.5 rounded-full bg-on-tertiary-container"></span>
+                                        ACTIVE
+                                    </span>
+</td>
+<td class="px-stack-lg py-4 text-right">
+<button class="material-symbols-outlined text-slate-400 hover:text-primary" data-icon="more_vert">more_vert</button>
+</td>
+</tr>
+<tr class="bg-slate-50/30 hover:bg-surface-container-low transition-colors">
+<td class="px-stack-lg py-4 font-mono-data text-mono-data text-primary">groups</td>
+<td class="px-stack-lg py-4 font-body-md text-body-md font-semibold">Security Role</td>
+<td class="px-stack-lg py-4 font-mono-data text-mono-data text-slate-400">read-only</td>
+<td class="px-stack-lg py-4">
+<span class="flex items-center gap-1 text-mono-status font-mono-status text-on-tertiary-container">
+<span class="w-1.5 h-1.5 rounded-full bg-on-tertiary-container"></span>
+                                        ACTIVE
+                                    </span>
+</td>
+<td class="px-stack-lg py-4 text-right">
+<button class="material-symbols-outlined text-slate-400 hover:text-primary" data-icon="more_vert">more_vert</button>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="px-stack-lg py-4 font-mono-data text-mono-data text-primary">department</td>
+<td class="px-stack-lg py-4 font-body-md text-body-md font-semibold">Organization Unit</td>
+<td class="px-stack-lg py-4 font-mono-data text-mono-data text-slate-400">unassigned</td>
+<td class="px-stack-lg py-4">
+<span class="flex items-center gap-1 text-mono-status font-mono-status text-slate-400">
+<span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span>
+                                        PENDING
+                                    </span>
+</td>
+<td class="px-stack-lg py-4 text-right">
+<button class="material-symbols-outlined text-slate-400 hover:text-primary" data-icon="more_vert">more_vert</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Vertical Audit Trail / Timeline -->
+<div class="col-span-12 bg-white border border-outline-variant rounded-lg p-stack-lg shadow-sm">
+<div class="flex items-center gap-3 mb-stack-lg border-b border-slate-100 pb-stack-sm">
+<span class="material-symbols-outlined text-secondary" data-icon="history_edu">history_edu</span>
+<h3 class="font-headline-lg text-headline-lg">Configuration Audit Trail</h3>
+</div>
+<div class="relative space-y-stack-md before:absolute before:inset-0 before:ml-5 before:-translate-x-px before:h-full before:w-0.5 before:bg-slate-200">
+<!-- Timeline Item -->
+<div class="relative flex items-center gap-stack-md pl-12">
+<div class="absolute left-0 w-10 h-10 bg-white border-2 border-secondary rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-secondary text-sm" data-icon="edit">edit</span>
+</div>
+<div class="flex-1 bg-surface-container-low p-stack-md rounded-lg border border-outline-variant">
+<div class="flex justify-between items-start mb-1">
+<h4 class="font-body-md text-body-md font-bold text-primary">SAML Certificate Rotated</h4>
+<span class="text-mono-status font-mono-status text-slate-400">OCT 24, 2023 · 14:22 GMT</span>
+</div>
+<p class="text-mono-data text-mono-data text-slate-600">Updated public key for Okta IDP. SHA-256 Fingerprint changed to <span class="bg-surface-variant px-1 rounded">A1:B2:C3:D4...</span></p>
+<div class="mt-stack-sm flex items-center gap-2">
+<img class="w-5 h-5 rounded-full" data-alt="Close up portrait of a security engineer with a focused expression in a professional environment" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBJMVc32xm2s70s5Suyleayvc-qlYLSfAIpRh85LoY7vpsDg6EiWr7lXNeCfEf21cHIvZFhY2VWIX39c1Z-MP7U6UobYtZke7j5Le3zGdPgkiwRw27VWxYZLa7APiWuIS7xYAMC7AsE9puVo9nn280WwSf0V8lg-RSC9GS-_Vvo51HIaI5YfuBPkmEEg-xkuWEDeVml1pqTRfkk0x_xn6y5nJrDWvizPa0L8j6AM-iZK295u9dppg12G-di-wk9CAVU6AQfEElMajQ"/>
+<span class="text-mono-status font-mono-status text-slate-500">action by s.chen@security.corp</span>
+</div>
+</div>
+</div>
+<!-- Timeline Item -->
+<div class="relative flex items-center gap-stack-md pl-12 opacity-80">
+<div class="absolute left-0 w-10 h-10 bg-white border-2 border-slate-200 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-slate-400 text-sm" data-icon="settings">settings</span>
+</div>
+<div class="flex-1 bg-white p-stack-md rounded-lg border border-slate-100">
+<div class="flex justify-between items-start mb-1">
+<h4 class="font-body-md text-body-md font-bold text-primary">Attribute Mapping Modified</h4>
+<span class="text-mono-status font-mono-status text-slate-400">OCT 12, 2023 · 09:15 GMT</span>
+</div>
+<p class="text-mono-data text-mono-data text-slate-600">Added 'Organization Unit' mapping for automated department provisioning.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer Action Bar -->
+<div class="flex items-center justify-between pt-stack-lg border-t border-outline-variant">
+<div class="flex items-center gap-2 text-error font-mono-status text-mono-status">
+<span class="material-symbols-outlined" data-icon="warning">warning</span>
+                    DANGER ZONE: DISABLING SSO WILL FORCE PASSWORD RESET FOR 1,248 USERS.
+                </div>
+<div class="flex gap-stack-md">
+<button class="px-6 py-2 border border-outline-variant rounded-lg font-label-caps text-label-caps text-primary hover:bg-slate-50 transition-colors">DISCARD CHANGES</button>
+<button class="px-8 py-2 bg-primary text-white rounded-lg font-label-caps text-label-caps hover:bg-opacity-90 shadow-sm transition-all active:scale-[0.98]">COMMIT CONFIGURATION</button>
+</div>
+</div>
+</div>
+</main>
+</body></html>

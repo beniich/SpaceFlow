@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "tertiary": "#00190e",
+            "error": "#ba1a1a",
+            "on-error-container": "#93000a",
+            "on-primary-fixed-variant": "#3c475a",
+            "error-container": "#ffdad6",
+            "on-tertiary-container": "#00a472",
+            "on-secondary-container": "#fefcff",
+            "secondary-fixed": "#d8e2ff",
+            "outline": "#75777d",
+            "surface-container-lowest": "#ffffff",
+            "inverse-on-surface": "#edf1f5",
+            "surface-tint": "#545f73",
+            "on-secondary-fixed": "#001a42",
+            "secondary": "#0058be",
+            "on-surface": "#171c1f",
+            "on-tertiary-fixed": "#002113",
+            "surface": "#f6fafe",
+            "surface-bright": "#f6fafe",
+            "on-primary-fixed": "#111c2d",
+            "tertiary-container": "#00301e",
+            "on-primary": "#ffffff",
+            "inverse-primary": "#bcc7de",
+            "on-surface-variant": "#45474c",
+            "inverse-surface": "#2c3134",
+            "on-tertiary-fixed-variant": "#005236",
+            "surface-container": "#eaeef2",
+            "on-error": "#ffffff",
+            "surface-container-highest": "#dfe3e7",
+            "surface-container-low": "#f0f4f8",
+            "surface-dim": "#d6dade",
+            "tertiary-fixed": "#6ffbbe",
+            "on-secondary": "#ffffff",
+            "on-secondary-fixed-variant": "#004395",
+            "primary-fixed-dim": "#bcc7de",
+            "on-primary-container": "#8590a6",
+            "surface-container-high": "#e4e9ed",
+            "on-background": "#171c1f",
+            "background": "#f6fafe",
+            "on-tertiary": "#ffffff",
+            "tertiary-fixed-dim": "#4edea3",
+            "primary": "#091426",
+            "outline-variant": "#c5c6cd",
+            "primary-fixed": "#d8e3fb",
+            "secondary-fixed-dim": "#adc6ff",
+            "primary-container": "#1e293b",
+            "surface-variant": "#dfe3e7",
+            "secondary-container": "#2170e4"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.125rem",
+            "lg": "0.25rem",
+            "xl": "0.5rem",
+            "full": "0.75rem"
+          },
+          "spacing": {
+            "stack-lg": "32px",
+            "margin-page": "40px",
+            "stack-sm": "8px",
+            "unit": "4px",
+            "gutter": "24px",
+            "stack-md": "16px",
+            "sidebar-width": "280px"
+          },
+          "fontFamily": {
+            "mono-data": ["JetBrains Mono"],
+            "mono-status": ["JetBrains Mono"],
+            "body-md": ["Inter"],
+            "headline-lg": ["Inter"],
+            "headline-xl": ["Inter"],
+            "label-caps": ["Inter"]
+          },
+          "fontSize": {
+            "mono-data": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+            "mono-status": ["12px", {"lineHeight": "16px", "fontWeight": "700"}],
+            "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+            "headline-lg": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+            "headline-xl": ["30px", {"lineHeight": "36px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+            "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      line-height: 1;
+      text-transform: none;
+      letter-spacing: normal;
+      word-wrap: normal;
+      white-space: nowrap;
+      direction: ltr;
+    }
+    .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
+    body { background-color: #f6fafe; }
+  </style>
+</head>
+<body class="font-body-md text-on-background selection:bg-primary-fixed">
+<!-- TopAppBar -->
+<header class="sticky top-0 w-full flex justify-between items-center h-16 px-10 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 shadow-sm z-40 font-sans antialiased text-sm font-medium tracking-tight">
+<div class="flex items-center gap-stack-md">
+<span class="text-lg font-bold tracking-tighter text-slate-900 dark:text-white">AuditMaster Global</span>
+<div class="h-6 w-px bg-slate-200 mx-4"></div>
+<div class="relative group">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">search</span>
+<input class="pl-10 pr-4 py-1.5 bg-slate-50 border-none rounded-lg text-xs w-64 focus:ring-2 focus:ring-blue-600 transition-all" placeholder="Search event store..." type="text"/>
+</div>
+</div>
+<nav class="flex items-center gap-6">
+<button class="flex items-center gap-2 text-slate-500 hover:text-slate-900 transition-colors">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="flex items-center gap-2 text-slate-500 hover:text-slate-900 transition-colors">
+<span class="material-symbols-outlined" data-icon="history_edu">history_edu</span>
+</button>
+<button class="flex items-center gap-2 text-slate-500 hover:text-slate-900 transition-colors">
+<span class="material-symbols-outlined" data-icon="account_tree">account_tree</span>
+</button>
+<button class="ml-4 px-4 py-2 bg-secondary text-on-secondary rounded-lg font-semibold hover:opacity-90 active:opacity-80 transition-opacity">
+        New Audit
+      </button>
+<img alt="User Profile Avatar" class="w-8 h-8 rounded-full border border-slate-200 ml-4" data-alt="Professional portrait of a male corporate executive in a neutral studio setting with soft lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDIIOrt-N5weiy-vrksOA4jnfwwlg1aoWT1UE55Zx3EFhlSOtXfAcMaXVPNUI3kVwD95mHyvz4u7bXJiru4WBrKbzJLRrbO324hQxkU2wSX_7VWF-zVbCBy4sqd2YpF6LFyrkD33OgjVOVoZi1z8MjqbDIxNJH1PcRNi4qTHrjq6E8j8WqAsVYNngWz9GdkA_9XD0mkyoISdhomMdsT2JJs7Sa065J_H6SmPJ0xVv6evZ1nj9kbhvKyJm6KNDyIH_NNO99GKEknkuc"/>
+</nav>
+</header>
+<div class="flex h-[calc(100vh-64px)] overflow-hidden">
+<!-- SideNavBar -->
+<aside class="fixed left-0 h-screen w-[280px] border-r border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 flex flex-col z-30">
+<div class="p-8 pb-4">
+<div class="flex items-center gap-3 mb-6">
+<div class="w-10 h-10 bg-primary rounded flex items-center justify-center">
+<span class="material-symbols-outlined text-white" data-icon="security" style="font-variation-settings: 'FILL' 1;">security</span>
+</div>
+<div>
+<h2 class="text-xl font-black text-slate-900 dark:text-white leading-tight">AuditMaster</h2>
+<p class="text-[10px] uppercase tracking-[0.2em] text-slate-400 font-bold">Global Compliance</p>
+</div>
+</div>
+</div>
+<nav class="flex-1 overflow-y-auto custom-scrollbar">
+<div class="space-y-1">
+<a class="flex items-center px-6 py-4 text-slate-500 hover:text-slate-900 dark:hover:text-slate-100 transition-all font-sans text-xs uppercase tracking-widest font-semibold" href="#">
+<span class="material-symbols-outlined mr-4" data-icon="gavel">gavel</span>Regulator Portal
+          </a>
+<a class="flex items-center px-6 py-4 text-slate-500 hover:text-slate-900 dark:hover:text-slate-100 transition-all font-sans text-xs uppercase tracking-widest font-semibold" href="#">
+<span class="material-symbols-outlined mr-4" data-icon="report_problem">report_problem</span>Exceptions
+          </a>
+<a class="flex items-center px-6 py-4 text-slate-500 hover:text-slate-900 dark:hover:text-slate-100 transition-all font-sans text-xs uppercase tracking-widest font-semibold" href="#">
+<span class="material-symbols-outlined mr-4" data-icon="account_tree">account_tree</span>ICF Explorer
+          </a>
+<a class="flex items-center px-6 py-4 text-slate-500 hover:text-slate-900 dark:hover:text-slate-100 transition-all font-sans text-xs uppercase tracking-widest font-semibold" href="#">
+<span class="material-symbols-outlined mr-4" data-icon="biotech">biotech</span>Integrity Diagnostics
+          </a>
+<a class="flex items-center px-6 py-4 text-slate-500 hover:text-slate-900 dark:hover:text-slate-100 transition-all font-sans text-xs uppercase tracking-widest font-semibold" href="#">
+<span class="material-symbols-outlined mr-4" data-icon="unarchive">unarchive</span>Batch Center
+          </a>
+<a class="bg-white dark:bg-slate-900 border-r-4 border-blue-600 text-blue-600 flex items-center px-6 py-4 shadow-sm font-sans text-xs uppercase tracking-widest font-semibold" href="#">
+<span class="material-symbols-outlined mr-4" data-icon="timeline">timeline</span>Incident Workspace
+          </a>
+<a class="flex items-center px-6 py-4 text-slate-500 hover:text-slate-900 dark:hover:text-slate-100 transition-all font-sans text-xs uppercase tracking-widest font-semibold" href="#">
+<span class="material-symbols-outlined mr-4" data-icon="event_available">event_available</span>Milestones
+          </a>
+<a class="flex items-center px-6 py-4 text-slate-500 hover:text-slate-900 dark:hover:text-slate-100 transition-all font-sans text-xs uppercase tracking-widest font-semibold" href="#">
+<span class="material-symbols-outlined mr-4" data-icon="settings_input_component">settings_input_component</span>Evidence Config
+          </a>
+<a class="flex items-center px-6 py-4 text-slate-500 hover:text-slate-900 dark:hover:text-slate-100 transition-all font-sans text-xs uppercase tracking-widest font-semibold" href="#">
+<span class="material-symbols-outlined mr-4" data-icon="fact_check">fact_check</span>QA Review
+          </a>
+<a class="flex items-center px-6 py-4 text-slate-500 hover:text-slate-900 dark:hover:text-slate-100 transition-all font-sans text-xs uppercase tracking-widest font-semibold" href="#">
+<span class="material-symbols-outlined mr-4" data-icon="security">security</span>System Logs
+          </a>
+</div>
+</nav>
+<div class="mt-auto border-t border-slate-200 dark:border-slate-800 p-4">
+<button class="w-full py-3 mb-4 bg-primary-container text-white rounded font-bold text-xs uppercase tracking-widest active:opacity-80 transition-opacity">
+          Generate Report
+        </button>
+<div class="space-y-1">
+<a class="flex items-center px-2 py-2 text-slate-500 hover:text-slate-900 text-xs font-semibold uppercase tracking-wider" href="#">
+<span class="material-symbols-outlined mr-3 text-sm" data-icon="description">description</span>Documentation
+          </a>
+<a class="flex items-center px-2 py-2 text-slate-500 hover:text-slate-900 text-xs font-semibold uppercase tracking-wider" href="#">
+<span class="material-symbols-outlined mr-3 text-sm" data-icon="help_outline">help_outline</span>Support
+          </a>
+</div>
+</div>
+</aside>
+<!-- Main Canvas -->
+<main class="ml-[280px] flex-1 overflow-y-auto bg-surface-container-low custom-scrollbar p-margin-page">
+<!-- Incident Header -->
+<section class="mb-stack-lg flex justify-between items-end">
+<div>
+<div class="flex items-center gap-2 mb-2">
+<span class="bg-error-container text-on-error-container px-2 py-0.5 rounded font-mono-status text-mono-status uppercase border border-error/20">Critical Finding</span>
+<span class="text-slate-400 font-mono-data text-mono-data tracking-tight">/ INC-2024-0892</span>
+</div>
+<h1 class="font-headline-xl text-headline-xl text-primary">Unauthorized Access Sequence: APAC Region</h1>
+<p class="text-on-surface-variant max-w-2xl mt-2 font-body-md">Forensic reconstruction of events originating from Tier-1 Ledger Infrastructure. Event store integrity verified across 14 nodes.</p>
+</div>
+<div class="flex gap-stack-sm">
+<button class="px-4 py-2 bg-white border border-outline-variant text-primary rounded-lg font-semibold flex items-center gap-2 hover:bg-slate-50 transition-colors">
+<span class="material-symbols-outlined text-sm" data-icon="share">share</span> Export Audit Trail
+          </button>
+<button class="px-4 py-2 bg-primary text-white rounded-lg font-semibold flex items-center gap-2 hover:opacity-90 transition-opacity">
+<span class="material-symbols-outlined text-sm" data-icon="gavel">gavel</span> Formal Escalation
+          </button>
+</div>
+</section>
+<!-- Investigation Workspace Grid -->
+<div class="grid grid-cols-12 gap-gutter">
+<!-- Interactive Vertical Timeline (Left Column) -->
+<div class="col-span-5 bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm flex flex-col">
+<div class="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
+<h3 class="font-headline-lg text-headline-lg text-primary">Event Reconstruction</h3>
+<span class="material-symbols-outlined text-slate-400" data-icon="filter_list">filter_list</span>
+</div>
+<div class="flex-1 p-8 overflow-y-auto custom-scrollbar">
+<div class="relative">
+<!-- Timeline Thread -->
+<div class="absolute left-[21px] top-4 bottom-4 w-px bg-slate-200"></div>
+<!-- Timeline Events -->
+<div class="space-y-stack-lg relative">
+<!-- Event 1 -->
+<div class="relative pl-12 group cursor-pointer">
+<div class="absolute left-0 top-1 w-[42px] h-[42px] bg-error-container rounded-full border-4 border-white shadow-sm flex items-center justify-center z-10 transition-transform group-hover:scale-110">
+<span class="material-symbols-outlined text-on-error-container text-lg" data-icon="warning" style="font-variation-settings: 'FILL' 1;">warning</span>
+</div>
+<div>
+<div class="flex justify-between items-start">
+<span class="font-mono-status text-mono-status text-error uppercase mb-1 block">Root Detection • 04:12:01 UTC</span>
+<span class="bg-slate-100 text-slate-500 px-2 py-0.5 rounded text-[10px] font-mono-data">NODE-X7</span>
+</div>
+<h4 class="font-bold text-primary mb-1">Non-conformity triggered</h4>
+<p class="text-sm text-on-surface-variant leading-relaxed">External IP `45.22.1.92` initiated handshake bypassing standard WAF protocol 14B.</p>
+</div>
+</div>
+<!-- Event 2 -->
+<div class="relative pl-12 group cursor-pointer">
+<div class="absolute left-0 top-1 w-[42px] h-[42px] bg-secondary-container rounded-full border-4 border-white shadow-sm flex items-center justify-center z-10 transition-transform group-hover:scale-110">
+<span class="material-symbols-outlined text-white text-lg" data-icon="account_tree" style="font-variation-settings: 'FILL' 1;">account_tree</span>
+</div>
+<div>
+<span class="font-mono-status text-mono-status text-secondary uppercase mb-1 block">Propagation • 04:14:55 UTC</span>
+<h4 class="font-bold text-primary mb-1">Credential Injection Attempt</h4>
+<p class="text-sm text-on-surface-variant leading-relaxed">Shadow account `admin_test_v2` created via lateral SQL injection in sub-ledger.</p>
+</div>
+</div>
+<!-- Event 3 (Active Selection) -->
+<div class="relative pl-12 group cursor-pointer bg-blue-50/30 -mx-8 px-8 py-4 border-y border-blue-100">
+<div class="absolute left-8 top-5 w-[42px] h-[42px] bg-secondary rounded-full border-4 border-white shadow-sm flex items-center justify-center z-10 transition-transform group-hover:scale-110">
+<span class="material-symbols-outlined text-white text-lg" data-icon="biotech" style="font-variation-settings: 'FILL' 1;">biotech</span>
+</div>
+<div>
+<span class="font-mono-status text-mono-status text-secondary uppercase mb-1 block">Analysis Point • 04:18:22 UTC</span>
+<h4 class="font-bold text-blue-900 mb-1">Encrypted Data Extraction</h4>
+<p class="text-sm text-blue-800 leading-relaxed">3.2GB of blob storage transferred to unauthorized endpoint. Payload markers identified.</p>
+<div class="mt-3 flex gap-2">
+<span class="px-2 py-1 bg-white border border-blue-200 rounded text-[10px] font-mono-data text-blue-600">ID: EXFIL-09</span>
+<span class="px-2 py-1 bg-white border border-blue-200 rounded text-[10px] font-mono-data text-blue-600">PKI: SIGNED</span>
+</div>
+</div>
+</div>
+<!-- Event 4 -->
+<div class="relative pl-12 group cursor-pointer opacity-60">
+<div class="absolute left-0 top-1 w-[42px] h-[42px] bg-slate-200 rounded-full border-4 border-white shadow-sm flex items-center justify-center z-10 transition-transform group-hover:scale-110">
+<span class="material-symbols-outlined text-slate-500 text-lg" data-icon="lock" style="font-variation-settings: 'FILL' 1;">lock</span>
+</div>
+<div>
+<span class="font-mono-status text-mono-status text-slate-500 uppercase mb-1 block">Containment • 04:22:10 UTC</span>
+<h4 class="font-bold text-slate-700 mb-1">Security Kill-Switch Engaged</h4>
+<p class="text-sm text-slate-500 leading-relaxed">Automated protocol isolation successful. All APAC endpoints rotated.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Evidence Panels (Right Column) -->
+<div class="col-span-7 flex flex-col gap-gutter">
+<!-- Evidence Dashboard (Top Right) -->
+<div class="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm p-8">
+<div class="flex items-center justify-between mb-stack-lg">
+<div>
+<h3 class="font-headline-lg text-headline-lg text-primary">Evidence Configuration</h3>
+<p class="text-sm text-on-surface-variant font-mono-data">Active Segment: EXFIL-09</p>
+</div>
+<div class="flex items-center gap-4">
+<div class="text-right">
+<p class="text-[10px] uppercase font-bold text-slate-400">Integrity Score</p>
+<p class="font-mono-data text-xl text-tertiary-container">99.98%</p>
+</div>
+<div class="w-12 h-12 rounded-full border-4 border-tertiary-fixed flex items-center justify-center">
+<span class="material-symbols-outlined text-tertiary-container" data-icon="verified" style="font-variation-settings: 'FILL' 1;">verified</span>
+</div>
+</div>
+</div>
+<!-- Bento Evidence Grid -->
+<div class="grid grid-cols-2 gap-stack-md">
+<div class="col-span-2 bg-slate-900 rounded-lg p-6 font-mono-data text-xs text-blue-300 relative overflow-hidden">
+<div class="flex justify-between items-center mb-4 text-blue-500 border-b border-blue-900/50 pb-2">
+<span>ROOT_LOG_SNAPSHOT</span>
+<span class="material-symbols-outlined text-sm" data-icon="terminal">terminal</span>
+</div>
+<pre class="whitespace-pre-wrap"><code>[2024-05-14T04:18:22.401Z] SIG_ALARM: DATA_FLOW_THRESHOLD_EXCEEDED
+[2024-05-14T04:18:22.405Z] TRACE_ID: 982-AX-001
+[2024-05-14T04:18:22.410Z] DEST: 104.28.1.5 (RU_MOSCOW_EXIT)
+[2024-05-14T04:18:22.412Z] SIZE: 3,219,842 KB
+[2024-05-14T04:18:22.415Z] ACTION: INTERCEPT_DEFERRED</code></pre>
+<div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent pointer-events-none"></div>
+</div>
+<div class="bg-white border border-slate-200 rounded-lg p-6">
+<h4 class="font-bold text-sm text-primary mb-3 flex items-center gap-2">
+<span class="material-symbols-outlined text-blue-600 text-base" data-icon="attachment">attachment</span> Payload Sample
+                </h4>
+<div class="h-32 rounded bg-slate-50 border border-dashed border-slate-200 flex items-center justify-center relative overflow-hidden">
+<img alt="Binary data visualization" class="absolute inset-0 w-full h-full object-cover opacity-20" data-alt="Abstract visualization of digital binary code and data nodes glowing in soft blue against a dark background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDZJFDlfwpKRqILuk_oDVc8d9DzqBRFaZjKd7y5GSlnegQXnpLrZrnwd4BjV1VKkkaPo_cLS1oan5XcQVwcg_R36XL-M_p9SPLz0di1ACKFWzTXyO8aUEoihwnIKBYpw032S5LXI0QldlnkEDWF1wDynH-dmw0lfGdFhntv2gsL9Kf2df8TrRFpVFaE_lXDHwJx3AgHV4jiD12N62psEotCRTPnJxXRIZjcmXL9XlQFW97PRsEMQm9QPYp45Xjkw8ohnum0T0D3TrU"/>
+<div class="text-center z-10">
+<p class="text-xs font-mono-data text-slate-500 mb-2">enc_data_fragment.vault</p>
+<button class="text-blue-600 text-[10px] font-bold uppercase tracking-widest hover:underline">Download Secure</button>
+</div>
+</div>
+</div>
+<div class="bg-white border border-slate-200 rounded-lg p-6">
+<h4 class="font-bold text-sm text-primary mb-3 flex items-center gap-2">
+<span class="material-symbols-outlined text-blue-600 text-base" data-icon="person_search">person_search</span> Actor Profile
+                </h4>
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 bg-slate-100 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-slate-400" data-icon="vpn_key">vpn_key</span>
+</div>
+<div>
+<p class="text-xs font-bold text-primary">Service Account</p>
+<p class="text-[10px] font-mono-data text-slate-500">uid: 0092-SYS-AUTO</p>
+<p class="text-[10px] text-error font-bold mt-1">Status: COMPROMISED</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Audit Trail Component -->
+<div class="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm">
+<div class="p-6 border-b border-slate-100 flex justify-between items-center">
+<h3 class="font-label-caps text-label-caps text-slate-500 uppercase">Forensic Audit Trail</h3>
+<span class="px-2 py-1 bg-tertiary-fixed text-on-tertiary-fixed-variant rounded text-[10px] font-mono-status uppercase">Immutable Log</span>
+</div>
+<div class="p-6">
+<table class="w-full text-left font-mono-data text-mono-data">
+<thead>
+<tr class="text-slate-400 border-b border-slate-50">
+<th class="py-3 font-medium">Timestamp</th>
+<th class="py-3 font-medium">Authorizer</th>
+<th class="py-3 font-medium">Action performed</th>
+<th class="py-3 text-right font-medium">Verification</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-50">
+<tr class="hover:bg-slate-50 transition-colors">
+<td class="py-4 text-slate-500">10:45:22</td>
+<td class="py-4 text-primary font-medium">System_Watchdog</td>
+<td class="py-4 text-slate-600">Auto-flagging: Threshold alert</td>
+<td class="py-4 text-right"><span class="text-tertiary-fixed-dim material-symbols-outlined text-sm" data-icon="check_circle" style="font-variation-settings: 'FILL' 1;">check_circle</span></td>
+</tr>
+<tr class="hover:bg-slate-50 transition-colors">
+<td class="py-4 text-slate-500">10:48:10</td>
+<td class="py-4 text-primary font-medium">J. Rodriguez</td>
+<td class="py-4 text-slate-600">Manual review initiated</td>
+<td class="py-4 text-right"><span class="text-tertiary-fixed-dim material-symbols-outlined text-sm" data-icon="check_circle" style="font-variation-settings: 'FILL' 1;">check_circle</span></td>
+</tr>
+<tr class="hover:bg-slate-50 transition-colors">
+<td class="py-4 text-slate-500">11:02:05</td>
+<td class="py-4 text-primary font-medium">L3_Investigator</td>
+<td class="py-4 text-slate-600">Evidence locked for investigation</td>
+<td class="py-4 text-right"><span class="text-tertiary-fixed-dim material-symbols-outlined text-sm" data-icon="check_circle" style="font-variation-settings: 'FILL' 1;">check_circle</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Audit Resource Allocator | AuditMaster Global</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-primary": "#ffffff",
+                        "surface-container-low": "#f0f4f8",
+                        "surface-bright": "#f6fafe",
+                        "outline-variant": "#c5c6cd",
+                        "secondary": "#0058be",
+                        "surface-variant": "#dfe3e7",
+                        "on-surface": "#171c1f",
+                        "surface-container": "#eaeef2",
+                        "surface-container-highest": "#dfe3e7",
+                        "on-primary-fixed-variant": "#3c475a",
+                        "error-container": "#ffdad6",
+                        "primary-fixed": "#d8e3fb",
+                        "surface-container-high": "#e4e9ed",
+                        "on-tertiary-container": "#00a472",
+                        "surface-container-lowest": "#ffffff",
+                        "on-tertiary": "#ffffff",
+                        "on-secondary-fixed": "#001a42",
+                        "error": "#ba1a1a",
+                        "surface-tint": "#545f73",
+                        "surface-dim": "#d6dade",
+                        "secondary-fixed-dim": "#adc6ff",
+                        "on-primary-fixed": "#111c2d",
+                        "outline": "#75777d",
+                        "background": "#f6fafe",
+                        "on-tertiary-fixed": "#002113",
+                        "on-error": "#ffffff",
+                        "secondary-container": "#2170e4",
+                        "on-secondary-container": "#fefcff",
+                        "inverse-primary": "#bcc7de",
+                        "on-secondary-fixed-variant": "#004395",
+                        "tertiary-fixed": "#6ffbbe",
+                        "secondary-fixed": "#d8e2ff",
+                        "inverse-surface": "#2c3134",
+                        "on-tertiary-fixed-variant": "#005236",
+                        "on-primary-container": "#8590a6",
+                        "primary-fixed-dim": "#bcc7de",
+                        "primary": "#091426",
+                        "on-error-container": "#93000a",
+                        "inverse-on-surface": "#edf1f5",
+                        "tertiary-container": "#00301e",
+                        "on-secondary": "#ffffff",
+                        "primary-container": "#1e293b",
+                        "tertiary-fixed-dim": "#4edea3",
+                        "on-surface-variant": "#45474c",
+                        "tertiary": "#00190e",
+                        "surface": "#f6fafe",
+                        "on-background": "#171c1f"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "stack-sm": "8px",
+                        "unit": "4px",
+                        "margin-page": "40px",
+                        "gutter": "24px",
+                        "stack-md": "16px",
+                        "stack-lg": "32px",
+                        "sidebar-width": "280px"
+                    },
+                    "fontFamily": {
+                        "label-caps": ["Inter"],
+                        "mono-data": ["JetBrains Mono"],
+                        "headline-xl": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "body-md": ["Inter"],
+                        "mono-status": ["JetBrains Mono"]
+                    },
+                    "fontSize": {
+                        "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "mono-data": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "headline-xl": ["30px", {"lineHeight": "36px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "headline-lg": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "mono-status": ["12px", {"lineHeight": "16px", "fontWeight": "700"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+        .gantt-grid {
+            background-image: linear-gradient(to right, #e2e8f0 1px, transparent 1px);
+            background-size: 100px 100%;
+        }
+    </style>
+</head>
+<body class="bg-background font-body-md text-on-surface">
+<!-- TopAppBar -->
+<header class="sticky top-0 w-full flex justify-between items-center h-16 px-10 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 shadow-sm z-40 font-sans antialiased text-sm font-medium tracking-tight">
+<div class="flex items-center gap-8">
+<span class="text-lg font-bold tracking-tighter text-slate-900 dark:text-white">AuditMaster Global</span>
+<div class="hidden md:flex items-center space-x-6">
+<a class="text-blue-600 border-b-2 border-blue-600 py-5" href="#">Resource Allocator</a>
+<a class="text-slate-500 hover:text-slate-900 transition-colors" href="#">Global Overview</a>
+<a class="text-slate-500 hover:text-slate-900 transition-colors" href="#">Forecasting</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-2 px-3 py-1.5 bg-slate-50 rounded-lg border border-slate-200">
+<span class="material-symbols-outlined text-slate-400" style="font-size: 18px;">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-xs w-48" placeholder="Search auditors..." type="text"/>
+</div>
+<button class="material-symbols-outlined text-slate-500 hover:bg-slate-50 p-2 rounded-lg transition-colors">notifications</button>
+<button class="material-symbols-outlined text-slate-500 hover:bg-slate-50 p-2 rounded-lg transition-colors">history_edu</button>
+<button class="bg-secondary text-on-primary px-4 py-2 rounded font-semibold text-xs tracking-wide active:opacity-80 transition-opacity">New Audit</button>
+<img alt="User Profile Avatar" class="w-8 h-8 rounded-full border border-slate-200" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDriFlUzZxrJ0HyDU4u93Hvw1BOV-4zAJgHR6XUsCiEZlM9TDCPjkXC29sTQRVMsgm1x_-2QxzNJ66pFt8oG-l3szpJnpBommzxL7vvy1GClb2CqLGG2K7K0zozGJ8XPBcB7EMmY9_pk2JVW_DB7JDVzV_xEz9mtMc94ANa56w7pbvNy64ndyrwaP6Qim9oSa2pyRQdS4zsNLT_CXRVqL8IXZc-0jKI8_CSy20axE5Yjxw_eJoUikUzdJTzIyQx_ODMFFoblhy-MK8"/>
+</div>
+</header>
+<div class="flex">
+<!-- SideNavBar -->
+<aside class="fixed left-0 h-[calc(100vh-64px)] w-[280px] flex flex-col bg-slate-50 dark:bg-slate-950 border-r border-slate-200 dark:border-slate-800 font-sans text-xs uppercase tracking-widest font-semibold overflow-y-auto">
+<div class="px-6 py-8 border-b border-slate-200">
+<div class="flex items-center gap-3 mb-1">
+<span class="material-symbols-outlined text-blue-600" style="font-variation-settings: 'FILL' 1;">shield_person</span>
+<span class="text-xl font-black text-slate-900 dark:text-white tracking-tight normal-case">AuditMaster</span>
+</div>
+<p class="text-[10px] text-slate-400 font-normal tracking-wider">GLOBAL COMPLIANCE UNIT</p>
+</div>
+<nav class="flex-1 py-4">
+<div class="px-6 mb-2 text-slate-400">Navigation</div>
+<a class="flex items-center px-6 py-4 text-slate-500 hover:bg-slate-100 transition-all active:scale-95 duration-150" href="#">
+<span class="material-symbols-outlined mr-3">gavel</span> Regulator Portal
+                </a>
+<a class="bg-white dark:bg-slate-900 border-r-4 border-blue-600 text-blue-600 flex items-center px-6 py-4 shadow-sm active:scale-95 duration-150" href="#">
+<span class="material-symbols-outlined mr-3">account_tree</span> ICF Explorer
+                </a>
+<a class="flex items-center px-6 py-4 text-slate-500 hover:bg-slate-100 transition-all active:scale-95 duration-150" href="#">
+<span class="material-symbols-outlined mr-3">biotech</span> Integrity Diagnostics
+                </a>
+<a class="flex items-center px-6 py-4 text-slate-500 hover:bg-slate-100 transition-all active:scale-95 duration-150" href="#">
+<span class="material-symbols-outlined mr-3">unarchive</span> Batch Center
+                </a>
+<a class="flex items-center px-6 py-4 text-slate-500 hover:bg-slate-100 transition-all active:scale-95 duration-150" href="#">
+<span class="material-symbols-outlined mr-3">timeline</span> Incident Workspace
+                </a>
+<a class="flex items-center px-6 py-4 text-slate-500 hover:bg-slate-100 transition-all active:scale-95 duration-150" href="#">
+<span class="material-symbols-outlined mr-3">event_available</span> Milestones
+                </a>
+<a class="flex items-center px-6 py-4 text-slate-500 hover:bg-slate-100 transition-all active:scale-95 duration-150" href="#">
+<span class="material-symbols-outlined mr-3">settings_input_component</span> Evidence Config
+                </a>
+</nav>
+<div class="p-6 border-t border-slate-200">
+<button class="w-full bg-slate-900 text-white py-3 rounded text-[10px] tracking-[0.2em] hover:bg-slate-800 transition-colors uppercase">Generate Report</button>
+<div class="mt-6 flex flex-col gap-4">
+<a class="flex items-center text-slate-400 hover:text-slate-900 transition-colors" href="#"><span class="material-symbols-outlined mr-2 text-lg">description</span> Documentation</a>
+<a class="flex items-center text-slate-400 hover:text-slate-900 transition-colors" href="#"><span class="material-symbols-outlined mr-2 text-lg">help_outline</span> Support</a>
+</div>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="ml-[280px] flex-1 p-margin-page min-h-screen">
+<header class="mb-stack-lg flex justify-between items-end">
+<div>
+<h1 class="font-headline-xl text-headline-xl text-primary mb-2">Audit Resource Allocator</h1>
+<p class="text-on-surface-variant font-body-md max-w-2xl">Forensic capacity management for global auditor deployment. Optimize workload balancing across jurisdictions while tracking travel compliance and budget integrity.</p>
+</div>
+<div class="flex gap-stack-sm">
+<div class="flex items-center px-3 py-1 bg-surface-container rounded-lg border border-outline-variant">
+<span class="font-mono-data text-mono-data text-on-surface-variant mr-3">PERIOD: Q3 2024</span>
+<span class="material-symbols-outlined text-slate-400 cursor-pointer">calendar_month</span>
+</div>
+<button class="flex items-center gap-2 border border-outline px-4 py-2 rounded font-semibold text-xs tracking-wide hover:bg-white transition-colors">
+<span class="material-symbols-outlined text-sm">filter_list</span> FILTER VIEW
+                    </button>
+</div>
+</header>
+<!-- Bento Stats Grid -->
+<div class="grid grid-cols-4 gap-gutter mb-stack-lg">
+<div class="bg-white border border-slate-200 p-stack-md rounded shadow-sm flex flex-col justify-between">
+<span class="font-label-caps text-label-caps text-slate-500 uppercase">Global Utilization</span>
+<div class="mt-4 flex items-end justify-between">
+<span class="text-3xl font-bold tracking-tight text-slate-900">84.2%</span>
+<span class="bg-emerald-50 text-emerald-700 font-mono-status text-mono-status px-2 py-0.5 rounded border border-emerald-100 flex items-center">
+<span class="material-symbols-outlined text-xs mr-1" style="font-variation-settings: 'FILL' 1;">check_circle</span> OPTIMAL
+                        </span>
+</div>
+</div>
+<div class="bg-white border border-slate-200 p-stack-md rounded shadow-sm">
+<span class="font-label-caps text-label-caps text-slate-500 uppercase">Available Buffer</span>
+<div class="mt-4 flex items-end justify-between">
+<span class="text-3xl font-bold tracking-tight text-slate-900">12</span>
+<span class="text-slate-400 font-mono-data text-xs">AUDITORS OFF-PROJECT</span>
+</div>
+</div>
+<div class="bg-white border border-slate-200 p-stack-md rounded shadow-sm">
+<span class="font-label-caps text-label-caps text-slate-500 uppercase">Travel Burn Rate</span>
+<div class="mt-4 flex items-end justify-between">
+<span class="text-3xl font-bold tracking-tight text-slate-900">$42.8k</span>
+<span class="text-error font-mono-status text-mono-status">+12% vs FC</span>
+</div>
+</div>
+<div class="bg-white border border-slate-200 p-stack-md rounded shadow-sm">
+<span class="font-label-caps text-label-caps text-slate-500 uppercase">Visa Risk level</span>
+<div class="mt-4 flex items-end justify-between">
+<span class="text-3xl font-bold tracking-tight text-slate-900">High</span>
+<span class="bg-error-container text-on-error-container font-mono-status text-mono-status px-2 py-0.5 rounded border border-error/10 flex items-center">
+<span class="material-symbols-outlined text-xs mr-1">warning</span> 4 EXPIRED
+                        </span>
+</div>
+</div>
+</div>
+<!-- GANTT Scheduler Container -->
+<div class="bg-white border border-slate-200 rounded overflow-hidden flex flex-col h-[600px] shadow-sm">
+<!-- Timeline Header -->
+<div class="flex border-b border-slate-200 bg-slate-50">
+<div class="w-72 border-r border-slate-200 p-4 font-label-caps text-label-caps text-slate-400 flex items-center justify-between">
+                        AUDITOR REGISTRY
+                        <span class="material-symbols-outlined cursor-pointer hover:text-slate-900">unfold_more</span>
+</div>
+<div class="flex-1 overflow-x-hidden relative flex font-mono-data text-xs text-slate-500 bg-slate-100">
+<div class="w-[100px] border-r border-slate-200 h-full flex items-center justify-center">JUL 01</div>
+<div class="w-[100px] border-r border-slate-200 h-full flex items-center justify-center">JUL 08</div>
+<div class="w-[100px] border-r border-slate-200 h-full flex items-center justify-center">JUL 15</div>
+<div class="w-[100px] border-r border-slate-200 h-full flex items-center justify-center">JUL 22</div>
+<div class="w-[100px] border-r border-slate-200 h-full flex items-center justify-center">JUL 29</div>
+<div class="w-[100px] border-r border-slate-200 h-full flex items-center justify-center">AUG 05</div>
+<div class="w-[100px] border-r border-slate-200 h-full flex items-center justify-center">AUG 12</div>
+<div class="w-[100px] border-r border-slate-200 h-full flex items-center justify-center">AUG 19</div>
+</div>
+</div>
+<!-- Main Scrollable Gantt Area -->
+<div class="flex-1 overflow-y-auto">
+<!-- Row 1 -->
+<div class="flex border-b border-slate-100 group hover:bg-slate-50 transition-colors">
+<div class="w-72 border-r border-slate-200 p-4 flex items-center gap-3 bg-white group-hover:bg-slate-50">
+<img alt="Auditor Avatar" class="w-8 h-8 rounded border border-slate-100" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDaY2VdSPKXvGKv40EOdQnu-dgnnVrXGtm8l_n6gqvbOlApHJ2l6lDihtn8to50ZxXA0jpJU__jizewNFUj9EsODp0o3HS3kqbmrefklSJZN49Tm_KfbPVlowwyItv_E68WgYAjpwBwcsvWmgjEDHUiSULWwwBz9gLR4XdwzCKXd3DdN_7XsFDUYU383hEBfhF8JAouRRFSEL6wCMBfQktpGDp7Lq2UIFEsln7Q8jur8F1FLeLbxyJ818edESxtMnFw2r7F9xlZH_8"/>
+<div>
+<div class="font-bold text-xs text-slate-900">DR. ALISA CHENG</div>
+<div class="text-[10px] text-slate-500 flex items-center gap-1 uppercase tracking-tighter">
+<span class="material-symbols-outlined text-[12px]">public</span> APAC / Senior
+                                </div>
+</div>
+<div class="ml-auto bg-emerald-50 text-emerald-700 text-[9px] px-1.5 py-0.5 rounded font-bold border border-emerald-100">80%</div>
+</div>
+<div class="flex-1 gantt-grid relative min-w-[800px] h-16">
+<!-- Task Bar -->
+<div class="absolute top-4 left-[50px] w-[250px] h-8 bg-blue-600 rounded-sm shadow-sm flex items-center px-3 text-white text-[10px] font-bold cursor-move hover:brightness-110 active:opacity-70">
+<span class="material-symbols-outlined text-xs mr-2">drag_indicator</span>
+                                HONG KONG COMPLIANCE AUDIT
+                            </div>
+<!-- Travel Indicator -->
+<div class="absolute top-4 left-[300px] w-[50px] h-8 border-y-2 border-r-2 border-dashed border-blue-300 bg-blue-50/50 flex items-center justify-center">
+<span class="material-symbols-outlined text-blue-400 text-xs">flight</span>
+</div>
+</div>
+</div>
+<!-- Row 2 -->
+<div class="flex border-b border-slate-100 group hover:bg-slate-50 transition-colors">
+<div class="w-72 border-r border-slate-200 p-4 flex items-center gap-3 bg-white group-hover:bg-slate-50">
+<img alt="Auditor Avatar" class="w-8 h-8 rounded border border-slate-100" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDKLzvwbX7cGqzSo4Ix3Fkuw7eUiAtB_BblcOHANjzl7ICaGiI7Dk5MyObhWPjbf4C261Llrfv9I3aQOEIcdEZ0nKoRGFPoCU3vZmq9YqEdHSUlZ2Br2e7MdpZd9EFP-WGig65QWnQtIrbTmm2kV7vw_xWD1aDfwtIcW4BQSz57iJOt3fHEIQ4aUtaKTXy0Xsq3jk-ts4nZEGtg66LQTMnAvgCtPmbcXmdWSnmo9neCK0tFOqbWJ5tUShBpcIMuHKJtuHOjUPXvPKc"/>
+<div>
+<div class="font-bold text-xs text-slate-900">MARCUS THORNE</div>
+<div class="text-[10px] text-slate-500 flex items-center gap-1 uppercase tracking-tighter">
+<span class="material-symbols-outlined text-[12px]">public</span> EMEA / Lead
+                                </div>
+</div>
+<div class="ml-auto bg-amber-50 text-amber-700 text-[9px] px-1.5 py-0.5 rounded font-bold border border-amber-100">110%</div>
+</div>
+<div class="flex-1 gantt-grid relative min-w-[800px] h-16">
+<!-- Overloaded Task -->
+<div class="absolute top-4 left-[0px] w-[400px] h-8 bg-slate-900 rounded-sm shadow-sm flex items-center px-3 text-white text-[10px] font-bold cursor-move border-l-4 border-amber-500">
+<span class="material-symbols-outlined text-xs mr-2">drag_indicator</span>
+                                LONDON - ESG VERIFICATION FRAMEWORK
+                            </div>
+<div class="absolute top-12 left-[150px] w-[150px] h-1 bg-amber-500/30 rounded-full"></div>
+</div>
+</div>
+<!-- Row 3 -->
+<div class="flex border-b border-slate-100 group hover:bg-slate-50 transition-colors">
+<div class="w-72 border-r border-slate-200 p-4 flex items-center gap-3 bg-white group-hover:bg-slate-50">
+<img alt="Auditor Avatar" class="w-8 h-8 rounded border border-slate-100" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCY8IXXB7b5FY3X8NWnEEmiczBOVeDlcsy3n7Wi6q4L_hbUo7NJiB70pIV3KhhfSs9TEZz2H7PLhDrMjOzsSPnZCNaoQZMc0a51wUfrQU3vzSFOjqMAtuRNpPdOwhn3Nzal1NTUbwI5zqiwf6eAjBwCb6qiS4dyTQBziYiq8D2FHrm51ylttBV-V1b2FPZlZXCKP7xH9z8tPIVK09-jARYL-s8plwrfcHMaD7taVIT_6jeugWTmUMTVBqFIEJ4Z-IlqNhTIlUIfY_I"/>
+<div>
+<div class="font-bold text-xs text-slate-900">ELARA VANCE</div>
+<div class="text-[10px] text-slate-500 flex items-center gap-1 uppercase tracking-tighter">
+<span class="material-symbols-outlined text-[12px]">public</span> AMER / Associate
+                                </div>
+</div>
+<div class="ml-auto bg-slate-100 text-slate-500 text-[9px] px-1.5 py-0.5 rounded font-bold border border-slate-200">20%</div>
+</div>
+<div class="flex-1 gantt-grid relative min-w-[800px] h-16">
+<div class="absolute top-4 left-[400px] w-[150px] h-8 bg-blue-100 border border-blue-200 text-blue-700 rounded-sm flex items-center px-3 text-[10px] font-bold cursor-move">
+<span class="material-symbols-outlined text-xs mr-2">drag_indicator</span>
+                                NY - BANKING LOGS
+                            </div>
+<div class="absolute top-4 left-[550px] flex items-center gap-2 px-2 h-8 text-error font-mono-status text-[10px]">
+<span class="material-symbols-outlined text-sm">error</span> VISA EXPIRED (BRAZIL)
+                            </div>
+</div>
+</div>
+<!-- Row 4 -->
+<div class="flex border-b border-slate-100 group hover:bg-slate-50 transition-colors">
+<div class="w-72 border-r border-slate-200 p-4 flex items-center gap-3 bg-white group-hover:bg-slate-50">
+<img alt="Auditor Avatar" class="w-8 h-8 rounded border border-slate-100" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA5D6qq5iiYAaaqPYkI2a_IkEQdIPoM5w1lkAMBj7Nstt_YoIVxfl0AEKsNtTKrKZyvLjsvEH5Dht7_01dA94QZXWg2K0WcgAtbFFs_SEJfixOh0AAaxfY5BusoZNWg0npQ9m_o4gcTi9F5TFvYsYKpiJ-BbeMsantrHwK2sdvarPBZT2UnrrtH3xhp6vSHmFZe5iqgze8JiHWM0LAec3RRO09XXsBx_LE_5txH5-nqjMMMO1OcKg0G0GlvVqBn4d4Lp6bne-bO6sI"/>
+<div>
+<div class="font-bold text-xs text-slate-900">SAMIR KHAN</div>
+<div class="text-[10px] text-slate-500 flex items-center gap-1 uppercase tracking-tighter">
+<span class="material-symbols-outlined text-[12px]">public</span> APAC / Staff
+                                </div>
+</div>
+<div class="ml-auto bg-emerald-50 text-emerald-700 text-[9px] px-1.5 py-0.5 rounded font-bold border border-emerald-100">95%</div>
+</div>
+<div class="flex-1 gantt-grid relative min-w-[800px] h-16">
+<div class="absolute top-4 left-[100px] w-[600px] h-8 bg-blue-600 rounded-sm shadow-sm flex items-center px-3 text-white text-[10px] font-bold cursor-move">
+<span class="material-symbols-outlined text-xs mr-2">drag_indicator</span>
+                                SINGAPORE - CRYPTO ASSET VERIFICATION (PHASE 2)
+                            </div>
+</div>
+</div>
+</div>
+<!-- Footer Audit Trail Summary -->
+<div class="h-10 bg-slate-900 text-white flex items-center px-6 text-[10px] font-mono-status justify-between">
+<div class="flex items-center gap-4">
+<span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-blue-500"></span> ACTIVE PROJECT</span>
+<span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-amber-500"></span> CAPACITY ALERT</span>
+<span class="flex items-center gap-1 border-l border-slate-700 pl-4">SYSTEM READY: ALL LOGS SYNCHRONIZED</span>
+</div>
+<div class="flex items-center gap-4">
+<span>LAST SYNC: 14:02:44 UTC</span>
+<span class="text-blue-400">v2.4.1-STABLE</span>
+</div>
+</div>
+</div>
+<!-- Lower Layout: Travel & Logistics + Risk Assessment -->
+<div class="mt-stack-lg grid grid-cols-3 gap-gutter">
+<!-- Travel Budget Column -->
+<div class="col-span-2 bg-white border border-slate-200 rounded p-stack-md shadow-sm">
+<div class="flex justify-between items-center mb-6">
+<h3 class="font-label-caps text-label-caps text-slate-900 flex items-center gap-2">
+<span class="material-symbols-outlined text-blue-600">payments</span> REGIONAL TRAVEL EXPENDITURE
+                        </h3>
+<button class="text-blue-600 text-xs font-bold hover:underline">VIEW FULL LEDGER</button>
+</div>
+<div class="space-y-6">
+<div class="flex items-center gap-4">
+<div class="w-20 font-mono-data text-xs text-slate-500">APAC</div>
+<div class="flex-1 h-3 bg-slate-100 rounded-full overflow-hidden flex">
+<div class="h-full bg-blue-600" style="width: 72%"></div>
+</div>
+<div class="w-24 text-right font-mono-data text-xs font-bold text-slate-900">$128,400</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="w-20 font-mono-data text-xs text-slate-500">EMEA</div>
+<div class="flex-1 h-3 bg-slate-100 rounded-full overflow-hidden flex">
+<div class="h-full bg-blue-400" style="width: 45%"></div>
+</div>
+<div class="w-24 text-right font-mono-data text-xs font-bold text-slate-900">$82,150</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="w-20 font-mono-data text-xs text-slate-500">AMER</div>
+<div class="flex-1 h-3 bg-slate-100 rounded-full overflow-hidden flex">
+<div class="h-full bg-error" style="width: 94%"></div>
+</div>
+<div class="w-24 text-right font-mono-data text-xs font-bold text-error">$164,000</div>
+</div>
+</div>
+<div class="mt-8 p-4 bg-slate-50 rounded border border-slate-200 flex items-start gap-3">
+<span class="material-symbols-outlined text-amber-500">info</span>
+<div>
+<p class="text-xs font-bold text-slate-900">AMER Budget threshold exceeded.</p>
+<p class="text-[11px] text-slate-500 mt-1">Audit density in NYC and São Paulo has triggered secondary reserve funding protocols. Approvals required for new flight bookings.</p>
+</div>
+</div>
+</div>
+<!-- Visa/Security Panel -->
+<div class="bg-white border border-slate-200 rounded p-stack-md shadow-sm">
+<h3 class="font-label-caps text-label-caps text-slate-900 mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-blue-600">verified_user</span> COMPLIANCE TRIGGERS
+                    </h3>
+<div class="space-y-4">
+<div class="p-3 border-l-4 border-error bg-error/5 rounded-r">
+<div class="flex justify-between items-center mb-1">
+<span class="text-[10px] font-black text-error uppercase">Visa Expiry Alert</span>
+<span class="font-mono-data text-[10px] text-error">48H</span>
+</div>
+<p class="text-xs text-slate-700">Elara Vance's Work Visa (Brazil) expires in 48 hours. Immediate project re-assignment required to prevent breach.</p>
+</div>
+<div class="p-3 border-l-4 border-amber-500 bg-amber-50 rounded-r">
+<div class="flex justify-between items-center mb-1">
+<span class="text-[10px] font-black text-amber-700 uppercase">Policy Warning</span>
+<span class="font-mono-data text-[10px] text-amber-700">LOW</span>
+</div>
+<p class="text-xs text-slate-700">3 Auditors have exceeded 14 consecutive days of international field work. Mandatory rest period approaching.</p>
+</div>
+<div class="p-3 border-l-4 border-emerald-500 bg-emerald-50 rounded-r">
+<div class="flex justify-between items-center mb-1">
+<span class="text-[10px] font-black text-emerald-700 uppercase">Verification Log</span>
+<span class="font-mono-data text-[10px] text-emerald-700">OK</span>
+</div>
+<p class="text-xs text-slate-700">All currently assigned APAC auditors have valid cryptographic travel clearance signatures.</p>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

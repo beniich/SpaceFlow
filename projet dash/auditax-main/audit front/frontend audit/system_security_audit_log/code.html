@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary": "#00190e",
+                        "error": "#ba1a1a",
+                        "on-error-container": "#93000a",
+                        "on-primary-fixed-variant": "#3c475a",
+                        "error-container": "#ffdad6",
+                        "on-tertiary-container": "#00a472",
+                        "on-secondary-container": "#fefcff",
+                        "secondary-fixed": "#d8e2ff",
+                        "outline": "#75777d",
+                        "surface-container-lowest": "#ffffff",
+                        "inverse-on-surface": "#edf1f5",
+                        "surface-tint": "#545f73",
+                        "on-secondary-fixed": "#001a42",
+                        "secondary": "#0058be",
+                        "on-surface": "#171c1f",
+                        "on-tertiary-fixed": "#002113",
+                        "surface": "#f6fafe",
+                        "surface-bright": "#f6fafe",
+                        "on-primary-fixed": "#111c2d",
+                        "tertiary-container": "#00301e",
+                        "on-primary": "#ffffff",
+                        "inverse-primary": "#bcc7de",
+                        "on-surface-variant": "#45474c",
+                        "inverse-surface": "#2c3134",
+                        "on-tertiary-fixed-variant": "#005236",
+                        "surface-container": "#eaeef2",
+                        "on-error": "#ffffff",
+                        "surface-container-highest": "#dfe3e7",
+                        "surface-container-low": "#f0f4f8",
+                        "surface-dim": "#d6dade",
+                        "tertiary-fixed": "#6ffbbe",
+                        "on-secondary": "#ffffff",
+                        "on-secondary-fixed-variant": "#004395",
+                        "primary-fixed-dim": "#bcc7de",
+                        "on-primary-container": "#8590a6",
+                        "surface-container-high": "#e4e9ed",
+                        "on-background": "#171c1f",
+                        "background": "#f6fafe",
+                        "on-tertiary": "#ffffff",
+                        "tertiary-fixed-dim": "#4edea3",
+                        "primary": "#091426",
+                        "outline-variant": "#c5c6cd",
+                        "primary-fixed": "#d8e3fb",
+                        "secondary-fixed-dim": "#adc6ff",
+                        "primary-container": "#1e293b",
+                        "surface-variant": "#dfe3e7",
+                        "secondary-container": "#2170e4"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "stack-lg": "32px",
+                        "margin-page": "40px",
+                        "stack-sm": "8px",
+                        "unit": "4px",
+                        "gutter": "24px",
+                        "stack-md": "16px",
+                        "sidebar-width": "280px"
+                    },
+                    "fontFamily": {
+                        "mono-data": ["JetBrains Mono"],
+                        "mono-status": ["JetBrains Mono"],
+                        "body-md": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "headline-xl": ["Inter"],
+                        "label-caps": ["Inter"]
+                    },
+                    "fontSize": {
+                        "mono-data": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "mono-status": ["12px", {"lineHeight": "16px", "fontWeight": "700"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "headline-lg": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "headline-xl": ["30px", {"lineHeight": "36px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-background font-body-md text-on-background min-h-screen flex">
+<!-- SideNavBar -->
+<aside class="fixed left-0 h-screen w-[280px] bg-slate-50 dark:bg-slate-950 border-r border-slate-200 dark:border-slate-800 flex flex-col z-50">
+<div class="px-6 py-8">
+<div class="flex items-center gap-3 mb-10">
+<div class="w-10 h-10 bg-primary flex items-center justify-center rounded-lg">
+<span class="material-symbols-outlined text-white" data-icon="security">security</span>
+</div>
+<div>
+<h1 class="text-xl font-black text-slate-900 dark:text-white tracking-tight">AuditMaster</h1>
+<p class="text-[10px] uppercase tracking-widest font-bold text-slate-500">Global Compliance</p>
+</div>
+</div>
+<nav class="space-y-1">
+<a class="flex items-center px-6 py-4 text-slate-500 hover:text-slate-900 transition-all hover:bg-slate-100" href="#">
+<span class="material-symbols-outlined mr-4" data-icon="gavel">gavel</span>
+<span class="font-sans text-xs uppercase tracking-widest font-semibold">Regulator Portal</span>
+</a>
+<a class="flex items-center px-6 py-4 text-slate-500 hover:text-slate-900 transition-all hover:bg-slate-100" href="#">
+<span class="material-symbols-outlined mr-4" data-icon="report_problem">report_problem</span>
+<span class="font-sans text-xs uppercase tracking-widest font-semibold">Exceptions</span>
+</a>
+<a class="flex items-center px-6 py-4 text-slate-500 hover:text-slate-900 transition-all hover:bg-slate-100" href="#">
+<span class="material-symbols-outlined mr-4" data-icon="account_tree">account_tree</span>
+<span class="font-sans text-xs uppercase tracking-widest font-semibold">ICF Explorer</span>
+</a>
+<a class="flex items-center px-6 py-4 text-slate-500 hover:text-slate-900 transition-all hover:bg-slate-100" href="#">
+<span class="material-symbols-outlined mr-4" data-icon="biotech">biotech</span>
+<span class="font-sans text-xs uppercase tracking-widest font-semibold">Integrity Diagnostics</span>
+</a>
+<a class="bg-white dark:bg-slate-900 border-r-4 border-blue-600 text-blue-600 flex items-center px-6 py-4 shadow-sm" href="#">
+<span class="material-symbols-outlined mr-4" data-icon="security">security</span>
+<span class="font-sans text-xs uppercase tracking-widest font-semibold">System Logs</span>
+</a>
+<a class="flex items-center px-6 py-4 text-slate-500 hover:text-slate-900 transition-all hover:bg-slate-100" href="#">
+<span class="material-symbols-outlined mr-4" data-icon="fact_check">fact_check</span>
+<span class="font-sans text-xs uppercase tracking-widest font-semibold">QA Review</span>
+</a>
+</nav>
+</div>
+<div class="mt-auto border-t border-slate-200 px-6 py-8 bg-slate-100/50">
+<button class="w-full py-3 bg-primary text-white font-label-caps uppercase rounded-lg shadow-sm hover:opacity-90 transition-opacity flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-sm" data-icon="description">description</span>
+                Generate Report
+            </button>
+<div class="mt-6 flex flex-col gap-4">
+<a class="flex items-center text-slate-500 hover:text-slate-900 transition-colors text-xs font-semibold uppercase tracking-widest" href="#">
+<span class="material-symbols-outlined mr-3 text-lg" data-icon="help_outline">help_outline</span>
+                    Support
+                </a>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 ml-[280px]">
+<!-- TopAppBar -->
+<header class="sticky top-0 w-full flex justify-between items-center h-16 px-10 bg-white border-b border-slate-200 z-40 shadow-sm">
+<div class="flex items-center gap-6">
+<div class="relative">
+<span class="absolute inset-y-0 left-3 flex items-center text-slate-400">
+<span class="material-symbols-outlined text-sm" data-icon="search">search</span>
+</span>
+<input class="pl-10 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-600/20 w-80" placeholder="Search system events..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-4 text-slate-500">
+<button class="hover:bg-slate-50 p-2 rounded-full transition-colors active:opacity-80">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="hover:bg-slate-50 p-2 rounded-full transition-colors active:opacity-80">
+<span class="material-symbols-outlined" data-icon="history_edu">history_edu</span>
+</button>
+<button class="hover:bg-slate-50 p-2 rounded-full transition-colors active:opacity-80">
+<span class="material-symbols-outlined" data-icon="account_tree">account_tree</span>
+</button>
+</div>
+<div class="h-8 w-[1px] bg-slate-200"></div>
+<div class="flex items-center gap-3">
+<span class="text-right">
+<p class="text-xs font-bold text-slate-900 leading-none">Admin_Control_01</p>
+<p class="text-[10px] text-slate-500 font-medium">SecOps Engineer</p>
+</span>
+<div class="w-8 h-8 rounded-full bg-slate-200 overflow-hidden">
+<img alt="User Profile Avatar" class="w-full h-full object-cover" data-alt="Close-up portrait of a professional technology specialist in a high-tech server room environment with neon blue lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDbZuseRI_K5Y4Ly2C3PZOmiOy-kYdmDIAPKSMxwJ3eWaAKRQYVWoECdkDtlnN_h-v-BpbpVihN9g7J-0BKt5J5Wu_htNj5ZuGDBVetVoCw4Ee3IxBinQyqt83Im1dhgkcYIiOrClDBONEpdPfrQzBZAb8etVYoSS5HDRBU_croehvnqkcg0ttTw97H9hFWWHqtQ0DNS07joClHaZrQnZvfZ9YSCF48UvHqEWZyZGt24AxcpDUY5sazB36Z025Dvptlfd2dDgZ3jyE"/>
+</div>
+</div>
+</div>
+</header>
+<!-- Content Body -->
+<div class="p-10 max-w-[1440px] mx-auto">
+<div class="mb-10 flex justify-between items-end">
+<div>
+<h2 class="font-headline-xl text-primary mb-2">System Security Audit Log</h2>
+<p class="text-on-surface-variant max-w-2xl font-body-md">Forensic record of all administrative overrides, role modifications, and authentication lifecycle events across the AuditMaster global infrastructure.</p>
+</div>
+<div class="flex gap-3">
+<div class="flex bg-white border border-outline-variant rounded-lg p-1">
+<button class="px-4 py-1.5 text-xs font-bold uppercase tracking-wider bg-slate-100 text-slate-900 rounded-sm">Real-time</button>
+<button class="px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-slate-400 hover:text-slate-600">Historical</button>
+</div>
+<button class="flex items-center gap-2 px-4 py-2 border border-outline-variant bg-white text-slate-700 font-label-caps hover:bg-slate-50 rounded-lg">
+<span class="material-symbols-outlined text-sm" data-icon="filter_list">filter_list</span>
+                        Filter Severity
+                    </button>
+</div>
+</div>
+<!-- Dashboard Stats Grid -->
+<div class="grid grid-cols-4 gap-gutter mb-stack-lg">
+<div class="bg-white p-stack-md border border-outline-variant rounded-lg">
+<div class="flex justify-between items-start mb-2">
+<p class="font-label-caps text-slate-500 uppercase">Alerts (24h)</p>
+<span class="material-symbols-outlined text-error" data-icon="warning" style="font-variation-settings: 'FILL' 1;">warning</span>
+</div>
+<p class="text-3xl font-black text-slate-900">12</p>
+<div class="mt-2 flex items-center gap-1 text-[10px] font-mono-status text-error uppercase">
+<span class="material-symbols-outlined text-xs" data-icon="trending_up">trending_up</span>
+                        8% from yesterday
+                    </div>
+</div>
+<div class="bg-white p-stack-md border border-outline-variant rounded-lg">
+<div class="flex justify-between items-start mb-2">
+<p class="font-label-caps text-slate-500 uppercase">Active Sessions</p>
+<span class="material-symbols-outlined text-secondary" data-icon="group" style="font-variation-settings: 'FILL' 1;">group</span>
+</div>
+<p class="text-3xl font-black text-slate-900">482</p>
+<div class="mt-2 flex items-center gap-1 text-[10px] font-mono-status text-on-tertiary-container uppercase">
+<span class="material-symbols-outlined text-xs" data-icon="trending_down">trending_down</span>
+                        Normal load
+                    </div>
+</div>
+<div class="bg-white p-stack-md border border-outline-variant rounded-lg">
+<div class="flex justify-between items-start mb-2">
+<p class="font-label-caps text-slate-500 uppercase">Override Requests</p>
+<span class="material-symbols-outlined text-slate-400" data-icon="vpn_key" style="font-variation-settings: 'FILL' 1;">vpn_key</span>
+</div>
+<p class="text-3xl font-black text-slate-900">07</p>
+<div class="mt-2 flex items-center gap-1 text-[10px] font-mono-status text-slate-500 uppercase">
+<span class="material-symbols-outlined text-xs" data-icon="check_circle">check_circle</span>
+                        All Approved
+                    </div>
+</div>
+<div class="bg-white p-stack-md border border-outline-variant rounded-lg">
+<div class="flex justify-between items-start mb-2">
+<p class="font-label-caps text-slate-500 uppercase">System Integrity</p>
+<span class="material-symbols-outlined text-on-tertiary-container" data-icon="verified_user" style="font-variation-settings: 'FILL' 1;">verified_user</span>
+</div>
+<p class="text-3xl font-black text-slate-900">99.9%</p>
+<div class="mt-2 flex items-center gap-1 text-[10px] font-mono-status text-on-tertiary-container uppercase">
+<span class="material-symbols-outlined text-xs" data-icon="shield">shield</span>
+                        Encrypted
+                    </div>
+</div>
+</div>
+<!-- Technical Audit Table -->
+<div class="bg-white border border-outline-variant shadow-sm overflow-hidden">
+<div class="bg-slate-50 border-b border-outline-variant px-6 py-4 flex justify-between items-center">
+<div class="flex gap-6">
+<button class="text-xs font-bold text-blue-600 border-b-2 border-blue-600 pb-1 uppercase tracking-wider">All Events</button>
+<button class="text-xs font-bold text-slate-400 hover:text-slate-600 pb-1 uppercase tracking-wider">Security</button>
+<button class="text-xs font-bold text-slate-400 hover:text-slate-600 pb-1 uppercase tracking-wider">Access</button>
+<button class="text-xs font-bold text-slate-400 hover:text-slate-600 pb-1 uppercase tracking-wider">Overrides</button>
+</div>
+<div class="text-[10px] font-mono-data text-slate-400">Showing 1-25 of 1,429 entries</div>
+</div>
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-slate-50/50 border-b border-outline-variant">
+<th class="px-6 py-3 font-label-caps text-slate-500 uppercase">Timestamp (UTC)</th>
+<th class="px-6 py-3 font-label-caps text-slate-500 uppercase">Event ID</th>
+<th class="px-6 py-3 font-label-caps text-slate-500 uppercase">Subject / User ID</th>
+<th class="px-6 py-3 font-label-caps text-slate-500 uppercase">Action type</th>
+<th class="px-6 py-3 font-label-caps text-slate-500 uppercase">Status</th>
+<th class="px-6 py-3 font-label-caps text-slate-500 uppercase text-right">Severity</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-100 font-mono-data text-sm">
+<!-- Row 1 -->
+<tr class="hover:bg-slate-50 transition-colors">
+<td class="px-6 py-4 text-slate-600">2023-11-24 14:22:01.092</td>
+<td class="px-6 py-4 text-slate-900 font-bold">EV-982-XQ</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-blue-500"></span>
+                                    usr_root_admin
+                                </div>
+</td>
+<td class="px-6 py-4">ROLE_MODIFICATION_ESCALATION</td>
+<td class="px-6 py-4">
+<span class="bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded text-[10px] font-bold border border-emerald-200">SUCCESS</span>
+</td>
+<td class="px-6 py-4 text-right">
+<span class="font-mono-status bg-slate-900 text-white px-2 py-0.5 rounded text-[10px]">LOW</span>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="bg-slate-50/30 hover:bg-slate-50 transition-colors">
+<td class="px-6 py-4 text-slate-600">2023-11-24 14:19:44.811</td>
+<td class="px-6 py-4 text-slate-900 font-bold">EV-981-AB</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-slate-400"></span>
+                                    svc_worker_node_04
+                                </div>
+</td>
+<td class="px-6 py-4">BATCH_PROCESS_INITIALIZATION</td>
+<td class="px-6 py-4">
+<span class="bg-blue-50 text-blue-700 px-2 py-0.5 rounded text-[10px] font-bold border border-blue-200">COMPLETED</span>
+</td>
+<td class="px-6 py-4 text-right">
+<span class="font-mono-status bg-slate-900 text-white px-2 py-0.5 rounded text-[10px]">INFO</span>
+</td>
+</tr>
+<!-- Row 3 (Alert) -->
+<tr class="bg-red-50/20 hover:bg-red-50/40 transition-colors">
+<td class="px-6 py-4 text-slate-600">2023-11-24 14:15:12.003</td>
+<td class="px-6 py-4 text-slate-900 font-bold">EV-980-CR</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-error"></span>
+                                    usr_external_guest
+                                </div>
+</td>
+<td class="px-6 py-4 text-error font-bold">UNAUTHORIZED_ACCESS_ATTEMPT</td>
+<td class="px-6 py-4">
+<span class="bg-error-container text-on-error-container px-2 py-0.5 rounded text-[10px] font-bold border border-red-200 uppercase">REJECTED</span>
+</td>
+<td class="px-6 py-4 text-right">
+<span class="font-mono-status bg-error text-white px-2 py-0.5 rounded text-[10px]">CRITICAL</span>
+</td>
+</tr>
+<!-- Row 4 -->
+<tr class="hover:bg-slate-50 transition-colors">
+<td class="px-6 py-4 text-slate-600">2023-11-24 14:12:09.992</td>
+<td class="px-6 py-4 text-slate-900 font-bold">EV-979-ZZ</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-blue-500"></span>
+                                    usr_compliance_mngr
+                                </div>
+</td>
+<td class="px-6 py-4">DATA_EXPORT_RESTRICTED_REGION</td>
+<td class="px-6 py-4">
+<span class="bg-orange-50 text-orange-700 px-2 py-0.5 rounded text-[10px] font-bold border border-orange-200">PENDING_APPROVAL</span>
+</td>
+<td class="px-6 py-4 text-right">
+<span class="font-mono-status bg-orange-500 text-white px-2 py-0.5 rounded text-[10px]">HIGH</span>
+</td>
+</tr>
+<!-- Row 5 -->
+<tr class="bg-slate-50/30 hover:bg-slate-50 transition-colors">
+<td class="px-6 py-4 text-slate-600">2023-11-24 14:08:33.111</td>
+<td class="px-6 py-4 text-slate-900 font-bold">EV-978-PL</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-slate-400"></span>
+                                    sys_cron_job_77
+                                </div>
+</td>
+<td class="px-6 py-4">DATABASE_CLEANUP_SEQUENCE</td>
+<td class="px-6 py-4">
+<span class="bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded text-[10px] font-bold border border-emerald-200">SUCCESS</span>
+</td>
+<td class="px-6 py-4 text-right">
+<span class="font-mono-status bg-slate-900 text-white px-2 py-0.5 rounded text-[10px]">INFO</span>
+</td>
+</tr>
+<!-- Row 6 -->
+<tr class="hover:bg-slate-50 transition-colors">
+<td class="px-6 py-4 text-slate-600">2023-11-24 14:05:01.002</td>
+<td class="px-6 py-4 text-slate-900 font-bold">EV-977-DD</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-blue-500"></span>
+                                    usr_root_admin
+                                </div>
+</td>
+<td class="px-6 py-4">MFA_RESET_REQUEST_VALIDATED</td>
+<td class="px-6 py-4">
+<span class="bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded text-[10px] font-bold border border-emerald-200">SUCCESS</span>
+</td>
+<td class="px-6 py-4 text-right">
+<span class="font-mono-status bg-slate-900 text-white px-2 py-0.5 rounded text-[10px]">MEDIUM</span>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="p-6 bg-slate-50 border-t border-outline-variant flex justify-between items-center">
+<div class="flex items-center gap-2">
+<span class="text-xs text-slate-500">Rows per page:</span>
+<select class="bg-white border border-outline-variant text-xs rounded px-1 py-0.5 outline-none">
+<option>25</option>
+<option>50</option>
+<option>100</option>
+</select>
+</div>
+<div class="flex gap-2">
+<button class="p-2 border border-outline-variant bg-white rounded-lg hover:bg-slate-100 disabled:opacity-30">
+<span class="material-symbols-outlined text-sm" data-icon="chevron_left">chevron_left</span>
+</button>
+<button class="px-3 py-1 bg-primary text-white text-xs rounded-lg">1</button>
+<button class="px-3 py-1 bg-white border border-outline-variant text-slate-600 text-xs rounded-lg hover:bg-slate-100">2</button>
+<button class="px-3 py-1 bg-white border border-outline-variant text-slate-600 text-xs rounded-lg hover:bg-slate-100">3</button>
+<span class="text-slate-400 px-1 pt-1">...</span>
+<button class="px-3 py-1 bg-white border border-outline-variant text-slate-600 text-xs rounded-lg hover:bg-slate-100">58</button>
+<button class="p-2 border border-outline-variant bg-white rounded-lg hover:bg-slate-100">
+<span class="material-symbols-outlined text-sm" data-icon="chevron_right">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Audit Trail Side Panel (Asymmetric Layout Example) -->
+<div class="mt-stack-lg grid grid-cols-3 gap-gutter">
+<div class="col-span-2 space-y-gutter">
+<div class="bg-white p-8 border border-outline-variant rounded-lg">
+<h3 class="font-headline-lg text-primary mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary" data-icon="analytics">analytics</span>
+                            Activity Heatmap
+                        </h3>
+<div class="aspect-[21/9] w-full bg-slate-100 rounded-lg flex items-center justify-center border border-dashed border-slate-300">
+<div class="text-center">
+<span class="material-symbols-outlined text-4xl text-slate-300 mb-2" data-icon="monitoring">monitoring</span>
+<p class="text-xs text-slate-400 font-mono-data">CRYPTOGRAPHIC_VISUALIZATION_LOADING...</p>
+</div>
+</div>
+</div>
+</div>
+<div class="col-span-1">
+<div class="bg-slate-900 text-white p-8 rounded-lg shadow-xl relative overflow-hidden h-full">
+<div class="absolute top-0 right-0 w-32 h-32 bg-blue-600/20 blur-[60px] rounded-full"></div>
+<h3 class="font-headline-lg mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-blue-400" data-icon="history">history</span>
+                            Recent History
+                        </h3>
+<div class="space-y-6 relative">
+<!-- Timeline Thread -->
+<div class="absolute left-3 top-2 bottom-0 w-[1px] bg-slate-700"></div>
+<div class="relative pl-10">
+<div class="absolute left-0 top-1 w-6 h-6 rounded-full bg-blue-500 border-4 border-slate-900 z-10"></div>
+<p class="text-[10px] font-mono-status text-blue-400 uppercase">14:22 UTC</p>
+<p class="text-sm font-bold text-slate-100">Escalated permissions for Admin_01</p>
+<p class="text-xs text-slate-400 mt-1">Authorized by SecOps Policy 4</p>
+</div>
+<div class="relative pl-10">
+<div class="absolute left-0 top-1 w-6 h-6 rounded-full bg-slate-700 border-4 border-slate-900 z-10"></div>
+<p class="text-[10px] font-mono-status text-slate-500 uppercase">14:19 UTC</p>
+<p class="text-sm font-bold text-slate-100">Worker Node 04 Re-sync</p>
+<p class="text-xs text-slate-400 mt-1">Automatic integrity validation passed</p>
+</div>
+<div class="relative pl-10">
+<div class="absolute left-0 top-1 w-6 h-6 rounded-full bg-error border-4 border-slate-900 z-10"></div>
+<p class="text-[10px] font-mono-status text-error uppercase">14:15 UTC</p>
+<p class="text-sm font-bold text-slate-100">Critical Access Blocked</p>
+<p class="text-xs text-slate-400 mt-1">IP 192.168.1.102 blacklisted</p>
+</div>
+</div>
+<button class="mt-10 w-full py-2 border border-slate-700 rounded-lg text-xs font-bold uppercase tracking-widest hover:bg-slate-800 transition-colors">View All Timeline</button>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>
