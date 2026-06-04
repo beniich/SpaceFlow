@@ -1,0 +1,93 @@
+{
+  "common": {
+    "app_name": "Sovereign Device Nexus",
+    "welcome": "Bienvenue, Commandant",
+    "role": "Niveau d'Habilitation",
+    "plan": "Plan Actuel",
+    "theme": "Thème",
+    "language": "Langue",
+    "cancel": "Annuler",
+    "confirm": "Confirmer",
+    "logout": "Verrouiller / Se déconnecter",
+    "mfa_active": "MFA ACTIF",
+    "sync_active": "LIAISON NEXUS RECONSTITUÉE",
+    "status": "STATUT",
+    "system_nominal": "SYSTÈME NOMINAL",
+    "online": "EN LIGNE",
+    "offline": "HORS LIGNE"
+  },
+  "tabs": {
+    "client-dashboard": "01 • PORTAIL ACCÈS INVITÉ",
+    "gmail": "07 • GMAIL SOUVERAIN",
+    "platform-gate": "12 • OPÉRATEUR PLATEFORME",
+    "contacts": "17 • CONTACTS SOUVERAINS",
+    "dashboard": "01 • CENTRE DE COMMANDE",
+    "health-matrix": "02 • MATRICE DE SANTÉ",
+    "data-flow": "03 • FLUX DE DONNÉES SÉCURISÉ",
+    "quantum-node": "04 • COGNITION QUANTIQUE",
+    "insights": "05 • VISION ARCHITECTE",
+    "perimeter": "06 • PÉRIMÈTRES DE SÉCURITÉ",
+    "terminal": "07 • TERMINAL SYSTÈME",
+    "timeline": "08 • HISTORIQUE DES INCIDENTS",
+    "global-map": "09 • PLANISPHÈRE GÉOGRAPHIQUE",
+    "settings": "10 • VARIABLES SYSTÈME SOUVERAINES",
+    "sovereign-audit": "13 • AUDITS SOUVERAINS",
+    "observation-deck": "14 • PLATEFORME D'OBSERVATION",
+    "appliance-core": "15 • NOYAU DE SÉCURITÉ APPAREIL",
+    "asset-enrollment": "16 • UNITÉS TACTIQUES ACCÈDENT"
+  },
+  "billing": {
+    "title": "Le Prix de la Certitude",
+    "subtitle": "Dans le Nexus de Souveraineté, la certitude n'est pas un luxe, c'est une clause absolue.",
+    "cta_expert": "Initialiser le Proxy",
+    "features": [
+      "Couplage de défense mTLS & Clés de RAM éphémères",
+      "Voûte d'audit souverain & Intégrité système profonde",
+      "Puits de DNS cognitif & Épuration automatisée de télémétrie"
+    ]
+  },
+  "dashboard": {
+    "welcome": "Bienvenue, Auditeur Souverain",
+    "loading": "Lien neural établi...",
+    "metrics": {
+      "total_hosts": "NŒUDS HÔTES TOTAUX",
+      "online_channels": "CANAUX ACTIFS (EN LIGNE)",
+      "warning_drifts": "DÉRIVES D'ALERTE (ATTN)",
+      "offline_stalls": "ARRÊTS HORS LIGNE",
+      "catalogued": "100% répertorié",
+      "active_telemetry": "Télémétrie active",
+      "requires_check": "Vérification requise",
+      "zero_heartbeat": "Inactif (Aucune pulsation)"
+    },
+    "controls_title": "CONTRÔLES D'INTÉGRITÉ ET DE SOUVERAINETÉ LOGICIELLE",
+    "gauges": {
+      "policies_rating": "ÉVALUATION DES POLITIQUES SOV",
+      "compliance": "CONFORMITÉ",
+      "policies_desc": "Moyenne de conformité aux règles d'accès et pare-feux noyau.",
+      "cpu_capacity": "CAPACITÉ NETTE DU CPU",
+      "load_mean": "CHARGE MOYENNE",
+      "cpu_desc": "Indicateur moyen d'utilisation CPU de l'ensemble des serveurs.",
+      "memory_load": "CHARGE MÉMOIRE UNIFIÉE",
+      "memory_mem": "MÉMOIRE RAM",
+      "memory_desc": "Moyenne d'allocation des modules physiques de stockage DDR."
+    },
+    "alerts": {
+      "title": "INCIDENTS ACTIFS REQUÉRANT UNE ACTION SEC-AUDIT",
+      "realtime_label": "CONTRÔLE TEMPS RÉEL",
+      "zero_alerts": "Zéro alerte de sécurité active",
+      "protected_desc": "Les couches système hôtes sont intégralement sécurisées par les stratégies du Nexus.",
+      "trace_target": "Tracer l'hôte cible",
+      "acknowledge": "Acquitter l'incident"
+    },
+    "ledger": {
+      "title": "REGISTRE DES INCIDENTS RÉCENTS CONSOLE",
+      "continuous_label": "Flux de télémétrie continu"
+    }
+  },
+  "auth": {
+    "title": "Accès Sovereign Gate Requis",
+    "sub_title": "Veuillez valider vos habilitations pour accéder au pupitre de commandement.",
+    "login_btn": "S'authentifier via Google Auth",
+    "bypass_btn": "Outrepasser les barrières de clearance"
+  }
+}

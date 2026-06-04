@@ -1,0 +1,253 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:ital,wght@0,100..0,800;1,100..0,800&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Outfit", "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+}
+
+:root {
+  --app-bg: #0c0523;
+  --app-text: #e2e8f0;
+  --panel-bg: rgba(21, 10, 54, 0.9);
+  --panel-border: rgba(168, 85, 247, 0.1);
+  --sidebar-bg: #150a36;
+  --sidebar-border: rgba(124, 107, 181, 0.1);
+  --sidebar-text: #7c6bb5;
+  --sidebar-text-active: #22d3ee;
+  --sidebar-btn-bg: transparent;
+  --sidebar-btn-bg-active: #24175e;
+  --card-bg: rgba(26, 14, 65, 0.85);
+  --card-border: rgba(62, 35, 137, 0.4);
+  --card-shadow: rgba(76, 29, 149, 0.25);
+  --glass-border: rgba(255, 255, 255, 0.15);
+  --glass-bg: rgba(17, 19, 24, 0.4);
+  --glass-shadow: inset 0 1px 0 0 rgba(0, 219, 233, 0.05);
+  --status-bar-bg: #0c0523;
+  --grid-line: rgba(0, 219, 233, 0.03);
+  --ring-glow: rgba(0, 219, 233, 0.25);
+  --accent-cyan: #22d3ee;
+  --accent-purple: #7c6bb5;
+  --scrollbar-thumb: rgba(124, 107, 181, 0.3);
+  --scrollbar-track: rgba(12, 5, 35, 0.6);
+}
+
+:root.light {
+  --app-bg: #FAF9F5; /* Precision Alabaster background for drawing board feel */
+  --app-text: #1c1917; /* High contrast Dark stone text */
+  --panel-bg: rgba(244, 242, 238, 0.96); /* Warm architectural panel */
+  --panel-border: rgba(28, 25, 23, 0.12);
+  --sidebar-bg: #F4F2EE; /* Crisp offset sidebar */
+  --sidebar-border: rgba(28, 25, 23, 0.1);
+  --sidebar-text: #6b6661;
+  --sidebar-text-active: #0f4c81; /* High-contrast classic engineering blue */
+  --sidebar-btn-bg: transparent;
+  --sidebar-btn-bg-active: #ffffff;
+  --card-bg: #ffffff;
+  --card-border: rgba(28, 25, 23, 0.15);
+  --card-shadow: rgba(28, 25, 23, 0.05);
+  --glass-border: rgba(28, 25, 23, 0.15);
+  --glass-bg: rgba(255, 255, 255, 0.85);
+  --glass-shadow: inset 0 1px 0 0 rgba(15, 76, 129, 0.05);
+  --status-bar-bg: #EAE6DF;
+  --grid-line: rgba(15, 76, 129, 0.05); /* Architectural paper grid lines */
+  --ring-glow: rgba(15, 76, 129, 0.15);
+  --accent-cyan: #0f4c81;
+  --accent-purple: #5c4d8e;
+  --scrollbar-thumb: rgba(28, 25, 23, 0.2);
+  --scrollbar-track: rgba(244, 242, 238, 0.5);
+}
+
+body {
+  background-color: var(--app-bg);
+  color: var(--app-text);
+  font-family: var(--font-sans);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+}
+
+/* Glass UI Panel Architecture styles */
+.glass-panel {
+  backdrop-filter: blur(20px);
+  border: 0.5px solid var(--glass-border);
+  background: var(--glass-bg);
+  box-shadow: var(--glass-shadow);
+  transition: transform 0.2s cubic-bezier(0.2, 0, 0.2, 1), background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.glass-card-hover:hover {
+  border-color: rgba(0, 219, 233, 0.4);
+  box-shadow: inset 0 0 15px rgba(0, 219, 233, 0.1);
+}
+
+.glow-cyan {
+  text-shadow: 0 0 12px rgba(0, 219, 233, 0.65), 0 0 2px rgba(0, 219, 233, 0.8);
+}
+
+.architectural-grid {
+  background-image: 
+      linear-gradient(var(--grid-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+  background-size: 40px 40px;
+  position: relative;
+}
+
+/* 3D Central Node Animation */
+.node-3d-container {
+  perspective: 1000px;
+}
+
+.node-3d-core-animation {
+  transform-style: preserve-3d;
+  animation: rotate3d 12s linear infinite;
+}
+
+@keyframes rotate3d {
+  from { transform: rotateY(0deg) rotateX(20deg); }
+  to { transform: rotateY(360deg) rotateX(20deg); }
+}
+
+.ring-pulse {
+  animation: ring-pulse 4s ease-out infinite;
+}
+
+@keyframes ring-pulse {
+  0% { transform: scale(0.8); opacity: 0; }
+  50% { opacity: 0.4; }
+  100% { transform: scale(1.5); opacity: 0; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-float-delayed {
+  animation: float 6s ease-in-out infinite;
+  animation-delay: 2s;
+}
+
+/* Custom glowing effects for high fidelity medical/hospital cockpit styling */
+.text-glow-cyan {
+  text-shadow: 0 0 10px rgba(34, 211, 238, 0.6), 0 0 2px rgba(34, 211, 238, 0.8);
+}
+
+.text-glow-orange {
+  text-shadow: 0 0 10px rgba(255, 92, 0, 0.6), 0 0 2px rgba(255, 92, 0, 0.8);
+}
+
+.text-glow-purple {
+  text-shadow: 0 0 12px rgba(168, 85, 247, 0.5);
+}
+
+/* Custom rounded corners matching reference screenshot exactly */
+.rounded-spec-card {
+  border-radius: 2.5rem;
+}
+
+/* Hide scrollbars but keep functionality or style beautifully */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(12, 5, 35, 0.6);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(124, 107, 181, 0.3);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(34, 211, 238, 0.4);
+}
+
+/* Prototype additions for Signal Flow Horizon */
+@keyframes flow-line {
+  0% { stroke-dashoffset: 100; opacity: 0; }
+  50% { opacity: 1; }
+  100% { stroke-dashoffset: 0; opacity: 0; }
+}
+
+.animate-flow {
+  stroke-dasharray: 20 80;
+  animation: flow-line 3s linear infinite;
+}
+
+.glass-border {
+  border: 0.5px solid rgba(255, 255, 255, 0.2);
+  background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.01) 100%);
+}
+
+.inner-glow-cyan {
+  box-shadow: inset 0 1px 12px 0 rgba(0, 219, 233, 0.1);
+}
+
+.bloom-cyan:hover {
+  box-shadow: 0 0 20px rgba(0, 219, 233, 0.4);
+}
+
+/* Custom Perspective and 3D classes rules */
+.perspective-1000 {
+  perspective: 1000px;
+}
+.transform-style-3d {
+  transform-style: preserve-3d;
+}
+.translate-z-\[18px\] {
+  transform: translateZ(18px);
+}
+.translate-z-\[-18px\] {
+  transform: translateZ(-18px);
+}
+.rotate-y-180 {
+  transform: rotateY(180deg);
+}
+.rotate-y-\[-90deg\] {
+  transform: rotateY(-90deg);
+}
+.rotate-y-\[90deg\] {
+  transform: rotateY(90deg);
+}
+.rotate-x-\[90deg\] {
+  transform: rotateX(90deg);
+}
+.rotate-x-\[-90deg\] {
+  transform: rotateX(-90deg);
+}
+
+@keyframes cube-rotate {
+  0% { transform: rotateX(0deg) rotateY(0deg); }
+  100% { transform: rotateX(360deg) rotateY(360deg); }
+}
+.animate-cube-rotate {
+  animation: cube-rotate 12s infinite linear;
+}
+
+@keyframes ping-slow {
+  0% { transform: scale(0.95); opacity: 0.2; }
+  50% { transform: scale(1.2); opacity: 0.8; }
+  100% { transform: scale(1.35); opacity: 0; }
+}
+.animate-ping-slow {
+  animation: ping-slow 3s infinite ease-out;
+}
+
+.animate-spin-reverse {
+  animation: spin-reverse 8s infinite linear;
+}
+
+@keyframes spin-reverse {
+  from { transform: rotate(360deg); }
+  to { transform: rotate(0deg); }
+}
+

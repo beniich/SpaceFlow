@@ -1,0 +1,213 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ==========================================
+    // GLOBAL CATCH-ALL DEFAULT DENY NET
+    // ==========================================
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // ==========================================
+    // REUSABLE HELPER PRIMITIVES
+    // ==========================================
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isEmailVerified() {
+      return request.auth.token.email_verified == true;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() > 0 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    // ==========================================
+    // ENTITY VALIDATING BLUEPRINTS
+    // ==========================================
+
+    function isValidUserProfile(data) {
+      return data.keys().hasAll(['uid', 'email', 'role', 'plan', 'createdAt', 'updatedAt']) &&
+             data.keys().hasOnly(['uid', 'email', 'role', 'plan', 'createdAt', 'updatedAt']) &&
+             data.uid is string && data.uid == request.auth.uid &&
+             data.email is string && data.email.size() <= 254 &&
+             data.role is string && (data.role == "client" || data.role == "super-admin" || data.role == "strategist" || data.role == "tactician" || data.role == "auditor") &&
+             data.plan is string && (data.plan == "tactical" || data.plan == "sovereign" || data.plan == "imperial") &&
+             data.createdAt is timestamp && data.updatedAt is timestamp;
+    }
+
+    function isValidDevice(data) {
+      return data.keys().hasAll(['id', 'name', 'ip', 'os', 'status', 'cpu', 'ram', 'storage', 'bandwidth', 'uptime', 'lastActive', 'group', 'location', 'policyCompliance', 'serialNumber', 'kernelVersion', 'ownerId', 'createdAt', 'updatedAt']) &&
+             data.keys().hasOnly(['id', 'name', 'ip', 'os', 'status', 'cpu', 'ram', 'storage', 'bandwidth', 'uptime', 'lastActive', 'group', 'location', 'policyCompliance', 'serialNumber', 'kernelVersion', 'ownerId', 'createdAt', 'updatedAt']) &&
+             data.id is string && data.id.size() <= 64 &&
+             data.name is string && data.name.size() > 0 && data.name.size() <= 100 &&
+             data.ip is string && data.ip.size() <= 45 &&
+             data.os is string && (data.os == "Linux" || data.os == "Windows" || data.os == "macOS" || data.os == "SovereignOS") &&
+             data.status is string && (data.status == "online" || data.status == "warning" || data.status == "offline") &&
+             data.cpu is int && data.cpu >= 0 && data.cpu <= 100 &&
+             data.ram is int && data.ram >= 0 && data.ram <= 100 &&
+             data.storage is int && data.storage >= 0 && data.storage <= 100 &&
+             data.bandwidth is number && data.bandwidth >= 0 && data.bandwidth <= 10000 &&
+             data.uptime is string && data.uptime.size() <= 30 &&
+             data.lastActive is string && data.lastActive.size() <= 50 &&
+             data.group is string && data.group.size() <= 100 &&
+             data.location is string && data.location.size() <= 100 &&
+             data.policyCompliance is int && data.policyCompliance >= 0 && data.policyCompliance <= 100 &&
+             data.serialNumber is string && data.serialNumber.size() <= 64 &&
+             data.kernelVersion is string && data.kernelVersion.size() <= 100 &&
+             data.ownerId is string && data.ownerId == request.auth.uid &&
+             data.createdAt is timestamp && data.updatedAt is timestamp;
+    }
+
+    function isValidSystemLog(data) {
+      let hasDeviceId = "deviceId" in data;
+      let validSchema = hasDeviceId 
+        ? data.keys().hasAll(['id', 'timestamp', 'source', 'level', 'message', 'deviceId', 'ownerId', 'createdAt', 'updatedAt']) && data.keys().hasOnly(['id', 'timestamp', 'source', 'level', 'message', 'deviceId', 'ownerId', 'createdAt', 'updatedAt'])
+        : data.keys().hasAll(['id', 'timestamp', 'source', 'level', 'message', 'ownerId', 'createdAt', 'updatedAt']) && data.keys().hasOnly(['id', 'timestamp', 'source', 'level', 'message', 'ownerId', 'createdAt', 'updatedAt']);
+
+      return validSchema &&
+             data.id is string && data.id.size() <= 64 &&
+             data.timestamp is string && data.timestamp.size() <= 30 &&
+             data.source is string && data.source.size() <= 100 &&
+             data.level is string && (data.level == "info" || data.level == "warning" || data.level == "critical" || data.level == "success") &&
+             data.message is string && data.message.size() <= 1000 &&
+             (!hasDeviceId || (
+               data.deviceId is string && data.deviceId.size() <= 64 &&
+               exists(/databases/$(database)/documents/users/$(request.auth.uid)/devices/$(data.deviceId))
+             )) &&
+             data.ownerId is string && data.ownerId == request.auth.uid &&
+             data.createdAt is timestamp && data.updatedAt is timestamp;
+    }
+
+    function isValidSecurityPolicy(data) {
+      return data.keys().hasAll(['id', 'name', 'category', 'description', 'enabled', 'severity', 'lastEnforced', 'ownerId', 'createdAt', 'updatedAt']) &&
+             data.keys().hasOnly(['id', 'name', 'category', 'description', 'enabled', 'severity', 'lastEnforced', 'ownerId', 'createdAt', 'updatedAt']) &&
+             data.id is string && data.id.size() <= 64 &&
+             data.name is string && data.name.size() > 0 && data.name.size() <= 150 &&
+             data.category is string && (data.category == "Access" || data.category == "Network" || data.category == "Storage" || data.category == "Authentication") &&
+             data.description is string && data.description.size() <= 500 &&
+             data.enabled is bool &&
+             data.severity is string && (data.severity == "low" || data.severity == "medium" || data.severity == "high" || data.severity == "critical") &&
+             data.lastEnforced is string && data.lastEnforced.size() <= 50 &&
+             data.ownerId is string && data.ownerId == request.auth.uid &&
+             data.createdAt is timestamp && data.updatedAt is timestamp;
+    }
+
+    function isValidGroupFolder(data) {
+      return data.keys().hasAll(['id', 'name', 'deviceCount', 'healthScore', 'activeThreats', 'category', 'ownerId', 'createdAt', 'updatedAt']) &&
+             data.keys().hasOnly(['id', 'name', 'deviceCount', 'healthScore', 'activeThreats', 'category', 'ownerId', 'createdAt', 'updatedAt']) &&
+             data.id is string && data.id.size() <= 64 &&
+             data.name is string && data.name.size() > 0 && data.name.size() <= 100 &&
+             data.deviceCount is int && data.deviceCount >= 0 && data.deviceCount <= 1000 &&
+             data.healthScore is int && data.healthScore >= 0 && data.healthScore <= 100 &&
+             data.activeThreats is int && data.activeThreats >= 0 && data.activeThreats <= 100 &&
+             data.category is string && (data.category == "Production" || data.category == "Core Infrastructure" || data.category == "Edge Relays" || data.category == "Testing Operations") &&
+             data.ownerId is string && data.ownerId == request.auth.uid &&
+             data.createdAt is timestamp && data.updatedAt is timestamp;
+    }
+
+    function isValidContact(data) {
+      return data.keys().hasAll(['id', 'name', 'email', 'phone', 'organization', 'type', 'ownerId', 'createdAt', 'updatedAt']) &&
+             data.keys().hasOnly(['id', 'name', 'email', 'phone', 'organization', 'type', 'ownerId', 'createdAt', 'updatedAt']) &&
+             data.id is string && data.id.size() <= 64 &&
+             data.name is string && data.name.size() > 0 && data.name.size() <= 100 &&
+             data.email is string && data.email.size() <= 254 &&
+             data.phone is string && data.phone.size() <= 30 &&
+             data.organization is string && data.organization.size() <= 100 &&
+             data.type is string && (data.type == "platform-admin" || data.type == "subscriber-client") &&
+             data.ownerId is string && data.ownerId == request.auth.uid &&
+             data.createdAt is timestamp && data.updatedAt is timestamp;
+    }
+
+    // ==========================================
+    // RESOURCE BOUNDARY MATCH BLOCKS
+    // ==========================================
+
+    // Connection Diagnostics Match
+    match /test/connection {
+      allow get: if true;
+    }
+
+    // Users Collection Root
+    match /users/{userId} {
+      allow get: if isOwner(userId);
+      allow create: if isOwner(userId) && isEmailVerified() && isValidUserProfile(incoming())
+                    && incoming().role == "client" && incoming().plan == "tactical"
+                    && incoming().createdAt == request.time && incoming().updatedAt == request.time;
+      allow update: if isOwner(userId) && isEmailVerified() && isValidUserProfile(incoming()) && incoming().uid == existing().uid
+                    && incoming().role == existing().role && incoming().plan == existing().plan
+                    && incoming().updatedAt == request.time && incoming().createdAt == existing().createdAt;
+      allow delete: if isOwner(userId);
+
+      // Devices Subcollection
+      match /devices/{deviceId} {
+        allow get: if isOwner(userId) && isValidId(deviceId);
+        allow list: if isOwner(userId);
+        allow create: if isOwner(userId) && isEmailVerified() && isValidId(deviceId) && isValidDevice(incoming())
+                      && incoming().createdAt == request.time && incoming().updatedAt == request.time;
+        allow update: if isOwner(userId) && isEmailVerified() && isValidId(deviceId) && isValidDevice(incoming()) && incoming().id == existing().id
+                      && incoming().status == existing().status
+                      && incoming().updatedAt == request.time && incoming().createdAt == existing().createdAt;
+        allow delete: if isOwner(userId) && isValidId(deviceId);
+      }
+
+      // System Logs Subcollection
+      match /systemLogs/{logId} {
+        allow get: if isOwner(userId) && isValidId(logId);
+        allow list: if isOwner(userId);
+        allow create: if isOwner(userId) && isEmailVerified() && isValidId(logId) && isValidSystemLog(incoming())
+                      && incoming().createdAt == request.time && incoming().updatedAt == request.time;
+        allow update: if isOwner(userId) && isEmailVerified() && isValidId(logId) && isValidSystemLog(incoming()) && incoming().id == existing().id
+                      && incoming().updatedAt == request.time && incoming().createdAt == existing().createdAt;
+        allow delete: if isOwner(userId) && isValidId(logId);
+      }
+
+      // Security Policies Subcollection
+      match /securityPolicies/{policyId} {
+        allow get: if isOwner(userId) && isValidId(policyId);
+        allow list: if isOwner(userId);
+        allow create: if isOwner(userId) && isEmailVerified() && isValidId(policyId) && isValidSecurityPolicy(incoming())
+                      && incoming().createdAt == request.time && incoming().updatedAt == request.time;
+        allow update: if isOwner(userId) && isEmailVerified() && isValidId(policyId) && isValidSecurityPolicy(incoming()) && incoming().id == existing().id
+                      && incoming().updatedAt == request.time && incoming().createdAt == existing().createdAt;
+        allow delete: if isOwner(userId) && isValidId(policyId);
+      }
+
+      // Group Folders Subcollection
+      match /groupFolders/{groupId} {
+        allow get: if isOwner(userId) && isValidId(groupId);
+        allow list: if isOwner(userId);
+        allow create: if isOwner(userId) && isEmailVerified() && isValidId(groupId) && isValidGroupFolder(incoming())
+                      && incoming().createdAt == request.time && incoming().updatedAt == request.time;
+        allow update: if isOwner(userId) && isEmailVerified() && isValidId(groupId) && isValidGroupFolder(incoming()) && incoming().id == existing().id
+                      && incoming().updatedAt == request.time && incoming().createdAt == existing().createdAt;
+        allow delete: if isOwner(userId) && isValidId(groupId);
+      }
+
+      // Contacts Subcollection
+      match /contacts/{contactId} {
+        allow get: if isOwner(userId) && isValidId(contactId);
+        allow list: if isOwner(userId);
+        allow create: if isOwner(userId) && isEmailVerified() && isValidId(contactId) && isValidContact(incoming())
+                      && incoming().createdAt == request.time && incoming().updatedAt == request.time;
+        allow update: if isOwner(userId) && isEmailVerified() && isValidId(contactId) && isValidContact(incoming()) && incoming().id == existing().id
+                      && incoming().updatedAt == request.time && incoming().createdAt == existing().createdAt;
+        allow delete: if isOwner(userId) && isValidId(contactId);
+      }
+    }
+  }
+}

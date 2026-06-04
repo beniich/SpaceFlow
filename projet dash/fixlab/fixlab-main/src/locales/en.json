@@ -1,0 +1,93 @@
+{
+  "common": {
+    "app_name": "Sovereign Device Nexus",
+    "welcome": "Welcome, Commander",
+    "role": "Clearance Level",
+    "plan": "Current Plan",
+    "theme": "Theme",
+    "language": "Language",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "logout": "Sign Out / Lock Terminal",
+    "mfa_active": "MFA ACTIVE",
+    "sync_active": "NEXUS COUPLING RE-LINKED",
+    "status": "STATUS",
+    "system_nominal": "SYSTEM NOMINAL",
+    "online": "ONLINE",
+    "offline": "OFFLINE"
+  },
+  "tabs": {
+    "client-dashboard": "01 • GUEST ACCESS HUB",
+    "gmail": "07 • SOVEREIGN MAIL",
+    "platform-gate": "12 • PLATFORM OPERATOR",
+    "contacts": "17 • SOVEREIGN CONTACTS",
+    "dashboard": "01 • COMMAND CENTER",
+    "health-matrix": "02 • HEALTH MATRIX",
+    "data-flow": "03 • DATA CONTROL FLOW",
+    "quantum-node": "04 • QUANTUM COGNITION",
+    "insights": "05 • VISION ARCHITECT",
+    "perimeter": "06 • SECURITY PERIMETER",
+    "terminal": "07 • SYSTEM TERMINAL",
+    "timeline": "08 • INCIDENT TIMELINE",
+    "global-map": "09 • GLOBAL GEOGRAPHIC MAP",
+    "settings": "10 • CORE SYSTEM SETTINGS",
+    "sovereign-audit": "13 • SOVEREIGN AUDITS",
+    "observation-deck": "14 • OBSERVATION PLATFORM",
+    "appliance-core": "15 • APPLIANCE NUCLEUS",
+    "asset-enrollment": "16 • TACTICAL ASSETS"
+  },
+  "billing": {
+    "title": "The Price of Certainty",
+    "subtitle": "Nexus AI is not a tool; it is an instrument of decision.",
+    "cta_expert": "Initialize Proxy",
+    "features": [
+      "mTLS Defense Coupling & Ephemeral Memory Keys",
+      "Sovereign Audit Log Vault & Deep System Integrity",
+      "Cognitive DNS Sinkhole & Automated Telemetry Scrubber"
+    ]
+  },
+  "dashboard": {
+    "welcome": "Welcome, Sovereign Auditor",
+    "loading": "Neural link established...",
+    "metrics": {
+      "total_hosts": "TOTAL HOST NODES",
+      "online_channels": "ONLINE CHANNELS",
+      "warning_drifts": "WARNING DRIFTS",
+      "offline_stalls": "OFFLINE STALLS",
+      "catalogued": "100% catalogued",
+      "active_telemetry": "Active telemetry",
+      "requires_check": "Requires check",
+      "zero_heartbeat": "Zero heartbeat"
+    },
+    "controls_title": "SUITE SOVEREIGNTY INTEGRITY CONTROLS",
+    "gauges": {
+      "policies_rating": "SOV POLICIES RATING",
+      "compliance": "COMPLIANCE",
+      "policies_desc": "Kernel constraints and firewall integrity average score.",
+      "cpu_capacity": "CPU NET CAPACITY",
+      "load_mean": "LOAD MEAN",
+      "cpu_desc": "Mean central compute index of all operational server machines.",
+      "memory_load": "UNIFIED MEMORY LOAD",
+      "memory_mem": "MEMORY MEM",
+      "memory_desc": "Resource metrics map averaging physical DDR modules."
+    },
+    "alerts": {
+      "title": "SEC-AUDIT ACTIONABLE INCIDENTS",
+      "realtime_label": "REAL-TIME CONTROLS",
+      "zero_alerts": "Zero active security alerts",
+      "protected_desc": "Host system layers are completely protected under Sovereign policy.",
+      "trace_target": "Trace host target",
+      "acknowledge": "Acknowledge"
+    },
+    "ledger": {
+      "title": "RECENT CONSOLE INCIDENT LEDGER",
+      "continuous_label": "Continuous streaming"
+    }
+  },
+  "auth": {
+    "title": "Sovereign Gate Access Required",
+    "sub_title": "Please complete clearance validation to enter the terminal command.",
+    "login_btn": "Authorize via Google Auth",
+    "bypass_btn": "Bypass Clearance Safeguards"
+  }
+}

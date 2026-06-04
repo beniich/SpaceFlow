@@ -1,0 +1,131 @@
+{
+  "entities": {
+    "userProfile": {
+      "title": "UserProfile",
+      "description": "Represents a Sovereign SaaS user profile and active billing/RBAC settings",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "description": "Unique user credentials identifier" },
+        "email": { "type": "string", "format": "email", "description": "The registered email address" },
+        "role": { "type": "string", "enum": ["super-admin", "strategist", "tactician", "auditor", "client"], "description": "RBAC clearance level" },
+        "plan": { "type": "string", "enum": ["tactical", "sovereign", "imperial"], "description": "SaaS licensing plan" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Creation timestamp" },
+        "updatedAt": { "type": "string", "format": "date-time", "description": "Last updated timestamp" }
+      },
+      "required": ["uid", "email", "role", "plan"]
+    },
+    "device": {
+      "title": "Device",
+      "description": "Represents an active physical or virtual managed node tracking telemetry",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "ip": { "type": "string" },
+        "os": { "type": "string", "enum": ["Linux", "Windows", "macOS", "SovereignOS"] },
+        "status": { "type": "string", "enum": ["online", "warning", "offline"] },
+        "cpu": { "type": "number" },
+        "ram": { "type": "number" },
+        "storage": { "type": "number" },
+        "bandwidth": { "type": "number" },
+        "uptime": { "type": "string" },
+        "lastActive": { "type": "string" },
+        "group": { "type": "string" },
+        "location": { "type": "string" },
+        "policyCompliance": { "type": "number" },
+        "serialNumber": { "type": "string" },
+        "kernelVersion": { "type": "string" },
+        "ownerId": { "type": "string" }
+      },
+      "required": ["id", "name", "ip", "os", "status", "cpu", "ram", "storage", "bandwidth", "uptime", "lastActive", "group", "location", "policyCompliance", "serialNumber", "kernelVersion", "ownerId"]
+    },
+    "systemLog": {
+      "title": "SystemLog",
+      "description": "Immutable log event recorded in Sovereign Nexus logs stream",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "timestamp": { "type": "string" },
+        "source": { "type": "string" },
+        "level": { "type": "string", "enum": ["info", "warning", "critical", "success"] },
+        "message": { "type": "string" },
+        "deviceId": { "type": "string" },
+        "ownerId": { "type": "string" }
+      },
+      "required": ["id", "timestamp", "source", "level", "message", "ownerId"]
+    },
+    "securityPolicy": {
+      "title": "SecurityPolicy",
+      "description": "Active kernel or workspace level dynamic policy rules",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "category": { "type": "string", "enum": ["Access", "Network", "Storage", "Authentication"] },
+        "description": { "type": "string" },
+        "enabled": { "type": "boolean" },
+        "severity": { "type": "string", "enum": ["low", "medium", "high", "critical"] },
+        "lastEnforced": { "type": "string" },
+        "ownerId": { "type": "string" }
+      },
+      "required": ["id", "name", "category", "description", "enabled", "severity", "lastEnforced", "ownerId"]
+    },
+    "groupFolder": {
+      "title": "GroupFolder",
+      "description": "Sovereign logical network segments linking multiple endpoints",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "deviceCount": { "type": "number" },
+        "healthScore": { "type": "number" },
+        "activeThreats": { "type": "number" },
+        "category": { "type": "string", "enum": ["Production", "Core Infrastructure", "Edge Relays", "Testing Operations"] },
+        "ownerId": { "type": "string" }
+      },
+      "required": ["id", "name", "deviceCount", "healthScore", "activeThreats", "category", "ownerId"]
+    },
+    "contact": {
+      "title": "Contact",
+      "description": "Sovereign platform registry recipient",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "email": { "type": "string" },
+        "phone": { "type": "string" },
+        "organization": { "type": "string" },
+        "type": { "type": "string", "enum": ["platform-admin", "subscriber-client"] },
+        "createdAt": { "type": "string" },
+        "ownerId": { "type": "string" }
+      },
+      "required": ["id", "name", "email", "phone", "organization", "type", "ownerId"]
+    }
+  },
+  "firestore": {
+    "users/{userId}": {
+      "schema": { "$ref": "#/entities/userProfile" },
+      "description": "User profile with SaaS subscription settings"
+    },
+    "users/{userId}/devices/{deviceId}": {
+      "schema": { "$ref": "#/entities/device" },
+      "description": "Managed devices subcollection"
+    },
+    "users/{userId}/systemLogs/{logId}": {
+      "schema": { "$ref": "#/entities/systemLog" },
+      "description": "Runtime secure systems auditing logs"
+    },
+    "users/{userId}/securityPolicies/{policyId}": {
+      "schema": { "$ref": "#/entities/securityPolicy" },
+      "description": "Customized sovereign host endpoint validation policies"
+    },
+    "users/{userId}/groupFolders/{groupId}": {
+      "schema": { "$ref": "#/entities/groupFolder" },
+      "description": "Sovereign node categorization clusters"
+    },
+    "users/{userId}/contacts/{contactId}": {
+      "schema": { "$ref": "#/entities/contact" },
+      "description": "Sovereign Administrative and Client Contacts"
+    }
+  }
+}

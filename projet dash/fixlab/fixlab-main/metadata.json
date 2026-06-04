@@ -1,0 +1,6 @@
+{
+  "name": "FixLab",
+  "description": "FixLab: Cyber-Industrial Sovereignty Control Console featuring real-time fleet monitoring, active health alerts, policy enforcement, predictive failure analytics, direct shell emulator, and interactive automation.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
