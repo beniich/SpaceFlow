@@ -4,6 +4,7 @@ import { AnimatePresence, motion } from 'motion/react';
 import AppLayout from '../components/layout/AppLayout';
 import DashboardSkeleton from '../components/ui/DashboardSkeleton';
 
+const LandingPage   = lazy(() => import('../pages/LandingPage'));
 const PortailsPage  = lazy(() => import('../pages/PortailsPage'));
 const ModulesPage   = lazy(() => import('../pages/ModulesPage'));
 const DashboardPage = lazy(() => import('../pages/DashboardPage'));
@@ -65,6 +66,17 @@ function AnimatedRoutes() {
   return (
     <AnimatePresence mode="wait">
       <Routes location={location} key={location.pathname}>
+        {/* ── Landing page — outside AppLayout ── */}
+        <Route
+          path="/"
+          element={
+            <Suspense fallback={<Loader />}>
+              <LandingPage />
+            </Suspense>
+          }
+        />
+
+        {/* ── App shell ── */}
         <Route element={<AppLayout />}>
           <Route
             path="/portails"
@@ -146,8 +158,7 @@ function AnimatedRoutes() {
               </Suspense>
             }
           />
-          <Route path="/"  element={<Navigate to="/portails" replace />} />
-          <Route path="*"  element={<Navigate to="/portails" replace />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Route>
       </Routes>
     </AnimatePresence>
