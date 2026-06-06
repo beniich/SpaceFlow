@@ -1,0 +1,67 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+  --color-primary: #c25a3d;
+  --color-primary-light: #e2725b;
+  --color-accent: #f97316;
+  --color-dark-bg: #122131;
+  --color-surface: #fdfbf9;
+  --color-dark-base: #051424;
+}
+
+@utility glow-green {
+  box-shadow: 0 0 15px rgba(77, 224, 130, 0.2);
+  border: 1px solid rgba(77, 224, 130, 0.4);
+}
+
+@utility glow-red {
+  box-shadow: 0 0 15px rgba(255, 179, 176, 0.23);
+  border: 1px solid rgba(255, 179, 176, 0.45);
+}
+
+@utility glow-blue {
+  box-shadow: 0 0 15px rgba(56, 189, 248, 0.2);
+  border: 1px solid rgba(56, 189, 248, 0.4);
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: #051424;
+  color: #d4e4fa;
+  min-height: 100vh;
+}
+
+/* Custom Scrollbar for terminal vibe */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #010f1f;
+}
+::-webkit-scrollbar-thumb {
+  background: #1c2b3c;
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #2a3d54;
+}
+
+/* Simple animation utility classes */
+@keyframes pulse-slow {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+.animate-pulse-slow {
+  animation: pulse-slow 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Grid lines overlay utility */
+.grid-overlay {
+  background-image: linear-gradient(#1e293b 1px, transparent 1px), linear-gradient(90deg, #1e293b 1px, transparent 1px);
+  background-size: 24px 24px;
+}

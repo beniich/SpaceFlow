@@ -1,0 +1,8 @@
+{
+  "name": "Remix: consolherb",
+  "description": "Tableau de bord haute performance de cybersécurité, de monitoring de conformité SOC 2 et de contrôle de nœuds d\u0027infrastructure.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

@@ -1,0 +1,91 @@
+version: '3.8'
+
+services:
+  # ─── Reverse Proxy (Traefik) ────────────────────────────────────────────────
+  traefik:
+    image: traefik:v2.10
+    container_name: traefik
+    command:
+      - "--api.insecure=false"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+      # Global HTTP -> HTTPS Redirection
+      - "--entrypoints.web.http.redirections.entryPoint.to=websecure"
+      - "--entrypoints.web.http.redirections.entryPoint.scheme=https"
+      # Let's Encrypt configuration
+      - "--certificatesresolvers.myresolver.acme.httpchallenge=true"
+      - "--certificatesresolvers.myresolver.acme.httpchallenge.entrypoint=web"
+      - "--certificatesresolvers.myresolver.acme.email=${ACME_EMAIL:-admin@yourdomain.com}"
+      - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "./letsencrypt:/letsencrypt"
+    restart: unless-stopped
+
+  # ─── PostgreSQL Database ────────────────────────────────────────────────────
+  db:
+    image: postgres:15-alpine
+    container_name: agromaitre_db_prod
+    environment:
+      POSTGRES_USER: ${DB_USER:-admin}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-super-secure-password}
+      POSTGRES_DB: agromaitre
+    volumes:
+      - pgdata_prod:/var/lib/postgresql/data
+    restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-admin} -d agromaitre"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ─── Node.js API Backend ────────────────────────────────────────────────────
+  backend:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: agromaitre_backend_prod
+    environment:
+      - DATABASE_URL=postgresql://${DB_USER:-admin}:${DB_PASSWORD:-super-secure-password}@db:5432/agromaitre
+      - PORT=4000
+      - NODE_ENV=production
+      - CORS_ORIGIN=https://${DOMAIN:-agromaitre.yourdomain.com}
+      - FIREBASE_PROJECT_ID=${FIREBASE_PROJECT_ID}
+      - FIREBASE_PRIVATE_KEY=${FIREBASE_PRIVATE_KEY}
+      - FIREBASE_CLIENT_EMAIL=${FIREBASE_CLIENT_EMAIL}
+    depends_on:
+      db:
+        condition: service_healthy
+    labels:
+      - "traefik.enable=true"
+      # Route all /api requests to backend
+      - "traefik.http.routers.backend.rule=Host(`${DOMAIN:-agromaitre.yourdomain.com}`) && PathPrefix(`/api`)"
+      - "traefik.http.routers.backend.entrypoints=websecure"
+      - "traefik.http.routers.backend.tls.certresolver=myresolver"
+      - "traefik.http.services.backend.loadbalancer.server.port=4000"
+    restart: always
+
+  # ─── React Frontend (Nginx) ─────────────────────────────────────────────────
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: agromaitre_frontend_prod
+    depends_on:
+      - backend
+    labels:
+      - "traefik.enable=true"
+      # Route all other requests to frontend
+      - "traefik.http.routers.frontend.rule=Host(`${DOMAIN:-agromaitre.yourdomain.com}`)"
+      - "traefik.http.routers.frontend.entrypoints=websecure"
+      - "traefik.http.routers.frontend.tls.certresolver=myresolver"
+      - "traefik.http.services.frontend.loadbalancer.server.port=80"
+    restart: always
+
+volumes:
+  pgdata_prod:

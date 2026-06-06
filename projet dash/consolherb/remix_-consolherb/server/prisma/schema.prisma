@@ -1,0 +1,145 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─── Enums ────────────────────────────────────────────────────────────────────
+
+enum Role {
+  ADMIN
+  MANAGER
+  WORKER
+}
+
+enum ZoneType {
+  FIELD
+  GREENHOUSE
+  STORAGE
+}
+
+enum SensorType {
+  TEMPERATURE
+  HUMIDITY
+  SOIL
+  LUMINOSITY
+}
+
+// ─── Models ───────────────────────────────────────────────────────────────────
+
+model User {
+  id          String   @id @default(cuid())
+  email       String   @unique
+  displayName String?
+  photoURL    String?
+  firebaseUid String   @unique
+  role        Role     @default(WORKER)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  teamId  String?
+  team    Team?    @relation(fields: [teamId], references: [id])
+  reports Report[]
+
+  @@map("users")
+}
+
+model Team {
+  id          String  @id @default(cuid())
+  name        String  @unique
+  description String?
+
+  // Relations
+  members User[]
+  zones   Zone[]
+
+  @@map("teams")
+}
+
+model Zone {
+  id   String   @id @default(cuid())
+  name String
+  type ZoneType @default(FIELD)
+
+  // Relations
+  teamId  String
+  team    Team     @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  sensors Sensor[]
+
+  @@map("zones")
+}
+
+model Sensor {
+  id       String     @id @default(cuid())
+  name     String
+  type     SensorType
+  isActive Boolean    @default(true)
+
+  // Relations
+  zoneId String
+  zone   Zone        @relation(fields: [zoneId], references: [id], onDelete: Cascade)
+  logs   SensorLog[]
+
+  @@map("sensors")
+}
+
+model SensorLog {
+  id        String   @id @default(cuid())
+  value     Float
+  unit      String
+  timestamp DateTime @default(now())
+
+  // Relations
+  sensorId String
+  sensor   Sensor @relation(fields: [sensorId], references: [id], onDelete: Cascade)
+
+  @@index([sensorId, timestamp(sort: Desc)])
+  @@map("sensor_logs")
+}
+
+model Report {
+  id        String   @id @default(cuid())
+  title     String
+  type      String
+  content   Json
+  createdAt DateTime @default(now())
+
+  // Relations
+  createdById String?
+  createdBy   User?   @relation(fields: [createdById], references: [id])
+
+  @@map("reports")
+}
+
+model CropKnowledge {
+  id                String   @id @default(cuid())
+  name              String   @unique
+  idealPhMin        Float
+  idealPhMax        Float
+  idealTempMin      Float
+  idealTempMax      Float
+  waterNeed         String
+  companionPlants   String[]
+  description       String?
+
+  @@map("crop_knowledge")
+}
+
+model PestKnowledge {
+  id                String   @id @default(cuid())
+  pestName          String   @unique
+  targetCrops       String[]
+  symptoms          String
+  organicTreatment  String
+  chemicalTreatment String?
+  severity          String    @default("Medium")
+
+  @@map("pest_knowledge")
+}
