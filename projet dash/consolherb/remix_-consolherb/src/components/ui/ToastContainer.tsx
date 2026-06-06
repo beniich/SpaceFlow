@@ -14,6 +14,17 @@ function ToastItem({ toast }: { toast: ToastNotif }) {
     return () => clearTimeout(t);
   }, [toast.id, toast.level, removeToast]);
 
+  // Haptic feedback on mobile (Vibration API)
+  useEffect(() => {
+    if (!('vibrate' in navigator)) return;
+    if (toast.level === 'error') {
+      navigator.vibrate([100, 50, 100]); // double pulse for critical
+    } else if (toast.level === 'warn') {
+      navigator.vibrate(60); // single short buzz for warning
+    }
+  }, [toast.id, toast.level]); // run once per new toast
+
+
   const config = {
     error: {
       icon: <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5" />,

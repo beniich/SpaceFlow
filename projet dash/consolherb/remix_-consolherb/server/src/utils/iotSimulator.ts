@@ -34,9 +34,15 @@ export function removeSSEClient(send: SSEClient) {
   sseClients.delete(send);
 }
 
-function broadcast(event: string, data: object) {
+export function broadcastEvent(event: string, data: object) {
   sseClients.forEach((send) => send({ event, data }));
 }
+
+// Internal alias kept for use within this file
+function broadcast(event: string, data: object) {
+  broadcastEvent(event, data);
+}
+
 
 // ─── Initial Node Definitions ────────────────────────────────────────────────
 const nodes: NodeState[] = [

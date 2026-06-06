@@ -12,6 +12,35 @@
   --color-dark-base: #051424;
 }
 
+/* ─── Dark / Light mode scoped variables ─────────────────────────────────────── */
+.dark {
+  --color-dark-base: #051424;
+  --color-dark-bg: #122131;
+  --color-surface: #0d1c2d;
+  --color-text-primary: #d4e4fa;
+  --color-text-muted: #8f9097;
+  --color-border: rgba(51, 65, 85, 0.6);
+  color-scheme: dark;
+}
+
+.light {
+  --color-dark-base: #f5f0eb;
+  --color-dark-bg: #fdfbf9;
+  --color-surface: #ffffff;
+  --color-text-primary: #1a2535;
+  --color-text-muted: #4a5568;
+  --color-border: rgba(203, 213, 224, 0.8);
+  color-scheme: light;
+}
+
+/* Light mode body overrides */
+.light body,
+body:is(.light *) {
+  background-color: var(--color-dark-base);
+  color: var(--color-text-primary);
+}
+
+/* ─── Glow utilities ─────────────────────────────────────────────────────────── */
 @utility glow-green {
   box-shadow: 0 0 15px rgba(77, 224, 130, 0.2);
   border: 1px solid rgba(77, 224, 130, 0.4);
@@ -50,7 +79,7 @@ body {
   background: #2a3d54;
 }
 
-/* Simple animation utility classes */
+/* ─── Animations ─────────────────────────────────────────────────────────────── */
 @keyframes pulse-slow {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.6; }
@@ -58,6 +87,35 @@ body {
 
 .animate-pulse-slow {
   animation: pulse-slow 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Skeleton shimmer animation */
+@keyframes shimmer {
+  0%   { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+/* Tailwind v4 custom animation reference */
+@utility animate-shimmer {
+  animation: shimmer 1.6s infinite;
+}
+
+/* animate-in fade-in utility (used by DashboardSkeleton) */
+@keyframes fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.animate-in {
+  animation-fill-mode: both;
+}
+
+.fade-in {
+  animation-name: fade-in;
+}
+
+.duration-300 {
+  animation-duration: 300ms;
 }
 
 /* Grid lines overlay utility */

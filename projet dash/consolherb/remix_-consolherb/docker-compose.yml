@@ -18,6 +18,24 @@ services:
       timeout: 5s
       retries: 5
 
+  # ─── Mosquitto MQTT Broker ──────────────────────────────────────────────────
+  mosquitto:
+    image: eclipse-mosquitto:2
+    container_name: agromaitre_mosquitto
+    ports:
+      - "1883:1883"   # MQTT
+      - "9001:9001"   # MQTT over WebSocket (optional)
+    volumes:
+      - ./server/mosquitto/mosquitto.conf:/mosquitto/config/mosquitto.conf:ro
+      - mosquitto_data:/mosquitto/data
+      - mosquitto_log:/mosquitto/log
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "mosquitto_pub -h localhost -t healthcheck -m ping -q 1 || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
   backend:
     build:
       context: ./server
@@ -30,8 +48,11 @@ services:
       - PORT=4000
       - NODE_ENV=production
       - CORS_ORIGIN=http://localhost:3000
+      - MQTT_BROKER_URL=mqtt://mosquitto:1883
     depends_on:
       db:
+        condition: service_healthy
+      mosquitto:
         condition: service_healthy
 
   frontend:
@@ -46,3 +67,6 @@ services:
 
 volumes:
   pgdata:
+  mosquitto_data:
+  mosquitto_log:
+

@@ -1,91 +1,128 @@
-version: '3.8'
+# ─── AgroMaître — Production Docker Compose ──────────────────────────────────
+# Usage:
+#   cp .env.production.example .env.production
+#   docker compose -f docker-compose.prod.yml --env-file .env.production up -d
+#
+# Services:
+#   traefik   → Reverse proxy + auto SSL (Let's Encrypt)
+#   db        → PostgreSQL 16
+#   backend   → Express API + Prisma
+#   frontend  → React SPA served by Nginx
+
+version: "3.9"
+
+networks:
+  agromaitre-net:
+    driver: bridge
+
+volumes:
+  db-data:
+  mosquitto-data:
+  mosquitto-log:
+  traefik-certs:
 
 services:
-  # ─── Reverse Proxy (Traefik) ────────────────────────────────────────────────
+
+  # ── Traefik reverse proxy ───────────────────────────────────────────────────
   traefik:
-    image: traefik:v2.10
-    container_name: traefik
+    image: traefik:v3.0
+    container_name: agromaitre-traefik
+    restart: unless-stopped
     command:
-      - "--api.insecure=false"
-      - "--providers.docker=true"
-      - "--providers.docker.exposedbydefault=false"
-      - "--entrypoints.web.address=:80"
-      - "--entrypoints.websecure.address=:443"
-      # Global HTTP -> HTTPS Redirection
-      - "--entrypoints.web.http.redirections.entryPoint.to=websecure"
-      - "--entrypoints.web.http.redirections.entryPoint.scheme=https"
-      # Let's Encrypt configuration
-      - "--certificatesresolvers.myresolver.acme.httpchallenge=true"
-      - "--certificatesresolvers.myresolver.acme.httpchallenge.entrypoint=web"
-      - "--certificatesresolvers.myresolver.acme.email=${ACME_EMAIL:-admin@yourdomain.com}"
-      - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
+      - --api.dashboard=false
+      - --providers.docker=true
+      - --providers.docker.exposedbydefault=false
+      - --entrypoints.web.address=:80
+      - --entrypoints.websecure.address=:443
+      # Redirect all HTTP → HTTPS
+      - --entrypoints.web.http.redirections.entrypoint.to=websecure
+      - --entrypoints.web.http.redirections.entrypoint.scheme=https
+      # Let's Encrypt
+      - --certificatesresolvers.letsencrypt.acme.tlschallenge=true
+      - --certificatesresolvers.letsencrypt.acme.email=${ACME_EMAIL}
+      - --certificatesresolvers.letsencrypt.acme.storage=/certs/acme.json
     ports:
       - "80:80"
       - "443:443"
     volumes:
-      - "/var/run/docker.sock:/var/run/docker.sock:ro"
-      - "./letsencrypt:/letsencrypt"
-    restart: unless-stopped
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - traefik-certs:/certs
+    networks:
+      - agromaitre-net
 
-  # ─── PostgreSQL Database ────────────────────────────────────────────────────
+  # ── PostgreSQL database ─────────────────────────────────────────────────────
   db:
-    image: postgres:15-alpine
-    container_name: agromaitre_db_prod
+    image: postgres:16-alpine
+    container_name: agromaitre-db
+    restart: unless-stopped
     environment:
-      POSTGRES_USER: ${DB_USER:-admin}
-      POSTGRES_PASSWORD: ${DB_PASSWORD:-super-secure-password}
       POSTGRES_DB: agromaitre
+      POSTGRES_USER: ${POSTGRES_USER:-agromaitre}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     volumes:
-      - pgdata_prod:/var/lib/postgresql/data
-    restart: always
+      - db-data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-admin} -d agromaitre"]
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-agromaitre}"]
       interval: 10s
       timeout: 5s
       retries: 5
+    networks:
+      - agromaitre-net
 
-  # ─── Node.js API Backend ────────────────────────────────────────────────────
+  # ── Mosquitto MQTT broker ───────────────────────────────────────────────────
+  mosquitto:
+    image: eclipse-mosquitto:2
+    container_name: agromaitre-mosquitto
+    restart: unless-stopped
+    volumes:
+      - ./server/mosquitto/mosquitto.conf:/mosquitto/config/mosquitto.conf:ro
+      - mosquitto-data:/mosquitto/data
+      - mosquitto-log:/mosquitto/log
+    ports:
+      - "1883:1883"    # MQTT
+    networks:
+      - agromaitre-net
+
+  # ── Express backend ─────────────────────────────────────────────────────────
   backend:
-    build:
-      context: ./server
-      dockerfile: Dockerfile
-    container_name: agromaitre_backend_prod
-    environment:
-      - DATABASE_URL=postgresql://${DB_USER:-admin}:${DB_PASSWORD:-super-secure-password}@db:5432/agromaitre
-      - PORT=4000
-      - NODE_ENV=production
-      - CORS_ORIGIN=https://${DOMAIN:-agromaitre.yourdomain.com}
-      - FIREBASE_PROJECT_ID=${FIREBASE_PROJECT_ID}
-      - FIREBASE_PRIVATE_KEY=${FIREBASE_PRIVATE_KEY}
-      - FIREBASE_CLIENT_EMAIL=${FIREBASE_CLIENT_EMAIL}
+    image: ghcr.io/${GITHUB_REPOSITORY}/agromaitre-backend:${IMAGE_TAG:-latest}
+    container_name: agromaitre-backend
+    restart: unless-stopped
     depends_on:
       db:
         condition: service_healthy
+      mosquitto:
+        condition: service_started
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:-agromaitre}:${POSTGRES_PASSWORD}@db:5432/agromaitre
+      NODE_ENV: production
+      PORT: 4000
+      CORS_ORIGIN: https://${DOMAIN}
+      FIREBASE_PROJECT_ID: ${FIREBASE_PROJECT_ID}
+      FIREBASE_PRIVATE_KEY: ${FIREBASE_PRIVATE_KEY}
+      FIREBASE_CLIENT_EMAIL: ${FIREBASE_CLIENT_EMAIL}
+      MQTT_BROKER_URL: mqtt://mosquitto:1883
     labels:
-      - "traefik.enable=true"
-      # Route all /api requests to backend
-      - "traefik.http.routers.backend.rule=Host(`${DOMAIN:-agromaitre.yourdomain.com}`) && PathPrefix(`/api`)"
-      - "traefik.http.routers.backend.entrypoints=websecure"
-      - "traefik.http.routers.backend.tls.certresolver=myresolver"
-      - "traefik.http.services.backend.loadbalancer.server.port=4000"
-    restart: always
+      - traefik.enable=true
+      - traefik.http.routers.backend.rule=Host(`api.${DOMAIN}`)
+      - traefik.http.routers.backend.entrypoints=websecure
+      - traefik.http.routers.backend.tls.certresolver=letsencrypt
+      - traefik.http.services.backend.loadbalancer.server.port=4000
+    networks:
+      - agromaitre-net
 
-  # ─── React Frontend (Nginx) ─────────────────────────────────────────────────
+  # ── React frontend (Nginx) ──────────────────────────────────────────────────
   frontend:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: agromaitre_frontend_prod
+    image: ghcr.io/${GITHUB_REPOSITORY}/agromaitre-frontend:${IMAGE_TAG:-latest}
+    container_name: agromaitre-frontend
+    restart: unless-stopped
     depends_on:
       - backend
     labels:
-      - "traefik.enable=true"
-      # Route all other requests to frontend
-      - "traefik.http.routers.frontend.rule=Host(`${DOMAIN:-agromaitre.yourdomain.com}`)"
-      - "traefik.http.routers.frontend.entrypoints=websecure"
-      - "traefik.http.routers.frontend.tls.certresolver=myresolver"
-      - "traefik.http.services.frontend.loadbalancer.server.port=80"
-    restart: always
-
-volumes:
-  pgdata_prod:
+      - traefik.enable=true
+      - traefik.http.routers.frontend.rule=Host(`${DOMAIN}`)
+      - traefik.http.routers.frontend.entrypoints=websecure
+      - traefik.http.routers.frontend.tls.certresolver=letsencrypt
+      - traefik.http.services.frontend.loadbalancer.server.port=80
+    networks:
+      - agromaitre-net

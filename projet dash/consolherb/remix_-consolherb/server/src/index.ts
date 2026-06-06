@@ -79,8 +79,27 @@ async function bootstrap() {
         console.log(`   Stream: http://localhost:${PORT}/api/stream`);
       }
 
-      // Start the IoT simulator after server is ready
+      // Start the IoT simulator (always runs as fallback / supplemental data source)
       startIotSimulator();
+
+      // Start MQTT client only when a broker URL is provided
+      if (process.env.MQTT_BROKER_URL) {
+        // Dynamic import keeps mqtt fully optional — if the package were absent
+        // the server still boots normally with the simulator.
+        import('./utils/mqttClient')
+          .then(({ connectMQTT }) => {
+            connectMQTT();
+            // eslint-disable-next-line no-console
+            console.log('📡 MQTT client initialised — listening on agromaitre/#');
+          })
+          .catch((err: unknown) => {
+            // eslint-disable-next-line no-console
+            console.error('⚠️  MQTT client failed to load:', (err as Error).message);
+          });
+      } else {
+        // eslint-disable-next-line no-console
+        console.log('ℹ️  No MQTT_BROKER_URL set — using IoT simulator only');
+      }
     });
   } catch (error) {
     // eslint-disable-next-line no-console

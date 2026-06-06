@@ -69,8 +69,8 @@ model Zone {
   type ZoneType @default(FIELD)
 
   // Relations
-  teamId  String
-  team    Team     @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  teamId  String?
+  team    Team?    @relation(fields: [teamId], references: [id], onDelete: Cascade)
   sensors Sensor[]
 
   @@map("zones")
