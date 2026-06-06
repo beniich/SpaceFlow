@@ -143,3 +143,41 @@ model PestKnowledge {
 
   @@map("pest_knowledge")
 }
+
+model FinanceRecord {
+  id          String   @id @default(cuid())
+  cropName    String
+  amount      Float
+  type        String   // "INCOME" or "EXPENSE"
+  category    String   // "SEEDS", "FERTILIZER", "LABOR", "SALES" etc.
+  description String?
+  date        DateTime @default(now())
+
+  @@map("finance_records")
+}
+
+model SaleRecord {
+  id        String   @id @default(cuid())
+  cropName  String
+  quantity  Float
+  unitPrice Float
+  totalSale Float
+  buyer     String?
+  date      DateTime @default(now())
+
+  @@map("sale_records")
+}
+
+model BatchTrace {
+  id           String   @id @default(cuid())
+  batchId      String
+  cropName     String
+  action       String
+  timestamp    DateTime @default(now())
+  operator     String
+  location     String
+  previousHash String
+  hash         String
+
+  @@map("batch_traces")
+}

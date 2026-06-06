@@ -10,6 +10,10 @@ const DashboardPage = lazy(() => import('../pages/DashboardPage'));
 const InfraPage     = lazy(() => import('../pages/InfraPage'));
 const LogsPage      = lazy(() => import('../pages/LogsPage'));
 const SettingsPage  = lazy(() => import('../pages/SettingsPage'));
+const AgroBrainPage = lazy(() => import('../pages/AgroBrainPage'));
+const VisionPage    = lazy(() => import('../pages/VisionPage'));
+const FinancePage   = lazy(() => import('../pages/FinancePage'));
+const TraceabilityPage = lazy(() => import('../pages/TraceabilityPage'));
 
 // Page transition wrapper — applied to every route change
 const pageVariants = {
@@ -107,6 +111,38 @@ function AnimatedRoutes() {
             element={
               <Suspense fallback={<Loader />}>
                 <AnimatedPage><SettingsPage /></AnimatedPage>
+              </Suspense>
+            }
+          />
+          <Route
+            path="/agro-brain"
+            element={
+              <Suspense fallback={<Loader />}>
+                <AnimatedPage><AgroBrainPage /></AnimatedPage>
+              </Suspense>
+            }
+          />
+          <Route
+            path="/vision"
+            element={
+              <Suspense fallback={<Loader />}>
+                <AnimatedPage><VisionPage /></AnimatedPage>
+              </Suspense>
+            }
+          />
+          <Route
+            path="/finance"
+            element={
+              <Suspense fallback={<Loader />}>
+                <AnimatedPage><FinancePage /></AnimatedPage>
+              </Suspense>
+            }
+          />
+          <Route
+            path="/traceability"
+            element={
+              <Suspense fallback={<Loader />}>
+                <AnimatedPage><TraceabilityPage /></AnimatedPage>
               </Suspense>
             }
           />

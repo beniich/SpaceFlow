@@ -37,6 +37,10 @@ export default function AppLayout() {
       case '/infra': return 'Infrastructure Topology';
       case '/logs': return 'Central Compliance Audit Registry';
       case '/settings': return 'Systems Settings & Threshold Decouplers';
+      case '/agro-brain': return 'AgroBrain — Intelligence Autonome';
+      case '/vision': return 'Eyes in the Field — Diagnostic Visuel';
+      case '/finance': return 'Agro-Finance — ROI Engine';
+      case '/traceability': return 'Blockchain Traceability Ledger';
       default: return 'AgroMaître';
     }
   };
@@ -49,7 +53,7 @@ export default function AppLayout() {
       
       {/* Decorative cyber backdrop grid lights */}
       <div className="absolute top-0 right-0 w-96 h-96 bg-[#38BDF8]/5 rounded-full blur-3xl pointer-events-none"></div>
-
+ 
       <div className="max-w-7xl mx-auto p-2 sm:p-4 lg:p-6 pt-2 sm:pt-3 lg:pt-4 relative z-10">
         
         {/* NAVIGATION BAR - MINIMIZED TO LE PETIT POSSIBLE */}
@@ -100,6 +104,34 @@ export default function AppLayout() {
               className={({ isActive }) => `px-1.5 py-0.5 rounded-xs transition-all pointer-events-auto cursor-pointer ${isActive ? 'bg-[#122131] border border-slate-700 text-white font-bold' : 'text-[#c5c6cd] hover:text-white'}`}
             >
               Settings
+            </NavLink>
+            <NavLink
+              to="/agro-brain"
+              className={({ isActive }) => `px-1.5 py-0.5 rounded-xs transition-all pointer-events-auto cursor-pointer ${isActive ? 'bg-[#f97316]/20 border border-[#f97316]/50 text-[#f97316] font-bold' : 'text-[#f97316] hover:text-[#ea580c]'} flex items-center gap-0.5 ml-1`}
+              title="Intelligence Autonome"
+            >
+              🧠 Brain
+            </NavLink>
+            <NavLink
+              to="/vision"
+              className={({ isActive }) => `px-1.5 py-0.5 rounded-xs transition-all pointer-events-auto cursor-pointer ${isActive ? 'bg-[#f97316]/20 border border-[#f97316]/50 text-[#f97316] font-bold' : 'text-[#f97316] hover:text-[#ea580c]'} flex items-center gap-0.5 ml-1`}
+              title="Vision par Ordinateur"
+            >
+              👁️ Vision
+            </NavLink>
+            <NavLink
+              to="/finance"
+              className={({ isActive }) => `px-1.5 py-0.5 rounded-xs transition-all pointer-events-auto cursor-pointer ${isActive ? 'bg-[#f97316]/20 border border-[#f97316]/50 text-[#f97316] font-bold' : 'text-[#f97316] hover:text-[#ea580c]'} flex items-center gap-0.5 ml-1`}
+              title="Agro-Finance ROI"
+            >
+              💰 Finance
+            </NavLink>
+            <NavLink
+              to="/traceability"
+              className={({ isActive }) => `px-1.5 py-0.5 rounded-xs transition-all pointer-events-auto cursor-pointer ${isActive ? 'bg-[#f97316]/20 border border-[#f97316]/50 text-[#f97316] font-bold' : 'text-[#f97316] hover:text-[#ea580c]'} flex items-center gap-0.5 ml-1`}
+              title="Blockchain Trace"
+            >
+              🔗 Trace
             </NavLink>
           </div>
  
