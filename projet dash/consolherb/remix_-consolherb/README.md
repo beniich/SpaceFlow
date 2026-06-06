@@ -1,127 +1,115 @@
-<div align="center">
-  <img src="public/favicon.ico" alt="AgroMaître Logo" width="80" height="80">
-  <h1 align="center">AgroMaître — Precision Agriculture Command Center</h1>
-  <p align="center">
-    <strong>A next-generation SaaS ERP for intelligent, data-driven agricultural management.</strong>
-  </p>
-  
-  <p align="center">
-    <a href="https://github.com/beniich/consolherb2/actions"><img src="https://img.shields.io/badge/build-passing-brightgreen?style=flat-square" alt="Build Status"></a>
-    <a href="https://reactjs.org/"><img src="https://img.shields.io/badge/React-19-61dafb?style=flat-square&logo=react" alt="React"></a>
-    <a href="https://vitejs.dev/"><img src="https://img.shields.io/badge/Vite-6.x-646CFF?style=flat-square&logo=vite" alt="Vite"></a>
-    <a href="https://tailwindcss.com/"><img src="https://img.shields.io/badge/TailwindCSS-v4-38B2AC?style=flat-square&logo=tailwind-css" alt="TailwindCSS"></a>
-    <a href="https://www.prisma.io/"><img src="https://img.shields.io/badge/Prisma-ORM-2D3748?style=flat-square&logo=prisma" alt="Prisma"></a>
-    <a href="#"><img src="https://img.shields.io/badge/SOC_2-Compliant-success?style=flat-square" alt="SOC 2 Compliant"></a>
-  </p>
-</div>
+# 🌿 AgroMaître Precision Agriculture 4.0
+**The Intelligent Command Center for Modern Agricultural Excellence.**
 
-<br/>
+[![Build Status](https://img.shields.io/badge/Build-Passing-brightgreen)]()
+[![Deployment](https://img.shields.io/badge/Deployment-Docker%20%2F%20Vercel-blue)]()
+[![Tech Stack](https://img.shields.io/badge/Stack-React%20%7C%20Node.js%20%7C%20Postgres-orange)]()
+[![Standard](https://img.shields.io/badge/Standard-SOC2%20%2F%20ISO%2027001-blue)]()
 
-## 📖 Overview
-
-**AgroMaître** (Consolherb Command Center) is an elite-grade, full-stack ERP tailored for precision agriculture. Moving away from standard dashboards, the interface has been completely engineered as a **high-density operational tool**. It brings industrial monitoring, real-time IoT synchronization, and artificial intelligence into a single, cohesive, minimalist application.
-
-Built with performance, security, and scalability in mind, it provides seamless multi-tenant isolation, real-time telemetry via Server-Sent Events (SSE), and a robust backend designed for enterprise deployment.
+AgroMaître is a high-end Enterprise Resource Planning (ERP) system designed for precision agriculture. It transforms raw IoT data into actionable agronomical intelligence using a state-of-the-art tech stack, real-time streaming, and Generative AI.
 
 ---
 
-## ✨ Core Capabilities
+## 🚀 Key Capabilities
 
-### 🧠 Intelligence & Analytics (AgroBrain & Vision AI)
-* **Computer Vision Diagnostics**: Automated disease detection and botanical anomaly tracking.
-* **Retrieval-Augmented Generation (RAG) AI**: Built-in autonomous assistant for agronomic decision support systems (DSS).
-* **Agro-Finance ROI Engine**: Real-time financial projections, cash flow monitoring, and predictive harvest yields.
+### 🧠 AI-Driven Intelligence (Agro-Brain)
+- **RAG Implementation**: A Generative AI assistant integrated with a **Retrieval-Augmented Generation** system. It queries real-time sensor data and the **OpenFarm** knowledge base to provide expert agronomical advice.
+- **Computer Vision**: An integrated FastAPI micro-service that analyzes plant leaf images to detect pathogens and suggest organic treatments.
+- **DSS (Decision Support System)**: An automated rule engine that monitors soil pH, temperature, and humidity to trigger instant alerts and corrective actions.
 
-### 📡 Real-Time IoT & Infrastructure
-* **MQTT Telemetry Ingestion**: Seamless integration with remote soil, humidity, and temperature sensors.
-* **Server-Sent Events (SSE)**: Ultra-low latency data synchronization from the backend to the Zustand global state.
-* **Blockchain Traceability Ledger**: Cryptographically verifiable ledger ensuring supply chain integrity from harvest to delivery.
+### 📡 Real-Time IoT Ecosystem
+- **MQTT Integration**: High-performance data ingestion from ESP32/Raspberry Pi sensors via the MQTT protocol.
+- **SSE Streaming**: Server-Sent Events (SSE) ensure a "Live" experience, pushing sensor updates to the dashboard without page refreshes.
+- **System Monitoring**: Real-time tracking of node health, CPU load, and connectivity status.
 
-### 🛡️ Enterprise Security & Compliance
-* **Physical Multi-Tenancy**: Isolated database schemas and data-at-rest encryption.
-* **SOC 2 & ISO 27001 Preparedness**: Comprehensive audit logs, RBAC (Role-Based Access Control), and zero-trust IAM architecture.
-* **Firebase Auth Integration**: Secure JWT-based session management.
-
-### 🎨 Minimalist "Command Center" UX
-* **Operation-First Layout**: Ultra-compact status header (live weather, IP, satellite tracking metrics) and a slim right-side navigation bar utilizing `react-router-dom` active state routing.
-* **Fluid PWA Architecture**: Offline-ready Progressive Web App with optimized service workers and Framer Motion micro-interactions.
-* **Tailwind v4 Theme Engine**: Extensively customized design system featuring dark mode, glassmorphism, and minimal cognitive load.
+### 🚜 Operational Modules
+- **Livestock & Botanical Hubs**: Specialized management for animal health and crop growth cycles.
+- **Pest Control**: Early warning system with heat-mapping and AI-assisted diagnostics.
+- **Agro-Finance ROI**: Real-time profitability tracking, expense management, and ROI calculation per crop.
+- **Blockchain Traceability**: An immutable ledger for "Farm-to-Fork" transparency, certifying product origin and quality.
 
 ---
 
-## 🏗️ Technical Architecture
+## 🛠 Technical Architecture
 
-The platform follows a decoupled, service-oriented architecture:
+### Frontend (The Experience)
+- **Framework**: React 18 + Vite + TypeScript.
+- **State Management**: Zustand (Global store for nodes, logs, and session).
+- **Styling**: Tailwind CSS + Framer Motion (Premium animations & Glassmorphism).
+- **PWA**: Fully installable Progressive Web App with Offline-first capabilities.
+- **Routing**: React Router 6 for a modular, page-based architecture.
 
-### Frontend (Client-Side)
-* **Framework**: React 19 + TypeScript + Vite
-* **Routing**: React Router v6 (`NavLink`, `Outlet` layout strategy)
-* **State Management**: Zustand (for reactive, boilerplate-free global stores)
-* **Styling**: Tailwind CSS v4 + Framer Motion
-* **API Communication**: Custom Axios/Fetch wrapper with interceptors for Firebase JWT injection.
+### Backend (The Engine)
+- **API**: Node.js + Express (REST & SSE).
+- **Database**: PostgreSQL with Prisma ORM for type-safe queries.
+- **AI Layer**: OpenAI API (GPT-4) + FastAPI (Python) for Computer Vision.
+- **Messaging**: Eclipse Mosquitto (MQTT Broker) for IoT communication.
 
-### Backend (Server-Side)
-* **Core**: Node.js + Express + TypeScript
-* **Database & ORM**: PostgreSQL paired with Prisma ORM for type-safe schema definitions and migrations.
-* **Real-time Engine**: Custom SSE (Server-Sent Events) controller for pushing live IoT updates.
-* **Authentication**: Firebase Admin SDK for robust token validation.
-
----
-
-## 🚀 Getting Started
-
-### Prerequisites
-* Node.js (v20+)
-* PostgreSQL (v15+)
-* Docker & Docker Compose (Optional for containerized deployment)
-* A Firebase Project (for Authentication)
-
-### Local Development Setup
-
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/beniich/consolherb2.git
-   cd consolherb2/remix_-consolherb
-   ```
-
-2. **Install Dependencies**
-   ```bash
-   npm install
-   ```
-
-3. **Configure Environment**
-   * Copy the `.env.example` files in both the root and `server/` directories.
-   * Add your PostgreSQL connection string and Firebase credentials.
-
-4. **Initialize Database**
-   ```bash
-   cd server
-   npx prisma migrate dev
-   npx prisma db seed
-   ```
-
-5. **Start the Application**
-   ```bash
-   # Starts the Vite frontend server on http://localhost:3000
-   npm run dev 
-   ```
+### Infrastructure (The Fortress)
+- **Containerization**: Multi-stage Docker builds for Frontend and Backend.
+- **Reverse Proxy**: Traefik with automatic Let's Encrypt SSL certification.
+- **CI/CD**: GitHub Actions pipeline (Lint $\rightarrow$ Test $\rightarrow$ Build $\rightarrow$ Deploy).
+- **Deployment**: Vercel (Frontend) + VPS/DigitalOcean (Backend & DB).
 
 ---
 
-## 📦 Deployment (CI/CD)
+## 📦 Installation & Quick Start
 
-The project includes a comprehensive CI/CD setup for automated deployments.
-
-* **Frontend (Vercel)**: Configured with `vercel.json` for proper SPA routing, immutable asset caching, and Vite build detection.
-* **Backend (Docker / VPS)**: Included `Dockerfile` and `docker-compose.prod.yml` for isolated production environments (e.g., Railway, Render, or dedicated Linux VPS). 
-
-To deploy the production environment via Docker:
+### 1. Clone the repository
 ```bash
-docker-compose -f docker-compose.prod.yml up --build -d
+git clone https://github.com/beniich/herboferme.git
+cd remix_-consolherb
+```
+
+### 2. Environment Setup
+Create a `.env` file in the `server/` directory:
+```env
+DATABASE_URL="postgresql://user:password@localhost:5432/agromaitre"
+OPENAI_API_KEY="your_key_here"
+MQTT_BROKER_URL="mqtt://localhost:1883"
+JWT_SECRET="your_super_secret_key"
+```
+
+### 3. Local Development (Docker)
+The fastest way to launch the entire ecosystem:
+```bash
+docker-compose up --build
+```
+- **Frontend**: `http://localhost:3000`
+- **Backend API**: `http://localhost:4000`
+- **MQTT Broker**: `localhost:1883`
+
+### 4. Database Initialization
+```bash
+cd server
+npx prisma migrate dev
+npx prisma db seed
 ```
 
 ---
 
-<div align="center">
-  <sub>Built for scale. Engineered for precision.</sub>
-</div>
+## 🗺️ Project Structure
+```text
+├── server/                 # Express Backend
+│   ├── src/
+│   │   ├── controllers/    # Business logic
+│   │   ├── routes/         # API endpoints
+│   │   ├── services/       # AI & IoT Logic (DSS, RAG)
+│   │   └── utils/          # MQTT Client & Helpers
+│   └── prisma/             # Database Schema & Seeding
+├── src/                    # React Frontend
+│   ├── api/                # API wrappers
+│   ├── components/         # UI Design System (Atomic)
+│   ├── hooks/              # Custom React hooks
+│   ├── pages/              # Modular view components
+│   └── store/              # Zustand global state
+├── server_vision/          # Python FastAPI (Computer Vision)
+└── docs/                   # Architecture & API specs
+```
+
+---
+
+## 📜 License
+Distributed under the MIT License. See `LICENSE` for more information.
+
+**Built with ❤️ for the future of sustainable agriculture.**
