@@ -1,12 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { 
-  Activity, ShieldCheck, Cpu, Globe, 
-  Brain, Eye, TrendingUp, Link as LinkIcon, 
-  LayoutDashboard, Database, Settings, FileText, 
-  Beef, Leaf, ShoppingBag, Bug, Users, Truck 
+  ShieldCheck, Cpu, Settings, FileText
 } from 'lucide-react';
-import { NavLink } from 'react-router-dom';
 
 const ProfessionalHeader = () => {
   const [currentTime, setCurrentTime] = useState('');
@@ -78,56 +74,8 @@ const ProfessionalHeader = () => {
           </div>
         </div>
       </div>
-
-      {/* 3. SMART NAVIGATION HUB */}
-      <div className="px-8 pb-8">
-        <div className="flex items-center gap-3 mb-4">
-          <div className="h-px flex-1 bg-gradient-to-r from-transparent via-slate-700 to-transparent"></div>
-          <span className="text-[10px] uppercase tracking-[0.2em] text-slate-500 font-bold">Navigation Hub</span>
-          <div className="h-px flex-1 bg-gradient-to-r from-transparent via-slate-700 to-transparent"></div>
-        </div>
-
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-3">
-          {/* Mapping original routes to the new tiles style */}
-          <NavTile to="/portails" icon={<Leaf size={18}/>} label="Portails" color="text-green-400" />
-          <NavTile to="/modules" icon={<Database size={18}/>} label="Modules" color="text-blue-400" />
-          <NavTile to="/dashboard" icon={<ShieldCheck size={18}/>} label="Dashboard" color="text-emerald-400" />
-          <NavTile to="/infra" icon={<Cpu size={18}/>} label="Infrastructure" color="text-purple-400" />
-          <NavTile to="/logs" icon={<LayoutDashboard size={18}/>} label="Logs Audit" color="text-slate-300" badge="New" />
-          
-          <NavTile to="/settings" icon={<Settings size={18}/>} label="Settings" color="text-slate-300" />
-          <NavTile to="/agro-brain" icon={<Brain size={18}/>} label="Agro Brain" color="text-orange-400" badge="AI" />
-          <NavTile to="/vision" icon={<Eye size={18}/>} label="Vision IA" color="text-red-400" badge="AI" />
-          <NavTile to="/finance" icon={<TrendingUp size={18}/>} label="Finance ROI" color="text-yellow-400" />
-          <NavTile to="/traceability" icon={<LinkIcon size={18}/>} label="Traceability" color="text-cyan-400" />
-        </div>
-      </div>
     </header>
   );
 };
-
-// Sub-component for Navigation Tiles using NavLink for routing
-const NavTile = ({ icon, label, color, badge, to }: { icon: any, label: string, color: string, badge?: string, to: string }) => (
-  <NavLink to={to} className="block outline-none">
-    {({ isActive }) => (
-      <motion.div 
-        whileHover={{ y: -3, backgroundColor: 'rgba(255,255,255,0.08)' }}
-        className={`group relative flex items-center gap-3 p-3 rounded-2xl bg-white/5 border transition-all hover:border-white/20 cursor-pointer ${
-          isActive ? 'border-accent shadow-[0_0_15px_rgba(249,115,22,0.15)] bg-white/10' : 'border-white/10'
-        }`}
-      >
-        <div className={`p-2 rounded-lg bg-slate-800 ${color} ${isActive ? 'scale-110' : 'group-hover:scale-110'} transition-transform`}>
-          {icon}
-        </div>
-        <div className="flex flex-col">
-          <span className={`text-xs font-medium transition-colors ${isActive ? 'text-white font-bold' : 'text-slate-300 group-hover:text-white'}`}>
-            {label}
-          </span>
-          {badge && <span className="text-[9px] text-accent font-bold uppercase">{badge}</span>}
-        </div>
-      </motion.div>
-    )}
-  </NavLink>
-);
 
 export default ProfessionalHeader;
