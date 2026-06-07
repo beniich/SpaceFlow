@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
-import { motion, useInView, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'motion/react';
+import { useInView } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import {
   MapPin, Bell, Shield, TrendingUp, Cpu, Brain,

@@ -7,13 +7,22 @@ import MetricChart from '../components/MetricChart';
 import AttackSimulator from '../components/AttackSimulator';
 import { useStore } from '../store/useStore';
 import { useNotifications } from '../hooks/useNotifications';
+import { usePlan } from '../hooks/usePlan';
+import FreeDashboard from './FreeDashboard';
 
 export default function DashboardPage() {
+  const { isFree } = usePlan();
   const logs = useStore((s) => s.logs);
   const addLog = useStore((s) => s.addLog);
   const clearLogs = useStore((s) => s.clearLogs);
   const nodes = useStore((s) => s.nodes);
   const setNodes = useStore((s) => s.setNodes);
+
+  // Enforce free tier minimalist dashboard
+  if (isFree) {
+    return <FreeDashboard />;
+  }
+
 
   const [isProcessingNodeId, setIsProcessingNodeId] = useState<string | null>(null);
   const [isDdosActive, setIsDdosActive] = useState(true);

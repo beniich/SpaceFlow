@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { User, Satellite, Thermometer, Globe } from 'lucide-react';
+import ThemeToggle from './ThemeToggle';
+import TokenWidget from '../ui/TokenWidget';
+
 
 const MinimalistHeader = () => {
   const [data, setData] = useState({ ip: '...', temp: '...', time: '' });
@@ -56,20 +59,30 @@ const MinimalistHeader = () => {
       </div>
 
       {/* RIGHT: System Status & Profile */}
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-3">
+        {/* Token Widget */}
+        <TokenWidget />
+
+        {/* Theme Toggle */}
+        <ThemeToggle />
+
         <div className="flex items-center gap-2 bg-white/5 px-2 py-1 rounded-full border border-white/10">
           <Satellite size={12} className="text-purple-400" />
-          <span>SATS: <span className="text-slate-200 font-bold">{satellites.active}/{satellites.total}</span></span>
+          <span className="hidden sm:inline">SATS: </span>
+          <span className="text-slate-200 font-bold">{satellites.active}/{satellites.total}</span>
         </div>
+        
         <div className="relative group cursor-pointer z-50">
           <div className="w-7 h-7 rounded-full bg-slate-700 border border-white/20 flex items-center justify-center overflow-hidden">
              <User size={16} className="text-slate-300" />
           </div>
           {/* Minimal Dropdown */}
           <div className="absolute right-0 top-full mt-2 w-48 bg-[#1e293b] border border-white/10 rounded-xl shadow-2xl opacity-0 group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto transition-all translate-y-2 group-hover:translate-y-0 p-2">
-            <div className="px-3 py-2 text-xs font-bold text-slate-400 border-b border-white/10 mb-1">Account</div>
-            <div className="px-3 py-2 text-xs text-slate-300 hover:bg-white/5 rounded-lg cursor-pointer">Profile Settings</div>
-            <div className="px-3 py-2 text-xs text-red-400 hover:bg-red-500/10 rounded-lg cursor-pointer">Logout</div>
+            <div className="px-3 py-2 text-xs font-bold text-slate-400 border-b border-white/10 mb-1">Mon Compte</div>
+            <div className="px-3 py-2 text-xs text-slate-300 hover:bg-white/5 rounded-lg cursor-pointer" onClick={() => window.location.href = '/billing'}>Facturation & Jetons</div>
+            <div className="px-3 py-2 text-xs text-slate-300 hover:bg-white/5 rounded-lg cursor-pointer" onClick={() => window.location.href = '/upgrade'}>Changer de Plan</div>
+            <div className="px-3 py-2 text-xs text-slate-300 hover:bg-white/5 rounded-lg cursor-pointer" onClick={() => window.location.href = '/team'}>Gérer l'Équipe</div>
+            <div className="px-3 py-2 text-xs text-red-400 hover:bg-red-500/10 rounded-lg cursor-pointer">Déconnexion</div>
           </div>
         </div>
       </div>

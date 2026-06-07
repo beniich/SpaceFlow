@@ -36,6 +36,12 @@ self.addEventListener('fetch', (event) => {
   const { request } = event;
   const url = new URL(request.url);
 
+  // Bypass cache completely on localhost (local development) to prevent caching stale Vite dev server chunks
+  if (url.hostname === 'localhost' || url.hostname === '127.0.0.1') {
+    event.respondWith(fetch(request));
+    return;
+  }
+
   // Network-first for API and SSE stream
   if (url.pathname.startsWith('/api/')) {
     event.respondWith(

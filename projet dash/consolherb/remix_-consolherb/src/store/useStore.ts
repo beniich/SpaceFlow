@@ -1,5 +1,6 @@
 import { create } from 'zustand';
-import { AuditNode, TerminalLog } from '../types';
+import { AuditNode, TerminalLog, SubscriptionState, CurrentUser, TeamMember } from '../types';
+
 
 // ─── Toast Notification type ─────────────────────────────────────────────────
 export interface ToastNotif {
@@ -19,7 +20,19 @@ interface AppStore {
   toasts: ToastNotif[];
   addToast: (toast: ToastNotif) => void;
   removeToast: (id: string) => void;
+  // ─── SaaS Slices ───────────────────────────────────────────────────────────
+  subscription: SubscriptionState;
+  setSubscription: (s: Partial<SubscriptionState>) => void;
+  consumeToken: (n?: number) => void;
+  currentUser: CurrentUser;
+  setCurrentUser: (u: Partial<CurrentUser>) => void;
+  teamMembers: TeamMember[];
+  setTeamMembers: (members: TeamMember[]) => void;
+  addTeamMember: (member: TeamMember) => void;
+  updateTeamMember: (id: string, patch: Partial<TeamMember>) => void;
+  removeTeamMember: (id: string) => void;
 }
+
 
 const initialNodes: AuditNode[] = [
   {
@@ -129,4 +142,50 @@ export const useStore = create<AppStore>((set) => ({
     })),
   removeToast: (id) =>
     set((s) => ({ toasts: s.toasts.filter((t) => t.id !== id) })),
+  // ─── SaaS: Subscription ──────────────────────────────────────────────────────
+  subscription: {
+    plan: 'pro' as const,
+    tokensUsed: 3210,
+    tokensLimit: 5000,
+    apiCallsUsed: 847,
+    apiCallsLimit: 10000,
+    trialDaysLeft: 0,
+    renewalDate: new Date(Date.now() + 18 * 24 * 3600000).toISOString(),
+    weeklyReportEnabled: true,
+    reportRecipients: ['admin@agromatre.io'],
+  },
+  setSubscription: (s) =>
+    set((state) => ({ subscription: { ...state.subscription, ...s } })),
+  consumeToken: (n = 1) =>
+    set((s) => ({
+      subscription: {
+        ...s.subscription,
+        tokensUsed: Math.min(s.subscription.tokensUsed + n, s.subscription.tokensLimit),
+      },
+    })),
+  // ─── SaaS: Current User ───────────────────────────────────────────────────────
+  currentUser: {
+    id: 'usr-001',
+    name: 'Admin AgroMaître',
+    email: 'admin@agromatre.io',
+    role: 'owner' as const,
+    plan: 'pro' as const,
+  },
+  setCurrentUser: (u) =>
+    set((s) => ({ currentUser: { ...s.currentUser, ...u } })),
+  // ─── SaaS: Team ───────────────────────────────────────────────────────────────
+  teamMembers: [
+    { id: 'tm-1', name: 'Admin AgroMaître', email: 'admin@agromatre.io', role: 'owner', joinedAt: '2024-01-15', status: 'active' },
+    { id: 'tm-2', name: 'Fatima Benali', email: 'f.benali@agromatre.io', role: 'manager', joinedAt: '2024-03-01', status: 'active' },
+    { id: 'tm-3', name: 'Youssef Karam', email: 'y.karam@agromatre.io', role: 'viewer', joinedAt: '2024-05-20', status: 'invited' },
+  ],
+  setTeamMembers: (members) => set({ teamMembers: members }),
+  addTeamMember: (member) =>
+    set((s) => ({ teamMembers: [...s.teamMembers, member] })),
+  updateTeamMember: (id, patch) =>
+    set((s) => ({
+      teamMembers: s.teamMembers.map((m) => (m.id === id ? { ...m, ...patch } : m)),
+    })),
+  removeTeamMember: (id) =>
+    set((s) => ({ teamMembers: s.teamMembers.filter((m) => m.id !== id) })),
 }));

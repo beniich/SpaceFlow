@@ -3,6 +3,8 @@ import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-route
 import { AnimatePresence, motion } from 'motion/react';
 import AppLayout from '../components/layout/AppLayout';
 import DashboardSkeleton from '../components/ui/DashboardSkeleton';
+import FeatureGate from '../components/ui/FeatureGate';
+
 
 const LandingPage   = lazy(() => import('../pages/LandingPage'));
 const PortailsPage  = lazy(() => import('../pages/PortailsPage'));
@@ -15,6 +17,11 @@ const AgroBrainPage = lazy(() => import('../pages/AgroBrainPage'));
 const VisionPage    = lazy(() => import('../pages/VisionPage'));
 const FinancePage   = lazy(() => import('../pages/FinancePage'));
 const TraceabilityPage = lazy(() => import('../pages/TraceabilityPage'));
+const UpgradePage   = lazy(() => import('../pages/UpgradePage'));
+const BillingPage   = lazy(() => import('../pages/BillingPage'));
+const TeamPage      = lazy(() => import('../pages/TeamPage'));
+const ReportsPage   = lazy(() => import('../pages/ReportsPage'));
+
 
 // Page transition wrapper — applied to every route change
 const pageVariants = {
@@ -82,7 +89,7 @@ function AnimatedRoutes() {
             path="/portails"
             element={
               <Suspense fallback={<Loader />}>
-                <AnimatedPage><PortailsPage /></AnimatedPage>
+                <AnimatedPage><FeatureGate feature="portails"><PortailsPage /></FeatureGate></AnimatedPage>
               </Suspense>
             }
           />
@@ -90,7 +97,7 @@ function AnimatedRoutes() {
             path="/modules"
             element={
               <Suspense fallback={<Loader />}>
-                <AnimatedPage><ModulesPage /></AnimatedPage>
+                <AnimatedPage><FeatureGate feature="modules"><ModulesPage /></FeatureGate></AnimatedPage>
               </Suspense>
             }
           />
@@ -106,7 +113,7 @@ function AnimatedRoutes() {
             path="/infra"
             element={
               <Suspense fallback={<Loader />}>
-                <AnimatedPage><InfraPage /></AnimatedPage>
+                <AnimatedPage><FeatureGate feature="infra"><InfraPage /></FeatureGate></AnimatedPage>
               </Suspense>
             }
           />
@@ -130,7 +137,7 @@ function AnimatedRoutes() {
             path="/agro-brain"
             element={
               <Suspense fallback={<Loader />}>
-                <AnimatedPage><AgroBrainPage /></AnimatedPage>
+                <AnimatedPage><FeatureGate feature="agro-brain"><AgroBrainPage /></FeatureGate></AnimatedPage>
               </Suspense>
             }
           />
@@ -138,7 +145,7 @@ function AnimatedRoutes() {
             path="/vision"
             element={
               <Suspense fallback={<Loader />}>
-                <AnimatedPage><VisionPage /></AnimatedPage>
+                <AnimatedPage><FeatureGate feature="vision"><VisionPage /></FeatureGate></AnimatedPage>
               </Suspense>
             }
           />
@@ -146,7 +153,7 @@ function AnimatedRoutes() {
             path="/finance"
             element={
               <Suspense fallback={<Loader />}>
-                <AnimatedPage><FinancePage /></AnimatedPage>
+                <AnimatedPage><FeatureGate feature="finance"><FinancePage /></FeatureGate></AnimatedPage>
               </Suspense>
             }
           />
@@ -154,7 +161,39 @@ function AnimatedRoutes() {
             path="/traceability"
             element={
               <Suspense fallback={<Loader />}>
-                <AnimatedPage><TraceabilityPage /></AnimatedPage>
+                <AnimatedPage><FeatureGate feature="traceability"><TraceabilityPage /></FeatureGate></AnimatedPage>
+              </Suspense>
+            }
+          />
+          <Route
+            path="/upgrade"
+            element={
+              <Suspense fallback={<Loader />}>
+                <AnimatedPage><UpgradePage /></AnimatedPage>
+              </Suspense>
+            }
+          />
+          <Route
+            path="/billing"
+            element={
+              <Suspense fallback={<Loader />}>
+                <AnimatedPage><BillingPage /></AnimatedPage>
+              </Suspense>
+            }
+          />
+          <Route
+            path="/team"
+            element={
+              <Suspense fallback={<Loader />}>
+                <AnimatedPage><TeamPage /></AnimatedPage>
+              </Suspense>
+            }
+          />
+          <Route
+            path="/reports"
+            element={
+              <Suspense fallback={<Loader />}>
+                <AnimatedPage><ReportsPage /></AnimatedPage>
               </Suspense>
             }
           />
