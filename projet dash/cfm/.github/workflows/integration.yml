@@ -1,0 +1,74 @@
+name: CI - ReclamTrack Integration
+
+on:
+  push:
+    branches: ["main", "develop"]
+  pull_request:
+    branches: ["main", "develop"]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "npm"
+
+      - name: Install dependencies (Root Workspace)
+        run: npm ci
+
+      # --- Shared Package ---
+      - name: Build Shared Package
+        run: npm run build --workspace=shared || echo "No build script for shared or already built via dependencies"
+
+      # --- Backend CI ---
+      - name: Lint Backend
+        run: npm run lint --workspace=backend
+        continue-on-error: true # Warning only for now
+
+      - name: Build Backend
+        run: npm run build --workspace=backend
+
+      - name: Run Backend Tests
+        run: npm run test --workspace=backend
+
+      # --- Frontend CI ---
+      - name: Lint Frontend
+        run: npm run lint --workspace=frontend
+        continue-on-error: true # Warning only for now
+
+      - name: Build Frontend
+        run: npm run build --workspace=frontend
+        env:
+          NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET || 'dummy_secret' }}
+          NEXTAUTH_URL: ${{ secrets.NEXTAUTH_URL || 'http://localhost:3000' }}
+          NEXT_PUBLIC_API_URL: http://localhost:5001/api
+          NEXT_PUBLIC_SOCKET_URL: http://localhost:5001
+
+  # Placeholder for Deployment (CD)
+  # This job works but does nothing real yet.
+  deploy-preview:
+    needs: build-and-test
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy Preview (Placeholder)
+        run: echo "Deploying preview for PR #${{ github.event.number }}..."
+
+  deploy-production:
+    needs: build-and-test
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy Production (Placeholder)
+        run: echo "Deploying to production..."

@@ -1,0 +1,320 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  firstName String
+  lastName  String
+  role      String   @default("USER") // ADMIN, TECH, MANAGER, USER, OWNER
+  companyName     String?
+  jobTitle        String?
+  avatar          String?
+  phone           String?
+  emailVerified   Boolean  @default(false)
+  isActive        Boolean  @default(true)
+  lastLoginAt     DateTime?
+  
+  // Subscription
+  plan            String   @default("FREE")
+  trialEndsAt     DateTime?
+  subscriptionId  String?
+  
+  // Relations
+  organizationId  String?
+  organization    Organization? @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  
+  contacts        Contact[]
+  deals           Deal[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  workOrders WorkOrder[] @relation("AssignedTo")
+  createdWorkOrders WorkOrder[] @relation("CreatedBy")
+  Activity Activity[]
+  ActivityLog ActivityLog[]
+}
+
+model Asset {
+  id            String   @id @default(uuid())
+  name          String
+  description   String?
+  category      String
+  status        String   @default("OPERATIONAL") // OPERATIONAL, MAINTENANCE, BREAKDOWN, RETIRED
+  locationId    String?
+  location      Location? @relation(fields: [locationId], references: [id])
+  purchaseDate  DateTime?
+  warrantyEnd   DateTime?
+  serialNumber  String?
+  healthScore   Int      @default(100) // 0-100%
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  
+  workOrders    WorkOrder[]
+  maintenanceSchedules MaintenanceSchedule[]
+  telemetryData TelemetryData[]
+}
+
+model Location {
+  id          String   @id @default(uuid())
+  name        String
+  type        String   // BUILDING, FLOOR, ROOM, ZONE
+  parentId    String?
+  parent      Location? @relation("LocationHierarchy", fields: [parentId], references: [id])
+  children    Location[] @relation("LocationHierarchy")
+  capacity    Int?
+  area        Float?   // in square meters
+  status      String   @default("ACTIVE")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  assets      Asset[]
+  leases      Lease[]
+}
+
+model WorkOrder {
+  id          String   @id @default(uuid())
+  title       String
+  description String
+  status      String   @default("PENDING") // PENDING, IN_PROGRESS, ON_HOLD, COMPLETED, CANCELLED
+  priority    String   @default("MEDIUM") // LOW, MEDIUM, HIGH, CRITICAL
+  assetId     String?
+  asset       Asset?   @relation(fields: [assetId], references: [id])
+  assignedToId String?
+  assignedTo  User?    @relation("AssignedTo", fields: [assignedToId], references: [id])
+  createdById String
+  createdBy   User     @relation("CreatedBy", fields: [createdById], references: [id])
+  dueDate     DateTime?
+  completedAt DateTime?
+  cost        Float?
+  notes       String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model MaintenanceSchedule {
+  id              String   @id @default(uuid())
+  name            String
+  description     String?
+  assetId         String
+  asset           Asset    @relation(fields: [assetId], references: [id])
+  frequency       String   // DAILY, WEEKLY, MONTHLY, QUARTERLY, YEARLY
+  lastMaintenance DateTime?
+  nextMaintenance DateTime
+  estimatedCost   Float?
+  isActive        Boolean  @default(true)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model Lease {
+  id          String   @id @default(uuid())
+  tenantName  String
+  contactEmail String?
+  contactPhone String?
+  locationId  String
+  location    Location @relation(fields: [locationId], references: [id])
+  startDate   DateTime
+  endDate     DateTime
+  monthlyRent Float
+  status      String   @default("ACTIVE") // ACTIVE, EXPIRED, TERMINATED
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model TelemetryData {
+  id          String   @id @default(uuid())
+  assetId     String
+  asset       Asset    @relation(fields: [assetId], references: [id])
+  sensorType  String   // TEMPERATURE, HUMIDITY, ENERGY, VIBRATION
+  value       Float
+  unit        String
+  timestamp   DateTime @default(now())
+}
+
+model Organization {
+  id          String   @id @default(uuid())
+  name        String
+  slug        String   @unique
+  industry    String?
+  size        String?  // 1-10, 11-50, 51-200, 200+
+  logoUrl     String?
+  website     String?
+  
+  plan        String   @default("FREE")
+  maxUsers    Int      @default(1)
+  maxContacts Int      @default(100)
+  
+  users       User[]
+  contacts    Contact[]
+  deals       Deal[]
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Contact {
+  id              String   @id @default(uuid())
+  organizationId  String
+  organization    Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  
+  // Champs principaux
+  firstName       String
+  lastName        String
+  email           String?
+  phone           String?
+  mobile          String?
+  
+  // Entreprise
+  company         String?
+  jobTitle        String?
+  department      String?
+  industry        String?
+  companySize     String?
+  website         String?
+  
+  // Adresse
+  address         String?
+  city            String?
+  postalCode      String?
+  country         String?
+  
+  // Réseaux sociaux
+  linkedin        String?
+  twitter         String?
+  
+  // Catégorisation
+  type            String   @default("LEAD") // LEAD, PROSPECT, CUSTOMER, PARTNER, VENDOR
+  source          String?  // website, referral, cold_call, event, etc.
+  status          String   @default("ACTIVE") // ACTIVE, INACTIVE, BLOCKED
+  rating          Int?     // 1-5
+  
+  // Tags personnalisés - stringified JSON
+  tags            String?
+  
+  // Propriétaire
+  ownerId         String
+  owner           User     @relation(fields: [ownerId], references: [id])
+  
+  // Relations
+  deals           Deal[]
+  activities      Activity[]
+  customFields    String?  // stringified JSON
+  
+  // Métadonnées
+  lastContactedAt DateTime?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  @@index([organizationId, type, status])
+  @@index([email])
+}
+
+model Activity {
+  id          String   @id @default(uuid())
+  organizationId String
+  type        String   // CALL, EMAIL, MEETING, NOTE, TASK
+  subject     String
+  description String?
+  contactId   String?
+  contact     Contact? @relation(fields: [contactId], references: [id], onDelete: Cascade)
+  dealId      String?
+  deal        Deal?    @relation(fields: [dealId], references: [id], onDelete: Cascade)
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  completedAt DateTime?
+  createdAt   DateTime @default(now())
+}
+
+model ActivityLog {
+  id          String   @id @default(uuid())
+  organizationId String
+  userId      String?
+  user        User?    @relation(fields: [userId], references: [id])
+  action      String   // CREATE, UPDATE, DELETE, LOGIN
+  entity      String   // contact, deal, user
+  entityId    String?
+  metadata    String?  // stringified JSON
+  createdAt   DateTime @default(now())
+  
+  @@index([organizationId, createdAt])
+}
+
+model Deal {
+  id              String   @id @default(uuid())
+  organizationId  String
+  organization    Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  
+  name            String
+  amount          Float    @default(0)
+  currency        String   @default("EUR")
+  status          String   @default("PIPELINE")
+  stage           String   @default("Discovery")
+  probability     Int      @default(10) // %
+  
+  // Dates
+  expectedCloseDate DateTime
+  closedAt        DateTime?
+  
+  // Source
+  source          String?
+  campaign        String?
+  
+  // Description
+  description     String?
+  nextStep        String?
+  
+  // Relations
+  contactId       String
+  contact         Contact  @relation(fields: [contactId], references: [id])
+  ownerId         String
+  owner           User     @relation(fields: [ownerId], references: [id])
+  
+  activities      Activity[]
+  customFields    String? // stringified JSON
+  tags            String? // stringified JSON
+  
+  // Perte
+  lostReason      String?
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  @@index([organizationId, status])
+}
+
+model CustomField {
+  id          String   @id @default(uuid())
+  organizationId String
+  entity      String   // 'contact', 'deal'
+  name        String
+  label       String
+  type        String   // text, number, date, select, multiselect, boolean
+  options     String?  // stringified JSON array
+  required    Boolean  @default(false)
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+}
+
+model ImportJob {
+  id          String   @id @default(uuid())
+  organizationId String
+  type        String   // 'contacts', 'deals'
+  status      String   // 'PENDING', 'PROCESSING', 'COMPLETED', 'FAILED'
+  totalRows   Int
+  processed   Int      @default(0)
+  succeeded   Int      @default(0)
+  failed      Int      @default(0)
+  errors      String?  // stringified JSON
+  fileName    String
+  userId      String
+  completedAt DateTime?
+  createdAt   DateTime @default(now())
+}
