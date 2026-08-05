@@ -1,0 +1,16 @@
+model Space {
+  // ... existing fields ...
+  bookings        Booking[]
+  accessLogs      AccessLog[]
+}
+
+model Member {
+  // ... existing fields ...
+  bookings        Booking[]
+  accessLogs      AccessLog[]
+}
+
+model Organization {
+  // ... existing fields ...
+  bookings        Booking[]
+}

@@ -1,0 +1,466 @@
+// Generator & Datasource
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============== ENUMS ==============
+enum UserRole {
+  SUPER_ADMIN
+  ORG_OWNER
+  ORG_ADMIN
+  MANAGER
+  RECEPTIONIST
+  MEMBER
+  VIEWER
+}
+
+enum OrgPlan {
+  FREE
+  STARTER
+  PRO
+  ENTERPRISE
+}
+
+enum SpaceType {
+  COWORKING
+  PRIVATE_OFFICE
+  MEETING_ROOM
+  EVENT_SPACE
+  STUDIO
+  WORKSHOP
+  PHONE_BOOTH
+  COMMUNAL
+}
+
+enum SpaceStatus {
+  AVAILABLE
+  MAINTENANCE
+  CLOSED
+  COMING_SOON
+}
+
+enum AccessType {
+  KEY
+  KEYCARD
+  QR_CODE
+  BIOMETRIC
+  PIN
+  NFC
+}
+
+enum BookingType {
+  HOT_DESK
+  DEDICATED_DESK
+  PRIVATE_OFFICE
+  MEETING_ROOM
+  EVENT
+  DAY_PASS
+}
+
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  CHECKED_IN
+  COMPLETED
+  CANCELLED
+  NO_SHOW
+}
+
+enum BookingSource {
+  WEB
+  MOBILE
+  RECEPTION
+  ADMIN
+  AUTOMATIC
+  API
+}
+
+// ============== MODELS ==============
+
+model Organization {
+  id              String   @id @default(uuid())
+  name            String
+  slug            String   @unique
+  type            String   @default("OPERATOR") // OPERATOR, NETWORK, INDEPENDENT
+  
+  // Contact
+  email           String
+  phone           String?
+  website         String?
+  
+  // Address
+  address         String?
+  city            String?
+  postalCode      String?
+  country         String   @default("FR")
+  timezone        String   @default("Europe/Paris")
+  
+  // Branding
+  logoUrl         String?
+  coverUrl        String?
+  primaryColor    String   @default("#6366f1")
+  description     String?  @db.Text
+  
+  // Subscription
+  plan            OrgPlan  @default(FREE)
+  planExpiresAt   DateTime?
+  stripeCustomerId String?  @unique
+  
+  // Limits
+  maxSpaces       Int      @default(1)
+  maxMembers      Int      @default(50)
+  maxUsers        Int      @default(3)
+  features        String[]
+  
+  // Settings
+  currency        String   @default("EUR")
+  language        String   @default("fr")
+  taxRate         Float    @default(20)
+  invoicePrefix   String   @default("INV")
+  
+  // Status
+  isActive        Boolean  @default(true)
+  isVerified      Boolean  @default(false)
+  
+  // Relations
+  users           User[]
+  spaces          Space[]
+  members         Member[]
+  bookings        Booking[]
+  subscription    Subscription?
+  invoices        Invoice[]
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  @@index([slug])
+  @@index([plan])
+}
+
+model User {
+  id              String   @id @default(uuid())
+  email           String   @unique
+  password        String?
+  firebaseUid     String?  @unique
+  
+  firstName       String
+  lastName        String
+  avatar          String?
+  phone           String?
+  
+  role            UserRole @default(MEMBER)
+  isActive        Boolean  @default(true)
+  emailVerified   Boolean  @default(false)
+  lastLoginAt     DateTime?
+  
+  organizationId  String
+  organization    Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  
+  // Auth
+  twoFactorEnabled Boolean  @default(false)
+  twoFactorSecret  String?
+  
+  // Préférences notif
+  emailNotifications Boolean @default(true)
+  pushNotifications  Boolean @default(true)
+  pushSubscription   Json?
+  
+  // Relations inverses
+  member           Member?
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  @@index([email])
+  @@index([organizationId])
+}
+
+model Space {
+  id              String   @id @default(uuid())
+  organizationId  String
+  organization    Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  
+  // Identification
+  name            String
+  code            String?
+  description     String?  @db.Text
+  type            SpaceType
+  status          SpaceStatus @default(AVAILABLE)
+  
+  // Adresse
+  address         String?
+  city            String?
+  postalCode      String?
+  floor            Int?
+  
+  // Caractéristiques
+  capacity        Int      // nb personnes
+  surface         Float?
+  amenities       String[]
+  
+  // Tarification (en cents pour éviter les floats)
+  hourlyRateCents      Int?
+  dailyRateCents       Int?
+  halfDayRateCents     Int?
+  weeklyRateCents      Int?
+  monthlyRateCents    Int?
+  cleaningFeeCents     Int     @default(0)
+  
+  // Horaires
+  openingTime     String?  // "08:00"
+  closingTime     String?  // "20:00"
+  availableDays   Int[]    @default([1,2,3,4,5])
+  
+  // Photos
+  coverPhoto      String?
+  
+  // Accès
+  accessType      AccessType @default(KEY)
+  accessCode      String?  @unique
+  
+  // Relations
+  bookings        Booking[]
+  accessLogs      AccessLog[]
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  @@index([organizationId])
+  @@index([type])
+  @@index([status])
+}
+
+model Member {
+  id              String   @id @default(uuid())
+  organizationId  String
+  organization    Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  
+  // Identity
+  firstName       String?
+  lastName        String?
+  companyName     String?
+  
+  // Contact
+  email           String   @unique
+  phone           String?
+  
+  // Profile
+  avatar          String?
+  jobTitle        String?
+  company         String?
+  
+  // Status
+  status          String   @default("ACTIVE")
+  rating          Int      @default(5)
+  isVip            Boolean  @default(false)
+  
+  // Marketing
+  referralCode    String   @unique
+  
+  // Stats
+  totalBookings   Int      @default(0)
+  totalSpentCents  Int     @default(0)
+  
+  // Relations
+  user            User?    @relation(fields: [userId], references: [id])
+  userId          String?  @unique
+  bookings        Booking[]
+  accessLogs      AccessLog[]
+  invoices        Invoice[]
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  @@index([organizationId])
+  @@index([email])
+  @@index([referralCode])
+}
+
+model Booking {
+  id              String   @id @default(uuid())
+  organizationId  String
+  organization    Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  
+  reference       String   @unique  // BK-2025-001
+  
+  memberId        String
+  member          Member   @relation(fields: [memberId], references: [id], onDelete: Cascade)
+  
+  spaceId         String
+  space           Space    @relation(fields: [spaceId], references: [id], onDelete: Cascade)
+  
+  type            BookingType
+  status          BookingStatus @default(PENDING)
+  source          BookingSource @default(WEB)
+  
+  // Time
+  startTime       DateTime
+  endTime         DateTime
+  hours           Float    @default(0)
+  
+  // Pricing (cents to avoid float issues)
+  hourlyRateCents Int?
+  subtotalCents   Int
+  cleaningFeeCents Int    @default(0)
+  discountCents   Int     @default(0)
+  totalCents      Int
+  
+  // Check-in/out
+  checkedInAt     DateTime?
+  checkedInBy     String?
+  checkedOutAt    DateTime?
+  
+  // QR code
+  qrCode          String?  @unique
+  
+  // Cancellation
+  cancelledAt     DateTime?
+  cancelledBy     String?
+  cancelReason    String?
+  refundCents     Int?
+  
+  // Notes
+  notes           String?  @db.Text
+  internalNotes   String?  @db.Text
+  
+  // Metadata
+  attendees       Int      @default(1)
+  metadata        Json?
+  
+  // Relations inverses
+  accessLogs      AccessLog[]
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  // Indexes
+  @@index([organizationId, startTime])
+  @@index([memberId, startTime])
+  @@index([spaceId, startTime])
+  @@index([spaceId, status])
+  @@index([status, startTime])
+}
+
+model AccessLog {
+  id              String   @id @default(uuid())
+  organizationId  String
+  
+  spaceId         String
+  space           Space    @relation(fields: [spaceId], references: [id])
+  
+  memberId        String?
+  member          Member?  @relation(fields: [memberId], references: [id])
+  
+  bookingId       String?
+  booking         Booking? @relation(fields: [bookingId], references: [id])
+  
+  accessType      String   // QR_CODE, MANUAL, etc
+  success         Boolean  @default(true)
+  
+  ipAddress       String?
+  userAgent       String?
+  
+  accessedAt      DateTime @default(now())
+  
+  @@index([spaceId, accessedAt])
+  @@index([bookingId])
+}
+
+model Subscription {
+  id                    String   @id @default(uuid())
+  organizationId        String   @unique
+  organization          Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  
+  stripeCustomerId      String?  @unique
+  stripeSubscriptionId  String?  @unique
+  stripePriceId         String?
+  
+  plan                  String   @default("FREE") // FREE, STARTER, PRO, ENTERPRISE
+  status                String   @default("active") // active, trialing, past_due, canceled, unpaid
+  
+  currentPeriodStart    DateTime?
+  currentPeriodEnd      DateTime?
+  trialEnd              DateTime?
+  cancelAtPeriodEnd     Boolean  @default(false)
+  canceledAt            DateTime?
+  
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+}
+
+model Invoice {
+  id              String   @id @default(uuid())
+  organizationId  String
+  organization    Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  
+  // Stripe (nullable - invoices can be created manually)
+  stripeInvoiceId String?  @unique
+  invoiceNumber   String?  @unique  // Legacy Stripe alias
+  number          String   @unique  // Local: INV-2025-00001
+  customerId      String?
+  type            String   @default("BOOKING") // BOOKING, SUBSCRIPTION, MANUAL
+  
+  // Status
+  status          String   @default("open") // draft, open, paid, void, uncollectible
+  currency        String   @default("eur")
+  
+  // Amounts (cents)
+  subtotalCents   Int      @default(0)
+  taxCents        Int      @default(0)
+  totalCents      Int      @default(0)
+  amountPaidCents Int      @default(0)
+  amountDueCents  Int      @default(0)
+  
+  // Backwards compat floats (kept for Stripe webhook)
+  amount          Float    @default(0)
+  amountPaid      Float    @default(0)
+  amountDue       Float    @default(0)
+  
+  // Dates
+  issueDate       DateTime @default(now())
+  dueDate         DateTime
+  periodStart     DateTime?
+  periodEnd       DateTime?
+  paidAt          DateTime?
+  
+  // Notes
+  notes           String?  @db.Text
+  
+  // PDF
+  invoicePdfUrl   String?
+  hostedInvoiceUrl String?
+  
+  // Relations
+  items           InvoiceItem[]
+  memberId        String?
+  member          Member?  @relation(fields: [memberId], references: [id])
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  @@index([organizationId, status])
+  @@index([memberId])
+}
+
+model InvoiceItem {
+  id              String   @id @default(uuid())
+  invoiceId       String
+  invoice         Invoice  @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+  
+  description     String
+  quantity        Float    @default(1)
+  unitPriceCents  Int      // cents
+  taxRate         Float    @default(20)
+  amountCents     Int      // cents
+  
+  // Backwards compat
+  unitPrice       Float    @default(0)
+  amount          Float    @default(0)
+  
+  order           Int      @default(0)
+}

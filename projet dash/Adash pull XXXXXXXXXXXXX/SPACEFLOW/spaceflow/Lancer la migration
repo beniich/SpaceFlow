@@ -1,0 +1,3 @@
+cd apps/backend
+npx prisma migrate dev --name add-bookings
+npx prisma generate

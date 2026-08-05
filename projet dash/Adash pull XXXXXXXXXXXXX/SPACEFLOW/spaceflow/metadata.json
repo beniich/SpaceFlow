@@ -1,0 +1,6 @@
+{
+  "name": "SPACEFLOW",
+  "description": "Plateforme SaaS de gestion d'espaces de coworking : membres, réservations, facturation Stripe, analytics et prédictions d'occupation IA.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
