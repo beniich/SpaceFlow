@@ -1,0 +1,1023 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============== ENUMS ==============
+enum TenantPlan {
+  FREE
+  STARTER
+  PRO
+  ENTERPRISE
+}
+
+enum UserRole {
+  SUPER_ADMIN
+  ADMIN
+  MANAGER
+  TECHNICIAN
+  VIEWER
+}
+
+enum AssetStatus {
+  OPERATIONAL
+  DEGRADED
+  UNDER_MAINTENANCE
+  OUT_OF_ORDER
+  DECOMMISSIONED
+}
+
+enum AssetCategory {
+  HVAC
+  ELECTRICAL
+  PLUMBING
+  FIRE_SAFETY
+  IT
+  SECURITY
+  ELEVATOR
+  STRUCTURE
+  FURNITURE
+  SIGNAGE
+  OTHER
+}
+
+enum WorkOrderStatus {
+  PENDING
+  ASSIGNED
+  IN_PROGRESS
+  ON_HOLD
+  COMPLETED
+  CANCELLED
+}
+
+enum WorkOrderPriority {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum WorkOrderType {
+  CORRECTIVE
+  PREVENTIVE
+  PREDICTIVE
+  INSPECTION
+  EMERGENCY
+}
+
+enum SpaceType {
+  OFFICE
+  MEETING_ROOM
+  COMMON_AREA
+  STORAGE
+  PARKING
+  TECHNICAL
+  SERVER_ROOM
+  RESTROOM
+  CAFETERIA
+  OTHER
+}
+
+enum SpaceStatus {
+  AVAILABLE
+  OCCUPIED
+  MAINTENANCE
+  UNAVAILABLE
+}
+
+enum SyncDirection {
+  PULL
+  PUSH
+  BIDIRECTIONAL
+}
+
+enum ConflictStrategy {
+  LATEST_WINS
+  ERP_WINS
+  CAFM_WINS
+  MANUAL
+}
+
+// ============== MULTI-TENANCY ==============
+model Tenant {
+  id          String     @id @default(uuid())
+  name        String
+  slug        String     @unique
+  plan        TenantPlan @default(ENTERPRISE)
+  logo        String?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  users             User[]
+  buildings         Building[]
+  assets            Asset[]
+  procedures        Procedure[]
+  parts             Part[]
+  failureCodes      FailureCode[]
+  digitalTwins      DigitalTwin[]
+  notifications     Notification[]
+  tenantConfigs     TenantConfig[]
+  tenantDomains     TenantDomain[]
+  erpConnections    ERPConnection[]
+  bimModels         BIMModel[]
+  floors            Floor[]
+  contracts         Contract[]
+  energyCounters    EnergyCounter[]
+  esgReports        ESGReport[]
+}
+
+model TenantConfig {
+  id        String   @id @default(uuid())
+  tenantId  String
+  tenant    Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  key       String
+  value     String
+  updatedAt DateTime @updatedAt
+
+  @@unique([tenantId, key])
+}
+
+model TenantDomain {
+  id        String   @id @default(uuid())
+  tenantId  String
+  tenant    Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  domain    String   @unique
+  verified  Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+// ============== UTILISATEURS ==============
+model User {
+  id           String   @id @default(uuid())
+  email        String   @unique
+  password     String
+  firstName    String
+  lastName     String
+  role         UserRole @default(VIEWER)
+  department   String?
+  avatar       String?
+  isActive     Boolean  @default(true)
+  tenantId     String?
+  tenant       Tenant?  @relation(fields: [tenantId], references: [id])
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  workOrders        WorkOrder[]               @relation("AssignedTo")
+  createdWOs        WorkOrder[]               @relation("CreatedBy")
+  assets            Asset[]
+  comments          Comment[]
+  pushSubscriptions PushSubscription[]
+  notifications     Notification[]
+  notificationPref  NotificationPreference?
+  inventoryMovements InventoryMovement[]
+}
+
+// ============== HIÉRARCHIE SPATIALE : Bâtiment → Étage → Local → Asset ==============
+model Building {
+  id           String   @id @default(uuid())
+  name         String
+  address      String
+  city         String
+  country      String
+  postalCode   String?
+  totalArea    Float
+  yearBuilt    Int?
+  imageUrl     String?
+  tenantId     String?
+  tenant       Tenant?  @relation(fields: [tenantId], references: [id])
+  createdAt    DateTime @default(now())
+
+  // Géolocalisation (lat/lng stockés pour compatibilité sans PostGIS natif)
+  latitude     Float?
+  longitude    Float?
+
+  // COBie Lite : identifiant externe
+  cobieExternalId  String?
+
+  floors       Floor[]
+  spaces       Space[]
+  assets       Asset[]
+  leases       Lease[]
+  digitalTwins DigitalTwin[]
+  bimModels    BIMModel[]
+  energyCounters EnergyCounter[]
+}
+
+model Floor {
+  id         String   @id @default(uuid())
+  name       String   // "RDC", "Étage 1", "Sous-sol -1"
+  level      Int      // 0 = RDC, négatif = sous-sol
+  area       Float?
+  buildingId String
+  building   Building @relation(fields: [buildingId], references: [id], onDelete: Cascade)
+  tenantId   String?
+  tenant     Tenant?  @relation(fields: [tenantId], references: [id])
+
+  // COBie Lite
+  cobieExternalId  String?
+  floorPlanUrl     String?  // Plan 2D (PDF ou image)
+
+  spaces     Space[]
+  assets     Asset[]
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model Space {
+  id          String      @id @default(uuid())
+  name        String
+  type        SpaceType   @default(OTHER)
+  floor       Int?        // Legacy - à migrer vers floorId
+  floorId     String?
+  floorModel  Floor?      @relation(fields: [floorId], references: [id])
+  area        Float?
+  capacity    Int?
+  occupancy   Int         @default(0)
+  status      SpaceStatus @default(AVAILABLE)
+  price       Float?
+  buildingId  String
+  building    Building    @relation(fields: [buildingId], references: [id])
+
+  // COBie Lite
+  cobieExternalId  String?
+  cobieCategory    String?  // Classification COBie (ex: Office, Storage)
+  ifcSpaceId       String?  // GUID IFC lié
+
+  reservations Reservation[]
+  assets       Asset[]
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+}
+
+// ============== ASSET (MODÈLE MAÎTRE CAFM) ==============
+model Asset {
+  id              String        @id @default(uuid())
+  name            String
+  category        AssetCategory @default(OTHER)
+  subcategory     String?
+  model           String?
+  serialNumber    String?       @unique
+  manufacturer    String?
+  purchaseDate    DateTime?
+  purchasePrice   Float?
+  warrantyEnd     DateTime?
+  location        String?       // Description textuelle (legacy)
+  status          AssetStatus   @default(OPERATIONAL)
+  healthScore     Int           @default(100) // 0-100
+  criticality     Int           @default(1)  // 1=faible, 5=critique (pour priorisation)
+  lastMaintenance DateTime?
+  nextMaintenance DateTime?
+
+  // Hiérarchie spatiale
+  buildingId      String?
+  building        Building?     @relation(fields: [buildingId], references: [id])
+  floorId         String?
+  floor           Floor?        @relation(fields: [floorId], references: [id])
+  spaceId         String?
+  space           Space?        @relation(fields: [spaceId], references: [id])
+
+  // Asset parent (structure hiérarchique équipements)
+  parentId        String?
+  parent          Asset?        @relation("AssetHierarchy", fields: [parentId], references: [id])
+  children        Asset[]       @relation("AssetHierarchy")
+
+  // Responsable
+  managerId       String?
+  manager         User?         @relation(fields: [managerId], references: [id])
+  tenantId        String?
+  tenant          Tenant?       @relation(fields: [tenantId], references: [id])
+
+  // COBie Lite (Building Lifecycle Interoperability)
+  cobieExternalId  String?
+  cobieCategory    String?
+  cobieTypeId      String?
+  installDate      DateTime?
+  tagNumber        String?      // Étiquette physique sur l'équipement
+
+  // IFC / BIM
+  ifcGuid          String?      // GlobalId IFC pour le couplage BIM ↔ Asset
+
+  // Géolocalisation de l'asset (coordonnées au sein du bâtiment)
+  posX             Float?       // Coordonnée X dans le plan
+  posY             Float?       // Coordonnée Y dans le plan
+  posZ             Float?       // Coordonnée Z (hauteur)
+
+  // Métadonnées ESG
+  energyClass      String?      // A, B, C, D, E, F, G
+  co2FactorKg      Float?       // facteur d'émission CO2 (kg CO2/kWh ou unité pertinente)
+
+  workOrders      WorkOrder[]
+  sensors         Sensor[]
+  maintenanceLogs MaintenanceLog[]
+  procedures      Procedure[]
+  digitalTwins    DigitalTwin[]
+  bimElements     BIMElement[]
+  erpAssetMappings ERPAssetMapping[]
+  energyReadings  EnergyReading[]
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+}
+
+// ============== SENSORS & IoT ==============
+model Sensor {
+  id        String   @id @default(uuid())
+  type      String   // temperature, humidity, energy, vibration, pressure
+  value     Float
+  unit      String
+  status    String   @default("active")
+  assetId   String
+  asset     Asset    @relation(fields: [assetId], references: [id], onDelete: Cascade)
+  readings  SensorReading[]
+  createdAt DateTime @default(now())
+}
+
+model SensorReading {
+  id        String   @id @default(uuid())
+  value     Float
+  timestamp DateTime @default(now())
+  sensorId  String
+  sensor    Sensor   @relation(fields: [sensorId], references: [id], onDelete: Cascade)
+
+  @@index([sensorId, timestamp])
+}
+
+// ============== WORK ORDERS ==============
+model WorkOrder {
+  id            String            @id @default(uuid())
+  title         String
+  description   String
+  type          WorkOrderType     @default(CORRECTIVE)
+  priority      WorkOrderPriority @default(MEDIUM)
+  status        WorkOrderStatus   @default(PENDING)
+  estimatedCost Float?
+  actualCost    Float?
+  scheduledAt   DateTime
+  completedAt   DateTime?
+
+  // Rapport de clôture (terrain mobile)
+  closureReport    String?   // JSON : {notes, photos[], signature, duration}
+  closedByTech     String?
+  laborHours       Float?
+
+  assetId       String
+  asset         Asset             @relation(fields: [assetId], references: [id])
+
+  assignedToId  String?
+  assignedTo    User?             @relation("AssignedTo", fields: [assignedToId], references: [id])
+
+  createdById   String
+  createdBy     User              @relation("CreatedBy", fields: [createdById], references: [id])
+
+  comments      Comment[]
+  orderParts    WorkOrderPart[]
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+
+  @@index([status, priority])
+  @@index([assetId])
+  @@index([assignedToId])
+}
+
+model Comment {
+  id          String    @id @default(uuid())
+  content     String
+  workOrderId String
+  workOrder   WorkOrder @relation(fields: [workOrderId], references: [id], onDelete: Cascade)
+  authorId    String
+  author      User      @relation(fields: [authorId], references: [id])
+  createdAt   DateTime  @default(now())
+}
+
+model MaintenanceLog {
+  id          String   @id @default(uuid())
+  description String
+  cost        Float
+  performedAt DateTime
+  performedBy String
+  assetId     String
+  asset       Asset    @relation(fields: [assetId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+}
+
+// ============== CONTRATS & FOURNISSEURS ==============
+model Contract {
+  id            String   @id @default(uuid())
+  title         String
+  type          String   // MAINTENANCE, WARRANTY, SLA, RENTAL, INSURANCE
+  vendor        String
+  vendorContact String?
+  startDate     DateTime
+  endDate       DateTime
+  value         Float?
+  currency      String   @default("EUR")
+  status        String   @default("ACTIVE")
+  autoRenew     Boolean  @default(false)
+  alertDaysBefore Int    @default(60)
+  documentUrl   String?
+  notes         String?
+  tenantId      String?
+  tenant        Tenant?  @relation(fields: [tenantId], references: [id])
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  linkedAssetIds String?
+  linkedWOIds    String?
+
+  @@index([endDate, status])
+}
+
+// ============== TEMPLATES WORK ORDERS ==============
+model WOTemplate {
+  id              String   @id @default(uuid())
+  name            String   // "Maintenance préventive CTA", "Remplacement filtre"
+  title           String   // Titre pré-rempli du WO
+  description     String   // Description détaillée
+  type            WorkOrderType     @default(PREVENTIVE)
+  priority        WorkOrderPriority @default(MEDIUM)
+  assetCategory   AssetCategory?    // Catégorie d'asset ciblée (HVAC, ELECTRICAL...)
+  estimatedCost   Float?
+  estimatedHours  Float?
+  checklistItems  Json?    // JSONB : [{label, required}]
+  tenantId        String?
+  isGlobal        Boolean  @default(false) // Template partagé entre tenants
+  usageCount      Int      @default(0)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+// ============== ESG : ÉNERGIE & DURABILITÉ ==============
+model EnergyCounter {
+  id         String   @id @default(uuid())
+  name       String   // Ex: "Compteur électrique bâtiment A", "Gaz RDC"
+  type       String   // ELECTRICITY, GAS, WATER, STEAM, FUEL_OIL
+  unit       String   // kWh, m3, L
+  meterRef   String?  // Référence du compteur physique
+  buildingId String
+  building   Building @relation(fields: [buildingId], references: [id])
+  tenantId   String?
+  tenant     Tenant?  @relation(fields: [tenantId], references: [id])
+  assetId    String?  // Si lié à un asset spécifique (ex: chaudière)
+
+  readings   EnergyReading[]
+  createdAt  DateTime @default(now())
+}
+
+model EnergyReading {
+  id             String        @id @default(uuid())
+  counterId      String
+  counter        EnergyCounter @relation(fields: [counterId], references: [id], onDelete: Cascade)
+  assetId        String?
+  asset          Asset?        @relation(fields: [assetId], references: [id])
+  value          Float         // Consommation pour la période
+  periodStart    DateTime
+  periodEnd      DateTime
+  cost           Float?        // Coût en EUR
+  invoiceRef     String?       // Référence facture
+  // Scope Carbone (ADEME/DEFRA)
+  scope          Int?          // 1, 2, ou 3
+  co2eKg         Float?        // kg CO2 équivalent calculé
+  emissionFactor Float?        // Facteur d'émission utilisé (kg CO2e/kWh)
+  createdAt      DateTime      @default(now())
+
+  @@index([counterId, periodStart])
+}
+
+model ESGReport {
+  id          String   @id @default(uuid())
+  tenantId    String
+  tenant      Tenant   @relation(fields: [tenantId], references: [id])
+  title       String
+  period      String   // "2024-Q1", "2024", etc.
+  status      String   @default("DRAFT") // DRAFT, FINALIZED, CERTIFIED
+  // Données agrégées (Json pour flexibilité)
+  scope1KgCO2 Float?   // Émissions directes
+  scope2KgCO2 Float?   // Indirectes énergie
+  scope3KgCO2 Float?   // Indirectes valeur
+  totalEnergyKwh Float?
+  waterM3     Float?
+  wasteKg     Float?
+  reportUrl   String?  // PDF signé sur S3
+  sha256Hash  String?  // Signature cryptographique du rapport
+  generatedAt DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// ============== LEASES ==============
+model Lease {
+  id          String   @id @default(uuid())
+  tenant      String   // Nom du locataire (à ne pas confondre avec Tenant CAFM)
+  startDate   DateTime
+  endDate     DateTime
+  monthlyRent Float
+  deposit     Float
+  status      String   @default("active")
+  buildingId  String
+  building    Building @relation(fields: [buildingId], references: [id])
+  createdAt   DateTime @default(now())
+}
+
+model Reservation {
+  id        String   @id @default(uuid())
+  startTime DateTime
+  endTime   DateTime
+  purpose   String
+  userId    String?
+  spaceId   String
+  space     Space    @relation(fields: [spaceId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+}
+
+// ============== AUDIT TRAIL ==============
+model AuditLog {
+  id        String   @id @default(uuid())
+  userId    String?
+  tenantId  String?
+  action    String   // ex: CREATE_ASSET, DELETE_WORK_ORDER
+  entity    String   // ex: ASSET, WORK_ORDER
+  entityId  String?
+  ipAddress String?
+  details   Json?    // JSONB natif PostgreSQL
+  timestamp DateTime @default(now())
+
+  @@index([tenantId, timestamp])
+  @@index([entity, entityId])
+}
+
+// ============== CMMS / GMAO ==============
+model Part {
+  id          String   @id @default(uuid())
+  partNumber  String   @unique
+  name        String
+  category    String
+  description String?
+  unit        String   @default("unit")
+  unitCost    Float
+  quantity    Int      @default(0)
+  minQuantity Int      @default(5)
+  maxQuantity Int      @default(100)
+  location    String?
+  supplier    String?
+  tenantId    String?
+  tenant      Tenant?  @relation(fields: [tenantId], references: [id])
+
+  movements   InventoryMovement[]
+  orderParts  WorkOrderPart[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model InventoryMovement {
+  id        String   @id @default(uuid())
+  type      String   // IN, OUT, ADJUSTMENT, RETURN
+  quantity  Int
+  reason    String
+  reference String?
+  partId    String
+  part      Part     @relation(fields: [partId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+}
+
+model WorkOrderPart {
+  id          String    @id @default(uuid())
+  workOrderId String
+  workOrder   WorkOrder @relation(fields: [workOrderId], references: [id], onDelete: Cascade)
+  partId      String
+  part        Part      @relation(fields: [partId], references: [id])
+  quantity    Int
+  unitCost    Float
+}
+
+model Procedure {
+  id            String   @id @default(uuid())
+  title         String
+  category      String
+  steps         Json     // JSONB : Array de {order, action, duration, tools[]}
+  estimatedTime Int      // minutes
+  safetyNotes   String?
+  assetId       String?
+  asset         Asset?   @relation(fields: [assetId], references: [id])
+  tenantId      String?
+  tenant        Tenant?  @relation(fields: [tenantId], references: [id])
+  createdAt     DateTime @default(now())
+}
+
+model FailureCode {
+  id          String   @id @default(uuid())
+  code        String
+  description String
+  category    String
+  severity    String
+  resolution  String?
+  tenantId    String?
+  tenant      Tenant?  @relation(fields: [tenantId], references: [id])
+}
+
+// ============== DIGITAL TWIN ==============
+model DigitalTwin {
+  id          String   @id @default(uuid())
+  name        String
+  type        String   // BUILDING, FLOOR, ASSET
+  modelUrl    String?  // 3D model URL (S3)
+  metadata    Json     // JSONB natif PostgreSQL
+  position    Json?    // {x, y, z}
+  buildingId  String?
+  building    Building? @relation(fields: [buildingId], references: [id])
+  assetId     String?
+  asset       Asset?   @relation(fields: [assetId], references: [id])
+  tenantId    String?
+  tenant      Tenant?  @relation(fields: [tenantId], references: [id])
+  snapshots   TwinSnapshot[]
+  simulations TwinSimulation[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model TwinSnapshot {
+  id        String      @id @default(uuid())
+  twinId    String
+  twin      DigitalTwin @relation(fields: [twinId], references: [id], onDelete: Cascade)
+  data      Json        // JSONB {temperature, energy, occupancy, etc}
+  thumbnail String?
+  createdAt DateTime    @default(now())
+}
+
+model TwinSimulation {
+  id         String      @id @default(uuid())
+  twinId     String
+  twin       DigitalTwin @relation(fields: [twinId], references: [id], onDelete: Cascade)
+  scenario   String      // 'fire', 'evacuation', 'energy_optim', 'maintenance'
+  parameters Json        // JSONB
+  results    Json        // JSONB
+  duration   Int         // minutes simulated
+  createdAt  DateTime    @default(now())
+}
+
+// ============== PUSH NOTIFICATIONS ==============
+model PushSubscription {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  endpoint  String   @unique
+  p256dh    String
+  auth      String
+  userAgent String?
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+}
+
+model Notification {
+  id        String    @id @default(uuid())
+  userId    String?
+  user      User?     @relation(fields: [userId], references: [id])
+  type      String    // WORK_ORDER, ASSET, SENSOR, LEASE, INVENTORY, CONTRACT
+  title     String
+  body      String
+  data      Json?     // JSONB
+  priority  String    @default("NORMAL") // LOW, NORMAL, HIGH, URGENT
+  read      Boolean   @default(false)
+  readAt    DateTime?
+  tenantId  String?
+  tenant    Tenant?   @relation(fields: [tenantId], references: [id])
+  createdAt DateTime  @default(now())
+
+  @@index([userId, read])
+}
+
+model NotificationPreference {
+  id                 String  @id @default(uuid())
+  userId             String  @unique
+  user               User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  workOrderAssigned  Boolean @default(true)
+  workOrderCompleted Boolean @default(false)
+  assetAlerts        Boolean @default(true)
+  sensorAlerts       Boolean @default(true)
+  leaseExpiring      Boolean @default(true)
+  inventoryLow       Boolean @default(true)
+  contractExpiring   Boolean @default(true)
+  emailEnabled       Boolean @default(true)
+  pushEnabled        Boolean @default(true)
+  smsEnabled         Boolean @default(false)
+  quietHoursStart    Int?    // 22
+  quietHoursEnd      Int?    // 7
+}
+
+// ============== ERP INTEGRATION ==============
+model ERPConnection {
+  id             String        @id @default(uuid())
+  tenantId       String
+  tenant         Tenant        @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  name           String
+  type           String        // SAP, ORACLE, DYNAMICS, ODOO, GENERIC
+  status         String        @default("INACTIVE")
+
+  baseUrl        String
+  apiVersion     String?
+  clientId       String?
+  clientSecret   String?
+  username       String?
+  password       String?
+  apiKey         String?
+  companyCode    String?
+  plantCode      String?
+
+  entityMapping  Json          // JSONB : Mapping champs CAFM ↔ ERP
+
+  syncAssets     Boolean       @default(true)
+  syncWorkOrders Boolean       @default(true)
+  syncInvoices   Boolean       @default(false)
+  syncInterval   Int           @default(60)
+
+  lastSyncAt     DateTime?
+  lastError      String?
+  totalSynced    Int           @default(0)
+
+  syncLogs       ERPSyncLog[]
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+}
+
+model ERPSyncLog {
+  id               String        @id @default(uuid())
+  connectionId     String
+  connection       ERPConnection @relation(fields: [connectionId], references: [id], onDelete: Cascade)
+  type             String
+  status           String
+  recordsProcessed Int           @default(0)
+  recordsCreated   Int           @default(0)
+  recordsUpdated   Int           @default(0)
+  recordsFailed    Int           @default(0)
+  errors           Json?         // JSONB
+  duration         Int
+  startedAt        DateTime
+  completedAt      DateTime?
+  triggeredBy      String?
+  createdAt        DateTime      @default(now())
+}
+
+model ERPAssetMapping {
+  id               String          @id @default(uuid())
+  connectionId     String
+  cafmAssetId      String
+  cafmAsset        Asset           @relation(fields: [cafmAssetId], references: [id], onDelete: Cascade)
+  erpAssetId       String
+  erpAssetType     String?
+  lastSyncedAt     DateTime?
+  syncDirection    SyncDirection   @default(BIDIRECTIONAL)
+  conflictStrategy ConflictStrategy @default(LATEST_WINS)
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
+}
+
+model ERPInvoice {
+  id            String    @id @default(uuid())
+  connectionId  String
+  invoiceNumber String
+  vendor        String
+  amount        Float
+  currency      String    @default("EUR")
+  invoiceDate   DateTime
+  dueDate       DateTime?
+  status        String    @default("PENDING")
+  poNumber      String?
+  workOrderId   String?
+  attachments   Json?     // JSONB
+  syncedAt      DateTime  @default(now())
+
+  @@unique([connectionId, invoiceNumber])
+}
+
+// ============== BIM ==============
+model BIMModel {
+  id          String       @id @default(uuid())
+  name        String
+  fileUrl     String       // URL S3
+  fileSize    BigInt?      // Taille en octets
+  version     Int          @default(1)
+  status      String       @default("UPLOADED") // UPLOADED, PROCESSING, READY, ERROR
+  buildingId  String
+  building    Building     @relation(fields: [buildingId], references: [id], onDelete: Cascade)
+  tenantId    String?
+  tenant      Tenant?      @relation(fields: [tenantId], references: [id])
+  elements    BIMElement[]
+  jobId       String?      // BullMQ job ID de parsing
+  parsedAt    DateTime?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+}
+
+model BIMElement {
+  id         String        @id @default(uuid())
+  modelId    String
+  model      BIMModel      @relation(fields: [modelId], references: [id], onDelete: Cascade)
+  ifcGuid    String        // GlobalId IFC
+  name       String
+  type       String        // IfcWall, IfcDoor, IfcFlowTerminal, etc.
+  spaceId    String?
+  assetId    String?
+  asset      Asset?        @relation(fields: [assetId], references: [id])
+  properties BIMProperty[]
+  // Géométrie bounding box
+  bbMinX     Float?
+  bbMinY     Float?
+  bbMinZ     Float?
+  bbMaxX     Float?
+  bbMaxY     Float?
+  bbMaxZ     Float?
+  createdAt  DateTime      @default(now())
+
+  @@index([ifcGuid])
+}
+
+model BIMProperty {
+  id        String     @id @default(uuid())
+  elementId String
+  element   BIMElement @relation(fields: [elementId], references: [id], onDelete: Cascade)
+  set       String     // Pset_WallCommon
+  name      String     // LoadBearing
+  value     String
+}
+
+// ============== CRM SAAS ==============
+model CRMOrganization {
+  id          String   @id @default(uuid())
+  name        String
+  slug        String   @unique
+  industry    String?
+  size        String?
+  logoUrl     String?
+  website     String?
+  plan        String   @default("FREE")
+  maxUsers    Int      @default(1)
+  maxContacts Int      @default(100)
+  trialEndsAt DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  users       CRMUser[]
+  contacts    CRMContact[]
+  deals       CRMDeal[]
+  activityLogs CRMActivityLog[]
+  customFields CRMCustomField[]
+  importJobs  CRMImportJob[]
+}
+
+model CRMUser {
+  id              String   @id @default(uuid())
+  email           String   @unique
+  password        String
+  firstName       String
+  lastName        String
+  role            String   @default("OWNER")
+  companyName     String?
+  jobTitle        String?
+  avatar          String?
+  phone           String?
+  emailVerified   Boolean  @default(false)
+  isActive        Boolean  @default(true)
+  lastLoginAt     DateTime?
+  plan            String   @default("FREE")
+  trialEndsAt     DateTime?
+  subscriptionId  String?
+  stripeCustomerId     String?  @unique
+  stripeSubscriptionId String?
+  stripePriceId        String?
+  subscriptionStatus   String?  @default("TRIAL")
+
+  organizationId  String
+  organization    CRMOrganization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  contacts        CRMContact[]
+  deals           CRMDeal[]
+  activities      CRMActivity[]
+  activityLogs    CRMActivityLog[]
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model CRMContact {
+  id             String   @id @default(uuid())
+  organizationId String
+  organization   CRMOrganization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  firstName      String
+  lastName       String
+  email          String?
+  phone          String?
+  mobile         String?
+  company        String?
+  jobTitle       String?
+  department     String?
+  industry       String?
+  companySize    String?
+  website        String?
+  address        String?
+  city           String?
+  postalCode     String?
+  country        String?
+  linkedin       String?
+  twitter        String?
+  type           String   @default("LEAD")
+  source         String?
+  status         String   @default("ACTIVE")
+  rating         Int?
+  tags           Json?    // JSONB
+  ownerId        String
+  owner          CRMUser  @relation(fields: [ownerId], references: [id])
+  deals          CRMDeal[]
+  activities     CRMActivity[]
+  lastContactedAt DateTime?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+model CRMDeal {
+  id                String   @id @default(uuid())
+  organizationId    String
+  organization      CRMOrganization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  name              String
+  amount            Float    @default(0)
+  currency          String   @default("EUR")
+  status            String   @default("PIPELINE")
+  stage             String   @default("Pipeline")
+  probability       Int      @default(10)
+  expectedCloseDate DateTime
+  closedAt          DateTime?
+  source            String?
+  campaign          String?
+  description       String?
+  nextStep          String?
+  lostReason        String?
+  tags              Json?    // JSONB
+  contactId         String
+  contact           CRMContact @relation(fields: [contactId], references: [id])
+  ownerId           String
+  owner             CRMUser  @relation(fields: [ownerId], references: [id])
+  activities        CRMActivity[]
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+}
+
+model CRMActivity {
+  id             String   @id @default(uuid())
+  organizationId String
+  type           String   // CALL, EMAIL, MEETING, NOTE, TASK
+  subject        String
+  description    String?
+  contactId      String?
+  contact        CRMContact? @relation(fields: [contactId], references: [id], onDelete: Cascade)
+  dealId         String?
+  deal           CRMDeal?    @relation(fields: [dealId], references: [id], onDelete: Cascade)
+  userId         String
+  user           CRMUser     @relation(fields: [userId], references: [id])
+  completedAt    DateTime?
+  createdAt      DateTime @default(now())
+}
+
+model CRMActivityLog {
+  id             String   @id @default(uuid())
+  organizationId String
+  organization   CRMOrganization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  userId         String?
+  user           CRMUser? @relation(fields: [userId], references: [id])
+  action         String
+  entity         String
+  entityId       String?
+  metadata       Json?    // JSONB
+  createdAt      DateTime @default(now())
+}
+
+model CRMCustomField {
+  id             String   @id @default(uuid())
+  organizationId String
+  organization   CRMOrganization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  entity         String
+  name           String
+  label          String
+  type           String
+  options        Json?    // JSONB
+  required       Boolean  @default(false)
+  order          Int      @default(0)
+  createdAt      DateTime @default(now())
+}
+
+model CRMImportJob {
+  id             String   @id @default(uuid())
+  organizationId String
+  organization   CRMOrganization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  type           String
+  status         String   @default("PENDING")
+  totalRows      Int      @default(0)
+  processed      Int      @default(0)
+  succeeded      Int      @default(0)
+  failed         Int      @default(0)
+  errors         Json?    // JSONB
+  fileName       String
+  userId         String
+  completedAt    DateTime?
+  createdAt      DateTime @default(now())
+}
