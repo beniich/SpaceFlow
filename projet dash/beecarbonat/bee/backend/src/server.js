@@ -1,4 +1,6 @@
 require('dotenv').config();
+const { getEnv } = require('./lib/env'); // ← fail-fast si variables manquantes
+getEnv();
 const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');

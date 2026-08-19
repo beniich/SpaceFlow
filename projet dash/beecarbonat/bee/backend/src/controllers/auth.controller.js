@@ -1,6 +1,8 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const prisma = require('../config/database');
+const { getEnv } = require('../lib/env');
+const env = getEnv();
 
 exports.register = async (req, res) => {
   try {
@@ -51,8 +53,8 @@ exports.login = async (req, res) => {
       }
       const token = jwt.sign(
         { id: user.id, email: user.email, role: user.role },
-        process.env.JWT_SECRET || 'secret-jwt-cafm-pro-key',
-        { expiresIn: '30d' }
+        env.JWT_SECRET,
+        { expiresIn: env.JWT_EXPIRES_IN || '7d' }
       );
       return res.json({
         user: {
@@ -77,8 +79,8 @@ exports.login = async (req, res) => {
 
     const token = jwt.sign(
       { id: user.id, email: user.email, role: user.role },
-      process.env.JWT_SECRET || 'secret-jwt-cafm-pro-key',
-      { expiresIn: '7d' }
+      env.JWT_SECRET,
+      { expiresIn: env.JWT_EXPIRES_IN || '7d' }
     );
     res.json({
       user: {

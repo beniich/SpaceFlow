@@ -28,7 +28,9 @@ export default function BackupTimeline({ backups }) {
                                 </span>
                             )}
                             <span className="text-sm font-medium text-slate-200">
-                                {new Date(b.timestamp).toISOString().replace("T", " ").slice(0, 16)}
+                                {b.timestamp && !isNaN(new Date(b.timestamp).getTime()) 
+                                    ? new Date(b.timestamp).toISOString().replace("T", " ").slice(0, 16) 
+                                    : "Date inconnue"}
                             </span>
                         </div>
                         <span className="text-xs text-slate-400">

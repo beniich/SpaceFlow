@@ -10,8 +10,9 @@ const {
   PLANS
 } = require('../services/stripe.service');
 const jwt = require('jsonwebtoken');
+const { getEnv } = require('../lib/env');
 
-const JWT_SECRET = process.env.JWT_SECRET || 'cafm-crm-secret';
+const JWT_SECRET = getEnv().JWT_SECRET;
 
 // ─── Middleware Auth CRM ───────────────────────────────────────────────────────
 const authMiddleware = async (req, res, next) => {

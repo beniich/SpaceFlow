@@ -1,6 +1,9 @@
 const express = require('express');
 const prisma = require('../config/database');
 const router = express.Router();
+const jwt = require('jsonwebtoken');
+const { getEnv } = require('../lib/env');
+const env = getEnv();
 
 /**
  * Server-Sent Events — notifications temps réel
@@ -15,8 +18,7 @@ router.get('/events', async (req, res) => {
   if (!token) return res.status(401).end();
 
   try {
-    const jwt = require('jsonwebtoken');
-    const decoded = jwt.verify(token, process.env.JWT_SECRET || process.env.CRM_JWT_SECRET);
+    const decoded = jwt.verify(token, env.JWT_SECRET);
     const tenantId = decoded.tenantId || decoded.organizationId || 'default';
 
     // SSE headers

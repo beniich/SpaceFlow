@@ -1,134 +1,132 @@
-import { initializeApp, getApps } from 'firebase/app';
+/**
+ * firebase.js — Init lazy & défensive
+ * Firebase Auth conservé UNIQUEMENT pour le flux Google OAuth → idToken → JWT backend.
+ * ✅ L'app ne crashe PAS si les variables VITE_FIREBASE_* sont manquantes.
+ */
+import { getApps, initializeApp } from 'firebase/app';
 import {
   getAuth,
   signInWithPopup,
   GoogleAuthProvider,
-  signInWithEmailAndPassword,
-  createUserWithEmailAndPassword,
-  onAuthStateChanged,
   signOut
 } from 'firebase/auth';
-import {
-  getFirestore,
-  doc,
-  setDoc,
-  getDoc,
-  getDocFromServer
-} from 'firebase/firestore';
 
-import firebaseConfigJson from '../../../firebase-applet-config.json';
+// ─── Validation de la config ──────────────────────────────────────────────────
+const REQUIRED_FIREBASE_FIELDS = [
+  'VITE_FIREBASE_API_KEY',
+  'VITE_FIREBASE_PROJECT_ID',
+  'VITE_FIREBASE_APP_ID',
+];
 
-// ─── Firebase Config (project: gen-lang-client-0918369522) ───────────────────────────
-const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY || firebaseConfigJson.apiKey || 'AIzaSyBTjKiXdnoI-dwhFgSlgeGQSLmR_pErimI',
-  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || firebaseConfigJson.authDomain || 'gen-lang-client-0918369522.firebaseapp.com',
-  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || firebaseConfigJson.projectId || 'gen-lang-client-0918369522',
-  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || firebaseConfigJson.storageBucket || 'gen-lang-client-0918369522.firebasestorage.app',
-  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || firebaseConfigJson.messagingSenderId || '5178671633',
-  appId: import.meta.env.VITE_FIREBASE_APP_ID || firebaseConfigJson.appId || '1:5178671633:web:56c3bd4637bb742d8367b0',
-};
+function isFirebaseConfigValid() {
+  const missing = REQUIRED_FIREBASE_FIELDS.filter(
+    (key) => !import.meta.env[key] || import.meta.env[key] === 'undefined'
+  );
+  if (missing.length > 0) {
+    console.warn(
+      `[Firebase] Configuration incomplète — clés manquantes: ${missing.join(', ')}.\n` +
+      'Google Sign-In et Push Notifications désactivés.'
+    );
+    return false;
+  }
+  return true;
+}
 
-// Singleton: éviter double-initialisation en HMR
-export const firebaseApp = getApps().length === 0
-  ? initializeApp(firebaseConfig)
-  : getApps()[0];
+// ─── Initialisation Singleton (lazy + défensive) ──────────────────────────────
+let _firebaseApp = null;
+let _firebaseAuth = null;
+let _firebaseEnabled = false;
 
-export const firebaseAuth = getAuth(firebaseApp);
-export const firestore = getFirestore(firebaseApp, firebaseConfigJson.firestoreDatabaseId);
+function initFirebase() {
+  if (_firebaseApp) return _firebaseApp;
 
-// Test connection on boot - handled silently
-async function testConnection() {
+  if (!isFirebaseConfigValid()) {
+    _firebaseEnabled = false;
+    return null;
+  }
+
   try {
-    await getDocFromServer(doc(firestore, 'test', 'connection'));
+    const firebaseConfig = {
+      apiKey:            import.meta.env.VITE_FIREBASE_API_KEY,
+      authDomain:        import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+      projectId:         import.meta.env.VITE_FIREBASE_PROJECT_ID,
+      storageBucket:     import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+      messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+      appId:             import.meta.env.VITE_FIREBASE_APP_ID,
+    };
+
+    _firebaseApp = getApps().length === 0
+      ? initializeApp(firebaseConfig)
+      : getApps()[0];
+
+    _firebaseAuth = getAuth(_firebaseApp);
+    _firebaseEnabled = true;
+
+    console.log('[Firebase] ✅ Initialisé avec succès');
+    return _firebaseApp;
   } catch (error) {
-    // Silently ignore connection tests on boot to prevent triggering test suite warnings
+    console.error('[Firebase] ❌ Erreur d\'initialisation:', error?.message);
+    _firebaseEnabled = false;
+    return null;
   }
 }
-testConnection();
+
+// ─── API Publique ─────────────────────────────────────────────────────────────
+export const firebaseApp = initFirebase();
+export const firebaseAuth = _firebaseAuth;
+export const isFirebaseEnabled = () => _firebaseEnabled;
 
 // ─── Google Provider ──────────────────────────────────────────────────────────
 const googleProvider = new GoogleAuthProvider();
 googleProvider.setCustomParameters({ prompt: 'select_account' });
 
-// Add Workspace scopes
-const SCOPES = [
-  'https://www.googleapis.com/auth/drive',
-  'https://www.googleapis.com/auth/drive.activity',
-  'https://www.googleapis.com/auth/drive.activity.readonly',
-  'https://www.googleapis.com/auth/drive.appdata',
-  'https://www.googleapis.com/auth/drive.apps.readonly',
-  'https://www.googleapis.com/auth/drive.file',
-  'https://www.googleapis.com/auth/drive.install',
-  'https://www.googleapis.com/auth/drive.meet.readonly',
-  'https://www.googleapis.com/auth/drive.metadata',
-  'https://www.googleapis.com/auth/drive.metadata.readonly',
-  'https://www.googleapis.com/auth/drive.photos.readonly',
-  'https://www.googleapis.com/auth/drive.readonly',
-  'https://www.googleapis.com/auth/drive.scripts',
-  'https://www.googleapis.com/auth/spreadsheets',
-  'https://www.googleapis.com/auth/spreadsheets.readonly'
-];
-
-SCOPES.forEach(scope => googleProvider.addScope(scope));
-
-let cachedAccessToken = null;
-
-export const getAccessToken = () => cachedAccessToken;
-
-// ─── Auth Functions ───────────────────────────────────────────────────────────
-
 /**
- * Sign in via Google OAuth popup
- * Returns idToken for backend verification
+ * Google Sign-In → retourne l'idToken Firebase pour échange côté backend.
+ * ✅ Lève une erreur claire si Firebase n'est pas configuré.
  */
 export const signInWithGoogle = async () => {
-  const result = await signInWithPopup(firebaseAuth, googleProvider);
-  const credential = GoogleAuthProvider.credentialFromResult(result);
-  if (credential?.accessToken) {
-    cachedAccessToken = credential.accessToken;
+  if (!_firebaseEnabled || !_firebaseAuth) {
+    throw new Error(
+      'Google Sign-In non disponible : Firebase non configuré. ' +
+      'Vérifiez vos variables VITE_FIREBASE_* dans le fichier .env'
+    );
   }
+  const result = await signInWithPopup(_firebaseAuth, googleProvider);
   const idToken = await result.user.getIdToken();
-  return { user: result.user, idToken, accessToken: cachedAccessToken };
+  return { user: result.user, idToken };
 };
 
 /**
- * Register with email/password via Firebase
- */
-export const registerWithEmailFirebase = async (email, password, displayName) => {
-  const { user } = await createUserWithEmailAndPassword(firebaseAuth, email, password);
-  const idToken = await user.getIdToken();
-  return { user, idToken };
-};
-
-/**
- * Login with email/password via Firebase
- */
-export const loginWithEmailFirebase = async (email, password) => {
-  const { user } = await signInWithEmailAndPassword(firebaseAuth, email, password);
-  const idToken = await user.getIdToken();
-  return { user, idToken };
-};
-
-/**
- * Sign out from Firebase
+ * Déconnexion Firebase (nettoie le cookie Google OAuth local).
+ * ✅ No-op si Firebase non configuré.
  */
 export const firebaseSignOut = () => {
-  cachedAccessToken = null;
-  return signOut(firebaseAuth);
+  if (!_firebaseEnabled || !_firebaseAuth) return Promise.resolve();
+  return signOut(_firebaseAuth);
 };
 
 /**
- * Listen to auth state changes
+ * Écoute le changement d'état Firebase.
+ * ✅ Retourne un no-op unsubscribe si Firebase non configuré.
  */
 export const onFirebaseAuthStateChanged = (callback) => {
-  return onAuthStateChanged(firebaseAuth, callback);
+  if (!_firebaseEnabled || !_firebaseAuth) {
+    return () => {}; // no-op unsubscribe
+  }
+  return _firebaseAuth.onAuthStateChanged(callback);
 };
 
-/**
- * Get current Firebase user ID token (refresh if needed)
- */
-export const getCurrentIdToken = async () => {
-  const user = firebaseAuth.currentUser;
-  if (!user) return null;
-  return user.getIdToken(true); // true = force refresh
+// ─── Cloud Messaging (lazy) ───────────────────────────────────────────────────
+export const getMessaging = async () => {
+  if (!_firebaseEnabled || !_firebaseApp) {
+    console.warn('[Firebase] Push Notifications non disponibles (Firebase non configuré)');
+    return null;
+  }
+  try {
+    const { getMessaging: fbGetMessaging, getToken, onMessage } = await import('firebase/messaging');
+    return { messaging: fbGetMessaging(_firebaseApp), getToken, onMessage };
+  } catch (error) {
+    console.error('[Firebase] Erreur chargement Cloud Messaging:', error?.message);
+    return null;
+  }
 };

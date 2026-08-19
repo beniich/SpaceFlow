@@ -3,8 +3,10 @@ const jwt = require('jsonwebtoken');
 const { body, validationResult } = require('express-validator');
 const prisma = require('../config/database');
 const { verifyFirebaseToken } = require('../services/firebase-admin.service');
+const { getEnv } = require('../lib/env');
+const env = getEnv();
 
-const JWT_SECRET = process.env.JWT_SECRET || 'cafm-crm-secret-key-2026';
+const JWT_SECRET = env.JWT_SECRET;
 
 /**
  * POST /api/crm/auth/firebase

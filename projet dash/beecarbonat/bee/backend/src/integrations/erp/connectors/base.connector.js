@@ -1,4 +1,5 @@
 const crypto = require('crypto');
+const { getEnv } = require('../../../lib/env');
 
 /**
  * Interface commune pour tous les connecteurs ERP
@@ -64,7 +65,7 @@ class BaseERPConnector {
   encrypt(text) {
     if (!text) return '';
     const algorithm = 'aes-256-gcm';
-    const key = crypto.scryptSync(process.env.ENCRYPTION_KEY || 'cafm-encryption-key-32-chars-here', 'salt', 32);
+    const key = crypto.scryptSync(getEnv().ENCRYPTION_KEY || 'dev-only-key-do-not-use-in-prod-!', 'salt', 32);
     const iv = crypto.randomBytes(16);
     const cipher = crypto.createCipheriv(algorithm, key, iv);
     let encrypted = cipher.update(text, 'utf8', 'hex');
@@ -77,7 +78,7 @@ class BaseERPConnector {
     if (!encryptedData) return '';
     if (!encryptedData.includes(':')) return encryptedData; // Fallback si non chiffré
     const algorithm = 'aes-256-gcm';
-    const key = crypto.scryptSync(process.env.ENCRYPTION_KEY || 'cafm-encryption-key-32-chars-here', 'salt', 32);
+    const key = crypto.scryptSync(getEnv().ENCRYPTION_KEY || 'dev-only-key-do-not-use-in-prod-!', 'salt', 32);
     const [ivHex, authTagHex, encrypted] = encryptedData.split(':');
     const iv = Buffer.from(ivHex, 'hex');
     const authTag = Buffer.from(authTagHex, 'hex');
