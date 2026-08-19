@@ -1,0 +1,60 @@
+{
+  "entities": {
+    "WorkOrder": {
+      "title": "Work Order",
+      "description": "Maintenance work order entity",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string", "maxLength": 200 },
+        "type": { "type": "string", "maxLength": 50 },
+        "priority": { "type": "string", "maxLength": 50 },
+        "status": { "type": "string", "maxLength": 50 },
+        "assetId": { "type": "string", "maxLength": 128 },
+        "createdBy": { "type": "string", "maxLength": 128 },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["title", "status"]
+    },
+    "Asset": {
+      "title": "Asset",
+      "description": "Equipment or infrastructure asset",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "maxLength": 200 },
+        "category": { "type": "string", "maxLength": 100 },
+        "status": { "type": "string", "maxLength": 50 },
+        "healthScore": { "type": "number" },
+        "location": { "type": "string", "maxLength": 200 }
+      },
+      "required": ["name"]
+    },
+    "Part": {
+      "title": "Part",
+      "description": "Inventory component or spare part",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "maxLength": 200 },
+        "reference": { "type": "string", "maxLength": 100 },
+        "category": { "type": "string", "maxLength": 100 },
+        "quantity": { "type": "number" },
+        "minQuantity": { "type": "number" },
+        "unitCost": { "type": "number" }
+      },
+      "required": ["name", "reference"]
+    }
+  },
+  "firestore": {
+    "/workorders/{workOrderId}": {
+      "schema": { "$ref": "#/entities/WorkOrder" },
+      "description": "List of work orders"
+    },
+    "/assets/{assetId}": {
+      "schema": { "$ref": "#/entities/Asset" },
+      "description": "List of assets"
+    },
+    "/parts/{partId}": {
+      "schema": { "$ref": "#/entities/Part" },
+      "description": "List of inventory parts"
+    }
+  }
+}
