@@ -1,0 +1,8 @@
+{
+  "name": "BEECARBONAT",
+  "description": "Facility Management platform with predictive maintenance, BIM, ERP integration, and offline-capable status reports.",
+  "requestFramePermissions": [
+    "camera"
+  ],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
