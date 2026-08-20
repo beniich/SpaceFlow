@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "buildCommand": "npm run build && cd apps/backend && npx prisma generate",
+  "buildCommand": "npm run build && npx prisma generate --schema=packages/database/prisma/schema.prisma",
   "outputDirectory": "apps/frontend/dist",
   "installCommand": "npm install",
   "framework": "vite",
