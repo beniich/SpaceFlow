@@ -9,7 +9,7 @@ export default async function AssetsPage() {
 
   if (!userId) redirect('/sign-in');
   
-  let assets = [];
+  let assets: Awaited<ReturnType<typeof prisma.asset.findMany>> = [];
   
   if (orgId) {
     assets = await prisma.asset.findMany({

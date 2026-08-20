@@ -13,4 +13,4 @@
 - [x] Composants ElementTree.jsx, PropertyPanel.jsx, BimDashboard.jsx crees
 - [x] Pages ERPIntegration.jsx et BIMViewer.jsx crees
 - [x] Enregistrement dans App.jsx et Layout.jsx (navigation)
-- [/] Verification build de l'application
+- [x] Verification build et lancement local de l'application

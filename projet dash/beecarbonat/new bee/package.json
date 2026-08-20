@@ -7,9 +7,9 @@
     "packages/*"
   ],
   "scripts": {
-    "dev": "concurrently \"npm run dev --workspace=frontend\" \"npm run dev --workspace=backend\"",
-    "build": "npm run build --workspace=frontend",
-    "start": "npm run start --workspace=backend"
+    "dev": "concurrently \"npm run dev --workspace=cafm-frontend\" \"npm run dev --workspace=cafm-backend\"",
+    "build": "npm run build --workspace=cafm-frontend",
+    "start": "npm run start --workspace=cafm-backend"
   },
   "devDependencies": {
     "concurrently": "^10.0.4",

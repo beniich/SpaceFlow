@@ -259,6 +259,16 @@ export default function LandingPage() {
     }, 2500);
   };
 
+  const handleSubscribe = (e) => {
+    e.preventDefault();
+    if (!newsletterEmail.trim()) {
+      toast.error('Please enter a valid email address.');
+      return;
+    }
+    toast.success('Subscribed successfully! Welcome aboard.');
+    setNewsletterEmail('');
+  };
+
   // Case Studies list
   const initialCaseStudies = [
     {

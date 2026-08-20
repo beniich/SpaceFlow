@@ -12,7 +12,7 @@ export default async function DashboardPage() {
   // Si pas d'organisation sélectionnée, on pourrait rediriger vers un sélecteur d'organisation Clerk
   // ou utiliser l'ID par défaut. Pour l'instant on gère le cas sans orgId gracieusement.
   let stats = { assets: 0, workOrders: 0, users: 0 };
-  let recentWorkOrders = [];
+  let recentWorkOrders: Awaited<ReturnType<typeof prisma.workOrder.findMany<{ include: { asset: { select: { name: true } } } }>>> = [];
 
   if (orgId) {
     const [assetsCount, workOrdersCount, tenant] = await Promise.all([

@@ -9,8 +9,8 @@ export default async function WorkOrdersPage() {
 
   if (!userId) redirect('/sign-in');
   
-  let workOrders = [];
-  let assets = [];
+  let workOrders: Awaited<ReturnType<typeof prisma.workOrder.findMany>> = [];
+  let assets: { id: string; name: string; code: string }[] = [];
   
   if (orgId) {
     workOrders = await prisma.workOrder.findMany({
