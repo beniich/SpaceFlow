@@ -10,6 +10,7 @@ import {
 } from 'recharts';
 import api from '../services/api';
 import toast from 'react-hot-toast';
+import CarbonFootprintDashboard from '../components/CarbonFootprintDashboard';
 
 // ================== WEBGL BACKGROUND SHADER ==================
 function ShaderBackground() {
@@ -312,54 +313,69 @@ export default function EnergySustainability() {
 
         </div>
 
-        {/* ============== MAIN SECTION: EMISSIONS CHART ============== */}
-        <div className="bg-surface/60 backdrop-blur-md border border-zinc-800/60 rounded-xl overflow-hidden shadow-lg flex flex-col">
-          <div className="p-6 border-b border-zinc-800/40 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-            <div>
-              <span className="font-mono text-emerald-400 text-[10px] tracking-[0.2em] uppercase block mb-1">M1-M6 ESG Target</span>
-              <h3 className="font-bold text-base text-zinc-50 font-display tracking-tight uppercase flex items-center gap-2">
-                <BarChart3 className="w-5 h-5 text-zinc-400" />
-                TRAJECTOIRE CARBONE (tCO₂e)
-              </h3>
+        {/* ============== MAIN VISUALIZATION SECTION: CARBON FOOTPRINT & TRAJECTORY CHART ============== */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+          {/* 3D Isometric Carbon Footprint Visual */}
+          <div className="lg:col-span-5 flex flex-col">
+            <div className="h-full bg-surface/60 backdrop-blur-md border border-zinc-800/60 rounded-xl overflow-hidden shadow-lg p-4 flex flex-col justify-center">
+              <span className="font-mono text-cyan-400 text-[10px] tracking-[0.2em] uppercase block mb-3 pl-2">
+                Cartographie 3D des Émissions
+              </span>
+              <div className="flex-1 flex items-center justify-center">
+                <CarbonFootprintDashboard />
+              </div>
             </div>
           </div>
 
-          <div className="p-6 h-[340px] w-full">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={emissionsData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#222" vertical={false} />
-                <XAxis 
-                  dataKey="month" 
-                  stroke="#555" 
-                  fontSize={10} 
-                  fontFamily="monospace"
-                  tickLine={false}
-                  axisLine={false}
-                />
-                <YAxis 
-                  stroke="#555" 
-                  fontSize={10} 
-                  fontFamily="monospace"
-                  tickLine={false}
-                  axisLine={false}
-                />
-                <Tooltip
-                  contentStyle={{
-                    backgroundColor: 'rgba(24, 24, 27, 0.95)',
-                    border: '1px solid rgba(255, 255, 255, 0.08)',
-                    borderRadius: '6px',
-                    fontFamily: 'monospace',
-                    fontSize: '11px',
-                    color: '#fff'
-                  }}
-                  cursor={{fill: 'rgba(255,255,255,0.02)'}}
-                />
-                <Legend iconType="circle" wrapperStyle={{ fontSize: '10px', fontFamily: 'monospace', marginTop: '10px' }}/>
-                <Bar dataKey="scope1" name="Scope 1 (Fuites, Gaz)" stackId="a" fill="#10b981" />
-                <Bar dataKey="scope2" name="Scope 2 (Électricité, Réseaux)" stackId="a" fill="var(--brand-cyan,_#00dbe7)" />
-                <Bar dataKey="scope3" name="Scope 3 (Cat 13: Aval)" stackId="a" fill="var(--brand-orange,_#f38020)" radius={[4, 4, 0, 0]} />
-              </BarChart>
-            </ResponsiveContainer>
+          {/* Emissions Trajectory Chart */}
+          <div className="lg:col-span-7 bg-surface/60 backdrop-blur-md border border-zinc-800/60 rounded-xl overflow-hidden shadow-lg flex flex-col justify-between">
+            <div className="p-6 border-b border-zinc-800/40 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div>
+                <span className="font-mono text-emerald-400 text-[10px] tracking-[0.2em] uppercase block mb-1">M1-M6 ESG Target</span>
+                <h3 className="font-bold text-base text-zinc-50 font-display tracking-tight uppercase flex items-center gap-2">
+                  <BarChart3 className="w-5 h-5 text-zinc-400" />
+                  TRAJECTOIRE CARBONE (tCO₂e)
+                </h3>
+              </div>
+            </div>
+
+            <div className="p-6 h-[400px] w-full flex-1">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={emissionsData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#222" vertical={false} />
+                  <XAxis 
+                    dataKey="month" 
+                    stroke="#555" 
+                    fontSize={10} 
+                    fontFamily="monospace"
+                    tickLine={false}
+                    axisLine={false}
+                  />
+                  <YAxis 
+                    stroke="#555" 
+                    fontSize={10} 
+                    fontFamily="monospace"
+                    tickLine={false}
+                    axisLine={false}
+                  />
+                  <Tooltip
+                    contentStyle={{
+                      backgroundColor: 'rgba(24, 24, 27, 0.95)',
+                      border: '1px solid rgba(255, 255, 255, 0.08)',
+                      borderRadius: '6px',
+                      fontFamily: 'monospace',
+                      fontSize: '11px',
+                      color: '#fff'
+                    }}
+                    cursor={{fill: 'rgba(255,255,255,0.02)'}}
+                  />
+                  <Legend iconType="circle" wrapperStyle={{ fontSize: '10px', fontFamily: 'monospace', marginTop: '10px' }}/>
+                  <Bar dataKey="scope1" name="Scope 1 (Fuites, Gaz)" stackId="a" fill="#10b981" />
+                  <Bar dataKey="scope2" name="Scope 2 (Électricité, Réseaux)" stackId="a" fill="var(--brand-cyan,_#00dbe7)" />
+                  <Bar dataKey="scope3" name="Scope 3 (Cat 13: Aval)" stackId="a" fill="var(--brand-orange,_#f38020)" radius={[4, 4, 0, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
           </div>
         </div>
 

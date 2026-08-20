@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const s3Service = require('../services/s3.service');
-const authMiddleware = require('../middleware/auth.middleware');
+const { authMiddleware } = require('../middleware/auth.middleware');
 const { tenantMiddleware } = require('../middleware/tenant.middleware');
 const { tenantContext } = require('../config/database');
 

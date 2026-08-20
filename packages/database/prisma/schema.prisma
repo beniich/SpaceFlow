@@ -2,7 +2,7 @@
 
 generator client {
   provider        = "prisma-client-js"
-  previewFeatures = ["postgisExtensions", "fullTextSearchPostgres"]
+  previewFeatures = ["postgresqlExtensions", "fullTextSearch"]
 }
 
 datasource db {
@@ -322,9 +322,28 @@ model WorkOrder {
   @@index([deletedAt])
 }
 
-enum WorkOrderType { PREVENTIVE CORRECTIVE EMERGENCY INSPECTION REQUEST }
-enum WorkOrderStatus { OPEN IN_PROGRESS ON_HOLD COMPLETED CANCELLED }
-enum WorkOrderPriority { LOW NORMAL HIGH URGENT }
+enum WorkOrderType {
+  PREVENTIVE
+  CORRECTIVE
+  EMERGENCY
+  INSPECTION
+  REQUEST
+}
+
+enum WorkOrderStatus {
+  OPEN
+  IN_PROGRESS
+  ON_HOLD
+  COMPLETED
+  CANCELLED
+}
+
+enum WorkOrderPriority {
+  LOW
+  NORMAL
+  HIGH
+  URGENT
+}
 
 model MaintenanceLog {
   id             String   @id @default(uuid())
@@ -355,7 +374,13 @@ model MaintenanceLog {
   @@index([performedAt])
 }
 
-enum MaintenanceType { PREVENTIVE CORRECTIVE PREDICTIVE INSPECTION CALIBRATION }
+enum MaintenanceType {
+  PREVENTIVE
+  CORRECTIVE
+  PREDICTIVE
+  INSPECTION
+  CALIBRATION
+}
 
 // ============================================
 // IOT / SENSORS
