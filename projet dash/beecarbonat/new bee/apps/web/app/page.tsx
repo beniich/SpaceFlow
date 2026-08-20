@@ -1,8 +1,9 @@
-import { SignInButton, SignUpButton, UserButton, auth } from '@clerk/nextjs';
+import { SignInButton, SignUpButton, UserButton } from '@clerk/nextjs';
+import { auth } from '@clerk/nextjs/server';
 import Link from 'next/link';
 
-export default function Home() {
-  const { userId, orgId } = auth();
+export default async function Home() {
+  const { userId, orgId } = await auth();
 
   return (
     <main className="flex min-h-screen flex-col bg-zinc-950 text-white">

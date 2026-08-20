@@ -3,7 +3,7 @@ import { prisma } from '@/lib/db';
 import { redirect } from 'next/navigation';
 
 export default async function DashboardPage() {
-  const { userId, orgId } = auth();
+  const { userId, orgId } = await auth();
 
   if (!userId) {
     redirect('/sign-in');

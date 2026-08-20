@@ -11,7 +11,7 @@ export async function createAsset(data: {
   manufacturer?: string;
   model?: string;
 }) {
-  const { userId, orgId } = auth();
+  const { userId, orgId } = await auth();
 
   if (!userId) {
     throw new Error('Non autorisé');
@@ -35,7 +35,7 @@ export async function createAsset(data: {
 }
 
 export async function deleteAsset(id: string) {
-  const { userId, orgId } = auth();
+  const { userId, orgId } = await auth();
 
   if (!userId || !orgId) {
     throw new Error('Non autorisé');

@@ -5,7 +5,7 @@ import AssetsClient from './AssetsClient';
 import { Suspense } from 'react';
 
 export default async function AssetsPage() {
-  const { userId, orgId } = auth();
+  const { userId, orgId } = await auth();
 
   if (!userId) redirect('/sign-in');
   
