@@ -1,0 +1,226 @@
+version: "3.9"
+
+services:
+  # ReclamTrack Backend API
+  backend:
+    build: ./backend
+    container_name: backend
+    ports:
+      - "5009:5001" # Moved to 5009 to let Gateway take 5001
+    environment:
+      - PORT=5001
+      - MONGO_URI=mongodb://mongo:27017/reclamtrack
+      - JWT_SECRET=supersecretkey
+      - JWT_EXPIRES_IN=7d
+      - KAFKA_BROKER=kafka:9092
+    depends_on:
+      - mongo
+      - kafka
+
+  api-gateway:
+    build: ./microservices/api-gateway
+    container_name: api-gateway
+    ports:
+      - "5001:5001" # Gateway takes the main entry port
+    depends_on:
+      - auth-service
+      - complaints-service
+      - teams-service
+      - notification-service
+      - analytics-service
+      - inventory-service
+      - backend
+  # ReclamTrack Frontend (includes Roster & Audit Logs)
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    env_file:
+      - ./frontend/.env
+    environment:
+      - NEXT_PUBLIC_API_URL=http://backend:5001
+    depends_on:
+      - backend
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+      - /app/.next
+
+  # MongoDB Database
+  mongo:
+    image: mongo:7
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    environment:
+      - MONGO_INITDB_DATABASE=reclamtrack
+
+  # --- Kafka Infrastructure ---
+  
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.5.0
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - "2181:2181"
+
+  kafka:
+    image: confluentinc/cp-kafka:7.5.0
+    depends_on:
+      - zookeeper
+    ports:
+      - "9092:9092"
+      - "9093:9093"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:9093
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+
+  schema-registry:
+    image: confluentinc/cp-schema-registry:7.5.0
+    depends_on:
+      - kafka
+    ports:
+      - "8081:8081"
+    environment:
+      SCHEMA_REGISTRY_HOST_NAME: schema-registry
+      SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: kafka:9092
+
+  kafka-ui:
+    image: provectuslabs/kafka-ui:latest
+    depends_on:
+      - kafka
+      - schema-registry
+    ports:
+      - "8080:8080"
+    environment:
+      KAFKA_CLUSTERS_0_SCHEMAREGISTRY: http://schema-registry:8081
+
+  # --- Microservices ---
+
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama
+    volumes:
+      - ollama-data:/root/.ollama
+    ports:
+      - "11434:11434"
+
+  ai-service:
+    build: ./microservices/ai-service
+    ports: ["3007:3007"]
+    environment:
+      - PORT=3007
+      - OLLAMA_URL=http://ollama:11434
+      - KAFKA_BROKER=kafka:9092
+    depends_on:
+      - kafka
+      - ollama
+
+  auth-service:
+    build: ./microservices/auth-service
+    ports: ["3001:3001"]
+    environment:
+      - PORT=3001
+      - KAFKA_BROKER=kafka:9092
+    depends_on: [kafka]
+
+  complaints-service:
+    build: ./microservices/complaints-service
+    ports: ["3002:3002"]
+    environment:
+      - PORT=3002
+      - KAFKA_BROKER=kafka:9092
+    depends_on: [kafka]
+
+  teams-service:
+    build: ./microservices/teams-service
+    ports: ["3003:3003"]
+    environment:
+      - PORT=3003
+      - KAFKA_BROKER=kafka:9092
+    depends_on: [kafka]
+
+  notification-service:
+    build: ./microservices/notification-service
+    ports: ["3004:3004"]
+    environment:
+      - PORT=3004
+      - KAFKA_BROKER=kafka:9092
+    depends_on: [kafka]
+
+  analytics-service:
+    build: ./microservices/analytics-service
+    ports: ["3005:3005"]
+    environment:
+      - PORT=3005
+      - KAFKA_BROKER=kafka:9092
+    depends_on: [kafka]
+
+  inventory-service:
+    build: ./microservices/inventory-service
+    ports: ["3006:3006"]
+    environment:
+      - PORT=3006
+      - KAFKA_BROKER=kafka:9092
+    depends_on: [kafka]
+
+  # --- Monitoring Stack ---
+  
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus-data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+    depends_on:
+      - backend
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+      - "3001:3000"
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=reclamtrack2024
+      - GF_SERVER_ROOT_URL=http://localhost:3001
+      - GF_AUTH_ANONYMOUS_ENABLED=false
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning
+    depends_on:
+      - prometheus
+
+  node-exporter:
+    image: prom/node-exporter:latest
+    container_name: node-exporter
+    ports:
+      - "9100:9100"
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.sysfs=/host/sys'
+      - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+
+
+volumes:
+  mongo-data:
+  prometheus-data:
+  grafana-data:
+  ollama-data:

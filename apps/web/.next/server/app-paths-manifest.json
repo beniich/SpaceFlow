@@ -1,0 +1,15 @@
+{
+  "/_not-found/page": "app/_not-found/page.js",
+  "/api/assets/route": "app/api/assets/route.js",
+  "/api/assets/[id]/route": "app/api/assets/[id]/route.js",
+  "/api/workorders/route": "app/api/workorders/route.js",
+  "/page": "app/page.js",
+  "/api/health/route": "app/api/health/route.js",
+  "/(app)/dashboard/page": "app/(app)/dashboard/page.js",
+  "/(app)/assets/page": "app/(app)/assets/page.js",
+  "/(app)/crm/deals/page": "app/(app)/crm/deals/page.js",
+  "/(app)/spaces/page": "app/(app)/spaces/page.js",
+  "/(app)/work-orders/page": "app/(app)/work-orders/page.js",
+  "/(app)/crm/pricing/page": "app/(app)/crm/pricing/page.js",
+  "/(app)/scanner/page": "app/(app)/scanner/page.js"
+}
