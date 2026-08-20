@@ -46,6 +46,7 @@ const Roadmap = lazy(() => import('./pages/Roadmap'));
 const WorkflowBuilder = lazy(() => import('./pages/WorkflowBuilder'));
 const Marketplace = lazy(() => import('./pages/Marketplace'));
 const SectorTemplates = lazy(() => import('./pages/SectorTemplates'));
+const BimWorkspace = lazy(() => import('./features/bim/BimWorkspace'));
 
 import { ErrorBoundary } from 'react-error-boundary';
 import { GlobalErrorFallback } from './components/GlobalErrorFallback';
@@ -90,6 +91,7 @@ export default function App() {
         <Route path="/signup" element={<Register />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/verify-email" element={<VerifyEmail />} />
+        <Route path="/bim/*" element={<BimWorkspace modelId="office-tower-a" />} />
         
         <Route element={<PrivateRoute><Layout /></PrivateRoute>}>
           <Route path="dashboard" element={<Dashboard />} />

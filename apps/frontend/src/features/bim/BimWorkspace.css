@@ -1,0 +1,62 @@
+.bim-workspace {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  background: var(--bg-deepest);
+  color: var(--text-primary);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  overflow: hidden;
+}
+
+.bim-workspace__main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.bim-workspace__content {
+  flex: 1;
+  display: flex;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.bim-workspace__tree {
+  width: var(--tree-width);
+  flex-shrink: 0;
+  border-right: 1px solid var(--border-default);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.bim-workspace__viewport {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  background: var(--bg-deepest);
+  overflow: hidden;
+}
+
+.bim-workspace__inspector {
+  width: var(--inspector-width);
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  border-left: 1px solid var(--border-default);
+  overflow: hidden;
+  background: var(--bg-deep);
+}
+
+/* Scrollbars */
+.bim-workspace * {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255,255,255,0.08) transparent;
+}
+.bim-workspace *::-webkit-scrollbar        { width: 6px; height: 6px; }
+.bim-workspace *::-webkit-scrollbar-track  { background: transparent; }
+.bim-workspace *::-webkit-scrollbar-thumb  { background: rgba(255,255,255,0.08); border-radius: 4px; }
+.bim-workspace *::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.15); }

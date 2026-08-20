@@ -1,0 +1,111 @@
+.bim-topbar {
+  height: var(--topbar-height);
+  background: linear-gradient(180deg, #131826 0%, #0f1420 100%);
+  border-bottom: 1px solid var(--border-default);
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  gap: 16px;
+  flex-shrink: 0;
+}
+
+.bim-topbar__brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-right: 16px;
+}
+
+.bim-topbar__brand-logo {
+  width: 28px;
+  height: 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #4a90e2, #64ffda);
+  border-radius: 6px;
+  color: #0d1117;
+  font-weight: bold;
+  font-size: 15px;
+}
+
+.bim-topbar__brand-text {
+  color: var(--text-primary);
+  font-size: 14px;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+.bim-topbar__brand-text strong { font-weight: 700; }
+
+.bim-topbar__search {
+  flex: 0 1 300px;
+  display: flex;
+  align-items: center;
+  background: rgba(0,0,0,0.3);
+  border: 1px solid var(--border-default);
+  border-radius: 8px;
+  padding: 0 10px;
+  height: 34px;
+  transition: border-color 0.15s;
+}
+.bim-topbar__search:focus-within { border-color: var(--accent-cyan-dim); }
+
+.bim-topbar__search-icon { color: var(--text-muted); margin-right: 6px; font-size: 13px; }
+
+.bim-topbar__search-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--text-primary);
+  font-size: 12px;
+}
+.bim-topbar__search-input::placeholder { color: var(--text-muted); }
+
+.bim-topbar__search-shortcut {
+  font-size: 10px;
+  color: var(--text-muted);
+  background: rgba(255,255,255,0.05);
+  padding: 2px 5px;
+  border-radius: 4px;
+}
+
+.bim-topbar__nav {
+  display: flex;
+  gap: 2px;
+  margin-left: auto;
+  margin-right: 8px;
+}
+
+.bim-topbar__tab {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 7px 12px;
+  background: transparent;
+  border: none;
+  border-radius: 7px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 500;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+.bim-topbar__tab:hover { color: var(--text-primary); background: rgba(255,255,255,0.03); }
+.bim-topbar__tab--active { color: var(--accent-cyan); background: rgba(100,255,218,0.08); }
+.bim-topbar__tab-icon { font-size: 13px; }
+
+.bim-topbar__avatar {
+  width: 34px;
+  height: 34px;
+  background: linear-gradient(135deg, #64ffda, #4a90e2);
+  border: none;
+  border-radius: 50%;
+  color: #0d1117;
+  font-weight: 700;
+  font-size: 13px;
+  cursor: pointer;
+  flex-shrink: 0;
+}

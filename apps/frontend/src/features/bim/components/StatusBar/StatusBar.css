@@ -1,0 +1,35 @@
+.bim-statusbar {
+  height: var(--statusbar-height);
+  background: linear-gradient(180deg, #0f1420 0%, #0a0f1a 100%);
+  border-top: 1px solid var(--border-default);
+  display: flex;
+  align-items: center;
+  padding: 0 14px;
+  font-size: 11px;
+  color: var(--text-muted);
+  flex-shrink: 0;
+  gap: 0;
+}
+
+.bim-statusbar__section { display: flex; align-items: center; gap: 5px; }
+
+.bim-statusbar__div {
+  width: 1px;
+  height: 13px;
+  background: var(--border-default);
+  margin: 0 10px;
+}
+
+.bim-statusbar__dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.bim-statusbar__dot--ok  { background: var(--state-success); box-shadow: 0 0 5px rgba(16,185,129,0.5); }
+.bim-statusbar__dot--err { background: var(--state-danger); }
+
+.bim-statusbar__conn--ok { color: var(--state-success); font-weight: 500; }
+
+.bim-statusbar__label { color: var(--text-muted); }
+.bim-statusbar__val   { color: var(--text-primary); font-variant-numeric: tabular-nums; }

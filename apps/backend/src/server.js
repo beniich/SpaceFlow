@@ -88,14 +88,19 @@ app.use(tenantMiddleware);
 // ============== DOCUMENTATION ==============
 app.use('/', swaggerRoutes);
 
+// ============== MONITORING & METRICS ==============
+const { mountBullBoard } = require('./monitoring/bullMonitor');
+const { getMetrics, getHealth } = require('./monitoring/metrics');
+
+// Metrics Endpoint (Prometheus)
+app.get('/metrics', getMetrics);
+
+// BullMQ Dashboard
+mountBullBoard(app);
+
 // Health check pour la production
-app.get('/api/health', (req, res) => {
-  res.json({
-    status: 'OK',
-    timestamp: new Date().toISOString(),
-    version: process.env.npm_package_version || '2.1.0',
-    uptime: process.uptime()
-  });
+app.get('/api/health', async (req, res) => {
+  res.json(await getHealth());
 });
 
 // Inject Socket.io into requests
@@ -156,6 +161,13 @@ io.on('connection', (socket) => {
 
 // Start IoT simulation (capteurs en temps réel)
 startIoTSimulation(io);
+
+// === NOUVEAU: BIM WebSocket Server ===
+const { initializeWebSocket } = require('./ws/websocketServer');
+initializeWebSocket(server).catch(err => {
+  console.error("Erreur initialisation WebSocket BIM:", err);
+});
+// =====================================
 
 const PORT = process.env.BACKEND_PORT || 8081;
 

@@ -1,0 +1,55 @@
+.bim-tabbar {
+  display: flex;
+  background: var(--bg-deep);
+  border-bottom: 1px solid var(--border-default);
+  padding: 0 8px;
+  overflow-x: auto;
+  scrollbar-width: thin;
+  flex-shrink: 0;
+  min-height: 38px;
+}
+
+.bim-tab {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 14px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+  border-right: 1px solid var(--border-subtle);
+  transition: all 0.15s;
+  position: relative;
+}
+.bim-tab:hover { background: rgba(255,255,255,0.03); color: var(--text-primary); }
+
+.bim-tab--active {
+  background: var(--bg-deepest);
+  color: var(--accent-cyan);
+}
+.bim-tab--active::after {
+  content: "";
+  position: absolute;
+  bottom: -1px;
+  left: 0; right: 0;
+  height: 2px;
+  background: var(--accent-cyan);
+  box-shadow: 0 0 8px var(--accent-cyan-dim);
+}
+
+.bim-tab__icon { font-size: 12px; color: var(--accent-cyan); }
+.bim-tab__title { font-weight: 500; }
+
+.bim-tab__close {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 15px;
+  padding: 0 3px;
+  border-radius: 3px;
+  line-height: 1;
+}
+.bim-tab__close:hover { background: rgba(239,68,68,0.15); color: var(--state-danger); }

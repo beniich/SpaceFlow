@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const crypto = require('crypto');
 const { prisma } = require('../config/database');
-const authMiddleware = require('../middleware/auth.middleware');
+const { authMiddleware } = require('../middleware/auth.middleware');
 const { tenantMiddleware } = require('../middleware/tenant.middleware');
 
 function generateApiKey() {
