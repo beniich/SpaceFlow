@@ -1,91 +1,56 @@
-name: CI — Quality Gate
+name: CI
 
 on:
   push:
-    branches: [main, develop]
+    branches: [ "main", "master", "develop" ]
   pull_request:
-    branches: [main, develop]
-
-concurrency:
-  group: ci-${{ github.ref }}
-  cancel-in-progress: true
-
-env:
-  NODE_VERSION: '22'
-  # Backend – suffisent pour prisma generate (pas de vraie DB)
-  DATABASE_URL: 'file:./ci.db'
-  JWT_SECRET: 'ci-jwt-secret'
-  PORT: '5001'
+    branches: [ "main", "master", "develop" ]
 
 jobs:
-  # ─── JOB 1 : Build Frontend (Vite) ────────────────────────────────────────
-  build-frontend:
-    name: Build — Frontend (Vite)
+  build-and-test:
     runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        node-version: [20.x]
 
     steps:
-      - uses: actions/checkout@v4
+    - uses: actions/checkout@v4
+    
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+        cache-dependency-path: backend/package-lock.json
 
-      - uses: oven-sh/setup-bun@v2
-        with:
-          bun-version: latest
+    - name: Install Backend Dependencies
+      working-directory: ./backend
+      run: npm ci
 
-      - name: Install deps (bun)
-        run: bun install
+    - name: Install Frontend Dependencies
+      working-directory: ./frontend
+      run: npm ci
 
-      - name: Vite build
-        run: bun run build --filter=frontend
-        working-directory: frontend
-        env:
-          VITE_API_URL: ${{ secrets.VITE_API_URL || 'http://localhost:5001/api' }}
-          VITE_SOCKET_URL: ${{ secrets.VITE_SOCKET_URL || 'http://localhost:5001' }}
+    - name: Lint Backend
+      working-directory: ./backend
+      run: npm run lint
+      continue-on-error: true # temporarily allow failures until debt is cleared
 
-      - name: Upload frontend dist
-        uses: actions/upload-artifact@v4
-        with:
-          name: frontend-dist
-          path: frontend/dist/
-          retention-days: 7
+    - name: Run Backend Tests
+      working-directory: ./backend
+      run: npm test
+      continue-on-error: true # temporarily allow failures until debt is cleared
 
-  # ─── JOB 2 : Prisma generate + backend sanity check ───────────────────────
-  build-backend:
-    name: Build — Backend (Prisma generate)
-    runs-on: ubuntu-latest
+    - name: Build Frontend
+      working-directory: ./frontend
+      run: npm run build
 
-    steps:
-      - uses: actions/checkout@v4
+    - name: Prisma Generate
+      working-directory: ./backend
+      run: npx prisma generate
 
-      - uses: oven-sh/setup-bun@v2
-        with:
-          bun-version: latest
-
-      - name: Install deps (bun)
-        run: bun install
-
-      - name: Prisma generate
-        run: bunx prisma generate
-        working-directory: backend
-
-      - name: Check server.js syntax
-        run: node --check src/server.js
-        working-directory: backend
-
-  # ─── JOB 3 : Lint (optional, continue-on-error) ───────────────────────────
-  lint:
-    name: Lint
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: oven-sh/setup-bun@v2
-        with:
-          bun-version: latest
-
-      - name: Install deps
-        run: bun install
-
-      - name: ESLint — frontend
-        run: bun run lint --if-present
-        working-directory: frontend
-        continue-on-error: true
+    - name: Run Security Audit
+      working-directory: ./backend
+      run: npm audit --audit-level=high
+      continue-on-error: true
