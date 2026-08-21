@@ -444,6 +444,13 @@ enum SensorStatus {
   RETIRED
 }
 
+enum DataQuality {
+  GOOD
+  DEGRADED
+  BAD
+  OUTLIER
+}
+
 model SensorReading {
   id          BigInt   @id @default(autoincrement())
   tenantId    String
@@ -452,7 +459,7 @@ model SensorReading {
   
   value       Float
   quality     DataQuality @default(GOOD)
-  rawValue    Json?    // Données brutes si nécessaire
+  rawValue    Json?
   timestamp   DateTime
   
   createdAt   DateTime @default(now())
@@ -461,8 +468,6 @@ model SensorReading {
   @@index([tenantId, timestamp(sort: Desc)])
   @@map("sensor_readings")
 }
-
-enum DataQuality { GOOD DEGRADED BAD OUTLIER }
 
 model SensorThreshold {
   id          String   @id @default(uuid())
