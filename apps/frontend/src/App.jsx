@@ -15,6 +15,7 @@ const Dashboard = lazy(() => import('./pages/Dashboard'));
 const Assets = lazy(() => import('./pages/Assets'));
 const Spaces = lazy(() => import('./pages/Spaces'));
 const WorkOrders = lazy(() => import('./pages/WorkOrders'));
+const Tickets = lazy(() => import('./pages/Tickets'));
 const Maintenance = lazy(() => import('./pages/Maintenance'));
 const Analytics = lazy(() => import('./pages/Analytics'));
 const Team = lazy(() => import('./pages/Team'));
@@ -46,6 +47,12 @@ const Roadmap = lazy(() => import('./pages/Roadmap'));
 const WorkflowBuilder = lazy(() => import('./pages/WorkflowBuilder'));
 const Marketplace = lazy(() => import('./pages/Marketplace'));
 const SectorTemplates = lazy(() => import('./pages/SectorTemplates'));
+const Careers = lazy(() => import('./pages/Careers'));
+const FAQ = lazy(() => import('./pages/FAQ'));
+const ImpactReport = lazy(() => import('./pages/ImpactReport'));
+const SupportAI = lazy(() => import('./pages/SupportAI'));
+const Investors = lazy(() => import('./pages/Investors'));
+const InnovationLab = lazy(() => import('./pages/InnovationLab'));
 const BimWorkspace = lazy(() => import('./features/bim/BimWorkspace'));
 
 import { ErrorBoundary } from 'react-error-boundary';
@@ -91,6 +98,12 @@ export default function App() {
         <Route path="/signup" element={<Register />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/verify-email" element={<VerifyEmail />} />
+        <Route path="/careers" element={<Careers />} />
+        <Route path="/faq" element={<FAQ />} />
+        <Route path="/impact" element={<ImpactReport />} />
+        <Route path="/support-ai" element={<SupportAI />} />
+        <Route path="/investors" element={<Investors />} />
+        <Route path="/innovation" element={<InnovationLab />} />
         <Route path="/bim/*" element={<BimWorkspace modelId="office-tower-a" />} />
         
         <Route element={<PrivateRoute><Layout /></PrivateRoute>}>
@@ -101,6 +114,7 @@ export default function App() {
           <Route path="scanner" element={<AssetScanner />} />
           <Route path="spaces" element={<Spaces />} />
           <Route path="work-orders" element={<WorkOrders />} />
+          <Route path="tickets" element={<Tickets />} />
           <Route path="intervention" element={<Intervention />} />
           <Route path="close-wo-photo" element={<CloseWorkOrderPhoto />} />
           <Route path="close-wo-signature" element={<CloseWorkOrderSignature />} />

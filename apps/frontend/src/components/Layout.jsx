@@ -22,6 +22,7 @@ const navItems = [
   { to: '/scanner',     icon: QrCode,          label: 'QR Code Scanner' },
   { to: '/spaces',      icon: MapPin,          label: 'Spaces' },
   { to: '/work-orders', icon: ClipboardList,   label: 'Work Orders' },
+  { to: '/tickets',     icon: AlertTriangle,   label: 'Tickets & Réclamations' },
   { to: '/maintenance', icon: Wrench,          label: 'Maintenance' },
   { to: '/team',        icon: Users,           label: 'Team Operations' },
 ];
