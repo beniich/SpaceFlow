@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom/client'
 import App from './App.jsx'
 import './index.css'
 import { initSentry } from './sentry.js'
+import { LanguageProvider } from './context/LanguageContext';
+import { SiteConfigProvider } from './context/SiteConfigContext';
 
 initSentry();
 
@@ -27,7 +29,11 @@ const updateSW = registerSW({
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <ErrorBoundary>
-      <App />
+      <LanguageProvider>
+        <SiteConfigProvider>
+          <App />
+        </SiteConfigProvider>
+      </LanguageProvider>
     </ErrorBoundary>
   </React.StrictMode>,
 )

@@ -8,6 +8,7 @@ export default function SREWorkOrders() {
   const [newTitle, setNewTitle] = useState('');
   const [newAsset, setNewAsset] = useState('HVAC-Z1');
   const [newPriority, setNewPriority] = useState('High');
+  const [searchQuery, setSearchQuery] = useState('');
 
   const handleCreateWO = async (e) => {
     e.preventDefault();

@@ -4,47 +4,65 @@
 
 ## 📦 Structure
 
+## Stack technique
+
+- **Base de données** : PostgreSQL 16 (Neon serverless en prod, Docker local en dev)
+- **ORM** : Prisma 5
+- **Cache / Queue** : Redis 7 + BullMQ
+- **Backend** : Express.js 4 (monolithique)
+- **Frontend** : React 18 + Vite 5 (SPA)
+
+## Architecture
+
+L'application suit un modèle **monolithique modulaire** :
+
 ```
-reclamtrack/
-├── frontend/           # Next.js 15 (App Router)
-│   ├── /dashboard      # Tableau de bord
-│   ├── /complaints     # Gestion des réclamations
-│   ├── /roster         # Planning d'équipe
-│   ├── /assets         # Registre GMAO (Industrial)
-│   ├── /work-orders    # Suivi interventions (OT)
-│   ├── /inventory/mro  # Magasins pièces détachées
-│   ├── /maintenance    # Plans préventifs (PM)
-│   ├── /technician     # Portail Mobile Tactile
-│   └── /audit-logs     # Logs d'audit
-├── backend/            # Express + MongoDB
-│   ├── /routes         # API routes (Assets, Orders, Analytics...)
-│   └── /models         # Mongoose models
-└── docker-compose.yml  # Orchestration
+┌─────────────┐      ┌──────────────────┐
+│   Nginx     │─────▶│  Frontend (SPA)  │
+│   :443      │      │  React + Vite    │
+└─────────────┘      └──────────────────┘
+       │
+       │ /api/
+       ▼
+┌─────────────┐      ┌──────────────────┐
+│  Backend    │─────▶│  PostgreSQL 16   │
+│  Express    │      │  (Neon/Docker)   │
+│  :5000      │      └──────────────────┘
+└─────────────┘      ┌──────────────────┐
+       │────────────▶│  Redis 7         │
+                     │  (BullMQ)        │
+                     └──────────────────┘
 ```
 
 ## 🚀 Démarrage Rapide
 
 ### Installation
 
-```bash
-npm run install:all
-```
+# 1. Cloner
+git clone https://github.com/yourorg/beecarbon.git
+cd beecarbon
 
-### Développement
+# 2. Configurer
+cp .env.example .env
+# Éditer .env avec vos valeurs
 
-```bash
-# Lancer Frontend + Backend
-npm run dev
-```
+# 3. Installer
+npm install
+npm run build -w @beecarbonit/database
 
-### URLs Clés
+# 4. Lancer (dev)
+docker compose up -d postgres redis
+cd apps/backend && npm run dev
+cd apps/frontend && npm run dev
 
-- **Tableau de Bord** : http://localhost:3000
-- **Equipements (GMAO)** : http://localhost:3000/assets
-- **Ordres de Travail** : http://localhost:3000/work-orders
-- **Magasin MRO** : http://localhost:3000/inventory/mro
-- **Rapports KPIs** : http://localhost:3000/reports/maintenance
-- **Portail Technicien** : http://localhost:3000/technician
+# 5. Lancer (prod)
+docker compose up -d
+
+## Architecture microservices (future)
+
+Le dossier `_archive/microservices/` contient des stubs pour une future
+décomposition en microservices. Actuellement, le monolithe Express gère
+l'ensemble des routes.
 
 ---
 
@@ -72,8 +90,8 @@ npm run dev
 ### Backend (.env)
 
 ```env
-PORT=5001
-MONGODB_URI=mongodb://localhost:27017/reclamtrack
+PORT=5000
+DATABASE_URL=postgresql://localhost:5432/beecarbon
 JWT_SECRET=your_secret_key
 ```
 

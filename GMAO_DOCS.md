@@ -1,3 +1,10 @@
+> ⚠️ **DOCUMENTATION OBSOLÈTE**
+> 
+> Ce document mentionne MongoDB, qui n'est plus utilisé.
+> La base de données actuelle est **PostgreSQL 16**.
+> 
+> Consultez `README.md` et `ARCHITECTURE.md` pour la documentation à jour.
+
 # ReclamTrack GMAO Industrielle — Documentation Technique & Déploiement
 
 ## 📌 Présentation

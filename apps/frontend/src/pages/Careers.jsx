@@ -1,137 +1,201 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { MapPin, ChevronLeft, ChevronRight } from 'lucide-react';
+import React, { useState } from 'react';
+import { Briefcase, MapPin, Sparkles, ArrowRight, CheckCircle2, Building, Send } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import toast from 'react-hot-toast';
 
 const jobListings = [
   {
-    id: 1,
+    id: 'job-1',
     title: 'Facility AI Specialist',
     location: 'New York Future Hub',
-    description: 'Facility capture innovation and determinist and advanced robust for learning and business-required collation.',
+    category: 'Sustainable Operations',
+    description: 'Facility capture innovation and master technician optimizing IoT networks and autonomous building operations.',
+    badge: 'Full Time • Hybrid'
   },
   {
-    id: 2,
+    id: 'job-2',
     title: 'Carbon Capture Engineer',
     location: 'London Eco-Campus',
-    description: 'Carbon capture is positioned and known technical sovereign to learning business macroeconomic restructuring.',
+    category: 'Advanced Materials',
+    description: 'Carbon capture solutions and technical engineering driving net-zero industrial emissions.',
+    badge: 'Full Time • On-site'
   },
   {
-    id: 3,
+    id: 'job-3',
     title: 'Green Architecture Lead',
     location: 'London Eco-Campus',
-    description: 'Green architecture lead to green architecture lead engineering meetings and environmental-at future position.',
+    category: 'Smart City Integration',
+    description: 'Green architecture leadership designing sustainable urban structures and bioclimatic HVAC integration.',
+    badge: 'Senior • Remote/Hybrid'
+  },
+  {
+    id: 'job-4',
+    title: 'Smart Grid Integration Lead',
+    location: 'Singapore Tech Hub',
+    category: 'Energy Systems',
+    description: 'Deploying micro-grids and renewable storage protocols across dense metropolitan facilities.',
+    badge: 'Full Time'
   }
 ];
 
-const categories = [
-  'Sustainable Operations',
-  'Smart City Integration',
-  'Advanced Materials',
-  'Energy Systems'
-];
-
 export default function Careers() {
+  const [activeCategory, setActiveCategory] = useState('All');
+  const [selectedJob, setSelectedJob] = useState(null);
+  const [applicantName, setApplicantName] = useState('');
+  const [applicantEmail, setApplicantEmail] = useState('');
+
+  const filteredJobs = activeCategory === 'All'
+    ? jobListings
+    : jobListings.filter(j => j.category === activeCategory);
+
+  const handleApplySubmit = (e) => {
+    e.preventDefault();
+    if (!applicantName || !applicantEmail) {
+      toast.error("Veuillez renseigner votre nom et adresse email");
+      return;
+    }
+    toast.success(`Candidature soumise pour ${selectedJob.title} !`);
+    setSelectedJob(null);
+    setApplicantName('');
+    setApplicantEmail('');
+  };
+
   return (
-    <div className="min-h-screen bg-brand-obsidian text-zinc-100 font-sans relative overflow-hidden">
-      {/* Background Effect */}
-      <div className="absolute inset-0 z-0">
-        <div className="absolute inset-0 bg-brand-obsidian/80 backdrop-blur-3xl" />
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-brand-cyan/20 rounded-full blur-[120px] mix-blend-screen" />
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-brand-primary/10 rounded-full blur-[120px] mix-blend-screen" />
+    <div className="min-h-screen bg-[#070b10] text-slate-100 p-4 sm:p-6 lg:p-12 font-sans relative">
+      {/* Top Header */}
+      <div className="max-w-7xl mx-auto flex items-center justify-between border-b border-slate-800 pb-6 mb-10">
+        <div className="flex items-center gap-2">
+          <span className="text-xl font-bold tracking-tight text-white">
+            <span className="text-[#f38020]">Bee</span><span className="text-[#00dbe7]">Carbonat</span>
+          </span>
+        </div>
+
+        <div className="hidden md:flex items-center gap-8 text-xs font-mono uppercase tracking-widest text-slate-400">
+          <Link to="/dashboard" className="hover:text-white transition">Home</Link>
+          <Link to="/about" className="hover:text-white transition">About Us</Link>
+          <span className="text-[#00dbe7] font-bold border-b border-[#00dbe7] pb-1">Careers</span>
+          <Link to="/impact" className="hover:text-white transition">Impact</Link>
+          <Link to="/case-studies" className="hover:text-white transition">Contact</Link>
+        </div>
       </div>
 
-      {/* Navigation - Simple version for mockup */}
-      <nav className="relative z-10 flex items-center justify-center gap-8 pt-8 pb-4">
-        <a href="/" className="hover:text-brand-cyan transition-colors">Home</a>
-        <a href="#" className="hover:text-brand-cyan transition-colors">About Us</a>
-        <a href="/careers" className="text-brand-cyan font-medium">Careers</a>
-        <a href="/impact" className="hover:text-brand-cyan transition-colors">Impact</a>
-        <a href="#" className="hover:text-brand-cyan transition-colors">Contact</a>
-      </nav>
+      {/* Hero Header */}
+      <div className="max-w-4xl mx-auto text-center mb-12 space-y-4">
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#f38020]/10 border border-[#f38020]/30 text-[#f38020] text-xs font-mono">
+          <Sparkles className="w-3.5 h-3.5 animate-pulse" /> FUTURE WORKSPACE
+        </div>
+        <h1 className="text-3xl sm:text-5xl font-black tracking-tight text-white">
+          BeeCarbonat Careers - <span className="text-[#00dbe7]">Join the Revolution</span>
+        </h1>
+        <p className="text-slate-400 text-sm sm:text-base max-w-2xl mx-auto">
+          Shape the future of green infrastructure, artificial intelligence, and carbon-neutral facility operations.
+        </p>
+      </div>
 
-      <main className="relative z-10 container mx-auto px-6 py-12 max-w-6xl">
-        <div className="text-center mb-12">
-          <h1 className="text-4xl md:text-5xl font-bold mb-8">
-            BeeCarbonit <span className="text-brand-cyan">Careers</span> - Future Workspace
-          </h1>
+      {/* Category Tabs Filter */}
+      <div className="max-w-7xl mx-auto mb-10 flex flex-wrap items-center justify-center gap-3">
+        {['All', 'Sustainable Operations', 'Smart City Integration', 'Advanced Materials', 'Energy Systems'].map((cat) => (
+          <button
+            key={cat}
+            onClick={() => setActiveCategory(cat)}
+            className={`px-4 py-2 rounded-xl text-xs font-mono transition backdrop-blur-md ${
+              activeCategory === cat
+                ? 'bg-[#00dbe7] text-slate-950 font-bold shadow-lg shadow-cyan-500/20'
+                : 'bg-slate-900/80 text-slate-400 hover:text-white border border-slate-800'
+            }`}
+          >
+            {cat}
+          </button>
+        ))}
+      </div>
 
-          {/* Hero Image Area (Glass Container) */}
-          <div className="relative rounded-2xl overflow-hidden border border-white/10 bg-white/5 p-2 backdrop-blur-md aspect-video max-h-[400px] flex items-center justify-center mb-12 group">
-             {/* Fallback pattern if no image */}
-             <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80')] bg-cover bg-center opacity-40 mix-blend-luminosity group-hover:opacity-60 transition-opacity duration-700" />
-             <div className="absolute inset-0 bg-gradient-to-t from-brand-obsidian via-brand-obsidian/50 to-transparent" />
-             <h2 className="relative text-5xl md:text-7xl font-bold text-white tracking-tight drop-shadow-2xl">
-               Join the Revolution
-             </h2>
-          </div>
+      {/* Job Cards Grid */}
+      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6">
+        {filteredJobs.map((job) => (
+          <div
+            key={job.id}
+            className="p-6 rounded-2xl bg-slate-900/60 border border-slate-800 hover:border-[#00dbe7]/50 transition-all duration-300 backdrop-blur-xl flex flex-col justify-between space-y-4 shadow-xl group"
+          >
+            <div className="space-y-3">
+              <div className="flex justify-between items-start">
+                <span className="px-2.5 py-0.5 rounded-full bg-slate-800 text-[10px] font-mono text-slate-300 border border-slate-700">
+                  {job.badge}
+                </span>
+                <span className="text-[10px] font-mono text-[#00dbe7]">{job.category}</span>
+              </div>
 
-          {/* Categories Carousel */}
-          <div className="flex items-center justify-center gap-4 mb-16">
-            <button className="p-2 rounded-full border border-white/10 text-white/50 hover:text-white hover:border-brand-cyan transition-colors">
-              <ChevronLeft size={20} />
-            </button>
-            <div className="flex gap-4 overflow-hidden">
-              {categories.map((cat, i) => (
-                <button 
-                  key={cat}
-                  className={`px-6 py-3 rounded-lg border backdrop-blur-md transition-all duration-300 ${
-                    i === 0 
-                      ? 'border-brand-cyan/50 bg-brand-cyan/10 text-brand-cyan shadow-[0_0_15px_rgba(0,242,255,0.2)]' 
-                      : 'border-white/10 bg-white/5 text-zinc-400 hover:text-zinc-200 hover:border-white/20'
-                  }`}
-                >
-                  {cat}
-                </button>
-              ))}
+              <h3 className="text-lg font-bold text-white group-hover:text-[#f38020] transition-colors">
+                {job.title}
+              </h3>
+
+              <div className="flex items-center gap-1.5 text-xs font-mono text-slate-400">
+                <MapPin className="w-3.5 h-3.5 text-[#f38020]" />
+                <span>{job.location}</span>
+              </div>
+
+              <p className="text-xs text-slate-400 leading-relaxed">
+                {job.description}
+              </p>
             </div>
-            <button className="p-2 rounded-full border border-white/10 text-white/50 hover:text-white hover:border-brand-cyan transition-colors">
-              <ChevronRight size={20} />
+
+            <button
+              onClick={() => setSelectedJob(job)}
+              className="w-full py-2.5 rounded-xl bg-gradient-to-r from-[#f38020] to-orange-600 hover:opacity-90 text-xs font-bold text-white transition tracking-wider uppercase font-mono shadow-lg shadow-orange-500/20 flex items-center justify-center gap-2"
+            >
+              <span>Apply Now</span>
+              <ArrowRight className="w-4 h-4" />
             </button>
           </div>
+        ))}
+      </div>
 
-          {/* Job Listings Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 text-left">
-            {jobListings.map(job => (
-              <motion.div 
-                key={job.id}
-                whileHover={{ y: -5 }}
-                className="rounded-xl border border-white/10 bg-white/5 backdrop-blur-xl p-6 flex flex-col hover:border-brand-primary/50 hover:shadow-[0_0_30px_rgba(243,128,32,0.15)] transition-all duration-300"
+      {/* Application Modal */}
+      {selectedJob && (
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
+          <div className="bg-slate-900 border border-slate-700 rounded-3xl max-w-md w-full p-6 space-y-5">
+            <div className="flex justify-between items-center border-b border-slate-800 pb-3">
+              <div>
+                <span className="text-[10px] font-mono text-[#00dbe7] uppercase">CANDIDATURE POSTE</span>
+                <h3 className="text-lg font-bold text-white">{selectedJob.title}</h3>
+              </div>
+              <button onClick={() => setSelectedJob(null)} className="text-slate-400 hover:text-white text-sm">✕</button>
+            </div>
+
+            <form onSubmit={handleApplySubmit} className="space-y-4">
+              <div>
+                <label className="text-xs font-mono text-slate-400 block mb-1">Nom complet</label>
+                <input
+                  type="text"
+                  required
+                  value={applicantName}
+                  onChange={(e) => setApplicantName(e.target.value)}
+                  placeholder="Jean Dupont"
+                  className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-[#f38020]"
+                />
+              </div>
+
+              <div>
+                <label className="text-xs font-mono text-slate-400 block mb-1">Adresse Email</label>
+                <input
+                  type="email"
+                  required
+                  value={applicantEmail}
+                  onChange={(e) => setApplicantEmail(e.target.value)}
+                  placeholder="jean.dupont@example.com"
+                  className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-[#f38020]"
+                />
+              </div>
+
+              <button
+                type="submit"
+                className="w-full py-2.5 rounded-xl bg-[#00dbe7] text-slate-950 font-bold text-xs uppercase font-mono hover:bg-cyan-400 transition flex items-center justify-center gap-2"
               >
-                <h3 className="text-xl font-semibold mb-2">{job.title}</h3>
-                <div className="flex items-center gap-2 text-zinc-400 text-sm mb-4 font-mono">
-                  <MapPin size={14} className="text-brand-cyan" />
-                  {job.location}
-                </div>
-                <p className="text-zinc-500 text-sm flex-grow mb-6">
-                  {job.description}
-                </p>
-                <button className="w-full py-3 rounded-lg bg-gradient-to-r from-brand-primary to-orange-400 text-brand-obsidian font-semibold hover:shadow-[0_0_20px_rgba(243,128,32,0.4)] transition-all duration-300">
-                  Apply Now
-                </button>
-              </motion.div>
-            ))}
-            {jobListings.map(job => (
-              <motion.div 
-                key={`${job.id}-2`}
-                whileHover={{ y: -5 }}
-                className="rounded-xl border border-white/10 bg-white/5 backdrop-blur-xl p-6 flex flex-col hover:border-brand-primary/50 hover:shadow-[0_0_30px_rgba(243,128,32,0.15)] transition-all duration-300"
-              >
-                <h3 className="text-xl font-semibold mb-2">{job.title}</h3>
-                <div className="flex items-center gap-2 text-zinc-400 text-sm mb-4 font-mono">
-                  <MapPin size={14} className="text-brand-cyan" />
-                  {job.location}
-                </div>
-                <p className="text-zinc-500 text-sm flex-grow mb-6">
-                  {job.description}
-                </p>
-                <button className="w-full py-3 rounded-lg border border-brand-primary/50 text-brand-primary font-semibold hover:bg-brand-primary/10 transition-all duration-300">
-                  Apply Now
-                </button>
-              </motion.div>
-            ))}
+                <Send className="w-4 h-4" /> Envoyer la Candidature
+              </button>
+            </form>
           </div>
         </div>
-      </main>
+      )}
     </div>
   );
 }

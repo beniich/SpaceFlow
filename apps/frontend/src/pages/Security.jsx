@@ -246,6 +246,198 @@ export default function Security() {
           </div>
         </div>
       </div>
+
+      {/* ============== NEW SECTION: SECURITY SHIELD & CCTV MATRIX WALL (IMAGES 6 & 7) ============== */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 mt-6">
+        
+        {/* Column 1: Security Threat Shield (Image 6) - 4 cols */}
+        <div className="lg:col-span-4 bg-zinc-900 border border-zinc-800 p-6 rounded-xl flex flex-col justify-between relative overflow-hidden group hover:border-cyan-500/30 transition-all duration-300">
+          <div>
+            <h3 className="font-mono text-xs font-bold text-cyan-400 uppercase tracking-widest border-b border-zinc-800/80 pb-3 mb-4">
+              Security Threat Shield
+            </h3>
+            <p className="text-zinc-400 text-xs font-mono">Concentric neural threat analyzer monitoring facility bypass nodes.</p>
+          </div>
+
+          {/* Glowing Concentric Rings Shield Visual */}
+          <div className="my-6 flex items-center justify-center relative h-48">
+            <div className="absolute inset-0 bg-cyan-500/5 rounded-full blur-3xl group-hover:bg-cyan-500/10 transition-all duration-700"></div>
+            
+            {/* Interactive Glowing Rings */}
+            <svg viewBox="0 0 200 200" className="w-40 h-40 animate-pulse">
+              {/* Outer Ring */}
+              <circle cx="100" cy="100" r="85" fill="none" stroke="#00dbe7" strokeWidth="1" strokeDasharray="6 8" className="animate-spin" style={{ animationDuration: '20s' }} />
+              {/* Mid Ring */}
+              <circle cx="100" cy="100" r="65" fill="none" stroke="#f38020" strokeWidth="1" strokeDasharray="12 4" className="animate-spin" style={{ animationDuration: '10s', animationDirection: 'reverse' }} opacity="0.6" />
+              {/* Inner Solid Ring */}
+              <circle cx="100" cy="100" r="50" fill="none" stroke="#00dbe7" strokeWidth="2" opacity="0.8" />
+              {/* Central Target */}
+              <circle cx="100" cy="100" r="35" fill="#090d16" stroke="#22d3ee" strokeWidth="1" />
+            </svg>
+
+            {/* Shield Metric overlay */}
+            <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+              <span className="text-lg font-black text-cyan-400 font-sans tracking-tight">98.4%</span>
+              <span className="text-[8px] text-zinc-500 font-mono uppercase tracking-widest">SECURED</span>
+            </div>
+          </div>
+
+          <div className="space-y-2.5 font-mono text-[10px] uppercase text-zinc-400 bg-zinc-950/60 p-3.5 border border-zinc-800 rounded">
+            <div className="flex justify-between">
+              <span>System Integrity:</span>
+              <span className="text-emerald-400 font-bold">OPTIMAL</span>
+            </div>
+            <div className="flex justify-between">
+              <span>Active Bypasses Permitted:</span>
+              <span className="text-brand-orange font-bold">3 / ADMIN</span>
+            </div>
+            <div className="flex justify-between">
+              <span>Intrusion attempts:</span>
+              <span className="text-zinc-500">0 IN 30 DAYS</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Column 2: CCTV Video Stream Wall (Image 7) - 8 cols */}
+        <div className="lg:col-span-8 bg-zinc-900 border border-zinc-800 p-6 rounded-xl flex flex-col justify-between group hover:border-orange-500/30 transition-all duration-300">
+          <div className="flex items-center justify-between border-b border-zinc-800/80 pb-3 mb-4">
+            <div>
+              <h3 className="font-mono text-xs font-bold text-brand-orange uppercase tracking-widest">
+                CCTV Tactical Stream Wall
+              </h3>
+              <p className="text-zinc-500 text-[10px] font-mono mt-0.5">Automated visual motion tracking feeds</p>
+            </div>
+            <span className="px-2.5 py-0.5 bg-red-500/10 border border-red-500/20 text-red-400 font-mono text-[9px] uppercase tracking-wider rounded animate-pulse">
+              ● Live Surveillance
+            </span>
+          </div>
+
+          {/* 2x2 Camera Feeds Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            
+            {/* Feed 1: Lobby */}
+            <div 
+              onClick={() => toast.success('Streaming feed: Camera 01 Lobby (Lossless)')}
+              className="bg-[#050912] border border-zinc-800 hover:border-cyan-500/40 rounded-lg p-3 relative h-36 overflow-hidden cursor-pointer transition-all duration-300 group/feed"
+            >
+              {/* Futuristic CCTV details */}
+              <div className="absolute top-2 left-2 flex items-center gap-1.5 z-10">
+                <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse"></span>
+                <span className="font-mono text-[8px] text-zinc-300 bg-black/50 px-1.5 py-0.5 rounded">CAM-01 LOBBY EAST</span>
+              </div>
+              <span className="absolute top-2 right-2 font-mono text-[8px] text-zinc-500 z-10">1080p // 30 FPS</span>
+              
+              {/* Scanline overlay */}
+              <div className="absolute inset-0 pointer-events-none opacity-10 bg-gradient-to-b from-zinc-100/10 via-zinc-900/10 to-zinc-100/10" style={{ backgroundSize: '100% 4px' }}></div>
+              
+              {/* Decorative wireframe visual to represent CCTV stream content */}
+              <div className="w-full h-full flex flex-col justify-center items-center opacity-25">
+                <svg viewBox="0 0 100 50" className="w-2/3 h-2/3 text-brand-cyan">
+                  <path d="M 0 40 L 40 10 L 80 40 Z" fill="none" stroke="currentColor" strokeWidth="0.5" />
+                  <path d="M 20 40 L 50 20 L 90 40 Z" fill="none" stroke="currentColor" strokeWidth="0.5" />
+                  <circle cx="50" cy="20" r="1" fill="currentColor" />
+                </svg>
+              </div>
+
+              <div className="absolute bottom-2 left-2 font-mono text-[8px] text-zinc-500 z-10 uppercase">
+                UTC: {new Date().toISOString().slice(11, 19)}
+              </div>
+              <div className="absolute bottom-2 right-2 font-mono text-[8px] text-emerald-400 z-10 uppercase flex items-center gap-1">
+                <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span> NO MOTION
+              </div>
+            </div>
+
+            {/* Feed 2: Core Server B */}
+            <div 
+              onClick={() => toast.success('Streaming feed: Camera 02 Server Room (Lossless)')}
+              className="bg-[#050912] border border-zinc-800 hover:border-brand-orange/40 rounded-lg p-3 relative h-36 overflow-hidden cursor-pointer transition-all duration-300 group/feed"
+            >
+              <div className="absolute top-2 left-2 flex items-center gap-1.5 z-10">
+                <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse"></span>
+                <span className="font-mono text-[8px] text-zinc-300 bg-black/50 px-1.5 py-0.5 rounded">CAM-02 SERVER ROOM B</span>
+              </div>
+              <span className="absolute top-2 right-2 font-mono text-[8px] text-zinc-500 z-10">1080p // 30 FPS</span>
+              <div className="absolute inset-0 pointer-events-none opacity-10 bg-gradient-to-b from-zinc-100/10 via-zinc-900/10 to-zinc-100/10" style={{ backgroundSize: '100% 4px' }}></div>
+              
+              <div className="w-full h-full flex flex-col justify-center items-center opacity-30">
+                <svg viewBox="0 0 100 50" className="w-2/3 h-2/3 text-brand-orange">
+                  <rect x="10" y="10" width="15" height="30" fill="none" stroke="currentColor" strokeWidth="0.5" />
+                  <rect x="35" y="10" width="15" height="30" fill="none" stroke="currentColor" strokeWidth="0.5" />
+                  <rect x="60" y="10" width="15" height="30" fill="none" stroke="currentColor" strokeWidth="0.5" />
+                </svg>
+              </div>
+
+              <div className="absolute bottom-2 left-2 font-mono text-[8px] text-zinc-500 z-10 uppercase">
+                UTC: {new Date().toISOString().slice(11, 19)}
+              </div>
+              <div className="absolute bottom-2 right-2 font-mono text-[8px] text-amber-400 z-10 uppercase flex items-center gap-1 animate-pulse">
+                <span className="w-1.5 h-1.5 bg-amber-500 rounded-full animate-ping"></span> TRACKING TEMP
+              </div>
+            </div>
+
+            {/* Feed 3: East Parking */}
+            <div 
+              onClick={() => toast.success('Streaming feed: Camera 03 Parking (Lossless)')}
+              className="bg-[#050912] border border-zinc-800 hover:border-cyan-500/40 rounded-lg p-3 relative h-36 overflow-hidden cursor-pointer transition-all duration-300 group/feed"
+            >
+              <div className="absolute top-2 left-2 flex items-center gap-1.5 z-10">
+                <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse"></span>
+                <span className="font-mono text-[8px] text-zinc-300 bg-black/50 px-1.5 py-0.5 rounded">CAM-03 EAST PARKING</span>
+              </div>
+              <span className="absolute top-2 right-2 font-mono text-[8px] text-zinc-500 z-10">720p // 24 FPS</span>
+              <div className="absolute inset-0 pointer-events-none opacity-10 bg-gradient-to-b from-zinc-100/10 via-zinc-900/10 to-zinc-100/10" style={{ backgroundSize: '100% 4px' }}></div>
+              
+              <div className="w-full h-full flex flex-col justify-center items-center opacity-25">
+                <svg viewBox="0 0 100 50" className="w-2/3 h-2/3 text-brand-cyan">
+                  <line x1="10" y1="45" x2="90" y2="45" stroke="currentColor" strokeWidth="0.5" />
+                  <circle cx="30" cy="35" r="5" fill="none" stroke="currentColor" strokeWidth="0.5" />
+                  <circle cx="70" cy="35" r="5" fill="none" stroke="currentColor" strokeWidth="0.5" />
+                </svg>
+              </div>
+
+              <div className="absolute bottom-2 left-2 font-mono text-[8px] text-zinc-500 z-10 uppercase">
+                UTC: {new Date().toISOString().slice(11, 19)}
+              </div>
+              <div className="absolute bottom-2 right-2 font-mono text-[8px] text-emerald-400 z-10 uppercase flex items-center gap-1">
+                <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span> NO MOTION
+              </div>
+            </div>
+
+            {/* Feed 4: Loading Dock */}
+            <div 
+              onClick={() => toast.success('Streaming feed: Camera 04 Loading Dock (Lossless)')}
+              className="bg-[#050912] border border-zinc-800 hover:border-brand-orange/40 rounded-lg p-3 relative h-36 overflow-hidden cursor-pointer transition-all duration-300 group/feed"
+            >
+              <div className="absolute top-2 left-2 flex items-center gap-1.5 z-10">
+                <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse"></span>
+                <span className="font-mono text-[8px] text-zinc-300 bg-black/50 px-1.5 py-0.5 rounded">CAM-04 LOADING DOCK</span>
+              </div>
+              <span className="absolute top-2 right-2 font-mono text-[8px] text-zinc-500 z-10">1080p // 30 FPS</span>
+              <div className="absolute inset-0 pointer-events-none opacity-10 bg-gradient-to-b from-zinc-100/10 via-zinc-900/10 to-zinc-100/10" style={{ backgroundSize: '100% 4px' }}></div>
+              
+              <div className="w-full h-full flex flex-col justify-center items-center opacity-30">
+                <svg viewBox="0 0 100 50" className="w-2/3 h-2/3 text-brand-orange">
+                  <path d="M10,40 L90,40 L90,20 L60,20 L40,30 L10,30 Z" fill="none" stroke="currentColor" strokeWidth="0.5" />
+                </svg>
+              </div>
+
+              <div className="absolute bottom-2 left-2 font-mono text-[8px] text-zinc-500 z-10 uppercase">
+                UTC: {new Date().toISOString().slice(11, 19)}
+              </div>
+              <div className="absolute bottom-2 right-2 font-mono text-[8px] text-brand-cyan z-10 uppercase flex items-center gap-1 animate-pulse">
+                <span className="w-1.5 h-1.5 bg-brand-cyan rounded-full"></span> SENSOR OK
+              </div>
+            </div>
+
+          </div>
+
+          <div className="pt-4 text-center font-mono text-[9px] text-zinc-500 uppercase tracking-widest">
+            AI Automated Intrusion Model: Active & Active Core Shield
+          </div>
+        </div>
+
+      </div>
     </div>
   );
 }
+

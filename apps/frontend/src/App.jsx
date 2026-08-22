@@ -61,6 +61,16 @@ const CarbonVisualizer = lazy(() => import('./pages/CarbonVisualizer'));
 const BIMAssetExplorer = lazy(() => import('./pages/BIMAssetExplorer'));
 const BimWorkspace = lazy(() => import('./features/bim/BimWorkspace'));
 
+// New 22 Imports
+const About = lazy(() => import('./pages/About'));
+const CarbonMarket = lazy(() => import('./pages/CarbonMarket'));
+const LightingCityPulse = lazy(() => import('./pages/LightingCityPulse'));
+const WaterHydroSync = lazy(() => import('./pages/WaterHydroSync'));
+const AirQuality = lazy(() => import('./pages/AirQuality'));
+const WasteManagement = lazy(() => import('./pages/WasteManagement'));
+const QRScanResult = lazy(() => import('./pages/QRScanResult'));
+const QRSmartScannerModal = lazy(() => import('./features/qr/components/QRSmartScanner').then(m => ({ default: m.QRSmartScanner })));
+
 import { ErrorBoundary } from 'react-error-boundary';
 import { GlobalErrorFallback } from './components/GlobalErrorFallback';
 
@@ -114,6 +124,16 @@ export default function App() {
         <Route path="/community" element={<Community />} />
         <Route path="/carbon-visualizer" element={<CarbonVisualizer />} />
         <Route path="/bim/*" element={<BimWorkspace modelId="office-tower-a" />} />
+        
+        {/* New 22 Routes */}
+        <Route path="/about" element={<About />} />
+        <Route path="/market" element={<CarbonMarket />} />
+        <Route path="/lighting" element={<LightingCityPulse />} />
+        <Route path="/water" element={<WaterHydroSync />} />
+        <Route path="/air-quality" element={<AirQuality />} />
+        <Route path="/waste" element={<WasteManagement />} />
+        <Route path="/qr/:code" element={<QRScanResult />} />
+        <Route path="/scan" element={<QRSmartScannerModal />} />
         
         <Route element={<PrivateRoute><Layout /></PrivateRoute>}>
           <Route path="dashboard" element={<Dashboard />} />

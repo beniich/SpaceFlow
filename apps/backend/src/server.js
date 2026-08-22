@@ -8,7 +8,7 @@ const { Server } = require('socket.io');
 const { prisma } = require('./config/database');
 const swaggerRoutes = require('./routes/swagger.routes');
 const { sanitizeInput, apiLimiter, securityHeaders } = require('./middleware/security.middleware');
-const { initSentry, Sentry } = require('./config/sentry');
+const Sentry = require('@sentry/node');
 
 const app = express();
 app.set('trust proxy', 1);
@@ -17,15 +17,16 @@ const io = new Server(server, {
   cors: { origin: ['http://localhost:3000', 'http://localhost:3001', 'http://localhost:5173'], credentials: true }
 });
 
-// Initialize Sentry early
-initSentry(app);
-
-// Sentry request handler if available
-if (Sentry && Sentry.Handlers && typeof Sentry.Handlers.requestHandler === 'function') {
-  app.use(Sentry.Handlers.requestHandler());
-}
-if (Sentry && Sentry.Handlers && typeof Sentry.Handlers.tracingHandler === 'function') {
-  app.use(Sentry.Handlers.tracingHandler());
+if (process.env.SENTRY_DSN) {
+  Sentry.init({
+    dsn: process.env.SENTRY_DSN,
+    environment: process.env.NODE_ENV || 'development',
+    tracesSampleRate: parseFloat(process.env.SENTRY_TRACES_SAMPLE_RATE || '0.1'),
+    integrations: [
+      Sentry.httpIntegration(),
+      Sentry.expressIntegration(),
+    ],
+  });
 }
 
 const authRoutes = require('./routes/auth.routes');
@@ -145,9 +146,9 @@ global.broadcastSSE = eventsRoutes.broadcast;
 const billingRoutes = require('./routes/billing.routes');
 app.use('/api/crm/billing', billingRoutes);
 
-// Sentry error handler if available
-if (Sentry && Sentry.Handlers && typeof Sentry.Handlers.errorHandler === 'function') {
-  app.use(Sentry.Handlers.errorHandler());
+// Sentry error handler
+if (process.env.SENTRY_DSN) {
+  Sentry.setupExpressErrorHandler(app);
 }
 
 const { errorMiddleware } = require('./middleware/error.middleware');
@@ -171,7 +172,7 @@ initializeWebSocket(server).catch(err => {
 });
 // =====================================
 
-const PORT = process.env.BACKEND_PORT || 8081;
+const PORT = process.env.PORT || 5000;
 
 if (process.env.NODE_ENV !== 'production' || require.main === module) {
   server.listen(PORT, () => {

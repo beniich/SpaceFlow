@@ -71,6 +71,10 @@ model User {
   ticketEvents      TicketEvent[]
   ticketAttachments TicketAttachment[]
 
+  // WORK ORDERS
+  assignedWorkOrders WorkOrder[] @relation("AssignedWorkOrders")
+  createdWorkOrders  WorkOrder[] @relation("CreatedWorkOrders")
+
   @@unique([email, tenantId])
   @@index([tenantId])
 }
@@ -315,7 +319,9 @@ model WorkOrder {
 
   // Assignation
   assigneeId  String?
+  assignee    User?     @relation("AssignedWorkOrders", fields: [assigneeId], references: [id])
   createdById String
+  createdBy   User      @relation("CreatedWorkOrders", fields: [createdById], references: [id])
 
   // Résolution
   completedAt DateTime?

@@ -50,14 +50,14 @@ exports.getAll = async (req, res) => {
     const where = {};
     if (status) where.status = status;
     if (priority) where.priority = priority;
-    if (assignedToId) where.assignedToId = assignedToId;
+    if (assignedToId) where.assigneeId = assignedToId;
 
     const workOrders = await prisma.workOrder.findMany({
       where,
       include: {
-        asset: { select: { name: true, category: true, location: true } },
-        assignedTo: { select: { firstName: true, lastName: true, email: true } },
-        createdBy: { select: { firstName: true, lastName: true } }
+        asset: { select: { name: true, type: true, zone: true, floor: true } },
+        assignee: { select: { fullName: true, email: true } },
+        createdBy: { select: { fullName: true } }
       },
       orderBy: [{ priority: 'desc' }, { scheduledAt: 'asc' }]
     });
@@ -86,14 +86,20 @@ exports.update = async (req, res) => {
     });
     
     // Si complété, créer un log de maintenance
-    if (req.body.status === 'COMPLETED') {
+    if (req.body.status === 'COMPLETED' && workOrder.assetId) {
       await prisma.maintenanceLog.create({
         data: {
-          description: workOrder.title,
-          cost: workOrder.actualCost || 0,
+          tenantId: workOrder.tenantId,
+          assetId: workOrder.assetId,
+          workOrderId: workOrder.id,
+          type: workOrder.type || 'CORRECTIVE',
           performedAt: new Date(),
-          performedBy: workOrder.assignedToId || 'unknown',
-          assetId: workOrder.assetId
+          completedAt: new Date(),
+          technicianId: workOrder.assigneeId || req.user?.id || 'system',
+          technicianName: req.user?.fullName || 'Système',
+          notes: workOrder.title,
+          laborHours: workOrder.actualDuration ? workOrder.actualDuration / 60 : null,
+          totalCost: workOrder.totalCost || null,
         }
       });
       // Mettre à jour l'actif
@@ -101,7 +107,7 @@ exports.update = async (req, res) => {
         where: { id: workOrder.assetId },
         data: {
           status: 'OPERATIONAL',
-          lastMaintenance: new Date(),
+          lastMaintenanceAt: new Date(),
           healthScore: 100
         }
       });

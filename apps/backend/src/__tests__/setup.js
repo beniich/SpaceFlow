@@ -62,15 +62,12 @@ jest.mock('../config/database', () => ({
   }
 }));
 
-// Mock Sentry
-jest.mock('../config/sentry', () => ({
-  initSentry: jest.fn(),
-  Sentry: {
-    captureException: jest.fn(),
-    Handlers: {
-      requestHandler: () => (req, res, next) => next(),
-      tracingHandler: () => (req, res, next) => next(),
-      errorHandler: () => (err, req, res, next) => next(err),
-    },
-  },
+// Mock Sentry (v10 API)
+jest.mock('@sentry/node', () => ({
+  init: jest.fn(),
+  captureException: jest.fn(),
+  captureMessage: jest.fn(),
+  setupExpressErrorHandler: jest.fn(),
+  httpIntegration: jest.fn(() => ({})),
+  expressIntegration: jest.fn(() => ({})),
 }));
