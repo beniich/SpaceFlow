@@ -337,7 +337,7 @@ export default function LandingPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#1a1e23] text-zinc-100 font-sans selection:bg-brand-orange selection:text-black relative overflow-x-hidden"
+    <div className="min-h-screen bg-[#1a1e23] text-zinc-100 font-sans selection:bg-brand-orange selection:text-black relative overflow-x-hidden tech-grid"
          style={{
            backgroundImage: `radial-gradient(circle at 75% 50%, rgba(0, 240, 255, 0.1) 0%, transparent 40%), radial-gradient(circle at 25% 70%, rgba(255, 138, 0, 0.1) 0%, transparent 40%)`
          }}>
@@ -388,18 +388,18 @@ export default function LandingPage() {
           background-clip: padding-box, border-box;
           box-shadow: -5px 0 15px -5px rgba(255, 138, 0, 0.6), 5px 0 15px -5px rgba(0, 240, 255, 0.6);
         }
+        .tech-grid {
+          background-size: 60px 60px;
+          background-image: 
+            linear-gradient(to right, rgba(255, 255, 255, 0.015) 1px, transparent 1px),
+            linear-gradient(to bottom, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
+        }
       `}</style>
 
-      {/* Background Graphic Overlay */}
+      {/* Background Grid Overlay (Replaces image overlay with baked-in blurred text) */}
       <div
         aria-hidden="true"
-        className="absolute top-0 right-0 w-full h-full select-none pointer-events-none opacity-[0.9] mix-blend-normal z-0"
-        style={{
-          backgroundImage: `url('https://lh3.googleusercontent.com/aida/AEtjO1VcgUYyBe89n_gLeSWrGf6XTcy1vX1YynqiR5dl0lj0MXGhdpBYRc7ryJtZcCf8d7-oVvH5dz9mSDjr-GW_hm2IbTy9tbMw3KFrZDPVSAgnsP0CLEXSdNCf_DFHwAoeHKNXj8y-hzEuBWxfaBKDSvL61GjthcNakHuf5srYTSMNYezCpmDAApvWT2OV-FfW1nhZwjzxtDpuIgUIl8J7dZIfd0BvH6EFkbdAhRK1-zbQztKkT3vjolGyQhY')`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat'
-        }}
+        className="absolute inset-0 select-none pointer-events-none opacity-[0.4] z-0 tech-grid"
       />
 
       {/* Interactive Background Canvas */}
@@ -766,27 +766,14 @@ export default function LandingPage() {
               </div>
             </section>
 
-            {/* BEGIN: Footer */}
-            <footer className="w-[90%] max-w-6xl glass-panel rounded-full px-12 py-4 flex flex-col md:flex-row items-center justify-between z-10 mt-12 mb-8 mx-auto">
-              {/* Logo */}
-              <div className="flex items-center gap-2 mb-4 md:mb-0">
-                <img src="/logo.png" className="w-6 h-6 object-contain" alt="BeeCarbonit Logo" />
-                <span className="text-lg font-bold tracking-wide">BeeCarbonit</span>
+            {/* BEGIN: Newsletter Subscription Section (Replaced duplicate footer navbar with clean CTA) */}
+            <section className="w-[90%] max-w-6xl glass-panel rounded-full px-12 py-5 flex flex-col md:flex-row items-center justify-between z-10 mt-12 mb-8 mx-auto">
+              <div className="flex flex-col mb-4 md:mb-0 text-left">
+                <h3 className="text-sm font-bold font-mono tracking-wider text-[#00F0FF] uppercase">NEWSLETTER INSIGHTS</h3>
+                <p className="text-xs text-zinc-400 font-sans mt-1">Receive the latest insights on sustainable facility engineering and decarbonization.</p>
               </div>
               
-              {/* Navigation */}
-              <nav className="flex items-center gap-6 text-sm font-medium text-gray-400 mb-4 md:mb-0">
-                <button onClick={() => setActiveTab('solutions')} className="hover:text-white transition-colors">Solutions</button>
-                <button onClick={() => setActiveTab('home')} className="hover:text-white transition-colors">Platform</button>
-                <button onClick={() => setActiveTab('case-studies')} className="hover:text-white transition-colors">Impact</button>
-                <button onClick={() => setActiveTab('pricing')} className="hover:text-white transition-colors">Resources</button>
-                <button onClick={() => {
-                  setDemoForm({ ...demoForm, plan: 'Advanced' });
-                  setDemoModalOpen(true);
-                }} className="hover:text-white transition-colors">Contact</button>
-              </nav>
-              
-              {/* Newsletter */}
+              {/* Newsletter Form */}
               <form onSubmit={handleSubscribe} className="flex items-center bg-gray-800/50 border border-gray-600 rounded-full p-1 pl-4">
                 <input
                   type="email"
@@ -800,7 +787,7 @@ export default function LandingPage() {
                   Subscribe
                 </button>
               </form>
-            </footer>
+            </section>
             {/* END: Footer */}
 
           </div>

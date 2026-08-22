@@ -53,6 +53,12 @@ const ImpactReport = lazy(() => import('./pages/ImpactReport'));
 const SupportAI = lazy(() => import('./pages/SupportAI'));
 const Investors = lazy(() => import('./pages/Investors'));
 const InnovationLab = lazy(() => import('./pages/InnovationLab'));
+const CaseStudies = lazy(() => import('./pages/CaseStudies'));
+const CircularEconomy = lazy(() => import('./pages/CircularEconomy'));
+const PartnerPortal = lazy(() => import('./pages/PartnerPortal'));
+const Community = lazy(() => import('./pages/Community'));
+const CarbonVisualizer = lazy(() => import('./pages/CarbonVisualizer'));
+const BIMAssetExplorer = lazy(() => import('./pages/BIMAssetExplorer'));
 const BimWorkspace = lazy(() => import('./features/bim/BimWorkspace'));
 
 import { ErrorBoundary } from 'react-error-boundary';
@@ -104,6 +110,9 @@ export default function App() {
         <Route path="/support-ai" element={<SupportAI />} />
         <Route path="/investors" element={<Investors />} />
         <Route path="/innovation" element={<InnovationLab />} />
+        <Route path="/case-studies" element={<CaseStudies />} />
+        <Route path="/community" element={<Community />} />
+        <Route path="/carbon-visualizer" element={<CarbonVisualizer />} />
         <Route path="/bim/*" element={<BimWorkspace modelId="office-tower-a" />} />
         
         <Route element={<PrivateRoute><Layout /></PrivateRoute>}>
@@ -111,6 +120,7 @@ export default function App() {
           
           {/* Assets & Operations */}
           <Route path="assets" element={<Assets />} />
+          <Route path="bim-explorer" element={<BIMAssetExplorer />} />
           <Route path="scanner" element={<AssetScanner />} />
           <Route path="spaces" element={<Spaces />} />
           <Route path="work-orders" element={<WorkOrders />} />
@@ -122,12 +132,16 @@ export default function App() {
           <Route path="maintenance" element={<Maintenance />} />
           <Route path="predictive-maintenance" element={<PredictiveMaintenance />} />
           <Route path="energy" element={<EnergySustainability />} />
+          <Route path="carbon-hud" element={<CarbonVisualizer />} />
+          <Route path="circular-economy" element={<CircularEconomy />} />
           <Route path="team" element={<Team />} />
           
-          {/* CRM */}
+          {/* CRM & Partners */}
           <Route path="contacts" element={<Contacts />} />
           <Route path="deals" element={<Deals />} />
           <Route path="pricing" element={<Pricing />} />
+          <Route path="partners" element={<PartnerPortal />} />
+          <Route path="partner-portal" element={<PartnerPortal />} />
           
           {/* CMMS / ERP / BIM */}
           <Route path="cmms" element={<CMMS />} />
@@ -139,6 +153,8 @@ export default function App() {
           <Route path="analytics" element={<Analytics />} />
           <Route path="executive" element={<DashboardExecutive />} />
           <Route path="roadmap" element={<Roadmap />} />
+          <Route path="case-studies" element={<CaseStudies />} />
+          <Route path="community" element={<Community />} />
           <Route path="exports" element={<Exports />} />
           <Route path="notifications" element={<Notifications />} />
           

@@ -5,7 +5,8 @@ import {
   ClipboardList, BarChart3, LogOut, Wrench, Box,
   Bell, Globe, Download, Database, Layers, Menu, X,
   FileText, Cpu, WifiOff, Wifi, RefreshCw, HardDrive,
-  Zap, Activity, ShieldCheck, CheckCircle2, TrendingUp, QrCode, Users, Settings, Shield, Milestone, AlertTriangle, CreditCard, Store, LayoutGrid
+  Zap, Activity, ShieldCheck, CheckCircle2, TrendingUp, QrCode, Users, Settings, Shield, Milestone, AlertTriangle, CreditCard, Store, LayoutGrid,
+  Recycle, Key, Sparkles, BookOpen
 } from 'lucide-react';
 import api from '../services/api';
 import { useAuthStore } from '../store/authStore';
@@ -19,6 +20,7 @@ const navItems = [
   { to: '/executive',   icon: TrendingUp,      label: 'Executive View' },
   { to: '/roadmap',     icon: Milestone,       label: 'Strategic Roadmap' },
   { to: '/assets',      icon: Package,         label: 'Assets' },
+  { to: '/bim-explorer',icon: Layers,          label: 'BIM Explorer 3D' },
   { to: '/scanner',     icon: QrCode,          label: 'QR Code Scanner' },
   { to: '/spaces',      icon: MapPin,          label: 'Spaces' },
   { to: '/work-orders', icon: ClipboardList,   label: 'Work Orders' },
@@ -28,6 +30,8 @@ const navItems = [
 ];
 
 const innovationPillars = [
+  { to: '/carbon-hud',            icon: Sparkles,     label: 'Carbon Pulse HUD' },
+  { to: '/circular-economy',      icon: Recycle,      label: 'Flux Circulaire & Déchets' },
   { to: '/intervention',          icon: CheckCircle2, label: 'FieldTech Mobile & OT' },
   { to: '/energy',                icon: Zap,          label: 'Energy & ESG Copilot' },
   { to: '/bim',                   icon: Layers,       label: 'BIM & 3D Viewer' },
@@ -37,6 +41,9 @@ const innovationPillars = [
 ];
 
 const advancedItems = [
+  { to: '/case-studies',   icon: BookOpen,  label: 'Études de Cas & Éco-Projets' },
+  { to: '/community',      icon: Users,     label: 'Communauté & Hub Éco' },
+  { to: '/partners',       icon: Key,       label: 'Portail Partenaires & API' },
   { to: '/cmms',           icon: Wrench,    label: 'CMMS / BEECARBONAT' },
   { to: '/erp',            icon: Database,  label: 'ERP Integration' },
   { to: '/analytics',      icon: BarChart3, label: 'Analytics' },
