@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Plus, Maximize2, User, CheckCircle2, QrCode, PenTool, LayoutList, 
   Trello, MoreVertical, Search, Filter, AlertCircle, Clock, 
@@ -10,6 +10,7 @@ import toast from 'react-hot-toast';
 import { useLanguage } from '../context/LanguageContext';
 import { useSiteConfig } from '../context/SiteConfigContext';
 import DynamicFormIndications from '../components/DynamicFormIndications';
+import api from '../services/api';
 
 const initialWOs = [
   { 
@@ -80,7 +81,42 @@ export default function WorkOrders() {
   const [view, setView] = useState('list'); // 'list' | 'kanban'
   const [activeTab, setActiveTab] = useState('ALL');
   const [searchQuery, setSearchQuery] = useState('');
-  const [workOrders, setWorkOrders] = useState(initialWOs);
+  const [workOrders, setWorkOrders] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const fetchWorkOrders = async () => {
+    try {
+      setLoading(true);
+      const { data } = await api.get('/workorders');
+      if (data && data.length > 0) {
+        const formatted = data.map(wo => ({
+          id: wo.id,
+          title: wo.title,
+          asset: wo.asset?.name || wo.asset?.type || '—',
+          priority: wo.priority,
+          assigned: wo.assignee?.fullName || 'Non assigné',
+          avatar: wo.assignee?.fullName ? wo.assignee.fullName.split(' ').map(n => n[0]).join('') : 'NA',
+          date: wo.scheduledAt ? new Date(wo.scheduledAt).toISOString().split('T')[0] : '—',
+          status: wo.status,
+          location: wo.asset ? `${wo.asset.zone || ''} • ${wo.asset.floor || ''}` : '—',
+          description: wo.description || '—'
+        }));
+        setWorkOrders(formatted);
+      } else {
+        setWorkOrders(initialWOs);
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error('Erreur API WorkOrders, fallback aux mocks');
+      setWorkOrders(initialWOs);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchWorkOrders();
+  }, []);
   
   // Modals / Drawers
   const [quickCloseWO, setQuickCloseWO] = useState(null);
@@ -138,40 +174,54 @@ export default function WorkOrders() {
     }
   };
 
-  const handleCreateWO = (e) => {
+  const handleCreateWO = async (e) => {
     e.preventDefault();
     if (!newTitle.trim()) {
       toast.error('Veuillez saisir un titre');
       return;
     }
-    const newEntry = {
-      id: `WO-2026-${Math.floor(Math.random()*800)+100}`,
-      title: newTitle,
-      asset: newAsset,
-      priority: newPriority,
-      assigned: newAssigned,
-      avatar: newAssigned.split(' ').map(n => n[0]).join(''),
-      date: new Date().toISOString().split('T')[0],
-      status: 'PENDING',
-      location: 'Bâtiment Alpha • L4',
-      description: newDesc || 'Standard maintenance intervention task.'
-    };
-    setWorkOrders([newEntry, ...workOrders]);
-    setShowNewWOModal(false);
-    setNewTitle('');
-    setNewDesc('');
-    toast.success(`Ordre de travail ${newEntry.id} créé !`);
+    try {
+      await api.post('/workorders', {
+        title: newTitle,
+        priority: newPriority,
+        status: 'PENDING',
+        scheduledAt: new Date(),
+        description: newDesc || 'Standard maintenance intervention task.'
+      });
+      setShowNewWOModal(false);
+      setNewTitle('');
+      setNewDesc('');
+      toast.success('Ordre de travail créé !');
+      fetchWorkOrders();
+    } catch (err) {
+      toast.error('Erreur création Work Order');
+    }
   };
 
-  const handleSignatureClose = () => {
+  const handleSignatureClose = async () => {
     if (!signatureName.trim()) {
       toast.error('Veuillez signer électroniquement');
       return;
     }
-    setWorkOrders(workOrders.map(w => w.id === quickCloseWO.id ? { ...w, status: 'COMPLETED' } : w));
-    toast.success(`Work Order ${quickCloseWO.id} clôturé et signé par ${signatureName} !`);
-    setQuickCloseWO(null);
-    setSignatureName('');
+    
+    if (quickCloseWO.id.toString().startsWith('WO-')) {
+       // mock WO
+       setWorkOrders(workOrders.map(w => w.id === quickCloseWO.id ? { ...w, status: 'COMPLETED' } : w));
+       toast.success(`Mock Work Order ${quickCloseWO.id} clôturé !`);
+       setQuickCloseWO(null);
+       setSignatureName('');
+       return;
+    }
+    
+    try {
+      await api.put(`/workorders/${quickCloseWO.id}`, { status: 'COMPLETED' });
+      toast.success(`Work Order ${quickCloseWO.id} clôturé et signé par ${signatureName} !`);
+      setQuickCloseWO(null);
+      setSignatureName('');
+      fetchWorkOrders();
+    } catch (err) {
+      toast.error('Erreur clôture Work Order');
+    }
   };
 
   return (

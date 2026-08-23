@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import api from '../services/api';
 import { Globe, TrendingUp, DollarSign, ArrowUpRight, ArrowDownRight, RefreshCw, ShoppingBag, ShieldCheck, AlertTriangle } from 'lucide-react';
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import toast from 'react-hot-toast';
@@ -18,6 +19,29 @@ export default function CarbonMarket() {
   const [quantity, setQuantity] = useState(1);
   const [availableCredit, setAvailableCredit] = useState(2517);
   const [userPortfolio, setUserPortfolio] = useState({ credits: 66.5, valueUsd: 3005.74 });
+  const [marketData, setMarketData] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchMarketData = async () => {
+      try {
+        setLoading(true);
+        // Using analytics endpoint as placeholder
+        const { data } = await api.get('/analytics?type=CARBON_MARKET');
+        if (data && data.length > 0) {
+          setMarketData(data);
+        } else {
+          setMarketData(mockPriceHistory);
+        }
+      } catch (err) {
+        console.error('API not ready for carbon market, fallback to mock data');
+        setMarketData(mockPriceHistory);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchMarketData();
+  }, []);
 
   const unitPrice = 45.20;
   const totalPrice = (quantity * unitPrice).toFixed(2);
@@ -121,7 +145,7 @@ export default function CarbonMarket() {
 
               <div className="h-40 w-full pt-2">
                 <ResponsiveContainer width="100%" height="100%">
-                  <AreaChart data={mockPriceHistory}>
+                  <AreaChart data={marketData}>
                     <defs>
                       <linearGradient id="colorPrice" x1="0" y1="0" x2="0" y2="1">
                         <stop offset="5%" stopColor="#f38020" stopOpacity={0.8}/>

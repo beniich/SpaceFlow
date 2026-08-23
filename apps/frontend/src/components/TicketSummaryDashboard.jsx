@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { 
   Ticket, AlertTriangle, Clock, CheckCircle2, UserCheck, Wrench, ShieldAlert,
   Search, Filter, ArrowUpRight, ChevronRight, AlertCircle, RefreshCw, Layers,
@@ -9,6 +9,7 @@ import toast from 'react-hot-toast';
 import { useLanguage } from '../context/LanguageContext';
 import { useSiteConfig } from '../context/SiteConfigContext';
 import DynamicFormIndications from './DynamicFormIndications';
+import api from '../services/api';
 
 // Enum definitions matching Prisma schema
 const STATUSES = [
@@ -163,7 +164,46 @@ const INITIAL_TICKETS = [
 export default function TicketSummaryDashboard() {
   const { t } = useLanguage();
   const { sites } = useSiteConfig();
-  const [tickets, setTickets] = useState(INITIAL_TICKETS);
+  const [tickets, setTickets] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const fetchTickets = async () => {
+    try {
+      setLoading(true);
+      const { data } = await api.get('/tickets');
+      if (data && data.length > 0) {
+        const formatted = data.map(tkt => ({
+          id: tkt.id,
+          reference: tkt.reference || `TKT-${tkt.id.slice(0, 5)}`,
+          title: tkt.title,
+          category: tkt.category || 'Maintenance',
+          severity: tkt.severity || 'LOW',
+          status: tkt.status || 'SUBMITTED',
+          building: tkt.tenant?.name || '—',
+          floor: tkt.locationDetails || '—',
+          locationDetails: tkt.locationDetails || '—',
+          submittedBy: tkt.createdBy?.fullName || '—',
+          assignedTo: tkt.assignee?.fullName || '—',
+          createdAt: tkt.createdAt ? new Date(tkt.createdAt).toISOString().split('T')[0] : '—',
+          slaDueMinutes: 120, // Default for now
+          description: tkt.description || '—'
+        }));
+        setTickets(formatted);
+      } else {
+        setTickets(INITIAL_TICKETS);
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error('Erreur API Tickets, fallback aux mocks');
+      setTickets(INITIAL_TICKETS);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchTickets();
+  }, []);
   const [selectedStatus, setSelectedStatus] = useState('ALL');
   const [selectedSeverity, setSelectedSeverity] = useState('ALL');
   const [selectedCategory, setSelectedCategory] = useState('ALL');
@@ -224,11 +264,26 @@ export default function TicketSummaryDashboard() {
   }, [tickets, selectedStatus, selectedSeverity, selectedCategory, searchQuery]);
 
   // Quick Action Handler to change status
-  const handleUpdateTicketStatus = (ticketId, newStatus) => {
-    setTickets(prev => prev.map(t => t.id === ticketId ? { ...t, status: newStatus } : t));
-    toast.success(`Statut du ticket mis à jour : ${newStatus}`);
-    if (selectedTicketModal && selectedTicketModal.id === ticketId) {
-      setSelectedTicketModal(prev => ({ ...prev, status: newStatus }));
+  const handleUpdateTicketStatus = async (ticketId, newStatus) => {
+    if (ticketId.toString().startsWith('tkt-')) {
+       // mock ticket
+       setTickets(prev => prev.map(t => t.id === ticketId ? { ...t, status: newStatus } : t));
+       toast.success(`Statut du mock ticket mis à jour : ${newStatus}`);
+       if (selectedTicketModal && selectedTicketModal.id === ticketId) {
+         setSelectedTicketModal(prev => ({ ...prev, status: newStatus }));
+       }
+       return;
+    }
+    
+    try {
+      await api.put(`/tickets/${ticketId}`, { status: newStatus });
+      toast.success(`Statut du ticket mis à jour : ${newStatus}`);
+      if (selectedTicketModal && selectedTicketModal.id === ticketId) {
+        setSelectedTicketModal(prev => ({ ...prev, status: newStatus }));
+      }
+      fetchTickets();
+    } catch (err) {
+      toast.error('Erreur lors de la mise à jour du ticket');
     }
   };
 
@@ -283,7 +338,7 @@ export default function TicketSummaryDashboard() {
 
           <button 
             onClick={() => {
-              setTickets([...INITIAL_TICKETS]);
+              fetchTickets();
               toast.success('Données réactualisées');
             }}
             className="p-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl border border-slate-700 transition-all cursor-pointer"
@@ -720,29 +775,26 @@ export default function TicketSummaryDashboard() {
             </div>
 
             <form
-              onSubmit={(e) => {
+              onSubmit={async (e) => {
                 e.preventDefault();
                 const selectedSite = sites.find(s => s.id === newTicketForm.siteId);
-                const newTkt = {
-                  id: `TKT-${Date.now().toString().slice(-4)}`,
-                  reference: `REC-2026-${Math.floor(100 + Math.random() * 900)}`,
-                  title: newTicketForm.title || 'Nouvelle Réclamation Occupant',
-                  category: newTicketForm.category || 'HVAC',
-                  status: 'SUBMITTED',
-                  severity: newTicketForm.severity || 'MEDIUM',
-                  building: selectedSite ? selectedSite.name : 'Paris HQ - Bâtiment Alpha',
-                  floor: 'L1',
-                  submittedBy: 'Superadmin / Occupant',
-                  assignedTo: 'Équipe FM',
-                  description: newTicketForm.description || 'Problème déclaré via formulaire.',
-                  slaDueMinutes: 120,
-                  createdAt: new Date().toISOString()
-                };
-                setTickets(prev => [newTkt, ...prev]);
-                setShowCreateTicketModal(false);
-                setNewTicketForm({ title: '', siteId: '', category: 'HVAC', severity: 'MEDIUM', description: '' });
-                setCustomFormValues({});
-                toast.success('Réclamation enregistrée avec succès !');
+                try {
+                  await api.post('/tickets', {
+                    title: newTicketForm.title || 'Nouvelle Réclamation Occupant',
+                    description: newTicketForm.description || 'Problème déclaré via formulaire.',
+                    category: newTicketForm.category || 'HVAC',
+                    severity: newTicketForm.severity || 'MEDIUM',
+                    status: 'SUBMITTED',
+                    tenantId: selectedSite?.id
+                  });
+                  setShowCreateTicketModal(false);
+                  setNewTicketForm({ title: '', siteId: '', category: 'HVAC', severity: 'MEDIUM', description: '' });
+                  setCustomFormValues({});
+                  toast.success('Réclamation enregistrée avec succès !');
+                  fetchTickets();
+                } catch (err) {
+                  toast.error('Erreur lors de la création du ticket');
+                }
               }}
               className="space-y-4 font-mono text-xs"
             >

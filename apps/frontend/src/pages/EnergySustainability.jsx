@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import api from '../services/api';
 import { 
   UploadCloud, FileText, Download, BarChart2, Leaf, Zap, Droplet, 
   CheckCircle2, Sparkles, AlertCircle, ArrowUpRight, ShieldCheck, 
@@ -31,9 +32,31 @@ const mockParsedInvoices = [
 
 export default function EnergySustainability() {
   const [isDragging, setIsDragging] = useState(false);
-  const [invoices, setInvoices] = useState(mockParsedInvoices);
+  const [invoices, setInvoices] = useState([]);
   const [isGeneratingReport, setIsGeneratingReport] = useState(false);
   const [activeMetric, setActiveMetric] = useState('all');
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchEnergyData = async () => {
+      try {
+        setLoading(true);
+        const { data } = await api.get('/analytics');
+        if (data && data.length > 0) {
+          // If real data exists, we'd map it here
+          setInvoices(data);
+        } else {
+          setInvoices(mockParsedInvoices);
+        }
+      } catch (err) {
+        console.error('API /analytics not ready, fallback to mock data');
+        setInvoices(mockParsedInvoices);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchEnergyData();
+  }, []);
 
   const handleDragOver = (e) => {
     e.preventDefault();

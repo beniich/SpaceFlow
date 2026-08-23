@@ -219,7 +219,69 @@ export default function Assets() {
   const [selectedAsset, setSelectedAsset] = useState(null);
 
   useEffect(() => {
-    // In a real app, we would fetch the tree here based on Tenant ID (RLS applied on backend)
+    const fetchAssets = async () => {
+      try {
+        setLoading(true);
+        const { data } = await api.get('/assets');
+        
+        if (data && data.length > 0) {
+          // Construct a simple virtual hierarchy from flat assets
+          const siteNode = {
+            id: 'SITE-REAL',
+            type: 'SITE',
+            name: 'Site Principal (API)',
+            code: 'SITE',
+            expanded: true,
+            children: []
+          };
+          
+          // Group by building
+          const bldgs = {};
+          data.forEach(asset => {
+            const bldgName = asset.building?.name || 'Bâtiment Principal';
+            if (!bldgs[bldgName]) {
+              bldgs[bldgName] = {
+                id: `BLD-${bldgName.replace(/\s+/g, '')}`,
+                type: 'BUILDING',
+                name: bldgName,
+                code: bldgName.substring(0, 3).toUpperCase(),
+                expanded: true,
+                children: []
+              };
+            }
+            
+            bldgs[bldgName].children.push({
+              id: asset.id,
+              type: 'EQUIPMENT',
+              name: asset.name,
+              code: asset.type || asset.category || 'EQ',
+              status: asset.status || 'OPERATIONAL',
+              category: asset.category || 'Maintenance',
+              cobieClass: asset.assetType || 'N/A',
+              bimRef: asset.bimUrl || null,
+              ...asset
+            });
+          });
+          
+          siteNode.children = Object.values(bldgs);
+          setAssetTree([siteNode]);
+        } else {
+          setAssetTree(MOCK_HIERARCHY); // fallback
+        }
+      } catch (err) {
+        console.error(err);
+        toast.error('Erreur de connexion API, fallback aux mocks');
+        setAssetTree(MOCK_HIERARCHY);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    fetchAssets();
+  }, []);
+
+  useEffect(() => {
+    // Process tree into flat list and apply filters
     const flat = flattenTree(assetTree);
     
     // Apply filters

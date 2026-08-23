@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import api from '../services/api';
 import { Wind, Flame, Activity, PieChart as PieChartIcon, FileText, Filter, Eye, ZoomIn, Sparkles } from 'lucide-react';
 import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, Tooltip, PieChart, Pie, Cell } from 'recharts';
 import toast from 'react-hot-toast';
@@ -21,6 +22,29 @@ const sourceData = [
 
 export default function AirQuality() {
   const [activeOverlay, setActiveOverlay] = useState('Air Flow');
+  const [aqiData, setAqiData] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchAqiData = async () => {
+      try {
+        setLoading(true);
+        // Using analytics endpoint as placeholder
+        const { data } = await api.get('/analytics?type=AIR_QUALITY');
+        if (data && data.length > 0) {
+          setAqiData(data);
+        } else {
+          setAqiData(mockAqiHistory);
+        }
+      } catch (err) {
+        console.error('API not ready for air quality, fallback to mock data');
+        setAqiData(mockAqiHistory);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchAqiData();
+  }, []);
 
   return (
     <div className="min-h-screen bg-[#0b0f14] text-slate-100 p-4 sm:p-6 lg:p-8 font-sans relative">
@@ -124,7 +148,7 @@ export default function AirQuality() {
             {/* Recharts AQI Trend */}
             <div className="h-36 w-full">
               <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={mockAqiHistory}>
+                <LineChart data={aqiData}>
                   <XAxis dataKey="day" stroke="#475569" fontSize={10} />
                   <YAxis stroke="#475569" fontSize={10} domain={[0, 60]} />
                   <Tooltip contentStyle={{ backgroundColor: '#0f172a', borderColor: '#334155', borderRadius: '8px', fontSize: '12px' }} />
