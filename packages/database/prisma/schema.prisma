@@ -1,0 +1,1008 @@
+// prisma/schema.prisma
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["postgresqlExtensions", "fullTextSearch"]
+}
+
+datasource db {
+  provider   = "postgresql"
+  url        = env("DATABASE_URL")
+  extensions = [postgis]
+}
+
+// ============================================
+// AUTH & MULTI-TENANT
+// ============================================
+
+model Tenant {
+  id        String       @id @default(uuid())
+  name      String
+  slug      String       @unique
+  status    TenantStatus @default(ACTIVE)
+  config    Json?
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+
+  users       User[]
+  assets      Asset[]
+  bimModels   BIMModel[]
+  bimElements BIMElement[]
+  sensors     Sensor[]
+  alerts      Alert[]
+  Ticket      Ticket[]
+  SLAPolicy   SLAPolicy[]
+
+  @@index([slug])
+  @@index([status])
+}
+
+enum TenantStatus {
+  ACTIVE
+  SUSPENDED
+  TRIAL
+  CANCELLED
+}
+
+model User {
+  id           String    @id @default(uuid())
+  email        String
+  passwordHash String
+  fullName     String?
+  role         UserRole  @default(MEMBER)
+  tenantId     String
+  tenant       Tenant    @relation(fields: [tenantId], references: [id])
+  lastLoginAt  DateTime?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  sessions           Session[]
+  apiKeys            ApiKey[]
+  acknowledgedAlerts Alert[]   @relation("AcknowledgedBy")
+  dismissedAlerts    Alert[]   @relation("DismissedBy")
+
+  // TICKETS EXTENSION
+  submittedTickets  Ticket[]           @relation("SubmittedTickets")
+  validatedTickets  Ticket[]           @relation("ValidatedTickets")
+  assignedTickets   Ticket[]           @relation("AssignedTickets")
+  closedTickets     Ticket[]           @relation("ClosedTickets")
+  qaReviews         QAReview[]
+  ticketComments    TicketComment[]
+  ticketEvents      TicketEvent[]
+  ticketAttachments TicketAttachment[]
+
+  // WORK ORDERS
+  assignedWorkOrders WorkOrder[] @relation("AssignedWorkOrders")
+  createdWorkOrders  WorkOrder[] @relation("CreatedWorkOrders")
+
+  @@unique([email, tenantId])
+  @@index([tenantId])
+}
+
+enum UserRole {
+  OWNER
+  ADMIN
+  MEMBER
+  VIEWER
+  DEMO
+}
+
+model Session {
+  id        String    @id @default(uuid())
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tokenHash String    @unique
+  expiresAt DateTime
+  revokedAt DateTime?
+  ipAddress String?
+  userAgent String?
+  createdAt DateTime  @default(now())
+
+  @@index([userId])
+  @@index([expiresAt])
+}
+
+// ============================================
+// BIM MODELS
+// ============================================
+
+model BIMModel {
+  id               String    @id @default(uuid())
+  tenantId         String
+  tenant           Tenant    @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  name             String
+  description      String?
+  originalFilename String?
+  storageKey       String // S3 key
+  fileSize         BigInt?
+  fileHash         String? // SHA256 pour déduplication
+  status           BIMStatus @default(PROCESSING)
+  elementCount     Int       @default(0)
+  buildingId       String?
+  building         Building? @relation(fields: [buildingId], references: [id])
+  coordinateSystem String? // e.g., "EPSG:4326"
+  units            String? // e.g., "meters"
+
+  // Métadonnées traitement
+  extractionDurationMs Int?
+  errorMessage         String?
+  errorAt              DateTime?
+  processedAt          DateTime?
+
+  // Stats usage
+  lastViewedAt DateTime?
+  viewCount    Int       @default(0)
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  elements BIMElement[]
+  alerts   Alert[]
+
+  @@unique([tenantId, fileHash])
+  @@index([tenantId, status])
+  @@index([buildingId])
+  @@index([deletedAt])
+}
+
+enum BIMStatus {
+  UPLOADING
+  PROCESSING
+  READY
+  ERROR
+  ARCHIVED
+}
+
+model BIMElement {
+  id       String   @id @default(uuid())
+  tenantId String
+  tenant   Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  modelId  String
+  model    BIMModel @relation(fields: [modelId], references: [id], onDelete: Cascade)
+
+  expressID   Int // IFC express ID
+  ifcGlobalId String // IFC GUID
+  ifcType     String // IFCBUILDING, IFCEQUIPMENT, etc.
+  elementType BIMElementType // Catégorie simplifiée
+
+  name        String?
+  description String?
+  level       String? // Ex: "L2"
+
+  parentExpressID Int? // Pour la hiérarchie
+  geometry        Json? // Bounding box, mesh simplifié
+  properties      Json? // PropertySets IFC
+  boundingBox     Json?
+  metadata        Json? // Autres metadata (color, material...)
+
+  // Liaison GMAO
+  assetId String?
+  asset   Asset?  @relation(fields: [assetId], references: [id])
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  @@unique([modelId, expressID])
+  @@index([tenantId])
+  @@index([modelId])
+  @@index([ifcGlobalId])
+  @@index([assetId])
+  @@index([elementType])
+  @@index([parentExpressID])
+  @@index([deletedAt])
+}
+
+enum BIMElementType {
+  SITE
+  BUILDING
+  FLOOR
+  SPACE
+  ZONE
+  ASSET
+  STRUCTURE
+  OTHER
+}
+
+// ============================================
+// ASSETS & WORK ORDERS
+// ============================================
+
+model Asset {
+  id       String      @id @default(uuid())
+  tenantId String
+  tenant   Tenant      @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  code     String
+  name     String
+  type     AssetType
+  status   AssetStatus @default(OPERATIONAL)
+
+  // Hiérarchie
+  parentId String?
+  parent   Asset?  @relation("AssetHierarchy", fields: [parentId], references: [id])
+  children Asset[] @relation("AssetHierarchy")
+
+  // Localisation
+  buildingId String?
+  building   Building? @relation(fields: [buildingId], references: [id])
+  floor      Int?
+  zone       String?
+  location   Json? // {lat, lng} PostGIS
+
+  // Caractéristiques
+  criticality     Int       @default(3) // 1-5
+  healthScore     Float? // 0-100
+  manufacturer    String?
+  model           String?
+  serialNumber    String?
+  installDate     DateTime?
+  warrantyEndDate DateTime?
+
+  // Link IFC bidirectionnel
+  ifcGuid     String?      @unique
+  bimElements BIMElement[]
+
+  sensors         Sensor[]
+  workOrders      WorkOrder[]
+  maintenanceLogs MaintenanceLog[]
+  tickets         Ticket[]
+
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+  lastMaintenanceAt DateTime?
+  deletedAt         DateTime?
+  AssetQRCode       AssetQRCode[]
+
+  @@unique([tenantId, code])
+  @@index([tenantId, status])
+  @@index([parentId])
+  @@index([buildingId])
+  @@index([type])
+  @@index([deletedAt])
+}
+
+enum AssetType {
+  EQUIPMENT
+  SYSTEM
+  COMPONENT
+  SPACE
+  OTHER
+}
+
+enum AssetStatus {
+  OPERATIONAL
+  ALERT
+  MAINTENANCE
+  OUT_OF_SERVICE
+  RETIRED
+}
+
+model Building {
+  id           String  @id @default(uuid())
+  tenantId     String
+  name         String
+  address      String?
+  city         String?
+  country      String?
+  geoLocation  Json? // PostGIS Point
+  totalSurface Float?
+
+  assets    Asset[]
+  bimModels BIMModel[]
+  tickets   Ticket[]
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  @@index([tenantId])
+  @@index([deletedAt])
+}
+
+model WorkOrder {
+  id          String            @id @default(uuid())
+  tenantId    String
+  assetId     String
+  asset       Asset             @relation(fields: [assetId], references: [id])
+  title       String
+  description String?
+  type        WorkOrderType
+  status      WorkOrderStatus   @default(OPEN)
+  priority    WorkOrderPriority @default(NORMAL)
+
+  // Planification
+  dueDate           DateTime?
+  scheduledAt       DateTime?
+  estimatedDuration Int? // minutes
+  actualDuration    Int? // minutes
+
+  // Assignation
+  assigneeId  String?
+  assignee    User?     @relation("AssignedWorkOrders", fields: [assigneeId], references: [id])
+  createdById String
+  createdBy   User      @relation("CreatedWorkOrders", fields: [createdById], references: [id])
+
+  // Résolution
+  completedAt DateTime?
+  completedBy String?
+
+  // Coûts
+  laborCost Float?
+  partsCost Float?
+  totalCost Float?
+
+  tickets Ticket[]
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  @@index([tenantId, status])
+  @@index([tenantId, dueDate])
+  @@index([assigneeId])
+  @@index([assetId])
+  @@index([deletedAt])
+}
+
+enum WorkOrderType {
+  PREVENTIVE
+  CORRECTIVE
+  EMERGENCY
+  INSPECTION
+  REQUEST
+}
+
+enum WorkOrderStatus {
+  OPEN
+  IN_PROGRESS
+  ON_HOLD
+  COMPLETED
+  CANCELLED
+}
+
+enum WorkOrderPriority {
+  LOW
+  NORMAL
+  HIGH
+  URGENT
+}
+
+model MaintenanceLog {
+  id       String @id @default(uuid())
+  tenantId String
+  assetId  String
+  asset    Asset  @relation(fields: [assetId], references: [id])
+
+  workOrderId    String?
+  type           MaintenanceType
+  performedAt    DateTime        @default(now())
+  completedAt    DateTime
+  technicianId   String
+  technicianName String
+
+  notes        String?
+  beforePhotos String[] // S3 keys
+  afterPhotos  String[]
+  signatureUrl String?
+
+  partsReplaced Json? // [{partId, quantity, cost}]
+  laborHours    Float?
+  totalCost     Float?
+
+  createdAt DateTime @default(now())
+
+  @@index([tenantId, assetId])
+  @@index([assetId])
+  @@index([performedAt])
+}
+
+enum MaintenanceType {
+  PREVENTIVE
+  CORRECTIVE
+  PREDICTIVE
+  INSPECTION
+  CALIBRATION
+}
+
+// ============================================
+// IOT / SENSORS
+// ============================================
+
+model Sensor {
+  id       String @id @default(uuid())
+  tenantId String
+  tenant   Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  assetId  String
+  asset    Asset  @relation(fields: [assetId], references: [id], onDelete: Cascade)
+
+  code     String
+  name     String
+  type     SensorType
+  unit     String // °C, kWh, m/s...
+  status   SensorStatus @default(ACTIVE)
+  protocol String? // MQTT, BACnet, Modbus...
+
+  position Json? // {x, y, z} localisation dans asset
+  metadata Json?
+
+  lastReadingAt    DateTime?
+  lastReadingValue Float?
+
+  readings   SensorReading[]
+  thresholds SensorThreshold?
+  alerts     Alert[]
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  @@unique([tenantId, code])
+  @@index([tenantId, assetId])
+  @@index([type])
+  @@index([status])
+  @@index([lastReadingAt])
+}
+
+enum SensorType {
+  TEMPERATURE
+  HUMIDITY
+  PRESSURE
+  VIBRATION
+  ENERGY
+  FLOW
+  CO2
+  AIR_QUALITY
+  LEVEL
+  CURRENT
+  VOLTAGE
+  CUSTOM
+}
+
+enum SensorStatus {
+  ACTIVE
+  INACTIVE
+  FAULTY
+  CALIBRATING
+  RETIRED
+}
+
+enum DataQuality {
+  GOOD
+  DEGRADED
+  BAD
+  OUTLIER
+}
+
+model SensorReading {
+  id       BigInt @id @default(autoincrement())
+  tenantId String
+  sensorId String
+  sensor   Sensor @relation(fields: [sensorId], references: [id], onDelete: Cascade)
+
+  value     Float
+  quality   DataQuality @default(GOOD)
+  rawValue  Json?
+  timestamp DateTime
+
+  createdAt DateTime @default(now())
+
+  @@index([sensorId, timestamp(sort: Desc)])
+  @@index([tenantId, timestamp(sort: Desc)])
+  @@map("sensor_readings")
+}
+
+model SensorThreshold {
+  id       String @id @default(uuid())
+  sensorId String @unique
+  sensor   Sensor @relation(fields: [sensorId], references: [id], onDelete: Cascade)
+
+  minValue    Float?
+  maxValue    Float?
+  minCritical Float?
+  maxCritical Float?
+
+  hysteresis Float @default(2.0) // Hysteresis pour éviter alertes flapping
+
+  setBy     String?
+  updatedBy String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// ============================================
+// ALERTS (système générique)
+// ============================================
+
+model Alert {
+  id       String    @id @default(uuid())
+  tenantId String
+  tenant   Tenant    @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  modelId  String?
+  model    BIMModel? @relation(fields: [modelId], references: [id])
+  sensorId String?
+  sensor   Sensor?   @relation(fields: [sensorId], references: [id])
+  assetId  String?
+
+  severity    AlertSeverity
+  title       String
+  description String?
+  location    String? // "Floor L3 · Structural"
+
+  value     Float?
+  threshold Float?
+
+  acknowledgedAt   DateTime?
+  acknowledgedById String?
+  acknowledgedBy   User?     @relation("AcknowledgedBy", fields: [acknowledgedById], references: [id])
+
+  dismissedAt     DateTime?
+  dismissedById   String?
+  dismissedBy     User?     @relation("DismissedBy", fields: [dismissedById], references: [id])
+  dismissedReason String?
+
+  resolvedAt DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([tenantId, createdAt(sort: Desc)])
+  @@index([tenantId, severity])
+  @@index([modelId])
+  @@index([sensorId])
+  @@index([acknowledgedAt])
+}
+
+enum AlertSeverity {
+  INFO
+  WARNING
+  CRITICAL
+  EMERGENCY
+}
+
+// ============================================
+// ERP, CRM, LEASES (extraits)
+// ============================================
+
+model ApiKey {
+  id         String    @id @default(uuid())
+  tenantId   String
+  userId     String
+  user       User      @relation(fields: [userId], references: [id])
+  name       String
+  prefix     String    @unique // "pk_live_abc..."
+  hash       String // bcrypt du secret complet
+  scopes     String[]
+  expiresAt  DateTime?
+  lastUsedAt DateTime?
+
+  createdAt DateTime  @default(now())
+  revokedAt DateTime?
+
+  @@index([tenantId])
+}
+
+// ============================================
+// LEASES / REAL ESTATE
+// ============================================
+
+model Lease {
+  id         String   @id @default(uuid())
+  tenantId   String
+  buildingId String?
+  unit       String?
+  startDate  DateTime
+  endDate    DateTime
+  rentAmount Float
+  currency   String   @default("EUR")
+  status     String   @default("ACTIVE")
+  terms      Json?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([tenantId])
+  @@index([endDate])
+}
+
+// ============================================
+// AUDIT & EVENTS
+// ============================================
+
+model AuditEvent {
+  id         BigInt   @id @default(autoincrement())
+  tenantId   String?
+  userId     String?
+  action     String // CREATE, UPDATE, DELETE, LOGIN...
+  resource   String // "Asset", "WorkOrder"...
+  resourceId String?
+  metadata   Json?
+  ip         String?
+  userAgent  String?
+  timestamp  DateTime @default(now())
+
+  @@index([tenantId, timestamp(sort: Desc)])
+  @@index([resource, resourceId])
+  @@index([userId])
+}
+
+// ============================================
+// DEMO SESSION MANAGEMENT
+// ============================================
+
+model DemoSession {
+  id           String   @id @default(uuid())
+  tenantId     String
+  userId       String?
+  ipAddress    String
+  userAgent    String?
+  startedAt    DateTime @default(now())
+  expiresAt    DateTime
+  actionsCount Int      @default(0)
+  metadata     Json?
+
+  @@index([ipAddress, startedAt])
+  @@index([expiresAt])
+}
+
+// ============================================
+// TICKETS / RECLAMATIONS
+// ============================================
+
+enum TicketSeverity {
+  LOW // Panne non-urgente
+  MEDIUM // Gêne modérée
+  HIGH // Impact significatif
+  CRITICAL // Risque sécurité/santé
+  EMERGENCY // Danger immédiat
+}
+
+enum TicketStatus {
+  DRAFT // Brouillon non soumis
+  SUBMITTED // Soumis, en attente triage
+  TRIAGED // Validé par FM, prêt dispatch
+  ASSIGNED // Assigné technicien
+  IN_PROGRESS // Intervention en cours
+  TECH_CLOSED // Clôture technique, attente QA
+  QAP_PASSED // Validation QA réussie
+  QAP_REJECTED // Rejet QA, retour tech
+  CLOSED // Clôture définitive (signée)
+  CANCELLED // Annulé
+}
+
+enum TicketCategory {
+  PLUMBING // Plomberie
+  ELECTRICAL // Électricité
+  HVAC // CVC / Climatisation
+  CARPENTRY // Menuiserie
+  CLEANING // Nettoyage
+  PEST_CONTROL // Nuisibles
+  SECURITY // Sécurité
+  IT_NETWORK // Réseau IT
+  LIGHTING // Éclairage
+  ACCESS // Contrôle d'accès
+  NOISE // Nuisance sonore
+  TEMPERATURE // Confort thermique
+  SAFETY // Sécurité incendie/sûreté
+  OTHER // Autre
+}
+
+model Ticket {
+  id       String @id @default(uuid())
+  tenantId String
+  tenant   Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  // Identifiants humains
+  reference   String // ex: "TKT-2026-00001" (lisible)
+  title       String
+  description String
+  category    TicketCategory
+  subcategory String?
+  severity    TicketSeverity @default(MEDIUM)
+  status      TicketStatus   @default(SUBMITTED)
+
+  // Localisation
+  buildingId      String?
+  building        Building? @relation(fields: [buildingId], references: [id])
+  floor           String?
+  zone            String?
+  locationDetails String? // Description libre de l'emplacement
+  geoLocation     Json? // {lat, lng}
+
+  // Lien vers asset BIM (optionnel)
+  assetId String?
+  asset   Asset?  @relation(fields: [assetId], references: [id])
+
+  // Workflow
+  submittedById      String? // null si anonyme
+  submittedBy        User?                  @relation("SubmittedTickets", fields: [submittedById], references: [id])
+  submittedByName    String? // Pour les soumissions anonymes
+  submittedByContact String? // Email ou téléphone si pas de user
+  submissionSource   TicketSubmissionSource @default(WEB)
+
+  validatedById String?
+  validatedBy   User?     @relation("ValidatedTickets", fields: [validatedById], references: [id])
+  validatedAt   DateTime?
+
+  assignedToId String?
+  assignedTo   User?     @relation("AssignedTickets", fields: [assignedToId], references: [id])
+  assignedAt   DateTime?
+
+  closedById    String?
+  closedBy      User?     @relation("ClosedTickets", fields: [closedById], references: [id])
+  closedAt      DateTime?
+  closureReason String?
+
+  // Lien Work Order
+  workOrderId String?
+  workOrder   WorkOrder? @relation(fields: [workOrderId], references: [id])
+
+  // SLA
+  slaPolicyId        String?
+  slaPolicy          SLAPolicy? @relation(fields: [slaPolicyId], references: [id])
+  slaResponseDueAt   DateTime?
+  slaResolutionDueAt DateTime?
+  slaResponseMetAt   DateTime?
+  slaResolutionMetAt DateTime?
+  slaBreached        Boolean    @default(false)
+
+  // Satisfaction (post-clôture)
+  satisfactionRating  Int? // 1-5
+  satisfactionComment String?
+  satisfactionAt      DateTime?
+
+  // Métadonnées
+  attachments TicketAttachment[]
+  events      TicketEvent[]
+  comments    TicketComment[]
+  qaReviews   QAReview[]
+
+  tags String[] // Tags libres
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  @@unique([tenantId, reference])
+  @@index([tenantId, status])
+  @@index([tenantId, severity])
+  @@index([assignedToId, status])
+  @@index([buildingId])
+  @@index([assetId])
+  @@index([slaResolutionDueAt, status])
+  @@index([submittedById])
+  @@index([createdAt(sort: Desc)])
+  @@index([deletedAt])
+}
+
+enum TicketSubmissionSource {
+  WEB
+  MOBILE_APP
+  EMAIL
+  PHONE
+  QR_CODE
+  CHATBOT
+  IOT_SENSOR
+  API
+  IMPORT
+}
+
+model TicketAttachment {
+  id           String  @id @default(uuid())
+  tenantId     String
+  ticketId     String
+  ticket       Ticket  @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  uploadedById String?
+  uploadedBy   User?   @relation(fields: [uploadedById], references: [id])
+
+  filename    String
+  storageKey  String // S3 key
+  mimeType    String
+  sizeBytes   Int
+  category    AttachmentCategory @default(GENERAL)
+  capturedAt  DateTime?
+  geoLocation Json?
+  metadata    Json?
+
+  createdAt DateTime @default(now())
+
+  @@index([tenantId, ticketId])
+}
+
+enum AttachmentCategory {
+  BEFORE_PHOTO
+  AFTER_PHOTO
+  DIAGNOSTIC_PHOTO
+  SIGNATURE
+  INVOICE
+  REPORT
+  GENERAL
+}
+
+model TicketEvent {
+  id       String @id @default(uuid())
+  tenantId String
+  ticketId String
+  ticket   Ticket @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+
+  type    TicketEventType
+  actorId String?
+  actor   User?           @relation(fields: [actorId], references: [id])
+
+  fromStatus TicketStatus?
+  toStatus   TicketStatus?
+
+  metadata Json? // Données contextuelles (assignation, etc.)
+  comment  String?
+
+  createdAt DateTime @default(now())
+
+  @@index([tenantId, ticketId, createdAt(sort: Desc)])
+  @@index([type])
+}
+
+enum TicketEventType {
+  CREATED
+  SUBMITTED
+  VALIDATED
+  SEVERITY_CHANGED
+  ASSIGNED
+  REASSIGNED
+  WORK_ORDER_LINKED
+  STATUS_CHANGED
+  COMMENT_ADDED
+  ATTACHMENT_ADDED
+  SLA_BREACHED_WARNING
+  SLA_BREACHED
+  TECHNICIAN_STARTED
+  TECHNICIAN_COMPLETED
+  QA_REVIEW_STARTED
+  QA_APPROVED
+  QA_REJECTED
+  CLOSED
+  REOPENED
+  CANCELLED
+  SATISFACTION_RECEIVED
+  ESCALATED
+}
+
+model TicketComment {
+  id       String @id @default(uuid())
+  tenantId String
+  ticketId String
+  ticket   Ticket @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+
+  authorId   String?
+  author     User?             @relation(fields: [authorId], references: [id])
+  authorName String? // Pour commentaires externes
+  isInternal Boolean           @default(false) // Visible uniquement staff
+  visibility CommentVisibility @default(ALL)
+  content    String
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  @@index([tenantId, ticketId, createdAt])
+}
+
+enum CommentVisibility {
+  ALL // Demandeur, FM, Tech, QA
+  STAFF_ONLY // FM, Tech, QA (pas le demandeur)
+  INTERNAL_NOTES // Notes internes uniquement
+  SUPERVISORS // FM + superviseurs
+}
+
+// ============================================
+// QA (Quality Assurance)
+// ============================================
+
+model QAReview {
+  id       String @id @default(uuid())
+  tenantId String
+  ticketId String
+  ticket   Ticket @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+
+  reviewerId String
+  reviewer   User   @relation(fields: [reviewerId], references: [id])
+
+  // Critères d'évaluation (extensible)
+  criteriaScores Json // {technical: 4, cleanliness: 5, ...}
+  totalScore     Float
+  passed         Boolean
+
+  rejectionReasons String[]
+  comments         String?
+
+  reviewedAt DateTime @default(now())
+
+  attachments QAReviewAttachment[]
+
+  @@index([tenantId, ticketId])
+  @@index([reviewerId])
+  @@index([passed])
+}
+
+model QAReviewAttachment {
+  id         String   @id @default(uuid())
+  qaReviewId String
+  qaReview   QAReview @relation(fields: [qaReviewId], references: [id], onDelete: Cascade)
+  storageKey String
+  filename   String
+  mimeType   String
+  createdAt  DateTime @default(now())
+}
+
+// ============================================
+// SLA POLICIES
+// ============================================
+
+model SLAPolicy {
+  id       String @id @default(uuid())
+  tenantId String
+  tenant   Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  name        String
+  description String?
+
+  // Cible SLA par sévérité (en minutes)
+  category TicketCategory?
+  severity TicketSeverity?
+  priority Int             @default(0) // Plus haut = prioritaire
+
+  responseTimeMinutes   Int // Temps cible avant première action
+  resolutionTimeMinutes Int // Temps cible résolution complète
+
+  // Escalade
+  escalateAfterMinutes Int?
+  escalateToRole       UserRole?
+  escalateToUserId     String?
+
+  // Heures ouvrées
+  businessHoursOnly   Boolean @default(false)
+  businessHoursConfig Json? // {mon: {start: '08:00', end: '18:00'}, ...}
+
+  isActive Boolean @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  tickets Ticket[]
+
+  @@index([tenantId, isActive])
+  @@index([category, severity])
+}
+
+model SLAEscalation {
+  id       String @id @default(uuid())
+  tenantId String
+  ticketId String
+  level    Int // 1, 2, 3...
+
+  reason        String
+  escalatedToId String
+  escalatedAt   DateTime @default(now())
+
+  @@index([tenantId, ticketId])
+  @@index([escalatedAt])
+}
+
+// ============================================
+// QR CODES & ASSET LINKS
+// ============================================
+
+model AssetQRCode {
+  id       String @id @default(uuid())
+  tenantId String
+  assetId  String
+  asset    Asset  @relation(fields: [assetId], references: [id], onDelete: Cascade)
+
+  shortCode String  @unique // 8 caractères alphanum
+  qrUrl     String? // URL encoded
+  scanCount Int     @default(0)
+
+  createdAt DateTime @default(now())
+
+  @@unique([tenantId, assetId])
+  @@index([shortCode])
+}

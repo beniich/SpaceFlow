@@ -1,0 +1,90 @@
+@import "./styles/auth.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --brand-orange: #ff5500;
+    --brand-navy: #0f172a;
+    --brand-black: #0a0a0c;
+    --brand-bg-offwhite: #f4f5f7;
+    --brand-card-bg: #ffffff;
+    --brand-cyan: #00dbe7;
+  }
+
+  body {
+    @apply antialiased bg-[#f4f5f7] text-[#0a0a0c] transition-colors duration-200;
+    font-family: 'Inter', sans-serif;
+  }
+
+  body.dark-mode {
+    @apply bg-[#090a0f] text-[#e5e2e1];
+  }
+}
+
+/* Light Mode Specific Styles (95% Blanc cassé, 2% Bleu marine, 2% Noir, 1% Orange électrique) */
+.light-mode-card {
+  background-color: #ffffff;
+  border: 1px solid rgba(15, 23, 42, 0.1);
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.05);
+}
+
+.light-mode-header {
+  background-color: rgba(255, 255, 255, 0.95);
+  border-bottom: 1px solid rgba(15, 23, 42, 0.1);
+}
+
+.glass-panel {
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(15, 23, 42, 0.12);
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+}
+
+body.dark-mode .glass-panel {
+  background: rgba(26, 26, 26, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: none;
+}
+
+.neon-glow-primary {
+  box-shadow: 0 0 12px rgba(255, 85, 0, 0.3);
+}
+
+.neon-glow-primary:hover {
+  box-shadow: 0 0 18px rgba(255, 85, 0, 0.45);
+}
+
+.neon-glow-secondary {
+  box-shadow: 0 0 12px rgba(15, 23, 42, 0.2);
+}
+
+/* Custom scrollbar for webkit */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(15, 23, 42, 0.03);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(15, 23, 42, 0.2);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(15, 23, 42, 0.35);
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

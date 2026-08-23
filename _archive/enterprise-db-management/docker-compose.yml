@@ -1,0 +1,21 @@
+# docker-compose.yml
+version: "3.9"
+
+services:
+  backend:
+    build: ./backend
+    container_name: db-backend
+    environment:
+      - NODE_ENV=production
+    ports:
+      - "4001:4001"
+    restart: unless-stopped
+
+  frontend:
+    build: ./frontend
+    container_name: db-frontend
+    ports:
+      - "3001:80"   # nginx expose sur le port 80 à l’intérieur, mappé sur 3001
+    depends_on:
+      - backend
+    restart: unless-stopped

@@ -1,0 +1,81 @@
+name: CI — BeeCarbonIT
+
+on:
+  push:
+    branches: [main, master, develop]
+  pull_request:
+    branches: [main, master, develop]
+
+jobs:
+  test-and-build:
+    name: Tests & Build
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: test
+          POSTGRES_PASSWORD: test
+          POSTGRES_DB: beecarbon_test
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+      redis:
+        image: redis:7-alpine
+        ports: ['6379:6379']
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies (workspace root)
+        run: npm install
+
+      - name: Generate Prisma client
+        run: npm run build -w @beecarbonit/database
+
+      - name: Lint Backend
+        working-directory: ./apps/backend
+        run: npm run lint
+        continue-on-error: true
+
+      - name: Run Backend Tests
+        working-directory: ./apps/backend
+        env:
+          DATABASE_URL: postgresql://test:test@localhost:5432/beecarbon_test
+          JWT_SECRET: test-jwt-secret-key-for-ci
+          REDIS_URL: redis://localhost:6379
+          NODE_ENV: test
+        run: npm test
+
+      - name: Build Frontend
+        working-directory: ./apps/frontend
+        run: npm run build
+
+      - name: Upload frontend build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-dist
+          path: apps/frontend/dist
+          retention-days: 7
+
+      - name: Security Audit (high severity)
+        working-directory: ./apps/backend
+        run: npm audit --audit-level=high
+        continue-on-error: true
