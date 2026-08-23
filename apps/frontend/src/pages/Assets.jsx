@@ -13,6 +13,7 @@ import { fr } from 'date-fns/locale';
 import { Link, useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { useOfflineStatus } from '../hooks/useOfflineStatus';
+import { useLanguage } from '../context/LanguageContext';
 
 // ================== WEBGL BACKGROUND SHADER ==================
 function ShaderBackground() {
@@ -199,6 +200,7 @@ const flattenTree = (nodes, level = 0, parentId = null) => {
 export default function Assets() {
   const navigate = useNavigate();
   const { isOffline, isOnline } = useOfflineStatus();
+  const { t } = useLanguage();
   
   // Data State
   const [assetTree, setAssetTree] = useState(MOCK_HIERARCHY);
@@ -286,15 +288,15 @@ export default function Assets() {
           <div>
             <div className="flex items-center gap-3">
               <h1 className="text-2xl font-bold tracking-tight font-display uppercase text-zinc-50">
-                MODÈLE DE DONNÉES ACTIFS
+                {t('asset_model_title', 'MODÈLE DE DONNÉES ACTIFS')}
               </h1>
               <span className="text-xs font-mono px-2 py-0.5 bg-zinc-900 border border-zinc-800 text-brand-cyan rounded">
-                Structure Canonique (H1)
+                {t('asset_canonical_structure', 'Structure Canonique (H1)')}
               </span>
             </div>
             <p className="text-xs font-mono text-zinc-500 uppercase tracking-widest mt-2 flex items-center gap-2">
               <span className="w-1.5 h-1.5 rounded-full bg-brand-cyan shadow-[0_0_8px_var(--brand-cyan,_#00dbe7)] animate-pulse" />
-              Conformité stricte COBie Lite • Multi-niveaux (Site → Équipement)
+              {t('asset_cobie_compliance', 'Conformité stricte COBie Lite • Multi-niveaux (Site → Équipement)')}
             </p>
           </div>
 
@@ -304,7 +306,7 @@ export default function Assets() {
               className="flex items-center gap-2 px-4 py-2 bg-zinc-900/60 border border-zinc-800 text-zinc-300 hover:text-brand-cyan hover:border-brand-cyan/50 text-[10px] font-mono uppercase font-bold rounded transition-colors"
             >
               <DownloadCloud className="w-4 h-4" />
-              Sync. IFC / BIM
+              {t('asset_sync_bim', 'Sync. IFC / BIM')}
             </button>
             <button
               type="button"
@@ -316,7 +318,7 @@ export default function Assets() {
               }`}
             >
               <Camera className="w-4 h-4" />
-              {showScanner ? 'Fermer Scanner' : 'Scanner QR'}
+              {showScanner ? t('asset_close_scanner', 'Fermer Scanner') : t('asset_scan_qr', 'Scanner QR')}
             </button>
 
             <button
@@ -324,7 +326,7 @@ export default function Assets() {
               className="flex items-center gap-2 bg-brand-orange text-black px-4 py-2 font-mono text-xs uppercase tracking-widest font-bold hover:bg-orange-500 transition-all rounded shadow-[0_0_15px_rgba(243,128,32,0.3)]"
             >
               <Plus className="w-4 h-4" />
-              Ajouter
+              {t('add', 'Ajouter')}
             </button>
           </div>
         </div>

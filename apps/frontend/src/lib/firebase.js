@@ -16,7 +16,7 @@ import {
   getDocFromServer
 } from 'firebase/firestore';
 
-import firebaseConfigJson from '../../../../firebase-applet-config.json';
+import firebaseConfigJson from './firebase-applet-config.json';
 
 // ─── Firebase Config (project: gen-lang-client-0918369522) ───────────────────────────
 const firebaseConfig = {

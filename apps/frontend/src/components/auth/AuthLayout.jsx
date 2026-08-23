@@ -1,163 +1,91 @@
 import { Link } from 'react-router-dom';
-import ParticleMap from './ParticleMap';
+import BeeCarbonitLogo from '../BeeCarbonitLogo';
 
 export default function AuthLayout({
   children,
-  signupLink = '/signup',
-  showSignup = true,
   legalText,
-  marketingTag = 'CAFM PRO by Carbonit',
   marketingHeadline = "Where Facility Managers Connect",
-  marketingMeta = 'Unleash the power of CAFM PRO by Carbonit. Manage assets, optimize space, and connect your facilities to the future.',
+  marketingMeta = 'Unleash the power of CAFM PRO by BeeCarbonat. Manage assets, optimize space, and connect your facilities to the future.',
   marketingCtaText = 'Explore Features',
   marketingCtaHref = '/'
 }) {
   return (
-    <div className="auth-page">
-      {/* COLONNE GAUCHE — Formulaire */}
-      <div className="auth-page-form">
+    <div className="auth-page min-h-screen grid grid-cols-1 lg:grid-cols-2 bg-[#121519] font-sans antialiased selection:bg-brand-orange selection:text-white">
+      {/* COLONNE GAUCHE — Formulaire CAFM PRO */}
+      <div className="auth-page-form bg-[#121519] text-white p-6 sm:p-12 lg:p-16 flex flex-col justify-between min-h-screen relative z-10">
         <div className="auth-form-header">
-          <Link to="/" className="flex flex-col select-none no-underline group">
-            <div className="flex items-center gap-1.5">
-              <span className="font-sans font-black text-2xl tracking-tight text-white uppercase">CAFM</span>
-              <span className="font-sans font-black text-2xl tracking-tight text-brand-orange uppercase">PRO</span>
-            </div>
-            <span className="text-[10px] font-mono text-zinc-500 font-semibold uppercase tracking-wider -mt-1.5 group-hover:text-brand-cyan transition-colors">by Carbonit</span>
+          <Link to="/" className="inline-flex flex-col select-none no-underline group">
+            <BeeCarbonitLogo size={42} showText={true} />
           </Link>
         </div>
 
-        <div className="auth-form-body">
+        <div className="auth-form-body w-full max-w-[420px] mx-auto py-8">
           {children}
         </div>
 
-        {legalText && (
-          <div className="auth-legal">
+        {legalText ? (
+          <div className="auth-legal w-full max-w-[420px] mx-auto text-center text-xs text-zinc-500 pb-2">
             {legalText}
+          </div>
+        ) : (
+          <div className="w-full max-w-[420px] mx-auto text-center text-xs text-zinc-500 pb-2">
+            By continuing, you agree to our <Link to="/terms" className="text-zinc-300 hover:text-white underline">Terms</Link> and{' '}
+            <Link to="/privacy" className="text-zinc-300 hover:text-white underline">Privacy Policy</Link>.
           </div>
         )}
       </div>
 
-      {/* COLONNE DROITE — Marketing (Style Cloudflare) */}
-      <div className="auth-page-marketing" style={{ position: 'relative', overflow: 'hidden' }}>
-        {/* Giant Glowing Skyscraper Schematic Blueprint Backdrop */}
-        <div className="absolute inset-0 opacity-15 pointer-events-none z-0 flex items-center justify-center">
-          <svg width="100%" height="100%" viewBox="0 0 800 800" fill="none" stroke="#ffffff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-            {/* Massive skyscraper circuits */}
-            <path d="M400 80 L520 180 L520 450 L400 370 Z" strokeWidth="2" />
-            <path d="M400 80 L280 180 L280 450 L400 370 Z" strokeWidth="2" />
-            <path d="M400 370 L400 680" strokeWidth="2" />
-            
-            {/* Side expansions */}
-            <path d="M280 220 L180 280 L180 550 L280 490 Z" />
-            <path d="M520 220 L620 280 L620 550 L520 490 Z" />
-            
-            {/* Ground circuitry traces */}
-            <path d="M400 680 L400 750 L100 750 L50 800" />
-            <path d="M400 680 L400 750 L700 750 L750 800" />
-            <path d="M180 550 L120 590 L120 700 L50 700" />
-            <path d="M620 550 L680 590 L680 700 L750 700" />
-            
-            {/* Hexagonal nodes and points */}
-            <polygon points="400,60 415,70 415,90 400,100 385,90 385,70" fill="#ffffff" />
-            <circle cx="280" cy="180" r="5" fill="#ffffff" />
-            <circle cx="520" cy="180" r="5" fill="#ffffff" />
-            <circle cx="400" cy="370" r="5" fill="#ffffff" />
-            <circle cx="180" cy="280" r="4" fill="#ffffff" />
-            <circle cx="620" cy="280" r="4" fill="#ffffff" />
-            <circle cx="180" cy="550" r="4" fill="#ffffff" />
-            <circle cx="620" cy="550" r="4" fill="#ffffff" />
-            
-            {/* Extra PCB nodes */}
-            <circle cx="120" cy="700" r="3" fill="#ffffff" />
-            <circle cx="680" cy="700" r="3" fill="#ffffff" />
-            <circle cx="100" cy="750" r="3" fill="#ffffff" />
-            <circle cx="700" cy="750" r="3" fill="#ffffff" />
+      {/* COLONNE DROITE — Visual Hero avec Arrière-Plan Architectural Cyber */}
+      <div className="auth-page-marketing hidden lg:flex flex-col justify-center relative overflow-hidden bg-[#ff5500] p-12 xl:p-20 text-white select-none">
+        {/* Background Image Layer */}
+        <div 
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat z-0"
+          style={{
+            backgroundImage: "url('/images/cafm_hero_bg.jpg')",
+            backgroundPosition: 'center 40%',
+            filter: 'contrast(1.05) saturate(1.1)'
+          }}
+        />
+
+        {/* Ambient Vibrant Orange Gradient Overlays */}
+        <div className="absolute inset-0 bg-gradient-to-tr from-[#e64a00]/80 via-transparent to-[#ff7700]/60 z-[1] mix-blend-multiply" />
+        <div className="absolute inset-0 bg-radial-at-c from-transparent via-[#ff5500]/20 to-[#cc3d00]/70 z-[1]" />
+
+        {/* High-Tech Vector Circuit & Grid Accents */}
+        <div className="absolute inset-0 pointer-events-none z-[2] opacity-40">
+          <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <pattern id="auth-grid-dots" width="32" height="32" patternUnits="userSpaceOnUse">
+                <circle cx="16" cy="16" r="1" fill="#ffffff" fillOpacity="0.4" />
+              </pattern>
+            </defs>
+            <rect width="100%" height="100%" fill="url(#auth-grid-dots)" />
           </svg>
         </div>
 
-        {/* En-tête avec switch langue et bouton d'action */}
-        <div className="auth-marketing-header" style={{ position: 'absolute', top: 32, right: 32, display: 'flex', gap: 16, alignItems: 'center', zIndex: 10 }}>
-          <button className="auth-lang-switch" type="button" style={{ display: 'flex', alignItems: 'center', gap: 6, background: 'transparent', border: 'none', color: '#1a1a1a', fontSize: 14, fontWeight: 500, cursor: 'pointer' }}>
-            <span style={{ fontSize: '15px' }}>🌐</span>
-            <span>Français</span>
-            <span style={{ fontSize: '10px' }}>▼</span>
-          </button>
-          {showSignup && (
-            <Link 
-              to={signupLink} 
-              className="auth-signup-link-dark" 
-              style={{ 
-                background: '#1a1a1a', 
-                color: '#fff', 
-                padding: '8px 20px', 
-                borderRadius: '6px', 
-                textDecoration: 'none', 
-                fontSize: '14px', 
-                fontWeight: 600,
-                border: '1px solid #1a1a1a',
-                transition: 'all 0.2s'
-              }}
-              onMouseEnter={(e) => e.currentTarget.style.background = '#2c2c2c'}
-              onMouseLeave={(e) => e.currentTarget.style.background = '#1a1a1a'}
-            >
-              {signupLink === '/login' ? 'Se connecter' : "S'inscrire"}
-            </Link>
-          )}
-        </div>
-
-        <ParticleMap />
-
-        <div className="auth-marketing-content" style={{ marginTop: 'auto', marginBottom: 'auto', position: 'relative', zIndex: 2 }}>
-          <div className="auth-marketing-tag" style={{ fontSize: '14px', fontWeight: 500, fontFamily: 'monospace', color: '#1a1a1a', opacity: 0.8, marginBottom: '16px' }}>
-            {marketingTag}
-          </div>
-
-          <div className="auth-marketing-headline" style={{ fontSize: '48px', fontWeight: 800, lineHeight: '1.1', color: '#1a1a1a', marginBottom: '24px', letterSpacing: '-1px' }}>
+        {/* Contenu Marketing Central — Aligné avec le Design Référence */}
+        <div className="relative z-10 max-w-xl">
+          <h2 className="text-4xl xl:text-5xl 2xl:text-6xl font-black tracking-tight text-white leading-[1.08] mb-6 drop-shadow-md">
             {marketingHeadline}
-          </div>
+          </h2>
 
           {marketingMeta && (
-            <div className="auth-marketing-meta" style={{ fontSize: '16px', color: '#1a1a1a', opacity: 0.8, marginBottom: '32px' }}>
+            <p className="text-base xl:text-lg text-white/95 leading-relaxed font-normal mb-8 max-w-lg drop-shadow-sm">
               {marketingMeta}
-            </div>
+            </p>
           )}
 
-          <Link 
-            to={marketingCtaHref} 
-            className="auth-marketing-cta"
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: 8,
-              padding: '14px 28px',
-              background: '#1a1a1a',
-              color: '#fff',
-              borderRadius: '6px',
-              fontWeight: 700,
-              fontSize: '14px',
-              textDecoration: 'none',
-              boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
-              transition: 'all 0.2s'
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.transform = 'translateY(-2px)';
-              e.currentTarget.style.boxShadow = '0 6px 18px rgba(0,0,0,0.25)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.transform = 'translateY(0)';
-              e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.15)';
-            }}
-          >
-            <span>{marketingCtaText}</span>
-            <span style={{ fontSize: '16px' }}>↗</span>
-          </Link>
-        </div>
-
-        <div className="auth-marketing-footer" style={{ zIndex: 2 }}>
-          <span>© 2026 BEECARBONAT</span>
-          <span>Une plateforme ℅ minimal</span>
+          <div>
+            <Link 
+              to={marketingCtaHref}
+              className="inline-flex items-center justify-center px-8 py-3.5 bg-white hover:bg-zinc-100 text-zinc-950 font-bold text-sm rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 transform hover:-translate-y-0.5"
+            >
+              {marketingCtaText}
+            </Link>
+          </div>
         </div>
       </div>
     </div>
   );
 }
+

@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { getPendingActionsCount, flushPendingActions, SYNC_EVENT_NAME } from '../services/syncService';
 
 export function useOfflineStatus() {
   const [isOnline, setIsOnline] = useState(
@@ -6,13 +7,29 @@ export function useOfflineStatus() {
   );
   const [swReady, setSwReady] = useState(false);
   const [cacheInfo, setCacheInfo] = useState(null);
+  const [pendingSyncCount, setPendingSyncCount] = useState(0);
+  const [isSyncing, setIsSyncing] = useState(false);
+
+  const updatePendingCount = useCallback(async () => {
+    const count = await getPendingActionsCount();
+    setPendingSyncCount(count);
+  }, []);
 
   useEffect(() => {
-    const handleOnline = () => setIsOnline(true);
-    const handleOffline = () => setIsOnline(false);
+    const handleOnline = () => {
+      setIsOnline(true);
+      updatePendingCount();
+    };
+    const handleOffline = () => {
+      setIsOnline(false);
+      updatePendingCount();
+    };
 
     window.addEventListener('online', handleOnline);
     window.addEventListener('offline', handleOffline);
+    window.addEventListener(SYNC_EVENT_NAME, updatePendingCount);
+
+    updatePendingCount();
 
     if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
       setSwReady(true);
@@ -27,8 +44,9 @@ export function useOfflineStatus() {
     return () => {
       window.removeEventListener('online', handleOnline);
       window.removeEventListener('offline', handleOffline);
+      window.removeEventListener(SYNC_EVENT_NAME, updatePendingCount);
     };
-  }, []);
+  }, [updatePendingCount]);
 
   const fetchCacheInfo = useCallback(() => {
     if (!navigator.serviceWorker?.controller) return;
@@ -62,14 +80,29 @@ export function useOfflineStatus() {
     );
   }, [fetchCacheInfo]);
 
+  const syncNow = useCallback(async () => {
+    setIsSyncing(true);
+    try {
+      const res = await flushPendingActions();
+      await updatePendingCount();
+      return res;
+    } finally {
+      setIsSyncing(false);
+    }
+  }, [updatePendingCount]);
+
   return {
     isOnline,
     isOffline: !isOnline,
     swReady,
     cacheInfo,
+    pendingSyncCount,
+    isSyncing,
+    syncNow,
     fetchCacheInfo,
     refreshFacilityCache
   };
 }
 
 export default useOfflineStatus;
+

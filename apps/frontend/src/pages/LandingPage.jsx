@@ -10,12 +10,11 @@ import {
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 
+import BeeCarbonitLogo from "../components/BeeCarbonitLogo";
+
 export default function LandingPage() {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('home'); // 'home' | 'solutions' | 'technology' | 'case-studies' | 'pricing'
-  const [scrolled, setScrolled] = useState(false);
-  const canvasRef = useRef(null);
-  const [newsletterEmail, setNewsletterEmail] = useState('');
   const [billingCycle, setBillingCycle] = useState('monthly'); // 'monthly' | 'annual'
   const [caseFilter, setCaseFilter] = useState('all'); // 'all' | 'datacenter' | 'commercial' | 'industrial'
   const [caseSort, setCaseSort] = useState('impact'); // 'impact' | 'recent' | 'scale'
@@ -85,131 +84,6 @@ export default function LandingPage() {
     }
   }, [terminalHistory]);
 
-  // Scroll event listener for glassmorphic header
-  useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY > 20) {
-        setScrolled(true);
-      } else {
-        setScrolled(false);
-      }
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  // Canvas background animation for circuit glowing lines
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    let animationId;
-    let width = (canvas.width = window.innerWidth);
-    let height = (canvas.height = window.innerHeight * 1.8);
-
-    const handleResize = () => {
-      width = canvas.width = window.innerWidth;
-      height = canvas.height = window.innerHeight * 1.8;
-    };
-    window.addEventListener('resize', handleResize);
-
-    const lines = [];
-    const lineCount = 10;
-    
-    // Generate curved paths
-    for (let i = 0; i < lineCount; i++) {
-      const isOrange = i % 2 === 0;
-      const color = isOrange ? '#f38020' : '#00dbe7';
-      const startX = Math.random() * width * 0.3;
-      const startY = height * (0.4 + Math.random() * 0.5);
-      const cp1x = width * (0.2 + Math.random() * 0.4);
-      const cp1y = height * (0.3 + Math.random() * 0.4);
-      const cp2x = width * (0.4 + Math.random() * 0.4);
-      const cp2y = height * (0.2 + Math.random() * 0.3);
-      const endX = width * (0.7 + Math.random() * 0.3);
-      const endY = height * (0.05 + Math.random() * 0.25);
-
-      lines.push({
-        color,
-        isOrange,
-        points: [startX, startY, cp1x, cp1y, cp2x, cp2y, endX, endY],
-        particles: Array.from({ length: 2 }, () => ({
-          t: Math.random(),
-          speed: 0.0004 + Math.random() * 0.0008,
-          size: 1.5 + Math.random() * 2
-        }))
-      });
-    }
-
-    const getBezierPoint = (t, x0, y0, x1, y1, x2, y2, x3, y3) => {
-      const u = 1 - t;
-      const tt = t * t;
-      const uu = u * u;
-      const uuu = uu * u;
-      const ttt = tt * t;
-      return {
-        x: uuu * x0 + 3 * uu * t * x1 + 3 * u * tt * x2 + ttt * x3,
-        y: uuu * y0 + 3 * uu * t * y1 + 3 * u * tt * y2 + ttt * y3
-      };
-    };
-
-    let scrollOffset = 0;
-    const handleScroll = () => {
-      scrollOffset = window.scrollY;
-    };
-    window.addEventListener('scroll', handleScroll, { passive: true });
-
-    const render = () => {
-      ctx.clearRect(0, 0, width, height);
-
-      lines.forEach(line => {
-        const [x0, y0, x1, y1, x2, y2, x3, y3] = line.points;
-        
-        // Draw path with scroll-parallax
-        ctx.beginPath();
-        const py0 = y0 - scrollOffset * 0.25;
-        const py1 = y1 - scrollOffset * 0.25;
-        const py2 = y2 - scrollOffset * 0.25;
-        const py3 = y3 - scrollOffset * 0.25;
-
-        ctx.moveTo(x0, py0);
-        ctx.bezierCurveTo(x1, py1, x2, py2, x3, py3);
-        ctx.strokeStyle = line.isOrange ? 'rgba(243, 128, 32, 0.06)' : 'rgba(0, 219, 231, 0.06)';
-        ctx.lineWidth = 1.8;
-        ctx.stroke();
-
-        // Draw glowing particles running along the path
-        line.particles.forEach(p => {
-          p.t += p.speed;
-          if (p.t > 1) {
-            p.t = 0;
-            p.speed = 0.0004 + Math.random() * 0.0008;
-          }
-
-          const pos = getBezierPoint(p.t, x0, py0, x1, py1, x2, py2, x3, py3);
-
-          ctx.beginPath();
-          ctx.arc(pos.x, pos.y, p.size, 0, Math.PI * 2);
-          ctx.fillStyle = line.color;
-          ctx.shadowColor = line.color;
-          ctx.shadowBlur = 10;
-          ctx.fill();
-          ctx.shadowBlur = 0;
-        });
-      });
-
-      animationId = requestAnimationFrame(render);
-    };
-
-    render();
-
-    return () => {
-      cancelAnimationFrame(animationId);
-      window.removeEventListener('resize', handleResize);
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, []);
-
   const handleTerminalSubmit = (e) => {
     e.preventDefault();
     if (!terminalInput.trim()) return;
@@ -257,16 +131,6 @@ export default function LandingPage() {
       setDemoSubmitting(false);
       toast.success(`Deployment Workspace created for ${demoForm.company}!`);
     }, 2500);
-  };
-
-  const handleSubscribe = (e) => {
-    e.preventDefault();
-    if (!newsletterEmail.trim()) {
-      toast.error('Please enter a valid email address.');
-      return;
-    }
-    toast.success('Subscribed successfully! Welcome aboard.');
-    setNewsletterEmail('');
   };
 
   // Case Studies list
@@ -337,199 +201,105 @@ export default function LandingPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#1a1e23] text-zinc-100 font-sans selection:bg-brand-orange selection:text-black relative overflow-x-hidden tech-grid"
-         style={{
-           backgroundImage: `radial-gradient(circle at 75% 50%, rgba(0, 240, 255, 0.1) 0%, transparent 40%), radial-gradient(circle at 25% 70%, rgba(255, 138, 0, 0.1) 0%, transparent 40%)`
-         }}>
+    <div className="min-h-screen bg-[#09090b] text-zinc-100 font-sans selection:bg-brand-orange selection:text-black relative overflow-x-hidden">
       
-      <style>{`
-        @keyframes float {
-          0%, 100% { transform: translateY(0px); }
-          50% { transform: translateY(-12px); }
-        }
-        .glass-panel {
-          background: rgba(30, 41, 59, 0.4);
-          backdrop-filter: blur(16px);
-          -webkit-backdrop-filter: blur(16px);
-          border: 1px solid rgba(255, 255, 255, 0.1);
-          box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
-        }
-        .glow-text-orange {
-          text-shadow: 0 0 10px rgba(255, 138, 0, 0.8), 0 0 20px rgba(255, 138, 0, 0.5);
-        }
-        .glow-text-cyan {
-          text-shadow: 0 0 10px rgba(0, 240, 255, 0.8), 0 0 20px rgba(0, 240, 255, 0.5);
-        }
-        .text-gradient {
-          background-clip: text;
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-        }
-        .btn-glow-cyan {
-          box-shadow: 0 0 15px rgba(0, 240, 255, 0.6);
-          transition: all 0.3s ease;
-        }
-        .btn-glow-cyan:hover {
-          box-shadow: 0 0 25px rgba(0, 240, 255, 0.9);
-        }
-        .btn-glow-orange {
-          box-shadow: 0 0 15px rgba(255, 138, 0, 0.6);
-          transition: all 0.3s ease;
-        }
-        .btn-glow-orange:hover {
-          box-shadow: 0 0 25px rgba(255, 138, 0, 0.9);
-        }
-        .btn-dual-glow {
-          position: relative;
-          background: transparent;
-          border: 2px solid transparent;
-          background-image: linear-gradient(rgba(30, 41, 59, 0.8), rgba(30, 41, 59, 0.8)), linear-gradient(to right, #FF8A00, #00F0FF);
-          background-origin: border-box;
-          background-clip: padding-box, border-box;
-          box-shadow: -5px 0 15px -5px rgba(255, 138, 0, 0.6), 5px 0 15px -5px rgba(0, 240, 255, 0.6);
-        }
-        .tech-grid {
-          background-size: 60px 60px;
-          background-image: 
-            linear-gradient(to right, rgba(255, 255, 255, 0.015) 1px, transparent 1px),
-            linear-gradient(to bottom, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
-        }
-      `}</style>
-
-      {/* Background Grid Overlay (Replaces image overlay with baked-in blurred text) */}
-      <div
-        aria-hidden="true"
-        className="absolute inset-0 select-none pointer-events-none opacity-[0.4] z-0 tech-grid"
-      />
-
-      {/* Interactive Background Canvas */}
-      <canvas
-        ref={canvasRef}
-        className="absolute inset-0 w-full h-full pointer-events-none z-0"
-      />
-
-      {/* Floating Header */}
-      <div className="fixed top-0 left-0 w-full z-50 flex justify-center pointer-events-none">
-        <header
-          className={`pointer-events-auto transition-all duration-500 ease-out flex items-center justify-between glass-panel shadow-[0_10px_40px_rgba(0,0,0,0.5)] relative overflow-hidden ${
-            scrolled
-              ? 'mt-3 py-2 px-8 rounded-full w-[85%] max-w-5xl mx-4 shadow-[0_10px_40px_rgba(0,0,0,0.7),_0_0_20px_rgba(0,240,255,0.06)]'
-              : 'mt-6 py-4 px-12 rounded-full w-[90%] max-w-6xl mx-4'
-          }`}
-        >
+      {/* Dynamic Header */}
+      <header className="fixed top-0 w-full z-50 bg-[#131313]/80 backdrop-blur-xl border-b border-zinc-800/60 h-16">
+        <div className="h-full max-w-7xl mx-auto px-6 flex items-center justify-between">
+          
           {/* Logo */}
-          <button onClick={() => setActiveTab('home')} className="flex items-center gap-2 group">
-            <div className="w-8 h-8 flex items-center justify-center group-hover:scale-105 transition-transform relative">
-              <img src="/logo.png" className="w-8 h-8 object-contain relative z-10" alt="BeeCarbonit Logo" />
-            </div>
-            <span className="text-xl font-bold tracking-wide text-white">BeeCarbonit</span>
+          <button onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="flex items-center gap-2.5 group">
+            <BeeCarbonitLogo size={36} showText={true} />
           </button>
 
           {/* Navigation Links */}
-          <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-gray-300">
+          <nav className="hidden md:flex items-center gap-8 font-mono text-[11px] uppercase tracking-widest">
             {[
-              { id: 'solutions', label: 'Solutions', accentColor: '#FF8A00' },
-              { id: 'home', label: 'Platform', accentColor: '#FF8A00' },
-              { id: 'case-studies', label: 'Impact', accentColor: '#FF8A00' },
-              { id: 'pricing', label: 'Resources', accentColor: '#00F0FF' },
-              { id: 'contact', label: 'Contact', accentColor: '#00F0FF' }
-            ].map(tab => {
-              const isActive = activeTab === tab.id || (tab.id === 'contact' && demoModalOpen);
-              return (
-                <button
-                  key={tab.id}
-                  onClick={() => {
-                    if (tab.id === 'contact') {
-                      setDemoForm({ ...demoForm, plan: 'Advanced' });
-                      setDemoModalOpen(true);
-                    } else {
-                      setActiveTab(tab.id);
-                    }
-                  }}
-                  className={`transition-colors relative py-1 hover:text-white ${
-                    isActive ? 'text-white font-semibold' : 'text-gray-300'
-                  }`}
-                >
-                  {tab.label}
-                  {isActive && (
-                    <span
-                      className="absolute -bottom-2 left-0 w-full h-[2px] rounded-full"
-                      style={{
-                        backgroundColor: tab.accentColor,
-                        boxShadow: `0 0 8px ${tab.accentColor}`
-                      }}
-                    />
-                  )}
-                </button>
-              );
-            })}
+              { path: '/about', label: 'About & Roots' },
+              { path: '/market', label: 'Carbon Market' },
+              { path: '/case-studies', label: 'Success Stories' },
+              { path: '/impact', label: 'Impact Report' }
+            ].map(tab => (
+              <Link
+                key={tab.path}
+                to={tab.path}
+                className="text-zinc-400 hover:text-brand-orange hover:drop-shadow-[0_0_8px_rgba(243,128,32,0.6)] transition-all relative py-1.5"
+              >
+                {tab.label}
+              </Link>
+            ))}
           </nav>
 
-          {/* Actions */}
+          {/* Call-to-actions */}
           <div className="flex items-center gap-4">
-            <Link
-              to="/login"
-              className="text-sm font-medium text-gray-300 hover:text-white border border-gray-600 rounded-full px-6 py-2 transition-colors"
-            >
-              Login
-            </Link>
             <button
               onClick={() => {
                 setDemoForm({ ...demoForm, plan: 'Advanced' });
                 setDemoModalOpen(true);
                 setDemoStep(1);
               }}
-              className="bg-[#00F0FF] text-zinc-950 font-bold text-sm rounded-full px-6 py-2 hover:opacity-90 transition-opacity shadow-[inset_0_0_10px_rgba(255,255,255,0.5)] btn-glow-cyan"
+              className="hidden sm:inline-flex items-center justify-center px-4 py-2 bg-brand-orange hover:bg-[#e27010] text-black font-mono text-[10px] font-bold uppercase tracking-wider rounded-sm shadow-[0_0_15px_rgba(243,128,32,0.15)] transition"
             >
-              Get Started
+              Request Demo
             </button>
+            <Link
+              to="/login"
+              className="w-8 h-8 rounded-full border border-zinc-800 bg-zinc-900/60 hover:bg-zinc-850 flex items-center justify-center text-zinc-300 hover:text-zinc-100 transition shadow"
+              title="Operator Portal Access"
+            >
+              <UserCheck className="w-4 h-4" />
+            </Link>
           </div>
-        </header>
-      </div>
+        </div>
+      </header>
 
       {/* Main Container */}
-      <main className="pt-24 min-h-screen relative z-10 flex flex-col items-center">
+      <main className="pt-16 min-h-screen">
 
         {/* ========================================================= */}
         {/* VIEW: HOME PAGE */}
         {/* ========================================================= */}
         {activeTab === 'home' && (
-          <div className="w-full flex flex-col items-center">
+          <div className="space-y-24">
             
             {/* Hero Section */}
-            <section className="w-full max-w-6xl mx-auto min-h-[75vh] flex items-center px-8 relative z-10">
-              <div className="max-w-2xl mt-16">
-                <h1 className="text-5xl md:text-6xl font-bold leading-[1.1] mb-6 tracking-tight">
-                  <span className="text-transparent text-gradient bg-gradient-to-b from-white to-[#FF8A00] glow-text-orange block pb-1">
-                    Carbon-Neutral
-                  </span>
-                  <span className="text-transparent text-gradient bg-gradient-to-t from-[#00F0FF] to-white glow-text-cyan block pb-1">
-                    Facility Management
-                  </span>
-                </h1>
+            <section className="relative w-full py-24 md:py-32 flex items-center justify-center overflow-hidden">
+              <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-colors-secondary-fixed-dim)_0%,_transparent_70%)] opacity-[0.03]"></div>
+              <div className="absolute -top-1/2 -right-1/4 w-[1000px] h-[1000px] bg-brand-orange/5 rounded-full blur-[150px] pointer-events-none"></div>
+              
+              <div className="relative z-10 max-w-7xl mx-auto px-6 w-full flex flex-col items-start gap-8">
                 
-                <p className="text-gray-300 text-lg mb-10 max-w-lg leading-relaxed font-sans font-normal">
-                  Optimize, track, and reduce your facility's carbon footprint with advanced AI and real-time analytics.
+                {/* Live Pill badge */}
+                <div className="flex items-center gap-2.5 bg-zinc-900/60 backdrop-blur-md px-4 py-1.5 border border-brand-cyan/20 rounded-full shadow-[inset_0_0_8px_rgba(0,219,231,0.05)]">
+                  <span className="w-1.5 h-1.5 rounded-full bg-brand-cyan animate-pulse" />
+                  <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-brand-cyan font-semibold">System v4.0 Now Live</span>
+                </div>
+
+                {/* Main Heading */}
+                <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold max-w-5xl tracking-tighter leading-tight font-display text-zinc-100">
+                  Carbon-Neutral Infrastructure & <span className="bg-clip-text text-transparent bg-gradient-to-r from-brand-cyan to-brand-orange drop-shadow-[0_0_20px_rgba(0,219,231,0.15)]">Smart Operations</span>
+                </h1>
+
+                {/* Subtext */}
+                <p className="text-sm md:text-base text-zinc-400 max-w-2xl leading-relaxed font-sans">
+                  The BeeCarbonat precision engineering standard for sustainable facility management. Empowering global smart cities through real-time carbon offset trading, automated resource telemetry, and zero-emission predictive analytics.
                 </p>
 
-                <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6">
+                {/* CTA Buttons */}
+                <div className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto mt-4">
                   <Link
-                    to="/signup"
-                    className="btn-dual-glow text-white font-bold py-3 px-8 rounded-full text-lg text-center transition-all inline-block shadow-[inset_0_0_10px_rgba(255,255,255,0.2)]"
-                    style={{
-                      boxShadow: '-8px 0 20px -5px rgba(255, 138, 0, 0.9), 8px 0 20px -5px rgba(0, 240, 255, 0.9)'
-                    }}
+                    to="/dashboard"
+                    className="w-full sm:w-auto px-8 py-3.5 bg-brand-orange hover:bg-[#e27010] text-black font-mono text-[11px] uppercase tracking-widest font-bold text-center shadow-[0_0_20px_rgba(243,128,32,0.2)] hover:shadow-[0_0_35px_rgba(243,128,32,0.4)] transition duration-300"
                   >
-                    Launch Dashboard
+                    Access Core Dashboard
                   </Link>
-                  <button
-                    onClick={() => {
-                      setActiveTab('solutions');
-                    }}
-                    className="text-gray-300 hover:text-white underline underline-offset-4 decoration-gray-500 hover:decoration-white transition-all text-lg font-medium"
+                  <Link
+                    to="/market"
+                    className="w-full sm:w-auto px-8 py-3.5 bg-zinc-900/60 hover:bg-zinc-800 text-brand-cyan hover:text-brand-cyan/80 border border-brand-cyan/30 font-mono text-[11px] uppercase tracking-widest text-center transition flex items-center justify-center gap-2"
                   >
-                    Explore Our Technology
-                  </button>
+                    <Leaf className="w-4 h-4 text-brand-cyan" />
+                    Enter Carbon Market
+                  </Link>
                 </div>
               </div>
             </section>
@@ -546,10 +316,10 @@ export default function LandingPage() {
                     <span className="font-mono text-[9px] text-zinc-500 uppercase tracking-widest">METRIC</span>
                   </div>
                   <div>
-                    <h3 className="text-4xl font-bold text-brand-orange tracking-tight">30%</h3>
-                    <h4 className="font-mono text-xs font-bold uppercase tracking-wider text-zinc-200 mt-1">Energy Reduction</h4>
+                    <h3 className="text-4xl font-bold text-brand-orange tracking-tight">4,200+</h3>
+                    <h4 className="font-mono text-xs font-bold uppercase tracking-wider text-zinc-200 mt-1">Tons CO₂e Reduced</h4>
                   </div>
-                  <p className="text-xs text-zinc-400 font-sans leading-relaxed">Automated HVAC optimization derived from spatial telemetry and occupancy heat maps.</p>
+                  <p className="text-xs text-zinc-400 font-sans leading-relaxed">Live carbon offset market trading backed by hyper-accurate facility telemetry.</p>
                 </div>
 
                 {/* Metric Card 2 */}
@@ -561,9 +331,9 @@ export default function LandingPage() {
                   </div>
                   <div>
                     <h3 className="text-4xl font-bold text-brand-cyan tracking-tight">100%</h3>
-                    <h4 className="font-mono text-xs font-bold uppercase tracking-wider text-zinc-200 mt-1">BIM Sync</h4>
+                    <h4 className="font-mono text-xs font-bold uppercase tracking-wider text-zinc-200 mt-1">Zero-Emission Sync</h4>
                   </div>
-                  <p className="text-xs text-zinc-400 font-sans leading-relaxed">Real-time bidirectional synchronization with full-scale digital twins and structural mapping.</p>
+                  <p className="text-xs text-zinc-400 font-sans leading-relaxed">Direct integration with city smart lighting, hydro flow networks, and IoT grids.</p>
                 </div>
 
                 {/* Metric Card 3 */}
@@ -597,8 +367,8 @@ export default function LandingPage() {
                     </svg>
                   </div>
                   <div>
-                    <h4 className="font-mono text-xs font-bold uppercase tracking-wider text-zinc-200">Operational Stability</h4>
-                    <p className="text-xs text-zinc-400 font-sans mt-1">Predictive anomaly detection prevents critical asset failure before it occurs.</p>
+                    <h4 className="font-mono text-xs font-bold uppercase tracking-wider text-zinc-200">Air Quality & ESG Stability</h4>
+                    <p className="text-xs text-zinc-400 font-sans mt-1">Predictive ambient condition modeling prevents excessive energy burns before they happen.</p>
                   </div>
                 </div>
 
@@ -765,30 +535,6 @@ export default function LandingPage() {
                 </div>
               </div>
             </section>
-
-            {/* BEGIN: Newsletter Subscription Section (Replaced duplicate footer navbar with clean CTA) */}
-            <section className="w-[90%] max-w-6xl glass-panel rounded-full px-12 py-5 flex flex-col md:flex-row items-center justify-between z-10 mt-12 mb-8 mx-auto">
-              <div className="flex flex-col mb-4 md:mb-0 text-left">
-                <h3 className="text-sm font-bold font-mono tracking-wider text-[#00F0FF] uppercase">NEWSLETTER INSIGHTS</h3>
-                <p className="text-xs text-zinc-400 font-sans mt-1">Receive the latest insights on sustainable facility engineering and decarbonization.</p>
-              </div>
-              
-              {/* Newsletter Form */}
-              <form onSubmit={handleSubscribe} className="flex items-center bg-gray-800/50 border border-gray-600 rounded-full p-1 pl-4">
-                <input
-                  type="email"
-                  required
-                  placeholder="Newsletter"
-                  value={newsletterEmail}
-                  onChange={(e) => setNewsletterEmail(e.target.value)}
-                  className="bg-transparent border-none text-sm text-white focus:ring-0 w-32 placeholder-gray-400 outline-none focus:outline-none"
-                />
-                <button type="submit" className="bg-[#00F0FF] text-zinc-950 font-bold text-sm rounded-full px-4 py-1.5 ml-2 hover:opacity-90 transition-opacity shadow-[inset_0_0_10px_rgba(255,255,255,0.5)]">
-                  Subscribe
-                </button>
-              </form>
-            </section>
-            {/* END: Footer */}
 
           </div>
         )}
@@ -1559,24 +1305,8 @@ export default function LandingPage() {
           
           {/* Col 1 */}
           <div className="space-y-4">
-            <button onClick={() => setActiveTab('home')} className="flex items-center gap-2 text-left">
-              <div className="w-6 h-6 flex items-center justify-center relative">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="relative z-10">
-                  <path d="M12 2v20" stroke="var(--brand-orange,_#f38020)" />
-                  <path d="M7 6v16" stroke="var(--brand-cyan,_#00dbe7)" />
-                  <path d="M17 6v16" stroke="var(--brand-cyan,_#00dbe7)" />
-                  <path d="M3 10v12" stroke="var(--brand-cyan,_#00dbe7)" />
-                  <path d="M21 10v12" stroke="var(--brand-cyan,_#00dbe7)" />
-                  <path d="M12 2L7 6L3 10" stroke="var(--brand-orange,_#f38020)" />
-                  <path d="M12 2L17 6L21 10" stroke="var(--brand-orange,_#f38020)" />
-                  <path d="M3 22h18" stroke="var(--brand-orange,_#f38020)" />
-                  <path d="M7 14l5-3l5 3" stroke="var(--brand-orange,_#f38020)" />
-                  <path d="M7 18l5-3l5 3" stroke="var(--brand-orange,_#f38020)" />
-                </svg>
-              </div>
-              <span className="font-mono text-xs font-bold uppercase tracking-wider text-zinc-100">
-                BEECARBONAT
-              </span>
+            <button onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="flex items-center gap-2 text-left">
+              <BeeCarbonitLogo size={28} showText={true} />
             </button>
             <p className="text-zinc-500 text-[11px] leading-relaxed max-w-xs">
               The precision engineering standard for facility management. Empowering global infrastructure since 2024.

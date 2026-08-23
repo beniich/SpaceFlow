@@ -1,47 +1,65 @@
+:root {
+  --bg-deepest: #0d1117;
+  --bg-deep: #0b1220;
+  --bg-elevated: #101a30;
+  --bg-overlay: #1a2238;
+  --accent-cyan: #64ffda;
+  --accent-cyan-dim: #64ffda80;
+  --state-success: #10b981;
+  --state-warning: #f59e0b;
+  --state-danger: #ef4444;
+  --text-primary: #e2e8f0;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  --border-subtle: rgba(255, 255, 255, 0.05);
+  --border-default: rgba(255, 255, 255, 0.10);
+  --sidebar-width: 56px;
+  --tree-width: 256px;
+  --inspector-width: 288px;
+  --topbar-height: 56px;
+  --statusbar-height: 28px;
+}
+
 .bim-workspace {
   display: flex;
-  height: 100vh;
+  height: calc(100vh - 64px);
   width: 100vw;
   background: var(--bg-deepest);
   color: var(--text-primary);
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   overflow: hidden;
 }
 
-.bim-workspace__main {
+.workspace-main {
   flex: 1;
   display: flex;
   flex-direction: column;
   min-width: 0;
-  overflow: hidden;
 }
 
-.bim-workspace__content {
+.workspace-content {
   flex: 1;
   display: flex;
   min-height: 0;
-  overflow: hidden;
 }
 
-.bim-workspace__tree {
+.workspace-tree {
   width: var(--tree-width);
   flex-shrink: 0;
   border-right: 1px solid var(--border-default);
   overflow: hidden;
-  display: flex;
-  flex-direction: column;
 }
 
-.bim-workspace__viewport {
+.workspace-viewport {
   flex: 1;
   display: flex;
   flex-direction: column;
   min-width: 0;
   background: var(--bg-deepest);
-  overflow: hidden;
+  position: relative;
 }
 
-.bim-workspace__inspector {
+.workspace-inspector {
   width: var(--inspector-width);
   flex-shrink: 0;
   display: flex;
@@ -51,12 +69,216 @@
   background: var(--bg-deep);
 }
 
-/* Scrollbars */
-.bim-workspace * {
-  scrollbar-width: thin;
-  scrollbar-color: rgba(255,255,255,0.08) transparent;
+/* Sidebar */
+.sidebar-nav {
+  width: var(--sidebar-width);
+  background: linear-gradient(180deg, #1a1f2e 0%, #0f1420 100%);
+  border-right: 1px solid var(--border-default);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 12px 0;
 }
-.bim-workspace *::-webkit-scrollbar        { width: 6px; height: 6px; }
-.bim-workspace *::-webkit-scrollbar-track  { background: transparent; }
-.bim-workspace *::-webkit-scrollbar-thumb  { background: rgba(255,255,255,0.08); border-radius: 4px; }
-.bim-workspace *::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.15); }
+.brand-icon {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #4a90e2, #64ffda);
+  border-radius: 8px;
+  color: #0d1117;
+  font-weight: bold;
+}
+.sidebar-items {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.sidebar-item {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+.sidebar-item-active {
+  background: rgba(74, 144, 226, 0.15);
+  color: var(--accent-cyan);
+  border-left: 3px solid var(--accent-cyan);
+}
+
+/* TopBar */
+.topbar {
+  height: var(--topbar-height);
+  background: linear-gradient(180deg, #131826 0%, #0f1420 100%);
+  border-bottom: 1px solid var(--border-default);
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  gap: 16px;
+}
+.topbar-search {
+  display: flex;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--border-default);
+  border-radius: 8px;
+  padding: 0 12px;
+  height: 36px;
+  width: 300px;
+}
+.search-input {
+  background: transparent;
+  border: none;
+  color: white;
+  outline: none;
+  flex: 1;
+  margin-left: 8px;
+}
+.topbar-nav {
+  display: flex;
+  gap: 4px;
+  margin-left: auto;
+}
+.topbar-tab {
+  padding: 8px 14px;
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  border-radius: 8px;
+}
+.topbar-tab-active {
+  color: var(--accent-cyan);
+  background: rgba(100, 255, 218, 0.08);
+}
+
+/* StatusBar */
+.status-bar {
+  height: var(--statusbar-height);
+  background: linear-gradient(180deg, #0f1420 0%, #0a0f1a 100%);
+  border-top: 1px solid var(--border-default);
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  font-size: 11px;
+  color: var(--text-muted);
+  gap: 16px;
+}
+.status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--state-success);
+  display: inline-block;
+  margin-right: 6px;
+}
+
+/* Viewport 3D */
+.viewport-3d {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: var(--bg-deepest);
+  overflow: hidden;
+}
+.viewport-canvas {
+  position: absolute;
+  inset: 0;
+  cursor: grab;
+}
+.viewport-canvas:active {
+  cursor: grabbing;
+}
+.viewport-hud {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: rgba(13, 17, 23, 0.85);
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--border-default);
+  font-family: monospace;
+  font-size: 11px;
+  color: var(--accent-cyan);
+}
+.viewport-toolbar {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  display: flex;
+  gap: 12px;
+  background: rgba(16, 26, 48, 0.95);
+  border: 1px solid var(--border-default);
+  border-radius: 12px;
+  padding: 8px;
+}
+.toolbar-section {
+  display: flex;
+  gap: 4px;
+}
+.tool-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 8px 12px;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 10px;
+}
+.tool-btn-active {
+  color: var(--accent-cyan);
+  background: rgba(100, 255, 218, 0.12);
+}
+
+/* Inspector */
+.inspector-header {
+  padding: 12px;
+  border-bottom: 1px solid var(--border-default);
+  font-size: 12px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+.property-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border-subtle);
+  font-size: 12px;
+}
+.property-label { color: var(--text-secondary); }
+.property-value { color: var(--text-primary); text-align: right; }
+.alerts-panel {
+  border-top: 1px solid var(--border-default);
+  flex: 1;
+}
+.alert-card {
+  margin: 12px;
+  padding: 12px;
+  border-radius: 6px;
+  background: rgba(239, 68, 68, 0.08);
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  color: var(--state-danger);
+  font-size: 12px;
+}
+
+/* Tree */
+.tree-node {
+  display: flex;
+  align-items: center;
+  padding: 6px;
+  cursor: pointer;
+  font-size: 13px;
+}
+.tree-node:hover { background: rgba(255, 255, 255, 0.05); }
+.tree-node-selected { background: rgba(100, 255, 218, 0.1); color: var(--accent-cyan); }

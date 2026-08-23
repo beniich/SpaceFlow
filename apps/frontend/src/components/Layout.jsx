@@ -1,428 +1,453 @@
-import { useState } from 'react';
-import { Outlet, NavLink, useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { Outlet, NavLink, useNavigate, useLocation } from 'react-router-dom';
 import {
-  LayoutDashboard, Building2, Package, MapPin,
-  ClipboardList, BarChart3, LogOut, Wrench, Box,
-  Bell, Globe, Download, Database, Layers, Menu, X,
-  FileText, Cpu, WifiOff, Wifi, RefreshCw, HardDrive,
-  Zap, Activity, ShieldCheck, CheckCircle2, TrendingUp, QrCode, Users, Settings, Shield, Milestone, AlertTriangle, CreditCard, Store, LayoutGrid,
-  Recycle, Key, Sparkles, BookOpen
+  Menu, X, Search, Bell, Download, Wifi, WifiOff, HardDrive, RefreshCw,
+  ChevronLeft, ChevronRight, Sun, Moon, PanelLeftClose, PanelLeftOpen, Globe
 } from 'lucide-react';
 import api from '../services/api';
 import { useAuthStore } from '../store/authStore';
 import { useOfflineStatus } from '../hooks/useOfflineStatus';
+import { useLanguage } from '../context/LanguageContext';
 import { ConflictResolutionModal } from './modals';
+import BeeCarbonatLogo from './BeeCarbonitLogo';
 import toast from 'react-hot-toast';
 import clsx from 'clsx';
 
-const navItems = [
-  { to: '/dashboard',   icon: LayoutDashboard, label: 'Dashboard', end: true },
-  { to: '/executive',   icon: TrendingUp,      label: 'Executive View' },
-  { to: '/roadmap',     icon: Milestone,       label: 'Strategic Roadmap' },
-  { to: '/assets',      icon: Package,         label: 'Assets' },
-  { to: '/bim-explorer',icon: Layers,          label: 'BIM Explorer 3D' },
-  { to: '/scanner',     icon: QrCode,          label: 'QR Code Scanner' },
-  { to: '/spaces',      icon: MapPin,          label: 'Spaces' },
-  { to: '/work-orders', icon: ClipboardList,   label: 'Work Orders' },
-  { to: '/tickets',     icon: AlertTriangle,   label: 'Tickets & Réclamations' },
-  { to: '/maintenance', icon: Wrench,          label: 'Maintenance' },
-  { to: '/team',        icon: Users,           label: 'Team Operations' },
+const navCategories = [
+  {
+    categoryKey: 'cat_roadmap_ops',
+    categoryDefault: 'Opérations & Maintenance',
+    items: [
+      { to: '/dashboard', labelKey: 'nav_dashboard', defaultLabel: 'Tableau de bord', icon: 'dashboard' },
+      { to: '/lighting', labelKey: 'nav_lighting', defaultLabel: 'Lighting - City Pulse', icon: 'lightbulb' },
+      { to: '/water', labelKey: 'nav_water', defaultLabel: 'Water - Hydro Sync', icon: 'water_drop' },
+      { to: '/waste', labelKey: 'nav_waste', defaultLabel: 'Waste - Circular Flow', icon: 'recycling' },
+      { to: '/assets', labelKey: 'nav_assets', defaultLabel: 'Assets', icon: 'inventory_2' },
+      { to: '/scanner', labelKey: 'nav_qr_scanner', defaultLabel: 'QR Code Scanner', icon: 'qr_code_scanner' },
+      { to: '/spaces', labelKey: 'nav_spaces', defaultLabel: 'Spaces', icon: 'domain' },
+      { to: '/work-orders', labelKey: 'nav_work_orders', defaultLabel: 'Work Orders', icon: 'assignment' },
+      { to: '/maintenance', labelKey: 'nav_maintenance', defaultLabel: 'Maintenance', icon: 'build' },
+      { to: '/team', labelKey: 'nav_team_ops', defaultLabel: 'Team Operations', icon: 'group' },
+    ]
+  },
+  {
+    categoryKey: 'cat_strategic_pillars',
+    categoryDefault: 'Climat & ESG Stratégique',
+    items: [
+      { to: '/market', labelKey: 'nav_carbon_market', defaultLabel: 'Carbon Credits Market', icon: 'public' },
+      { to: '/air-quality', labelKey: 'nav_air_quality', defaultLabel: 'Air Quality & AQI', icon: 'air' },
+      { to: '/impact', labelKey: 'nav_impact', defaultLabel: 'Environmental Impact Report', icon: 'nature_people' },
+      { to: '/energy', labelKey: 'nav_energy', defaultLabel: 'Energy & ESG Copilot', icon: 'eco' },
+      { to: '/bim', labelKey: 'nav_bim', defaultLabel: 'BIM & 3D Viewer', icon: 'view_in_3d' },
+      { to: '/digital-twin', labelKey: 'nav_digital_twin', defaultLabel: 'Digital Twin', icon: 'view_in_ar' },
+      { to: '/predictive-maintenance', labelKey: 'nav_predictive_ai', defaultLabel: 'Predictive AI & Health', icon: 'psychology' },
+      { to: '/tenants', labelKey: 'nav_tenants', defaultLabel: 'Occupants & Tenant Care', icon: 'person_pin' },
+    ]
+  },
+  {
+    categoryKey: 'cat_modules_system',
+    categoryDefault: 'Ecosystème & Système',
+    items: [
+      { to: '/about', labelKey: 'nav_about', defaultLabel: 'BeeCarbonat About (Roots)', icon: 'info' },
+      { to: '/case-studies', labelKey: 'nav_case_studies', defaultLabel: 'Success Stories', icon: 'auto_awesome' },
+      { to: '/careers', labelKey: 'nav_careers', defaultLabel: 'Careers Workspace', icon: 'work' },
+      { to: '/partner-portal', labelKey: 'nav_partner', defaultLabel: 'Partner Portal (B2B)', icon: 'vpn_key' },
+      { to: '/cmms', labelKey: 'nav_cmms', defaultLabel: 'CMMS / BEECARBONAT', icon: 'precision_manufacturing' },
+      { to: '/erp', labelKey: 'nav_erp', defaultLabel: 'ERP Integration', icon: 'hub' },
+      { to: '/analytics', labelKey: 'nav_analytics', defaultLabel: 'Analytics', icon: 'analytics' },
+      { to: '/ai', labelKey: 'nav_ai_assistant', defaultLabel: 'Generative AI Assistant', icon: 'smart_toy' },
+      { to: '/security', labelKey: 'nav_security', defaultLabel: 'Security & Access', icon: 'shield' },
+      { to: '/settings', labelKey: 'nav_settings', defaultLabel: 'System Configuration', icon: 'settings' },
+    ]
+  }
 ];
-
-const innovationPillars = [
-  { to: '/carbon-hud',            icon: Sparkles,     label: 'Carbon Pulse HUD' },
-  { to: '/circular-economy',      icon: Recycle,      label: 'Flux Circulaire & Déchets' },
-  { to: '/intervention',          icon: CheckCircle2, label: 'FieldTech Mobile & OT' },
-  { to: '/energy',                icon: Zap,          label: 'Energy & ESG Copilot' },
-  { to: '/bim',                   icon: Layers,       label: 'BIM & 3D Viewer' },
-  { to: '/digital-twin',          icon: Box,          label: 'Digital Twin' },
-  { to: '/predictive-maintenance', icon: Activity,    label: 'Predictive AI & Health' },
-  { to: '/tenants',               icon: Globe,        label: 'Occupants & Tenant Care' },
-];
-
-const advancedItems = [
-  { to: '/case-studies',   icon: BookOpen,  label: 'Études de Cas & Éco-Projets' },
-  { to: '/community',      icon: Users,     label: 'Communauté & Hub Éco' },
-  { to: '/partners',       icon: Key,       label: 'Portail Partenaires & API' },
-  { to: '/cmms',           icon: Wrench,    label: 'CMMS / BEECARBONAT' },
-  { to: '/erp',            icon: Database,  label: 'ERP Integration' },
-  { to: '/analytics',      icon: BarChart3, label: 'Analytics' },
-  { to: '/leases',         icon: FileText,  label: 'Leases & Contracts' },
-  { to: '/exports',        icon: Download,  label: 'PDF Exports & Reports' },
-  { to: '/notifications',  icon: Bell,      label: 'Notifications & Alerts' },
-  { to: '/ai',              icon: Cpu,         label: 'Generative AI Assistant' },
-  { to: '/workflows',       icon: Zap,         label: 'Workflow Builder (No-Code)' },
-  { to: '/marketplace',     icon: Store,       label: 'Marketplace Extensions' },
-  { to: '/sector-templates',icon: LayoutGrid,  label: 'Packs Sectoriels' },
-  { to: '/pricing',         icon: CreditCard,  label: 'Plans & Billing' },
-  { to: '/security',        icon: Shield,      label: 'Security & Access' },
-  { to: '/settings',        icon: Settings,    label: 'System Configuration' },
-];
-
-const linkClass = ({ isActive }) =>
-  clsx(
-    'flex items-center gap-3 px-3 py-2.5 rounded-lg text-xs uppercase tracking-widest font-mono transition-all duration-200 group relative',
-    isActive
-      ? 'bg-brand-orange text-black shadow-[0_0_15px_rgba(243,128,32,0.3)] font-semibold'
-      : 'text-zinc-400 hover:bg-zinc-800/60 hover:text-zinc-100'
-  );
 
 export default function Layout() {
   const { user, logout } = useAuthStore();
-  const { isOnline, isOffline, cacheInfo, refreshFacilityCache } = useOfflineStatus();
+  const { isOnline, pendingSyncCount, syncNow } = useOfflineStatus();
+  const { language, setLanguage, t } = useLanguage();
   const navigate = useNavigate();
+  const location = useLocation();
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
-  const [refreshingCache, setRefreshingCache] = useState(false);
+  const [showMoreNav, setShowMoreNav] = useState(false);
   
+  // Collapsible Sidebar State ("réduire la barre latérale")
+  const [isCollapsed, setIsCollapsed] = useState(() => {
+    return localStorage.getItem('sidebar_collapsed') === 'true';
+  });
+
+  // Light Mode / Dark Mode State (Default is Mode Clair as requested)
+  const [isDarkMode, setIsDarkMode] = useState(() => {
+    return localStorage.getItem('theme_mode') === 'dark';
+  });
+
+  useEffect(() => {
+    localStorage.setItem('sidebar_collapsed', isCollapsed ? 'true' : 'false');
+  }, [isCollapsed]);
+
+  useEffect(() => {
+    localStorage.setItem('theme_mode', isDarkMode ? 'dark' : 'light');
+    if (isDarkMode) {
+      document.body.classList.add('dark-mode');
+    } else {
+      document.body.classList.remove('dark-mode');
+    }
+  }, [isDarkMode]);
+
   // Offline Conflict Resolution States
   const [showConflictModal, setShowConflictModal] = useState(false);
   const [conflicts, setConflicts] = useState([]);
-  const [isSyncing, setIsSyncing] = useState(false);
+  const [isResolvingConflicts] = useState(false);
 
   const handleLogout = () => {
     logout();
     navigate('/login');
   };
 
-  const handleSyncCache = () => {
-    setRefreshingCache(true);
-    refreshFacilityCache();
-    
-    setTimeout(() => {
-      setRefreshingCache(false);
-      // Simulate detecting offline conflicts
-      const initialConflicts = [
-        {
-          id: 'conflict-1',
-          type: 'Fiche Intervention',
-          reference: 'WO-2026-042',
-          title: 'Inspection CTA-02 (Centrale de Traitement d\'Air)',
-          local: {
-            status: 'COMPLETED',
-            priority: 'URGENT',
-            notes: 'Vaporisateur réparé, courroie tendue. Filtre F7 remplacé.',
-            updatedAt: 'Il y a 10 min (Hors-ligne)',
-            modifiedBy: 'Technicien Terrain'
-          },
-          server: {
-            status: 'IN_PROGRESS',
-            priority: 'HIGH',
-            notes: 'Alerte de température ignorée sur sonde. Panne intermittente.',
-            updatedAt: 'Il y a 2 min (Serveur)',
-            modifiedBy: 'Opérateur Salle de Contrôle'
-          },
-          resolved: null
-        },
-        {
-          id: 'conflict-2',
-          type: 'Équipement (Asset)',
-          reference: 'AST-909',
-          title: 'Pompe de Relevage - Sous-Sol Cave',
-          local: {
-            status: 'OPERATIONAL',
-            health: '85%',
-            notes: 'Inondation résolue, pompe relancée après nettoyage complet.',
-            updatedAt: 'Il y a 25 min (Hors-ligne)',
-            modifiedBy: 'Technicien Terrain'
-          },
-          server: {
-            status: 'CRITICAL',
-            health: '40%',
-            notes: 'Capteur d\'humidité critique actif. Alarme active sur SCADA.',
-            updatedAt: 'Il y a 5 min (Serveur)',
-            modifiedBy: 'Système Automatique GTB'
-          },
-          resolved: null
-        }
-      ];
-      setConflicts(initialConflicts);
-      setShowConflictModal(true);
-      toast.error('⚠️ Conflits de synchronisation hors-ligne détectés !');
-    }, 1000);
-  };
-
-  const handleResolve = (id, choice) => {
-    setConflicts(prev => 
-      prev.map(c => c.id === id ? { ...c, resolved: choice } : c)
-    );
-    toast.success(`Option "${choice === 'local' ? 'Locale (Terrain)' : 'Serveur (Bureau)'}" sélectionnée.`);
-  };
-
-  const handleKeepAll = (choice) => {
-    setConflicts(prev => prev.map(c => ({ ...c, resolved: choice })));
-    toast.success(`Tous les éléments résolus en faveur de la version : ${choice === 'local' ? 'Locale (Terrain)' : 'Serveur (Bureau)'}`);
-  };
-
-  const handleApplyResolution = async () => {
-    const unresolved = conflicts.filter(c => !c.resolved);
-    if (unresolved.length > 0) {
-      toast.error("Veuillez résoudre tous les conflits avant d'appliquer.");
-      return;
-    }
-
-    setIsSyncing(true);
-    const toastId = toast.loading("Enregistrement des résolutions et synchronisation...");
-    
+  const handleManualSync = async () => {
+    const toastId = toast.loading('Synchronisation des données en cours...');
     try {
-      // Simulate sending updates to backend
-      for (const conflict of conflicts) {
-        const resolvedData = conflict.resolved === 'local' ? conflict.local : conflict.server;
-        await api.put(`/workorders/wo-2`, { 
-          status: resolvedData.status,
-          notes: resolvedData.notes
-        }).catch(() => {});
+      const result = await syncNow();
+      if (result.flushed > 0) {
+        toast.success(`${result.flushed} modification(s) synchronisée(s) !`, { id: toastId });
+      } else {
+        toast.success('Données déjà synchronisées.', { id: toastId });
       }
-      
-      setTimeout(() => {
-        toast.success("Synchronisation réussie ! Les données ont été alignées.", { id: toastId });
-        setShowConflictModal(false);
-        setIsSyncing(false);
-      }, 1200);
     } catch {
-      toast.error("Erreur réseau temporaire, résolution appliquée localement uniquement.", { id: toastId });
-      setShowConflictModal(false);
-      setIsSyncing(false);
+      toast.error('Erreur lors de la synchronisation.', { id: toastId });
     }
   };
 
   const closeSidebar = () => setSidebarOpen(false);
 
-  const SidebarContent = ({ isDesktop = false }) => (
-    <>
-      {/* Logo & Offline Badge */}
-      <div className={clsx("p-6 border-b border-zinc-800/40 relative", sidebarCollapsed && isDesktop && "px-4")}>
-        {isDesktop && (
-          <button
-            onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
-            className="absolute top-4 right-[-14px] bg-zinc-800 border border-zinc-700 text-zinc-400 hover:text-zinc-50 rounded-full p-1 shadow-lg z-50 transition-colors"
-          >
-            {sidebarCollapsed ? <ChevronRight className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
-          </button>
-        )}
-        <div className={clsx("flex items-center gap-3", sidebarCollapsed && isDesktop && "justify-center")}>
-          <div className="w-8 h-8 flex items-center justify-center relative shrink-0">
-            <div className="absolute inset-0 bg-brand-cyan/10 blur-xl rounded-full"></div>
-            <img src="/logo.png" className="w-8 h-8 object-contain relative z-10" alt="BeeCarbonit Logo" />
-          </div>
-          {(!sidebarCollapsed || !isDesktop) && (
-            <div className="flex-1">
-              <h1 className="font-bold text-zinc-50 font-sans tracking-tight text-base whitespace-nowrap">
-                BEECARBONIT
-              </h1>
-            </div>
-          )}
-        </div>
-        {(!sidebarCollapsed || !isDesktop) && (
-          <div className="mt-4 flex items-center justify-between">
-            <span className={clsx(
-              'inline-flex items-center gap-1.5 px-2 py-0.5 text-[10px] font-mono uppercase tracking-wider rounded-sm border',
-              isOnline
-                ? 'bg-green-500/10 text-green-400 border-green-500/20'
-                : 'bg-amber-500/10 text-amber-400 border-amber-500/30 animate-pulse'
-            )}>
-              {isOnline ? <Wifi className="w-3 h-3" /> : <WifiOff className="w-3 h-3" />}
-              {isOnline ? 'Online' : 'Offline'}
-            </span>
-            <button
-              onClick={handleSyncCache}
-              title="Pre-load / synchronize facility data"
-              className="text-[10px] text-zinc-400 hover:text-zinc-200 font-mono flex items-center gap-1 hover:bg-zinc-800 px-1.5 py-0.5 rounded transition-colors"
-            >
-              <HardDrive className={clsx('w-3 h-3', refreshingCache && 'animate-spin')} />
-              Sync
-            </button>
-          </div>
-        )}
-      </div>
-
-      {/* Nav */}
-      <nav className="flex-1 py-4 px-2 space-y-1 overflow-y-auto overflow-x-hidden">
-        {navItems.map((item) => (
-          <NavLink key={item.to} to={item.to} end={item.end} className={linkClass} onClick={closeSidebar}>
-            <item.icon className="w-5 h-5 shrink-0" />
-            {(!sidebarCollapsed || !isDesktop) && <span className="truncate">{item.label}</span>}
-            {sidebarCollapsed && isDesktop && (
-              <div className="absolute left-full ml-2 px-2 py-1 bg-zinc-800 text-zinc-100 text-xs rounded opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all whitespace-nowrap z-50 shadow-lg border border-zinc-700">
-                {item.label}
-              </div>
-            )}
-          </NavLink>
-        ))}
-
-        {(!sidebarCollapsed || !isDesktop) && (
-          <div className="pt-4 pb-1">
-            <p className="text-[9px] uppercase tracking-[0.2em] font-bold text-brand-orange/90 px-3 truncate">5 Strategic Pillars</p>
-          </div>
-        )}
-
-        {innovationPillars.map((item) => (
-          <NavLink key={item.to} to={item.to} className={linkClass} onClick={closeSidebar}>
-            {({ isActive }) => (
-              <>
-                <item.icon className={clsx("w-5 h-5 shrink-0", isActive ? "text-black" : "text-cyan-400")} />
-                {(!sidebarCollapsed || !isDesktop) && <span className="truncate">{item.label}</span>}
-                {sidebarCollapsed && isDesktop && (
-                  <div className="absolute left-full ml-2 px-2 py-1 bg-zinc-800 text-zinc-100 text-xs rounded opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all whitespace-nowrap z-50 shadow-lg border border-zinc-700">
-                    {item.label}
-                  </div>
-                )}
-              </>
-            )}
-          </NavLink>
-        ))}
-
-        {(!sidebarCollapsed || !isDesktop) && (
-          <div className="pt-4 pb-1">
-            <p className="text-[9px] uppercase tracking-[0.2em] font-bold text-zinc-600 px-3 truncate">Modules &amp; System</p>
-          </div>
-        )}
-
-        {advancedItems.map((item) => (
-          <NavLink key={item.to} to={item.to} className={linkClass} onClick={closeSidebar}>
-            <item.icon className="w-5 h-5 shrink-0" />
-            {(!sidebarCollapsed || !isDesktop) && <span className="truncate">{item.label}</span>}
-            {sidebarCollapsed && isDesktop && (
-              <div className="absolute left-full ml-2 px-2 py-1 bg-zinc-800 text-zinc-100 text-xs rounded opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all whitespace-nowrap z-50 shadow-lg border border-zinc-700">
-                {item.label}
-              </div>
-            )}
-          </NavLink>
-        ))}
-      </nav>
-
-      {/* User */}
-      <div className={clsx("p-4 border-t border-zinc-800", sidebarCollapsed && isDesktop && "flex flex-col items-center")}>
-        <div className={clsx("flex items-center gap-3 mb-3", sidebarCollapsed && isDesktop && "justify-center")}>
-          <div className="w-9 h-9 bg-zinc-800 border border-zinc-700 rounded-sm flex items-center justify-center shrink-0">
-            <span className="text-xs font-mono font-medium text-zinc-300">
-              {user?.firstName?.[0]}{user?.lastName?.[0]}
-            </span>
-          </div>
-          {(!sidebarCollapsed || !isDesktop) && (
-            <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-zinc-50 font-mono truncate">
-                {user?.firstName} {user?.lastName}
-              </p>
-              <p className="text-xs text-zinc-500 font-mono tracking-wider truncate">{user?.role}</p>
-            </div>
-          )}
-        </div>
-        <button
-          onClick={handleLogout}
-          className={clsx(
-            "flex items-center justify-center gap-2 py-2 text-xs font-mono tracking-widest uppercase text-zinc-400 hover:bg-zinc-800 hover:text-zinc-50 border border-zinc-800 rounded-sm transition group relative",
-            sidebarCollapsed && isDesktop ? "w-10 px-0" : "w-full px-3"
-          )}
-        >
-          <LogOut className="w-4 h-4" />
-          {(!sidebarCollapsed || !isDesktop) && "Logout"}
-          {sidebarCollapsed && isDesktop && (
-            <div className="absolute left-full ml-2 px-2 py-1 bg-zinc-800 text-zinc-100 text-xs rounded opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all whitespace-nowrap z-50 shadow-lg border border-zinc-700">
-              Logout
-            </div>
-          )}
-        </button>
-      </div>
-    </>
-  );
-
   return (
-    <div className="flex h-screen bg-background text-zinc-50 font-sans">
-
-      {/* ── Desktop sidebar ─────────────────────────────────────────────────── */}
+    <div className={clsx(
+      "min-h-screen font-sans antialiased flex flex-col selection:bg-[#ff5500] selection:text-white transition-colors duration-200",
+      isDarkMode ? "bg-[#090A0F] text-[#F8FAFC]" : "bg-[#F4F5F7] text-[#0A0A0C]"
+    )}>
+      
+      {/* ── Fixed Desktop Sidebar ─────────────────────────────────────────── */}
       <aside className={clsx(
-        "hidden md:flex bg-surface border-r border-zinc-800 flex-col shrink-0 transition-all duration-300 z-30 relative",
-        sidebarCollapsed ? "w-20" : "w-64"
+        "fixed left-0 top-0 h-full z-50 hidden md:flex flex-col transition-all duration-300 ease-in-out border-r shadow-sm backdrop-blur-xl",
+        isCollapsed ? "w-[76px]" : "w-[260px]",
+        isDarkMode 
+          ? "bg-[#0F1117]/95 border-slate-800 text-slate-200" 
+          : "bg-white/95 border-slate-200/80 text-[#0A0A0C]"
       )}>
-        <SidebarContent isDesktop={true} />
+        {/* Brand Header */}
+        <div className={clsx(
+          "h-[64px] flex items-center justify-between border-b shrink-0 transition-all duration-300",
+          isCollapsed ? "px-3" : "px-5",
+          isDarkMode ? "border-slate-800" : "border-slate-200/80"
+        )}>
+          <NavLink to="/dashboard" className="flex items-center gap-3 group min-w-0" title="BeeCarbonat">
+            <BeeCarbonatLogo size={36} showText={!isCollapsed} />
+          </NavLink>
+
+          {/* Collapse Toggle Button ("réduire la barre latérale") */}
+          <button
+            onClick={() => setIsCollapsed(!isCollapsed)}
+            title={isCollapsed ? "Agrandir la barre latérale" : "Réduire la barre latérale"}
+            className={clsx(
+              "p-1.5 rounded-lg transition-colors cursor-pointer shrink-0",
+              isDarkMode 
+                ? "text-slate-400 hover:text-white hover:bg-slate-800" 
+                : "text-slate-500 hover:text-[#0F172A] hover:bg-slate-100"
+            )}
+          >
+            {isCollapsed ? <PanelLeftOpen size={18} /> : <PanelLeftClose size={18} />}
+          </button>
+        </div>
+
+        {/* Primary Navigation */}
+        <nav className="flex-1 py-4 px-3 flex flex-col gap-4 overflow-y-auto custom-scrollbar">
+          {navCategories.map((cat, catIdx) => (
+            <div key={cat.categoryKey} className="flex flex-col gap-1">
+              {!isCollapsed && (
+                <div className={clsx(
+                  "px-3 py-1 text-[9px] font-mono uppercase tracking-widest font-bold",
+                  isDarkMode ? "text-slate-500" : "text-slate-400"
+                )}>
+                  {t(cat.categoryKey, cat.categoryDefault)}
+                </div>
+              )}
+              {isCollapsed && catIdx > 0 && (
+                <div className={clsx("my-1 border-t", isDarkMode ? "border-slate-800" : "border-slate-200")} />
+              )}
+              {cat.items.map((item) => {
+                const isActive = location.pathname === item.to;
+                const itemLabel = t(item.labelKey, item.defaultLabel);
+                return (
+                  <NavLink
+                    key={`${cat.categoryKey}-${item.to}-${item.labelKey}`}
+                    to={item.to}
+                    title={isCollapsed ? itemLabel : undefined}
+                    className={clsx(
+                      'flex items-center rounded-xl transition-all group font-mono text-[11px] uppercase tracking-wider relative',
+                      isCollapsed ? 'justify-center p-2.5' : 'px-3 py-2 gap-3',
+                      isActive
+                        ? 'bg-[#FF5500] text-white font-bold shadow-[0_2px_10px_rgba(255,85,0,0.3)]'
+                        : isDarkMode
+                          ? 'text-slate-400 hover:text-white hover:bg-slate-800/60'
+                          : 'text-slate-600 hover:text-[#0F172A] hover:bg-slate-100'
+                    )}
+                  >
+                    <span className="material-symbols-outlined text-[18px] group-hover:scale-110 transition-transform shrink-0">
+                      {item.icon}
+                    </span>
+                    {!isCollapsed && <span className="truncate">{itemLabel}</span>}
+                  </NavLink>
+                );
+              })}
+            </div>
+          ))}
+        </nav>
+
+        {/* User Card */}
+        <div className={clsx(
+          "p-3 mt-auto border-t shrink-0",
+          isDarkMode ? "border-slate-800" : "border-slate-200/80"
+        )}>
+          <div className={clsx(
+            "p-2.5 rounded-xl flex items-center justify-between gap-2 border transition-all",
+            isDarkMode 
+              ? "bg-slate-900/60 border-slate-800 text-slate-200" 
+              : "bg-slate-50 border-slate-200/90 text-[#0A0A0C]"
+          )}>
+            <div className="flex items-center gap-2.5 min-w-0" title={`${user?.firstName || 'System'} ${user?.lastName || 'Admin'}`}>
+              <div className="w-8 h-8 rounded-lg bg-[#0F172A] text-white flex items-center justify-center font-bold text-xs shadow shrink-0">
+                <span className="material-symbols-outlined text-cyan-400 text-[18px]">person</span>
+              </div>
+              {!isCollapsed && (
+                <div className="flex flex-col min-w-0">
+                  <span className="font-mono text-[11px] font-bold truncate">
+                    {user?.firstName ? `${user.firstName} ${user.lastName || ''}` : 'System Admin'}
+                  </span>
+                  <span className="text-[9px] text-slate-500 uppercase font-mono tracking-wider truncate">
+                    {user?.role === 'ADMIN' ? 'Tier 01 Operator' : (user?.role || 'Tier 01 Operator')}
+                  </span>
+                </div>
+              )}
+            </div>
+            {!isCollapsed && (
+              <button
+                onClick={handleLogout}
+                title="Déconnexion"
+                className={clsx(
+                  "p-1.5 rounded-lg transition-colors cursor-pointer",
+                  isDarkMode ? "text-slate-400 hover:text-rose-400 hover:bg-slate-800" : "text-slate-500 hover:text-rose-600 hover:bg-slate-200/60"
+                )}
+              >
+                <span className="material-symbols-outlined text-[18px]">logout</span>
+              </button>
+            )}
+          </div>
+        </div>
       </aside>
 
-      {/* ── Mobile overlay ──────────────────────────────────────────────────── */}
+      {/* ── Mobile Sidebar (Drawer) ───────────────────────────────────────── */}
       {sidebarOpen && (
         <div
-          className="fixed inset-0 bg-black/60 z-40 md:hidden"
+          className="fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-50 md:hidden"
           onClick={closeSidebar}
-          aria-hidden="true"
         />
       )}
-
-      {/* ── Mobile sidebar (drawer) ─────────────────────────────────────────── */}
       <aside
         className={clsx(
-          'fixed inset-y-0 left-0 z-50 w-72 bg-surface border-r border-zinc-800 flex flex-col transition-transform duration-300 md:hidden',
+          'fixed inset-y-0 left-0 z-50 w-[280px] flex flex-col transition-transform duration-300 md:hidden border-r shadow-2xl',
+          isDarkMode ? "bg-[#0F1117] border-slate-800 text-white" : "bg-white border-slate-200 text-[#0A0A0C]",
           sidebarOpen ? 'translate-x-0' : '-translate-x-full'
         )}
       >
-        <button
-          onClick={closeSidebar}
-          className="absolute top-4 right-4 p-1 text-zinc-400 hover:text-zinc-50"
-          aria-label="Fermer le menu"
-        >
-          <X className="w-5 h-5" />
-        </button>
-        <SidebarContent />
+        <div className="h-[64px] flex items-center justify-between px-5 border-b border-slate-200 dark:border-slate-800">
+          <div className="flex items-center gap-3">
+            <BeeCarbonatLogo size={32} showText={true} />
+          </div>
+          <button onClick={closeSidebar} className="p-1.5 text-slate-400 hover:text-slate-600 dark:hover:text-white">
+            <X className="w-5 h-5" />
+          </button>
+        </div>
+
+        <nav className="flex-1 py-4 px-4 flex flex-col gap-4 overflow-y-auto custom-scrollbar">
+          {navCategories.map((cat) => (
+            <div key={`mobile-${cat.categoryKey}`} className="flex flex-col gap-1">
+              <div className="px-3 py-1 text-[9px] font-mono uppercase tracking-widest font-bold text-slate-400">
+                {t(cat.categoryKey, cat.categoryDefault)}
+              </div>
+              {cat.items.map((item) => (
+                <NavLink
+                  key={`mobile-${cat.categoryKey}-${item.to}-${item.labelKey}`}
+                  to={item.to}
+                  onClick={closeSidebar}
+                  className={({ isActive }) => clsx(
+                    'flex items-center px-3.5 py-2.5 rounded-xl font-mono text-[11px] uppercase tracking-wider',
+                    isActive ? 'bg-[#FF5500] text-white font-bold' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800'
+                  )}
+                >
+                  <span className="material-symbols-outlined mr-3 text-[18px]">{item.icon}</span>
+                  {t(item.labelKey, item.defaultLabel)}
+                </NavLink>
+              ))}
+            </div>
+          ))}
+        </nav>
       </aside>
 
-      {/* ── Main content ────────────────────────────────────────────────────── */}
-      <div className="flex-1 flex flex-col overflow-hidden">
-        {/* Mobile topbar */}
-        <header className="md:hidden flex items-center justify-between px-4 py-3 bg-surface border-b border-zinc-800 shrink-0">
-          <button
-            onClick={() => setSidebarOpen(true)}
-            className="p-2 text-zinc-400 hover:text-zinc-50 rounded-sm"
-            aria-label="Ouvrir le menu"
-          >
-            <Menu className="w-5 h-5" />
-          </button>
-          <div className="flex items-center gap-2">
-            <span className="font-mono text-xs uppercase tracking-widest text-zinc-300">BEECARBONAT</span>
-            {isOffline && (
-              <span className="text-[10px] bg-amber-500/20 text-amber-400 px-1.5 py-0.5 border border-amber-500/30 font-mono uppercase">
-                Offline
-              </span>
-            )}
+      {/* ── Main Content Layout ────────────────────────────────────────────── */}
+      <div className={clsx(
+        "flex-1 flex flex-col min-h-screen transition-all duration-300 ease-in-out",
+        isCollapsed ? "md:pl-[76px]" : "md:pl-[260px]"
+      )}>
+        
+        {/* Fixed Top Header */}
+        <header className={clsx(
+          "fixed top-0 right-0 h-[64px] z-40 px-6 flex items-center justify-between border-b backdrop-blur-xl transition-all duration-300 ease-in-out left-0",
+          isCollapsed ? "md:left-[76px]" : "md:left-[260px]",
+          isDarkMode 
+            ? "bg-[#090A0F]/90 border-slate-800 text-white" 
+            : "bg-white/90 border-slate-200/80 text-[#0A0A0C]"
+        )}>
+          <div className="flex items-center gap-4">
+            <button
+              onClick={() => setSidebarOpen(true)}
+              className="md:hidden p-1.5 text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white rounded-lg"
+            >
+              <Menu className="w-5 h-5" />
+            </button>
+            
+            {/* Site Context Selector */}
+            <div className={clsx(
+              "flex items-center gap-2 border px-3 py-1.5 rounded-xl font-mono text-xs font-semibold shadow-xs transition-colors",
+              isDarkMode 
+                ? "bg-slate-900/80 border-slate-800 text-slate-200" 
+                : "bg-slate-50 border-slate-200/90 text-[#0F172A]"
+            )}>
+              <span className="material-symbols-outlined text-[18px] text-[#0F172A] dark:text-[#00F0FF]">apartment</span>
+              <select className="bg-transparent focus:outline-none cursor-pointer">
+                <option value="paris" className={isDarkMode ? "bg-slate-900" : "bg-white"}>{t('header_paris_hq', 'Paris HQ - Bâtiment Alpha')}</option>
+                <option value="lyon" className={isDarkMode ? "bg-slate-900" : "bg-white"}>{t('header_lyon_hub', 'Lyon - Hub Béta')}</option>
+                <option value="berlin" className={isDarkMode ? "bg-slate-900" : "bg-white"}>{t('header_berlin_campus', 'Berlin - Tech Campus')}</option>
+              </select>
+            </div>
           </div>
-          <div className="w-9 h-9 bg-zinc-800 border border-zinc-700 rounded-sm flex items-center justify-center">
-            <span className="text-xs font-mono text-zinc-300">
-              {user?.firstName?.[0]}{user?.lastName?.[0]}
-            </span>
+
+          <div className="flex items-center gap-2.5 sm:gap-3">
+            {/* 🌐 3-Language Selector (Français, English, Español) */}
+            <div className={clsx(
+              "flex items-center gap-1.5 border px-2.5 py-1.5 rounded-xl font-mono text-xs font-bold transition-colors shadow-xs",
+              isDarkMode 
+                ? "bg-slate-900 border-slate-800 text-slate-200" 
+                : "bg-slate-100 border-slate-200 text-[#0F172A]"
+            )}>
+              <Globe size={15} className="text-[#FF5500] shrink-0" />
+              <select
+                value={language}
+                onChange={(e) => setLanguage(e.target.value)}
+                className="bg-transparent focus:outline-none cursor-pointer font-bold pr-1"
+                aria-label="Sélectionner la langue / Select language"
+              >
+                <option value="fr" className={isDarkMode ? "bg-slate-900 text-white" : "bg-white text-slate-900"}>🇫🇷 FR - Français</option>
+                <option value="en" className={isDarkMode ? "bg-slate-900 text-white" : "bg-white text-slate-900"}>🇬🇧 EN - English</option>
+                <option value="es" className={isDarkMode ? "bg-slate-900 text-white" : "bg-white text-slate-900"}>🇪🇸 ES - Español</option>
+              </select>
+            </div>
+
+            {/* Mode Switcher Button (Mode Clair / Mode Sombre) */}
+            <button
+              onClick={() => setIsDarkMode(!isDarkMode)}
+              title={isDarkMode ? "Activer le Mode Clair (Off-White 95%)" : "Activer le Mode Sombre"}
+              className={clsx(
+                "flex items-center gap-2 px-3 py-1.5 rounded-xl border text-xs font-mono font-bold transition-all cursor-pointer",
+                isDarkMode 
+                  ? "bg-slate-900 border-slate-800 text-amber-400 hover:bg-slate-800" 
+                  : "bg-slate-100 border-slate-200 text-[#0F172A] hover:bg-slate-200/80"
+              )}
+            >
+              {isDarkMode ? <Sun size={15} /> : <Moon size={15} />}
+              <span className="hidden sm:inline">{isDarkMode ? t('dark_mode', 'Mode Sombre') : t('light_mode', 'Mode Clair')}</span>
+            </button>
+
+            {/* Online Sync Status Indicator */}
+            <div 
+              onClick={handleManualSync}
+              className={clsx(
+                "flex items-center gap-2 px-3 py-1.5 rounded-full border cursor-pointer transition-colors shadow-xs",
+                isDarkMode ? "bg-slate-900/80 border-slate-800" : "bg-slate-100/80 border-slate-200"
+              )}
+              title="Cliquer pour synchroniser manuellement"
+            >
+              <span className={clsx(
+                "w-2 h-2 rounded-full",
+                isOnline 
+                  ? "bg-emerald-500 shadow-[0_0_8px_#10B981] animate-pulse" 
+                  : "bg-rose-500 shadow-[0_0_8px_#ef4444]"
+              )} />
+              <span className="font-mono text-[10px] uppercase tracking-wider hidden sm:inline font-bold">
+                {isOnline ? t('system_sync_online', 'Système Synchro: En ligne') : t('system_sync_offline', 'Mode Hors Ligne')}
+              </span>
+              {pendingSyncCount > 0 && (
+                <span className="px-1.5 py-0.2 bg-[#FF5500] text-white font-mono text-[9px] font-bold rounded-full">
+                  {pendingSyncCount}
+                </span>
+              )}
+            </div>
+
+            {/* Quick Search */}
+            <button
+              onClick={() => navigate('/spaces')}
+              className={clsx(
+                "p-2 rounded-xl transition-colors cursor-pointer",
+                isDarkMode ? "text-slate-400 hover:text-white hover:bg-slate-800" : "text-slate-600 hover:text-[#0F172A] hover:bg-slate-100"
+              )}
+              title={t('search_placeholder', 'Rechercher des espaces ou équipements')}
+            >
+              <span className="material-symbols-outlined text-[20px]">search</span>
+            </button>
+
+            {/* Notifications */}
+            <button
+              onClick={() => navigate('/notifications')}
+              className={clsx(
+                "p-2 rounded-xl transition-colors relative cursor-pointer",
+                isDarkMode ? "text-slate-400 hover:text-white hover:bg-slate-800" : "text-slate-600 hover:text-[#0F172A] hover:bg-slate-100"
+              )}
+              title="Notifications système"
+            >
+              <span className="material-symbols-outlined text-[20px]">notifications</span>
+              <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-[#FF5500] rounded-full shadow-[0_0_6px_#FF5500]"></span>
+            </button>
           </div>
         </header>
 
-        {/* Global Offline Mode Status Banner */}
-        {isOffline && (
-          <div className="bg-amber-950/40 border-b border-amber-600/40 px-6 py-2.5 flex items-center justify-between text-amber-200 text-xs font-mono shrink-0">
-            <div className="flex items-center gap-2">
-              <WifiOff className="w-4 h-4 text-amber-400 animate-pulse" />
-              <span>
-                <strong className="font-bold text-amber-300">OFFLINE MODE ACTIVE:</strong> You are viewing state reports and facility data cached by the Service Worker.
-              </span>
-            </div>
-            <div className="flex items-center gap-3">
-              <span className="text-[10px] text-amber-400/80 uppercase">
-                Cache Service Worker v3
-              </span>
-            </div>
-          </div>
-        )}
-
-        <main className="flex-1 overflow-y-auto bg-background">
+        {/* Dynamic Main Body Content */}
+        <main className={clsx(
+          "relative pt-[64px] flex-1 min-h-screen transition-colors duration-200",
+          isDarkMode ? "bg-[#090A0F]" : "bg-[#F4F5F7]"
+        )}>
           <Outlet />
         </main>
       </div>
 
-      {/* Reusable Conflict Resolution Modal Component */}
+      {/* Offline Conflict Resolution Modal */}
       <ConflictResolutionModal
         isOpen={showConflictModal}
         onClose={() => setShowConflictModal(false)}
         conflicts={conflicts}
-        onResolve={handleResolve}
-        onKeepAll={handleKeepAll}
-        onApply={handleApplyResolution}
-        isSyncing={isSyncing}
+        onResolve={(id, choice) => {
+          setConflicts(prev => prev.map(c => c.id === id ? { ...c, resolved: choice } : c));
+        }}
+        onKeepAll={(choice) => {
+          setConflicts(prev => prev.map(c => ({ ...c, resolved: choice })));
+        }}
+        onApply={() => {
+          setShowConflictModal(false);
+          toast.success('Résolutions enregistrées');
+        }}
+        isSyncing={isResolvingConflicts}
       />
     </div>
   );
 }
+
+
 

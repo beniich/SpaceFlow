@@ -64,9 +64,9 @@ export default function Register() {
       showSignup={true}
       signupLink="/login"
       legalText={null}
-      marketingTag="CAFM PRO by Carbonit"
+      marketingTag="CAFM PRO by BeeCarbonat"
       marketingHeadline="Where Facility Managers Connect"
-      marketingMeta="Unleash the power of CAFM PRO by Carbonit. Manage assets, optimize space, and connect your facilities to the future."
+      marketingMeta="Unleash the power of CAFM PRO by BeeCarbonat. Manage assets, optimize space, and connect your facilities to the future."
     >
       <h1 className="auth-form-title">Créez votre compte</h1>
 

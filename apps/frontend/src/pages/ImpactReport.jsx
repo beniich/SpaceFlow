@@ -1,161 +1,138 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+import { Leaf, Award, Users, Bus, Sparkles, TrendingUp, Download, ArrowUpRight } from 'lucide-react';
+import toast from 'react-hot-toast';
 
 export default function ImpactReport() {
   return (
-    <div className="min-h-screen bg-brand-obsidian text-zinc-100 font-sans relative overflow-hidden flex flex-col items-center pt-8">
-      {/* Background Effects */}
-      <div className="absolute inset-0 z-0">
-        <div className="absolute inset-0 bg-brand-obsidian/90 backdrop-blur-3xl" />
-        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[800px] h-[300px] bg-brand-cyan/10 rounded-[100%] blur-[100px] mix-blend-screen" />
-        
-        {/* Bottom flame/energy effect */}
-        <div className="absolute bottom-0 left-0 w-full h-64 bg-gradient-to-t from-orange-600/40 via-blue-600/20 to-transparent blur-[60px]" />
+    <div className="min-h-screen bg-[#070b10] text-slate-100 p-4 sm:p-6 lg:p-12 font-sans relative overflow-hidden">
+      {/* Background Glow */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-96 bg-[radial-gradient(circle_at_center,rgba(0,219,231,0.15)_0,transparent_70%)] pointer-events-none" />
+
+      {/* Top Header */}
+      <div className="max-w-6xl mx-auto flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-800 pb-6 mb-10">
+        <div>
+          <div className="flex items-center gap-2 text-xs font-mono text-[#00dbe7] uppercase tracking-widest mb-1">
+            <Sparkles className="w-4 h-4 animate-pulse" /> Environmental Impact Report
+          </div>
+          <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white">
+            BeeCarbonat <span className="text-[#f38020]">Sustainability Ledger</span>
+          </h1>
+        </div>
+
+        <button
+          onClick={() => toast.success("Téléchargement du rapport d'impact ESG complet (PDF)")}
+          className="px-4 py-2 rounded-xl bg-gradient-to-r from-[#f38020] to-orange-600 hover:opacity-90 text-xs font-bold text-white transition flex items-center gap-2 shadow-lg shadow-orange-500/20"
+        >
+          <Download className="w-4 h-4" /> Exporter Rapport ESG (PDF)
+        </button>
       </div>
 
-      {/* Navigation */}
-      <nav className="relative z-10 bg-white/5 border border-white/10 rounded-full px-6 py-3 flex items-center justify-between w-full max-w-4xl backdrop-blur-xl mb-16">
-        <div className="flex items-center gap-2">
-          <div className="w-6 h-6 text-brand-cyan">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
-          </div>
-          <span className="font-bold">BeeCarbonit</span>
+      {/* Hero Impact Stat */}
+      <div className="max-w-4xl mx-auto text-center mb-16 space-y-4 relative z-10">
+        <div className="text-5xl sm:text-7xl font-black tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-[#00dbe7] via-cyan-300 to-[#00dbe7] drop-shadow-[0_0_35px_rgba(0,219,231,0.5)]">
+          4,200+
         </div>
-        <div className="flex gap-6 text-sm font-medium">
-          <a href="#" className="text-zinc-400 hover:text-zinc-200">DASHBOARD</a>
-          <a href="#" className="text-zinc-400 hover:text-zinc-200">FACILITIES</a>
-          <a href="/impact" className="text-brand-cyan">IMPACT REPORT</a>
-          <a href="#" className="text-zinc-400 hover:text-zinc-200">DATA PULSE</a>
-          <a href="#" className="text-zinc-400 hover:text-zinc-200">ABOUT US</a>
+        <div className="text-lg sm:text-xl font-bold tracking-wide text-slate-200 uppercase font-mono">
+          Metric Tons CO2e Reduced
         </div>
-        <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center">
-          <svg className="w-4 h-4 text-zinc-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
-        </div>
-      </nav>
+        <p className="text-xs text-slate-400 max-w-md mx-auto">
+          Calculé en temps réel via le réseau de capteurs IoT BeeCarbonat & la télémétrie énergétique certifiée.
+        </p>
+      </div>
 
-      <main className="relative z-10 flex flex-col items-center w-full max-w-5xl px-6">
-        {/* Hero Number */}
-        <div className="text-center mb-16">
-          <motion.h1 
-            initial={{ scale: 0.9, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            className="text-7xl md:text-9xl font-bold text-transparent bg-clip-text bg-gradient-to-b from-brand-cyan to-blue-500 tracking-tighter drop-shadow-[0_0_40px_rgba(0,242,255,0.4)]"
-          >
-            4,200+
-          </motion.h1>
-          <p className="text-xl md:text-2xl mt-4 text-zinc-300 tracking-wide">Metric Tons CO2e Reduced</p>
-        </div>
+      {/* Environmental Metrics Grid */}
+      <div className="max-w-6xl mx-auto space-y-12 relative z-10">
+        <div>
+          <h3 className="text-xs font-mono uppercase tracking-widest text-[#00dbe7] mb-6 flex items-center gap-2">
+            <Leaf className="w-4 h-4" /> ENVIRONMENTAL METRICS
+          </h3>
 
-        {/* Environmental Metrics */}
-        <div className="w-full mb-16">
-          <h2 className="text-xl font-semibold text-brand-cyan mb-6 text-center uppercase tracking-widest">
-            Environmental Metrics
-          </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {/* Card 1 */}
-            <div className="bg-white/5 border border-white/10 rounded-2xl p-6 backdrop-blur-xl flex flex-col items-center hover:border-brand-cyan/50 transition-colors">
-              <div className="w-full flex justify-between text-xs text-zinc-400 font-medium mb-8">
-                <span>CO2 REDUCTION GOAL</span>
-                <span className="text-brand-cyan">📈</span>
-              </div>
-              <div className="relative w-40 h-40 flex items-center justify-center mb-4">
-                <svg className="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
-                  <circle cx="50" cy="50" r="40" stroke="rgba(255,255,255,0.1)" strokeWidth="8" fill="none" />
-                  <circle cx="50" cy="50" r="40" stroke="#00f2ff" strokeWidth="8" fill="none" strokeDasharray="251" strokeDashoffset="37" className="drop-shadow-[0_0_8px_rgba(0,242,255,0.8)]" strokeLinecap="round" />
+            {/* Metric 1: CO2 Reduction Goal */}
+            <div className="p-6 rounded-2xl bg-slate-900/60 border border-slate-800 backdrop-blur-xl text-center space-y-3">
+              <span className="text-xs font-mono text-slate-400 uppercase">CO2 REDUCTION GOAL</span>
+              <div className="relative w-28 h-28 mx-auto flex items-center justify-center my-2">
+                <svg className="w-full h-full transform -rotate-90">
+                  <circle cx="56" cy="56" r="44" stroke="#1e293b" strokeWidth="8" fill="transparent" />
+                  <circle cx="56" cy="56" r="44" stroke="#00dbe7" strokeWidth="8" fill="transparent" strokeDasharray="280" strokeDashoffset="42" />
                 </svg>
                 <div className="absolute text-center">
-                  <span className="text-sm text-zinc-400">Chart.js</span>
-                  <div className="text-4xl font-bold">85%</div>
-                  <span className="text-brand-cyan">↗</span>
+                  <span className="text-xl font-black text-white font-mono">85%</span>
+                  <div className="text-[10px] text-emerald-400 font-mono flex items-center justify-center">
+                    <ArrowUpRight className="w-3 h-3" /> +12%
+                  </div>
                 </div>
               </div>
+              <p className="text-xs text-slate-400 font-mono">Objectif 2026 en passe d'être atteint</p>
             </div>
 
-            {/* Card 2 */}
-            <div className="bg-white/5 border border-white/10 rounded-2xl p-6 backdrop-blur-xl flex flex-col items-center hover:border-brand-cyan/50 transition-colors">
-              <div className="w-full flex justify-between text-xs text-zinc-400 font-medium mb-8">
-                <span>TOTAL CARBON OFFSET</span>
-                <span className="text-brand-cyan">🌲</span>
+            {/* Metric 2: Total Carbon Offset */}
+            <div className="p-6 rounded-2xl bg-slate-900/60 border border-slate-800 backdrop-blur-xl text-center space-y-3">
+              <span className="text-xs font-mono text-slate-400 uppercase">TOTAL CARBON OFFSET</span>
+              <div className="text-3xl font-black text-[#00dbe7] font-mono my-4">
+                1,500+ <span className="text-xs text-slate-400 font-normal">TONNES</span>
               </div>
-              <div className="relative w-40 h-40 flex items-center justify-center mb-4">
-                <svg className="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
-                  <circle cx="50" cy="50" r="40" stroke="rgba(255,255,255,0.1)" strokeWidth="8" fill="none" />
-                  <circle cx="50" cy="50" r="40" stroke="#00f2ff" strokeWidth="8" fill="none" strokeDasharray="251" strokeDashoffset="100" className="drop-shadow-[0_0_8px_rgba(0,242,255,0.8)]" strokeLinecap="round" />
-                </svg>
-                <div className="absolute text-center">
-                  <div className="text-3xl font-bold">1,500+</div>
-                  <span className="text-xs text-zinc-400 uppercase">Tonnes</span>
-                </div>
-              </div>
-              <p className="text-xs text-zinc-500 text-center">Equivalent to 30,000 trees planted</p>
+              <p className="text-xs text-emerald-400 font-mono bg-emerald-500/10 py-1.5 px-3 rounded-lg border border-emerald-500/20">
+                Équivalent à 30 000 arbres plantés
+              </p>
             </div>
 
-            {/* Card 3 */}
-            <div className="bg-white/5 border border-white/10 rounded-2xl p-6 backdrop-blur-xl flex flex-col items-center hover:border-brand-cyan/50 transition-colors">
-              <div className="w-full flex justify-between text-xs text-zinc-400 font-medium mb-8">
-                <span>ENERGY EFFICIENCY SCORE</span>
-              </div>
-              <div className="relative w-40 h-40 flex items-center justify-center mb-4">
-                <svg className="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
-                  <circle cx="50" cy="50" r="40" stroke="rgba(255,255,255,0.1)" strokeWidth="8" fill="none" />
-                  <circle cx="50" cy="50" r="40" stroke="#00f2ff" strokeWidth="8" fill="none" strokeDasharray="251" strokeDashoffset="20" className="drop-shadow-[0_0_8px_rgba(0,242,255,0.8)]" strokeLinecap="round" />
+            {/* Metric 3: Energy Efficiency Score */}
+            <div className="p-6 rounded-2xl bg-slate-900/60 border border-slate-800 backdrop-blur-xl text-center space-y-3">
+              <span className="text-xs font-mono text-slate-400 uppercase">ENERGY EFFICIENCY SCORE</span>
+              <div className="relative w-28 h-28 mx-auto flex items-center justify-center my-2">
+                <svg className="w-full h-full transform -rotate-90">
+                  <circle cx="56" cy="56" r="44" stroke="#1e293b" strokeWidth="8" fill="transparent" />
+                  <circle cx="56" cy="56" r="44" stroke="#f38020" strokeWidth="8" fill="transparent" strokeDasharray="280" strokeDashoffset="25" />
                 </svg>
                 <div className="absolute text-center">
-                  <div className="text-4xl font-bold">A+</div>
-                  <span className="text-sm text-zinc-400">92%</span>
+                  <span className="text-2xl font-black text-[#f38020] font-mono">A+</span>
+                  <div className="text-[10px] text-slate-300 font-mono">92%</div>
                 </div>
               </div>
-              <p className="text-xs text-zinc-500 text-center">Building consumption optimized</p>
+              <p className="text-xs text-slate-400 font-mono">Building consumption optimized</p>
             </div>
           </div>
         </div>
 
-        {/* Community Engagement */}
-        <div className="w-full mb-24">
-          <h2 className="text-xl font-semibold text-brand-cyan mb-6 text-center uppercase tracking-widest">
-            Community Engagement & Sustainability
-          </h2>
+        {/* Community Engagement & Sustainability */}
+        <div>
+          <h3 className="text-xs font-mono uppercase tracking-widest text-[#f38020] mb-6 flex items-center gap-2">
+            <Users className="w-4 h-4" /> COMMUNITY ENGAGEMENT & SUSTAINABILITY
+          </h3>
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="bg-white/5 border border-white/10 rounded-2xl p-6 backdrop-blur-xl flex items-center gap-6 hover:border-brand-cyan/30 transition-colors">
-               <div className="w-32 h-32 rounded-lg bg-white/5 flex-shrink-0 flex items-center justify-center overflow-hidden relative">
-                  {/* Mock Vertical Farm Image */}
-                  <div className="absolute inset-0 bg-green-500/20" />
-                  <div className="w-full h-full border border-green-500/30 flex flex-col gap-1 p-2">
-                    {[...Array(4)].map((_, i) => (
-                      <div key={i} className="flex-1 bg-green-400/30 rounded-sm" />
-                    ))}
-                  </div>
-               </div>
-               <div>
-                 <div className="text-4xl font-bold text-white mb-2">600+</div>
-                 <div className="text-sm text-zinc-400">Local Residents Trained</div>
-               </div>
+            {/* Card 1: Residents Trained */}
+            <div className="p-6 rounded-2xl bg-slate-900/60 border border-slate-800 backdrop-blur-xl flex items-center justify-between gap-6">
+              <div className="w-20 h-20 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center shrink-0">
+                <Leaf className="w-10 h-10 text-emerald-400" />
+              </div>
+              <div>
+                <div className="text-3xl font-black text-white font-mono">600+</div>
+                <div className="text-sm font-semibold text-slate-300 mt-1">Local Residents Trained</div>
+                <p className="text-xs text-slate-400 mt-1 font-mono">Sensibilisation à l'éco-gestion & à l'agriculture urbaine</p>
+              </div>
             </div>
 
-            <div className="bg-white/5 border border-white/10 rounded-2xl p-6 backdrop-blur-xl flex items-center gap-6 hover:border-brand-cyan/30 transition-colors">
-               <div className="w-32 h-32 rounded-lg bg-white/5 flex-shrink-0 flex items-center justify-center overflow-hidden relative">
-                  {/* Mock Bus Image */}
-                  <div className="absolute inset-x-2 bottom-4 top-8 bg-zinc-300 rounded-lg shadow-lg flex items-center justify-center border-b-4 border-blue-500">
-                    <div className="w-full h-1/2 bg-blue-900/50 mb-auto rounded-t-lg" />
-                  </div>
-               </div>
-               <div>
-                 <div className="text-4xl font-bold text-white mb-2">2,000+</div>
-                 <div className="text-sm text-zinc-400">Zero-Emission Trips</div>
-               </div>
+            {/* Card 2: Zero Emission Trips */}
+            <div className="p-6 rounded-2xl bg-slate-900/60 border border-slate-800 backdrop-blur-xl flex items-center justify-between gap-6">
+              <div className="w-20 h-20 rounded-2xl bg-[#00dbe7]/10 border border-[#00dbe7]/30 flex items-center justify-center shrink-0">
+                <Bus className="w-10 h-10 text-[#00dbe7]" />
+              </div>
+              <div>
+                <div className="text-3xl font-black text-white font-mono">2,000+</div>
+                <div className="text-sm font-semibold text-slate-300 mt-1">Zero-Emission Trips</div>
+                <p className="text-xs text-slate-400 mt-1 font-mono">Trajets en navettes autonomes électriques sur site</p>
+              </div>
             </div>
           </div>
         </div>
-      </main>
-      
-      <footer className="relative z-10 w-full bg-brand-obsidian/80 border-t border-white/10 py-4 flex justify-between px-8 text-xs text-zinc-500 mt-auto">
-        <span>© 2024 BeeCarbonit. All rights reserved. Carbon-Neutral Initiative.</span>
-        <div className="flex gap-4">
-          <a href="#" className="hover:text-zinc-300">Facebook</a>
-          <a href="#" className="hover:text-zinc-300">Twitter</a>
-          <a href="#" className="hover:text-zinc-300">Instagram</a>
-        </div>
-      </footer>
+      </div>
+
+      {/* Bottom Footer Flame Glow */}
+      <div className="mt-20 border-t border-slate-800 pt-8 text-center text-xs font-mono text-slate-500">
+        © 2026 BeeCarbonat. All rights reserved. Carbon-Neutral Infrastructure Protocol.
+      </div>
     </div>
   );
 }

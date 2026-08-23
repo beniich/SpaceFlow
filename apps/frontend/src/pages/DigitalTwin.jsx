@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import api from '../services/api';
-import { io } from 'socket.io-client';
 import {
   Box, Activity, Play, Camera, Flame, Zap, Wrench,
   Users, AlertTriangle, Layers
@@ -24,49 +23,6 @@ export default function DigitalTwin() {
 
   useEffect(() => {
     loadOverview();
-
-    // Connexion WebSocket pour le Temps Réel (IoT & Jumeau Numérique)
-    const socket = io('http://localhost:8081', { transports: ['websocket', 'polling'] });
-
-    socket.on('connect', () => {
-      console.log('[DigitalTwin] WebSocket Connecté');
-    });
-
-    socket.on('dashboard:update', (msg) => {
-      if (msg.type === 'sensor' && msg.data) {
-        setOverview(prev => {
-          if (!prev) return prev;
-          
-          // Clonage profond simplifié pour muter l'état proprement
-          const next = JSON.parse(JSON.stringify(prev));
-          let sensorFound = false;
-          
-          next.floors.forEach(floor => {
-            floor.spaces.forEach(space => {
-              if (space.id === msg.data.sensorId || space.name.includes(msg.data.sensorId)) {
-                if (msg.data.type === 'temperature') space.temperature = msg.data.value;
-                sensorFound = true;
-              }
-            });
-          });
-
-          // Si on veut aussi update les stats globales
-          if (sensorFound && msg.data.type === 'temperature' && msg.data.value > 25) {
-            next.stats.avgHealth = Math.max(0, next.stats.avgHealth - 1); // Baisse de la santé
-          }
-
-          return next;
-        });
-      }
-    });
-
-    socket.on('sensor:reading', (msg) => {
-      console.log('[DigitalTwin] Nouvelle lecture IoT:', msg);
-    });
-
-    return () => {
-      socket.disconnect();
-    };
   }, []);
 
   const loadOverview = async () => {

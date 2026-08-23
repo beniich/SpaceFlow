@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const crmApi = axios.create({
-  baseURL: 'http://localhost:8081/api/crm',
+  baseURL: '/api/crm',
   timeout: 10000
 });
 
