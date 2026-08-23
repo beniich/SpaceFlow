@@ -41,23 +41,7 @@ export default function Login() {
       localStorage.setItem('beecarbonat_last_email', email);
       toast.success('Connexion réussie');
     } catch (err) {
-      console.warn('API login failed, trying fallback...', err);
-      const cleanEmail = email?.trim().toLowerCase();
-      const isDemo = cleanEmail === 'tarikbenaich@gmail.com' || cleanEmail === 'admin@beecarbonat.com' || cleanEmail === 'demo@beecarbonat.com';
-      if (isDemo || password === 'admin123' || password === '0000_-tr' || password.length >= 4) {
-        const fallbackUser = {
-          id: cleanEmail === 'admin@beecarbonat.com' ? 'usr-admin-beecarbonat' : 'usr-tarik-benaich',
-          email: cleanEmail || 'tarikbenaich@gmail.com',
-          firstName: cleanEmail === 'admin@beecarbonat.com' ? 'Admin' : 'Tarik',
-          lastName: cleanEmail === 'admin@beecarbonat.com' ? 'BEECARBONAT' : 'Benaich',
-          role: 'ADMIN',
-          department: 'Facility & Executive Direction'
-        };
-        useAuthStore.setState({ user: fallbackUser, token: 'jwt-local-tarik-offline', loading: false });
-        toast.success('Connexion réussie');
-      } else {
-        setError(err.message || 'Identifiants invalides');
-      }
+      setError(err.message || 'Identifiants invalides');
     } finally {
       setLoading(false);
     }
@@ -67,18 +51,9 @@ export default function Login() {
     setLoading(true);
     try {
       await loginWithGoogleFirebase();
-    } catch (err) {
-      console.warn('Google sign-in fallback...', err);
-      const fallbackUser = {
-        id: 'usr-tarik-benaich',
-        email: 'tarikbenaich@gmail.com',
-        firstName: 'Tarik',
-        lastName: 'Benaich',
-        role: 'ADMIN',
-        department: 'Facility & Executive Direction'
-      };
-      useAuthStore.setState({ user: fallbackUser, token: 'jwt-local-tarik-offline', loading: false });
       toast.success('Connexion Google réussie');
+    } catch (err) {
+      setError(err.message || 'Échec de la connexion Google');
     } finally {
       setLoading(false);
     }

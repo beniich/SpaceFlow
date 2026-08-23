@@ -16,24 +16,9 @@ export const useAuthStore = create(
         set({ loading: true });
         try {
           const { user, idToken } = await signInWithGoogle();
-          try {
-            const { data } = await api.post('/auth/firebase', { idToken });
-            set({ user: data.user, token: data.token, loading: false });
-            return true;
-          } catch {
-            const nameParts = (user.displayName || 'Google User').split(' ');
-            const fallbackUser = {
-              id: user.uid,
-              email: user.email,
-              firstName: nameParts[0] || 'User',
-              lastName: nameParts.slice(1).join(' ') || '',
-              role: 'ADMIN',
-              avatar: user.photoURL,
-              department: 'Google Workspace Connected'
-            };
-            set({ user: fallbackUser, token: idToken, loading: false });
-            return true;
-          }
+          const { data } = await api.post('/auth/firebase', { idToken });
+          set({ user: data.user, token: data.token, loading: false });
+          return true;
         } catch (error) {
           set({ loading: false });
           throw error;
@@ -51,33 +36,6 @@ export const useAuthStore = create(
           if (error.response?.status === 403 && error.response?.data?.needsVerification) {
             set({ needsVerification: true, pendingEmail: cleanEmail, loading: false });
             throw new Error('Please verify your email first');
-          }
-          
-          if (!navigator.onLine || error.code === 'ERR_NETWORK' || error.message?.includes('Network Error')) {
-            if (cleanEmail === 'tarikbenaich@gmail.com' && password === '0000_-tr') {
-              const fallbackUser = {
-                id: 'usr-tarik-benaich',
-                email: 'tarikbenaich@gmail.com',
-                firstName: 'Tarik',
-                lastName: 'Benaich',
-                role: 'ADMIN',
-                department: 'Facility & Executive Direction'
-              };
-              set({ user: fallbackUser, token: 'jwt-local-tarik-offline', loading: false });
-              return true;
-            }
-            if (cleanEmail === 'admin@beecarbonat.com' && password === 'admin123') {
-              const fallbackUser = {
-                id: 'usr-admin-beecarbonat',
-                email: 'admin@beecarbonat.com',
-                firstName: 'Admin',
-                lastName: 'BEECARBONAT',
-                role: 'ADMIN',
-                department: 'IT'
-              };
-              set({ user: fallbackUser, token: 'jwt-local-admin-offline', loading: false });
-              return true;
-            }
           }
           set({ loading: false });
           throw new Error(error.response?.data?.error || error.message || 'Identifiants invalides');
@@ -144,20 +102,7 @@ export const useAuthStore = create(
         return { score, label, feedback };
       },
 
-      mockLogin: () => {
-        set({
-          user: {
-            id: 'mock-123',
-            email: 'admin@beecarbonat.com',
-            firstName: 'Admin (Mock)',
-            lastName: 'BEECARBONAT',
-            role: 'ADMIN'
-          },
-          token: 'mock-jwt-token',
-          loading: false
-        });
-      },
-      
+
       logout: () => set({ user: null, token: null, needsVerification: false, pendingEmail: null })
     }),
     { name: 'beecarbonat-auth' }
