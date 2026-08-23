@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { useDashboard } from '../hooks/useDashboard';
+import api from '../services/api';
 import { useNavigate } from 'react-router-dom';
 import { 
   Activity, Zap, CheckCircle2, AlertTriangle, Bell, Search, Settings, 
@@ -313,12 +315,50 @@ export default function Dashboard() {
   const [dashboardTab, setDashboardTab] = useState('TICKETS'); // 'TICKETS' | 'OVERVIEW'
   const [timeRange, setTimeRange] = useState('24h');
   const [systems, setSystems] = useState(INITIAL_SYSTEM_HEALTH);
-  const [workOrders, setWorkOrders] = useState(INITIAL_WORK_ORDERS);
   const [alerts, setAlerts] = useState(INITIAL_ALERTS);
   const [alertFilter, setAlertFilter] = useState('ALL');
   const [woFilter, setWoFilter] = useState('ALL');
   const [isLiveTelemetry, setIsLiveTelemetry] = useState(true);
-  
+
+  // ─── Real API data via useDashboard ───────────────────────────────────────
+  const {
+    kpis: apiKpis,
+    liveStats,
+    workOrders: apiWorkOrders,
+    loading: apiLoading,
+    error: apiError,
+    refresh: refreshDashboard,
+  } = useDashboard();
+
+  // Merge API work orders or fall back to mock
+  const workOrders = apiWorkOrders && apiWorkOrders.length > 0
+    ? apiWorkOrders.map(wo => ({
+        id: wo.id,
+        title: wo.title || wo.description,
+        system: wo.asset?.type || wo.category || '—',
+        location: wo.asset?.zone || wo.asset?.floor || '—',
+        priority: wo.priority?.charAt(0) + wo.priority?.slice(1).toLowerCase() || 'Medium',
+        assignedTo: wo.assignee ? `${wo.assignee.fullName}` : 'Non assigné',
+        status: wo.status === 'IN_PROGRESS' ? 'In Progress'
+               : wo.status === 'PENDING' ? 'Pending'
+               : wo.status === 'COMPLETED' ? 'Completed'
+               : wo.status,
+        dueDate: wo.scheduledAt ? new Date(wo.scheduledAt).toLocaleDateString('fr-FR') : '—',
+        progress: wo.status === 'COMPLETED' ? 100 : wo.status === 'IN_PROGRESS' ? 50 : 0,
+      }))
+    : INITIAL_WORK_ORDERS;
+
+  // Real KPIs or static fallbacks
+  const kpiData = {
+    totalWorkOrders: apiKpis?.pendingWorkOrders + apiKpis?.inProgressWorkOrders || workOrders.length,
+    criticalWorkOrders: liveStats?.critical ?? apiKpis?.criticalWorkOrders ?? workOrders.filter(w => w.priority === 'Critical').length,
+    highWorkOrders: workOrders.filter(w => w.priority === 'High').length,
+    assetAvailability: apiKpis?.assetAvailability ?? 94,
+    totalAssets: apiKpis?.totalAssets ?? 0,
+    occupancyRate: apiKpis?.occupancyRate ?? 0,
+    activeLeases: apiKpis?.activeLeases ?? 0,
+  };
+
   // Modals state
   const [selectedSystemDetail, setSelectedSystemDetail] = useState(null);
   const [isNewWoModalOpen, setIsNewWoModalOpen] = useState(false);
@@ -331,9 +371,9 @@ export default function Dashboard() {
   });
 
   // Calculate high level KPI aggregations
-  const totalWorkOrders = workOrders.length;
-  const criticalWorkOrders = workOrders.filter(w => w.priority === 'Critical').length;
-  const highWorkOrders = workOrders.filter(w => w.priority === 'High').length;
+  const totalWorkOrders = kpiData.totalWorkOrders;
+  const criticalWorkOrders = kpiData.criticalWorkOrders;
+  const highWorkOrders = kpiData.highWorkOrders;
   const unackAlerts = alerts.filter(a => !a.acknowledged && !a.resolved).length;
   const activeAlertsCount = alerts.filter(a => !a.resolved).length;
   
@@ -381,45 +421,55 @@ export default function Dashboard() {
   };
 
   // Work Order Creation
-  const handleCreateWorkOrder = (e) => {
+  const handleCreateWorkOrder = async (e) => {
     e.preventDefault();
     if (!newWoForm.title.trim()) {
       toast.error('Please enter a work order title');
       return;
     }
-    const newWo = {
-      id: `WO-${Math.floor(1000 + Math.random() * 9000)}`,
-      title: newWoForm.title,
-      system: newWoForm.system,
-      location: newWoForm.location || 'Main Building',
-      priority: newWoForm.priority,
-      assignedTo: newWoForm.assignedTo,
-      status: 'In Progress',
-      dueDate: 'Today, 18:00',
-      progress: 10
-    };
-    setWorkOrders([newWo, ...workOrders]);
-    setIsNewWoModalOpen(false);
-    setNewWoForm({
-      title: '',
-      system: 'HVAC & Climate Control',
-      location: '',
-      priority: 'Medium',
-      assignedTo: 'Tarik Ben (Facilities Tech)'
-    });
-    toast.success(`Work Order ${newWo.id} created successfully!`);
+    
+    try {
+      await api.post('/workorders', {
+        title: newWoForm.title,
+        type: newWoForm.system,
+        priority: newWoForm.priority.toUpperCase(),
+        status: 'IN_PROGRESS',
+        scheduledAt: new Date(),
+      });
+      
+      setIsNewWoModalOpen(false);
+      setNewWoForm({
+        title: '',
+        system: 'HVAC & Climate Control',
+        location: '',
+        priority: 'Medium',
+        assignedTo: 'Tarik Ben (Facilities Tech)'
+      });
+      
+      toast.success(`Work Order created successfully!`);
+      refreshDashboard();
+    } catch (err) {
+      toast.error('Failed to create Work Order');
+    }
   };
 
   // Status Change for Work Order
-  const handleUpdateWoStatus = (woId, newStatus) => {
-    setWorkOrders(prev => prev.map(wo => {
-      if (wo.id === woId) {
-        const updatedProgress = newStatus === 'Completed' ? 100 : newStatus === 'In Progress' ? 50 : wo.progress;
-        return { ...wo, status: newStatus, progress: updatedProgress };
+  const handleUpdateWoStatus = async (woId, newStatus) => {
+    try {
+      const dbStatus = newStatus === 'Completed' ? 'COMPLETED' : newStatus === 'In Progress' ? 'IN_PROGRESS' : 'PENDING';
+      
+      // Attempt to hit the API, ignore errors for mock entries
+      if (woId.toString().startsWith('WO-')) {
+         toast.success(`Mock Work order updated to ${newStatus}`);
+         return;
       }
-      return wo;
-    }));
-    toast.success(`Work order updated to ${newStatus}`);
+      
+      await api.put(`/workorders/${woId}`, { status: dbStatus });
+      toast.success(`Work order updated to ${newStatus}`);
+      refreshDashboard();
+    } catch (err) {
+      toast.error('Failed to update Work Order');
+    }
   };
 
   const currentFacility = INITIAL_FACILITIES.find(f => f.id === selectedFacility) || INITIAL_FACILITIES[0];
