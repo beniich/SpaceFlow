@@ -1,6 +1,6 @@
-/**
+﻿/**
  * api-key.middleware.js — Auth API publique v1
- * Horizon 2 beecarbonit : gestion des clés API avec rate limiting par tier
+ * Horizon 2 BeeCarbonat : gestion des clés API avec rate limiting par tier
  */
 const crypto = require('crypto');
 const { RateLimiterMemory } = require('rate-limiter-flexible');

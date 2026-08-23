@@ -1,4 +1,4 @@
-# Roadmap Stratégique Détaillée — beecarbonit
+﻿# Roadmap Stratégique Détaillée — BeeCarbonat
 
 Voici la roadmap opérationnelle complète, structurée par horizon avec une granularité suffisante pour piloter chaque sprint, avec critères de succès, dépendances, arbitrages et points de vigilance.
 
@@ -141,7 +141,7 @@ erpQueue.process('asset-sync', async (job) => {
 
 ## 🔵 Horizon 2 — Différenciation (12-24 mois)
 
-**Objectif** : faire de beecarbonit *la* référence terrain + BIM + ESG.
+**Objectif** : faire de BeeCarbonat *la* référence terrain + BIM + ESG.
 
 ### Thème 2.1 — Mode Offline Robuste (M13-M18)
 
@@ -427,6 +427,6 @@ const ragPipeline = async (query: string, tenantId: string) => {
 1. **Valider la promesse différenciatrice** : atelier produit avec 5 prospects cibles, test du pitch ESG-first.
 2. **Identifier 1 ICP précis** : nommer 1 vertical d'attaque (recommandation : *foncière tertiaire 50-500 sites en EU francophone*).
 3. **POC demonstrable** : 1 site pilote avec dashboard ESG basique, prêt en 6 semaines.
-4. **Carte des premiers intégrateurs** : lister 5 intégrateurs BIM/FM européens (typiquement 10-50 personnes) susceptibles de pousser beecarbonit en white-label.
+4. **Carte des premiers intégrateurs** : lister 5 intégrateurs BIM/FM européens (typiquement 10-50 personnes) susceptibles de pousser BeeCarbonat en white-label.
 5. **Recruter 1 Head of Sales** avec réseau dans l'immobilier d'entreprise (pas un SaaS generic).
 6. **Cadrage juridique** : DPA modèles, contrat API publique draft, conditions marketplace anticipées.

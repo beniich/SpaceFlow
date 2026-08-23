@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import { Outlet, NavLink, useNavigate, useLocation } from 'react-router-dom';
 import {
   Menu, X, Search, Bell, Download, Wifi, WifiOff, HardDrive, RefreshCw,
@@ -9,7 +9,7 @@ import { useAuthStore } from '../store/authStore';
 import { useOfflineStatus } from '../hooks/useOfflineStatus';
 import { useLanguage } from '../context/LanguageContext';
 import { ConflictResolutionModal } from './modals';
-import BeeCarbonatLogo from './BeeCarbonitLogo';
+import BeeCarbonatLogo from './BeeCarbonatLogo';
 import toast from 'react-hot-toast';
 import clsx from 'clsx';
 

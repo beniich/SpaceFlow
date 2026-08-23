@@ -1,4 +1,4 @@
-const { PrismaClient } = require('@prisma/client');
+﻿const { PrismaClient } = require('@prisma/client');
 const bcrypt = require('bcryptjs');
 
 const prisma = new PrismaClient();
@@ -13,7 +13,7 @@ async function main() {
   // await prisma.user.deleteMany();
 
   // Create default admin
-  const adminEmail = 'admin@beecarbonit.com';
+  const adminEmail = 'admin@BeeCarbonat.com';
   const existingAdmin = await prisma.user.findUnique({
     where: { email: adminEmail }
   });

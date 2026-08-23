@@ -1,4 +1,4 @@
-const { spawn } = require('child_process');
+﻿const { spawn } = require('child_process');
 const path = require('path');
 
 const services = [
@@ -10,7 +10,7 @@ const services = [
         env: {
             PORT: 5001,
             DISABLE_KAFKA: 'true',
-            MONGO_URI: 'mongodb://127.0.0.1:27017/reclamtrack',
+            MONGO_URI: 'mongodb://127.0.0.1:27017/BeeCarbonat',
             JWT_SECRET: 'supersecretkey', // Fallback
             NODE_ENV: 'development'
         }
@@ -29,11 +29,11 @@ const services = [
 
 const processes = [];
 
-console.log('🚀 Starting ReclamTrack SIMPLE Stack (Backend + Frontend)...');
+console.log('🚀 Starting BeeCarbonat SIMPLE Stack (Backend + Frontend)...');
 console.log('ℹ️  Microservices & Kafka are DISABLED.');
 
 // Build Shared Package First
-console.log('📦 Building @reclamtrack/shared...');
+console.log('📦 Building @BeeCarbonat/shared...');
 try {
     const sharedPath = path.join(__dirname, '..', 'shared');
     require('child_process').execSync('npm run build', { cwd: sharedPath, stdio: 'inherit' });

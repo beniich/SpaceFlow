@@ -1,5 +1,5 @@
-/**
- * Queue ERP — Pattern recommandé roadmap beecarbonit
+﻿/**
+ * Queue ERP — Pattern recommandé roadmap BeeCarbonat
  * BullMQ + Circuit Breaker (opossum) + idempotency keys
  */
 const { Queue, Worker, QueueEvents } = require('bullmq');

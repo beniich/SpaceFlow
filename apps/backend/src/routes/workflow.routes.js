@@ -1,6 +1,6 @@
-/**
+﻿/**
  * workflow.routes.js — CRUD API pour les Workflow Definitions (No-Code)
- * Horizon 3 beecarbonit
+ * Horizon 3 BeeCarbonat
  */
 const router = require('express').Router();
 const { prisma } = require('../config/database');

@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Wrapper Prometheus-compatible pour métriques custom
  * Utilise prom-client en interne (compatible Grafana)
  */
@@ -9,58 +9,58 @@ const register = new client.Registry();
 
 client.collectDefaultMetrics({ 
   register,
-  prefix: "beecarbonit_",
+  prefix: "BeeCarbonat_",
 });
 
 // ===== WebSocket Metrics =====
 const wsActiveConnections = new client.Gauge({
-  name: "beecarbonit_ws_active_connections",
+  name: "BeeCarbonat_ws_active_connections",
   help: "Active WebSocket connections per tenant",
   labelNames: ["tenant_id"],
   registers: [register],
 });
 
 const wsConnectionsTotal = new client.Counter({
-  name: "beecarbonit_ws_connections_total",
+  name: "BeeCarbonat_ws_connections_total",
   help: "Total WebSocket connections since start",
   registers: [register],
 });
 
 const wsDisconnects = new client.Counter({
-  name: "beecarbonit_ws_disconnects_total",
+  name: "BeeCarbonat_ws_disconnects_total",
   help: "Total WebSocket disconnects",
   registers: [register],
 });
 
 const wsBroadcasts = new client.Counter({
-  name: "beecarbonit_ws_broadcasts_total",
+  name: "BeeCarbonat_ws_broadcasts_total",
   help: "Total broadcast messages sent",
   labelNames: ["channel"],
   registers: [register],
 });
 
 const wsAuthFailures = new client.Counter({
-  name: "beecarbonit_ws_auth_failures_total",
+  name: "BeeCarbonat_ws_auth_failures_total",
   help: "WS authentication failures",
   registers: [register],
 });
 
 const wsRejected = new client.Counter({
-  name: "beecarbonit_ws_rejected_total",
+  name: "BeeCarbonat_ws_rejected_total",
   help: "WS rejected connections by reason",
   labelNames: ["reason"],
   registers: [register],
 });
 
 const wsSubscriptions = new client.Counter({
-  name: "beecarbonit_ws_subscriptions_total",
+  name: "BeeCarbonat_ws_subscriptions_total",
   help: "WS channel subscriptions",
   registers: [register],
 });
 
 // ===== BIM/Heatmap Metrics =====
 const bimExtractionDuration = new client.Histogram({
-  name: "beecarbonit_bim_extraction_duration_seconds",
+  name: "BeeCarbonat_bim_extraction_duration_seconds",
   help: "IFC extraction duration",
   buckets: [1, 5, 10, 30, 60, 120, 300, 600],
   labelNames: ["model_type"],
@@ -68,25 +68,25 @@ const bimExtractionDuration = new client.Histogram({
 });
 
 const bimElementsExtracted = new client.Counter({
-  name: "beecarbonit_bim_elements_extracted_total",
+  name: "BeeCarbonat_bim_elements_extracted_total",
   help: "Total IFC elements extracted",
   registers: [register],
 });
 
 const heatmapRequests = new client.Counter({
-  name: "beecarbonit_heatmap_requests_total",
+  name: "BeeCarbonat_heatmap_requests_total",
   help: "Heatmap computation requests",
   registers: [register],
 });
 
 const heatmapCacheHits = new client.Counter({
-  name: "beecarbonit_heatmap_cache_hits_total",
+  name: "BeeCarbonat_heatmap_cache_hits_total",
   help: "Heatmap cache hits",
   registers: [register],
 });
 
 const heatmapQuality = new client.Counter({
-  name: "beecarbonit_heatmap_quality_total",
+  name: "BeeCarbonat_heatmap_quality_total",
   help: "Heatmap quality requests",
   labelNames: ["quality"],
   registers: [register],
@@ -94,28 +94,28 @@ const heatmapQuality = new client.Counter({
 
 // ===== Alerts Metrics =====
 const alertsEmitted = new client.Counter({
-  name: "beecarbonit_alerts_emitted_total",
+  name: "BeeCarbonat_alerts_emitted_total",
   help: "Alerts emitted by severity",
   labelNames: ["severity"],
   registers: [register],
 });
 
 const alertThresholdsSet = new client.Counter({
-  name: "beecarbonit_alert_thresholds_set_total",
+  name: "BeeCarbonat_alert_thresholds_set_total",
   help: "Alert thresholds updated",
   registers: [register],
 });
 
 // ===== Demo Anonymization Metrics =====
 const demoAccess = new client.Counter({
-  name: "beecarbonit_demo_access_total",
+  name: "BeeCarbonat_demo_access_total",
   help: "Demo access events (RGPD audit)",
   labelNames: ["tenant_id"],
   registers: [register],
 });
 
 const gdprAnonymizations = new client.Counter({
-  name: "beecarbonit_gdpr_anonymizations_total",
+  name: "BeeCarbonat_gdpr_anonymizations_total",
   help: "Total anonymizations performed",
   registers: [register],
 });

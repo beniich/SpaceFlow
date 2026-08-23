@@ -1,4 +1,4 @@
-export default function BeeCarbonatLogo({ size = 36, showText = true, className = '' }) {
+﻿export default function BeeCarbonatLogo({ size = 36, showText = true, className = '' }) {
   return (
     <div className={`flex items-center gap-3 select-none ${className}`}>
       {/* Icon Badge */}
@@ -125,5 +125,5 @@ export default function BeeCarbonatLogo({ size = 36, showText = true, className 
   );
 }
 
-export { BeeCarbonatLogo as BeeCarbonitLogo };
+export { BeeCarbonatLogo as BeeCarbonatLogo };
 

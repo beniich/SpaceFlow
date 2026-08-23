@@ -1,29 +1,29 @@
-version: '3.8'
+﻿version: '3.8'
 
 services:
   postgres:
     image: postgres:16-alpine
-    container_name: beecarbon-postgres
+    container_name: beecarbonat-postgres
     restart: unless-stopped
     environment:
-      POSTGRES_USER: ${DB_USER:-beecarbon}
-      POSTGRES_PASSWORD: ${DB_PASSWORD:-beecarbon_secure_pwd}
-      POSTGRES_DB: ${DB_NAME:-beecarbon}
+      POSTGRES_USER: ${DB_USER:-beecarbonat}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-beecarbonat_secure_pwd}
+      POSTGRES_DB: ${DB_NAME:-beecarbonat}
     volumes:
       - postgres_data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-beecarbon}"]
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-beecarbonat}"]
       interval: 10s
       timeout: 5s
       retries: 5
     networks:
-      - beecarbon-net
+      - beecarbonat-net
 
   redis:
     image: redis:7-alpine
-    container_name: beecarbon-redis
+    container_name: beecarbonat-redis
     restart: unless-stopped
     command: redis-server --requirepass ${REDIS_PASSWORD:-redis_secure_pwd}
     volumes:
@@ -36,13 +36,13 @@ services:
       timeout: 5s
       retries: 5
     networks:
-      - beecarbon-net
+      - beecarbonat-net
 
   backend:
     build:
       context: .
       dockerfile: apps/backend/Dockerfile
-    container_name: beecarbon-backend
+    container_name: beecarbonat-backend
     restart: unless-stopped
     depends_on:
       postgres:
@@ -52,7 +52,7 @@ services:
     environment:
       - NODE_ENV=production
       - PORT=5000
-      - DATABASE_URL=postgresql://${DB_USER:-beecarbon}:${DB_PASSWORD:-beecarbon_secure_pwd}@postgres:5432/${DB_NAME:-beecarbon}
+      - DATABASE_URL=postgresql://${DB_USER:-beecarbonat}:${DB_PASSWORD:-beecarbonat_secure_pwd}@postgres:5432/${DB_NAME:-beecarbonat}
       - REDIS_URL=redis://:${REDIS_PASSWORD:-redis_secure_pwd}@redis:6379
       - JWT_SECRET=${JWT_SECRET}
       - CORS_ORIGIN=${CORS_ORIGIN}
@@ -61,22 +61,22 @@ services:
     ports:
       - "5000:5000"
     networks:
-      - beecarbon-net
+      - beecarbonat-net
 
   frontend:
     build:
       context: .
       dockerfile: apps/frontend/Dockerfile
-    container_name: beecarbon-frontend
+    container_name: beecarbonat-frontend
     restart: unless-stopped
     depends_on:
       - backend
     networks:
-      - beecarbon-net
+      - beecarbonat-net
 
   nginx:
     image: nginx:alpine
-    container_name: beecarbon-nginx
+    container_name: beecarbonat-nginx
     restart: unless-stopped
     depends_on:
       - backend
@@ -89,11 +89,11 @@ services:
       - ./certbot/conf:/etc/letsencrypt:ro
       - ./certbot/www:/var/www/certbot:ro
     networks:
-      - beecarbon-net
+      - beecarbonat-net
 
   certbot:
     image: certbot/certbot
-    container_name: beecarbon-certbot
+    container_name: beecarbonat-certbot
     volumes:
       - ./certbot/conf:/etc/letsencrypt
       - ./certbot/www:/var/www/certbot:ro
@@ -101,26 +101,26 @@ services:
 
   pg-backup:
     image: postgres:16-alpine
-    container_name: beecarbon-pg-backup
+    container_name: beecarbonat-pg-backup
     restart: unless-stopped
     depends_on:
       postgres:
         condition: service_healthy
     environment:
-      PGUSER: ${DB_USER:-beecarbon}
-      PGPASSWORD: ${DB_PASSWORD:-beecarbon_secure_pwd}
+      PGUSER: ${DB_USER:-beecarbonat}
+      PGPASSWORD: ${DB_PASSWORD:-beecarbonat_secure_pwd}
       PGHOST: postgres
-      PGDATABASE: ${DB_NAME:-beecarbon}
+      PGDATABASE: ${DB_NAME:-beecarbonat}
     volumes:
       - pg_backups:/backups
     entrypoint: >
       /bin/sh -c 'echo "0 0 * * * pg_dump -F c -f /backups/db_backup_$$(date +\%Y\%m\%d).dump" > /etc/crontabs/root && crond -f'
     networks:
-      - beecarbon-net
+      - beecarbonat-net
 
   prometheus:
     image: prom/prometheus:latest
-    container_name: beecarbon-prometheus
+    container_name: beecarbonat-prometheus
     restart: unless-stopped
     volumes:
       - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
@@ -132,11 +132,11 @@ services:
     ports:
       - "9090:9090"
     networks:
-      - beecarbon-net
+      - beecarbonat-net
 
   grafana:
     image: grafana/grafana:latest
-    container_name: beecarbon-grafana
+    container_name: beecarbonat-grafana
     restart: unless-stopped
     depends_on:
       - prometheus
@@ -150,7 +150,7 @@ services:
     ports:
       - "3002:3000"
     networks:
-      - beecarbon-net
+      - beecarbonat-net
 
 volumes:
   postgres_data:
@@ -160,5 +160,5 @@ volumes:
   grafana_data:
 
 networks:
-  beecarbon-net:
+  beecarbonat-net:
     driver: bridge

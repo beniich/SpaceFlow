@@ -1,4 +1,4 @@
-const fs = require('fs');
+﻿const fs = require('fs');
 const path = require('path');
 
 const services = [
@@ -13,7 +13,7 @@ const services = [
 const baseDir = path.join(__dirname, '../microservices');
 
 const packageJsonTemplate = (name) => ({
-    name: `reclamtrack-${name}`,
+    name: `BeeCarbonat-${name}`,
     version: "1.0.0",
     main: "dist/index.js",
     scripts: {

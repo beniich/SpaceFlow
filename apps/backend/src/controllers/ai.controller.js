@@ -1,4 +1,4 @@
-/**
+﻿/**
  * ai.controller.js — Aether AI Core (Horizon 3)
  * Moteur IA Agentif avec Google Gemini + Function Calling
  * Fallback vers un mode "Simulation Avancée" si GEMINI_API_KEY absent.
@@ -115,7 +115,7 @@ async function queryWithGemini(prompt) {
 
   const model = genAI.getGenerativeModel({
     model: 'gemini-1.5-flash',
-    systemInstruction: `Tu es Aether, l'assistant IA expert de la plateforme beecarbonit.
+    systemInstruction: `Tu es Aether, l'assistant IA expert de la plateforme BeeCarbonat.
 Tu gères les bâtiments, les équipements (actifs), les ordres de travail (maintenance), 
 les capteurs IoT et la performance énergétique.
 Tu réponds toujours en français, de façon concise et professionnelle.

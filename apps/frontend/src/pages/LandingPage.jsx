@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+﻿import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {
   Shield, Key, Lock, Eye, CheckCircle2, AlertTriangle, RefreshCw,
@@ -10,7 +10,7 @@ import {
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 
-import BeeCarbonitLogo from "../components/BeeCarbonitLogo";
+import BeeCarbonatLogo from "../components/BeeCarbonatLogo";
 
 export default function LandingPage() {
   const navigate = useNavigate();
@@ -209,7 +209,7 @@ export default function LandingPage() {
           
           {/* Logo */}
           <button onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="flex items-center gap-2.5 group">
-            <BeeCarbonitLogo size={36} showText={true} />
+            <BeeCarbonatLogo size={36} showText={true} />
           </button>
 
           {/* Navigation Links */}
@@ -1306,7 +1306,7 @@ export default function LandingPage() {
           {/* Col 1 */}
           <div className="space-y-4">
             <button onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="flex items-center gap-2 text-left">
-              <BeeCarbonitLogo size={28} showText={true} />
+              <BeeCarbonatLogo size={28} showText={true} />
             </button>
             <p className="text-zinc-500 text-[11px] leading-relaxed max-w-xs">
               The precision engineering standard for facility management. Empowering global infrastructure since 2024.

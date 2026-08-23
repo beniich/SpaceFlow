@@ -1,4 +1,4 @@
-const { prisma } = require('../config/database');
+﻿const { prisma } = require('../config/database');
 
 /**
  * Simule les capteurs IoT en générant des données en temps réel
@@ -60,7 +60,7 @@ const startIoTSimulation = (io) => {
         if (sensor.type === 'temperature' && newValue > 25) {
           const { dispatchWebhook } = require('./webhook.service');
           // Using a free mock webhook endpoint for demo purposes
-          const WEBHOOK_URL = process.env.SRE_WEBHOOK_URL || 'https://webhook.site/beecarbonit-sre-demo';
+          const WEBHOOK_URL = process.env.SRE_WEBHOOK_URL || 'https://webhook.site/BeeCarbonat-sre-demo';
           dispatchWebhook(WEBHOOK_URL, 'iot.anomaly.critical', {
             sensorId: sensor.id,
             type: sensor.type,

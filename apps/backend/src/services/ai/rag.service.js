@@ -1,5 +1,5 @@
-/**
- * rag.service.js — Pipeline RAG pour l'assistant IA beecarbonit
+﻿/**
+ * rag.service.js — Pipeline RAG pour l'assistant IA BeeCarbonat
  * Horizon 3 : IA Générative Opérationnelle
  *
  * Architecture :

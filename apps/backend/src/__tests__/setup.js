@@ -6,6 +6,7 @@ jest.mock('../config/database', () => ({
   prisma: {
     user: {
       findUnique: jest.fn(),
+      findFirst: jest.fn(),
       findMany: jest.fn(),
       create: jest.fn(),
       update: jest.fn(),
@@ -55,6 +56,30 @@ jest.mock('../config/database', () => ({
     building: {
       findMany: jest.fn(),
       findUnique: jest.fn(),
+    },
+    tenant: {
+      findUnique: jest.fn(),
+      create: jest.fn(),
+    },
+    invitation: {
+      findUnique: jest.fn(),
+      update: jest.fn(),
+    },
+    refreshToken: {
+      create: jest.fn(),
+      findUnique: jest.fn(),
+      delete: jest.fn(),
+      update: jest.fn(),
+    },
+    ticket: {
+      findMany: jest.fn(),
+      findUnique: jest.fn(),
+      create: jest.fn(),
+      update: jest.fn(),
+      count: jest.fn(),
+    },
+    auditEvent: {
+      create: jest.fn(),
     },
     $transaction: jest.fn((fn) => fn({
       user: { findUnique: jest.fn(), create: jest.fn() },

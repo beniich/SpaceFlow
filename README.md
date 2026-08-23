@@ -1,4 +1,4 @@
-# 🚀 ReclamTrack - GMAO Industrielle v3.0
+﻿# 🚀 BeeCarbonat - GMAO Industrielle v3.0
 
 > Application de gestion des réclamations transformée en système GMAO complet (Gestion de Maintenance Assistée par Ordinateur).
 
@@ -39,8 +39,8 @@ L'application suit un modèle **monolithique modulaire** :
 ### Installation
 
 # 1. Cloner
-git clone https://github.com/yourorg/beecarbon.git
-cd beecarbon
+git clone https://github.com/yourorg/beecarbonat.git
+cd beecarbonat
 
 # 2. Configurer
 cp .env.example .env
@@ -48,7 +48,7 @@ cp .env.example .env
 
 # 3. Installer
 npm install
-npm run build -w @beecarbonit/database
+npm run build -w @BeeCarbonat/database
 
 # 4. Lancer (dev)
 docker compose up -d postgres redis
@@ -91,7 +91,7 @@ l'ensemble des routes.
 
 ```env
 PORT=5000
-DATABASE_URL=postgresql://localhost:5432/beecarbon
+DATABASE_URL=postgresql://localhost:5432/beecarbonat
 JWT_SECRET=your_secret_key
 ```
 
@@ -111,7 +111,7 @@ cp .env.production .env
 
 Éditez le fichier `nginx/default.conf` pour remplacer `localhost` par votre véritable nom de domaine (ex: `votre-domaine.com`).
 Modifiez également `NEXT_PUBLIC_API_URL` dans le `docker-compose.yml` (service `frontend`) avec l'URL de votre API.
-Éditez le fichier `nginx/default.conf` pour remplacer `localhost` par votre véritable nom de domaine (ex: `reclamtrack.ricecloud.net`).
+Éditez le fichier `nginx/default.conf` pour remplacer `localhost` par votre véritable nom de domaine (ex: `BeeCarbonat.ricecloud.net`).
 Assurez-vous que votre domaine pointe bien vers l'IP de votre serveur.
 
 Ensuite, lancez la stack :
@@ -123,7 +123,7 @@ docker-compose up -d --build
 Puis générez le certificat :
 
 ```bash
-docker-compose run --rm certbot certonly --webroot --webroot-path /var/www/certbot/ -d reclamtrack.ricecloud.net --email contact@reclamtrack.ricecloud.net --agree-tos --no-eff-email
+docker-compose run --rm certbot certonly --webroot --webroot-path /var/www/certbot/ -d BeeCarbonat.ricecloud.net --email contact@BeeCarbonat.ricecloud.net --agree-tos --no-eff-email
 ```
 
 Une fois le certificat généré, décommentez la section HTTPS dans `nginx/default.conf` et redémarrez Nginx :

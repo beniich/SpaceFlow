@@ -1,4 +1,4 @@
-const { S3Client, PutObjectCommand, GetObjectCommand } = require('@aws-sdk/client-s3');
+﻿const { S3Client, PutObjectCommand, GetObjectCommand } = require('@aws-sdk/client-s3');
 const { getSignedUrl } = require('@aws-sdk/s3-request-presigner');
 const { v4: uuidv4 } = require('uuid');
 
@@ -10,7 +10,7 @@ const s3Client = new S3Client({
   }
 });
 
-const BUCKET_NAME = process.env.AWS_S3_BUCKET || 'beecarbonit-uploads';
+const BUCKET_NAME = process.env.AWS_S3_BUCKET || 'BeeCarbonat-uploads';
 
 /**
  * Generate a pre-signed URL for uploading a file to S3

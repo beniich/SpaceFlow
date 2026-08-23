@@ -1,5 +1,5 @@
-import { Link } from 'react-router-dom';
-import BeeCarbonitLogo from '../BeeCarbonitLogo';
+﻿import { Link } from 'react-router-dom';
+import BeeCarbonatLogo from '../BeeCarbonatLogo';
 
 export default function AuthLayout({
   children,
@@ -15,7 +15,7 @@ export default function AuthLayout({
       <div className="auth-page-form bg-[#121519] text-white p-6 sm:p-12 lg:p-16 flex flex-col justify-between min-h-screen relative z-10">
         <div className="auth-form-header">
           <Link to="/" className="inline-flex flex-col select-none no-underline group">
-            <BeeCarbonitLogo size={42} showText={true} />
+            <BeeCarbonatLogo size={42} showText={true} />
           </Link>
         </div>
 

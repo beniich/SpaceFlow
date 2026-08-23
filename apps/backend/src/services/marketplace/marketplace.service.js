@@ -1,6 +1,6 @@
-/**
+﻿/**
  * marketplace.service.js — Gestion de la marketplace d'extensions
- * Horizon 3 beecarbonit
+ * Horizon 3 BeeCarbonat
  *
  * Responsabilités :
  *  - Lister / rechercher les extensions approuvées

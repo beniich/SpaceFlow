@@ -6,6 +6,7 @@ const compression = require('compression');
 const http = require('http');
 const { Server } = require('socket.io');
 const { prisma } = require('./config/database');
+const logger = require('./utils/logger');
 const swaggerRoutes = require('./routes/swagger.routes');
 const { sanitizeInput, apiLimiter, securityHeaders } = require('./middleware/security.middleware');
 const Sentry = require('@sentry/node');
@@ -74,7 +75,20 @@ app.use(cors({
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
-app.use(helmet());
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'none'"],
+      scriptSrc: ["'self'"],
+      connectSrc: ["'self'"],
+      imgSrc: ["'self'", "data:"],
+      styleSrc: ["'self'", "'unsafe-inline'"],
+      frameAncestors: ["'none'"],
+      objectSrc: ["'none'"],
+      upgradeInsecureRequests: [],
+    },
+  },
+}));
 app.use(compression());
 app.use(express.json());
 
@@ -86,6 +100,17 @@ app.use('/api/', apiLimiter);
 // ============== TENANT CONTEXT ==============
 const { tenantMiddleware } = require('./middleware/tenant.middleware');
 app.use(tenantMiddleware);
+
+// ============== CSRF PROTECTION ==============
+// Actif uniquement en production — les SPA peuvent utiliser le mode cookie-to-header
+const { doubleCsrfProtection, generateToken } = require('./middleware/csrf.middleware');
+if (process.env.NODE_ENV === 'production') {
+  app.use(doubleCsrfProtection);
+}
+// Route pour distribuer le token CSRF au frontend
+app.get('/api/csrf-token', (req, res) => {
+  res.json({ csrfToken: generateToken(req, res) });
+});
 
 // ============== DOCUMENTATION ==============
 app.use('/', swaggerRoutes);
@@ -110,6 +135,7 @@ app.set('io', io);
 
 // Routes CAFM
 app.use('/api/auth', authRoutes);
+app.use('/api/auth/mfa', require('./routes/mfa.routes'));
 app.use('/api/assets', assetRoutes);
 app.use('/api/spaces', spaceRoutes);
 app.use('/api/workorders', workOrderRoutes);
@@ -158,8 +184,8 @@ app.use(errorMiddleware);
 
 // WebSocket
 io.on('connection', (socket) => {
-  console.log('Client connecté:', socket.id);
-  socket.on('disconnect', () => console.log('Client déconnecté:', socket.id));
+  logger.info({ socketId: socket.id }, 'Client WebSocket connecté');
+  socket.on('disconnect', () => logger.info({ socketId: socket.id }, 'Client WebSocket déconnecté'));
 });
 
 // Start IoT simulation (capteurs en temps réel)
@@ -168,7 +194,7 @@ startIoTSimulation(io);
 // === NOUVEAU: BIM WebSocket Server ===
 const { initializeWebSocket } = require('./ws/websocketServer');
 initializeWebSocket(server).catch(err => {
-  console.error("Erreur initialisation WebSocket BIM:", err);
+  logger.error({ err }, 'Erreur initialisation WebSocket BIM');
 });
 // =====================================
 
@@ -176,7 +202,7 @@ const PORT = process.env.PORT || 5000;
 
 if (process.env.NODE_ENV !== 'production' || require.main === module) {
   server.listen(PORT, () => {
-    console.log(`🚀 Serveur CAFM démarré sur le port ${PORT}`);
+    logger.info({ port: PORT, env: process.env.NODE_ENV }, '🚀 BeeCarbonat backend démarré');
   });
 }
 

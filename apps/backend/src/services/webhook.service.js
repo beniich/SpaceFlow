@@ -1,5 +1,5 @@
-/**
- * webhook.service.js — Service d'envoi de Webhooks (Horizon 2 beecarbonit)
+﻿/**
+ * webhook.service.js — Service d'envoi de Webhooks (Horizon 2 BeeCarbonat)
  * Permet d'alerter des systèmes tiers (ex: SAP, SRE Slack) lors d'anomalies.
  */
 
@@ -22,7 +22,7 @@ async function dispatchWebhook(targetUrl, eventType, payload) {
     eventType,
     timestamp: new Date().toISOString(),
     data: payload,
-    source: 'beecarbonit-core-engine'
+    source: 'BeeCarbonat-core-engine'
   };
 
   try {
@@ -31,8 +31,8 @@ async function dispatchWebhook(targetUrl, eventType, payload) {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'User-Agent': 'beecarbonit-webhook-dispatcher/1.0',
-        'X-Beecarbonit-Signature': 'mock-signature-h2' // A terme, HMAC SHA-256 du payload
+        'User-Agent': 'BeeCarbonat-webhook-dispatcher/1.0',
+        'X-BeeCarbonat-Signature': 'mock-signature-h2' // A terme, HMAC SHA-256 du payload
       },
       body: JSON.stringify(webhookPayload)
     });

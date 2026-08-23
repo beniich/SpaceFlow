@@ -1,4 +1,4 @@
-const { spawn } = require('child_process');
+﻿const { spawn } = require('child_process');
 const path = require('path');
 
 const services = [
@@ -15,7 +15,7 @@ const services = [
 
 const processes = [];
 
-console.log('🚀 Starting ReclamTrack Local Stack (No Docker)...');
+console.log('🚀 Starting BeeCarbonat Local Stack (No Docker)...');
 
 services.forEach(service => {
     const servicePath = path.join(__dirname, '..', service.dir);

@@ -1,6 +1,6 @@
-# 🤝 Guide de Contribution - ReclamTrack
+﻿# 🤝 Guide de Contribution - BeeCarbonat
 
-Merci de votre intérêt pour contribuer à ReclamTrack ! Ce document vous guidera à travers le processus de contribution.
+Merci de votre intérêt pour contribuer à BeeCarbonat ! Ce document vous guidera à travers le processus de contribution.
 
 ## 📋 Table des Matières
 
@@ -44,7 +44,7 @@ Nous nous engageons à faire de la participation à ce projet une expérience sa
 
 ### Signaler des Bugs
 
-Les bugs sont suivis via les [GitHub Issues](https://github.com/votre-org/reclamtrack/issues).
+Les bugs sont suivis via les [GitHub Issues](https://github.com/votre-org/BeeCarbonat/issues).
 
 **Avant de créer un bug report**, vérifiez qu'il n'existe pas déjà.
 
@@ -329,11 +329,11 @@ const ComplaintSchema = new Schema({
 ```bash
 # Fork le repository sur GitHub
 # Puis clone votre fork
-git clone https://github.com/votre-username/reclamtrack.git
-cd reclamtrack
+git clone https://github.com/votre-username/BeeCarbonat.git
+cd BeeCarbonat
 
 # Ajouter le repository original comme remote
-git remote add upstream https://github.com/votre-org/reclamtrack.git
+git remote add upstream https://github.com/votre-org/BeeCarbonat.git
 ```
 
 ### 2. Créer une Branche
@@ -609,10 +609,10 @@ describe('POST /api/complaints', () => {
 
 Si vous avez des questions, n'hésitez pas à :
 
-- Ouvrir une [Discussion GitHub](https://github.com/votre-org/reclamtrack/discussions)
-- Contacter l'équipe : dev@reclamtrack.com
-- Consulter la [Documentation](https://docs.reclamtrack.com)
+- Ouvrir une [Discussion GitHub](https://github.com/votre-org/BeeCarbonat/discussions)
+- Contacter l'équipe : dev@BeeCarbonat.com
+- Consulter la [Documentation](https://docs.BeeCarbonat.com)
 
 ---
 
-**Merci de contribuer à ReclamTrack ! 🎉**
+**Merci de contribuer à BeeCarbonat ! 🎉**

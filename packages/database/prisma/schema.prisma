@@ -32,6 +32,7 @@ model Tenant {
   alerts      Alert[]
   Ticket      Ticket[]
   SLAPolicy   SLAPolicy[]
+  invitations Invitation[]
 
   @@index([slug])
   @@index([status])
@@ -47,7 +48,8 @@ enum TenantStatus {
 model User {
   id           String    @id @default(uuid())
   email        String
-  passwordHash String
+  passwordHash String?
+  firebaseUid  String?   @unique
   fullName     String?
   role         UserRole  @default(MEMBER)
   tenantId     String
@@ -56,7 +58,12 @@ model User {
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @updatedAt
 
+  // MFA / 2FA
+  mfaEnabled   Boolean   @default(false)
+  mfaSecret    String?   // TOTP secret (chiffré idéalement)
+
   sessions           Session[]
+  refreshTokens      RefreshToken[]
   apiKeys            ApiKey[]
   acknowledgedAlerts Alert[]   @relation("AcknowledgedBy")
   dismissedAlerts    Alert[]   @relation("DismissedBy")
@@ -74,6 +81,9 @@ model User {
   // WORK ORDERS
   assignedWorkOrders WorkOrder[] @relation("AssignedWorkOrders")
   createdWorkOrders  WorkOrder[] @relation("CreatedWorkOrders")
+
+  // INVITATIONS
+  sentInvitations    Invitation[] @relation("InvitedBy")
 
   @@unique([email, tenantId])
   @@index([tenantId])
@@ -100,6 +110,41 @@ model Session {
 
   @@index([userId])
   @@index([expiresAt])
+}
+
+model RefreshToken {
+  id        String   @id @default(uuid())
+  token     String   @unique
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  revokedAt DateTime?
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+}
+
+// ============================================
+// INVITATIONS
+// ============================================
+
+model Invitation {
+  id          String   @id @default(cuid())
+  token       String   @unique
+  email       String
+  role        String   // ADMIN, MANAGER, TECHNICIAN, VIEWER
+  tenantId    String
+  invitedById String
+  expiresAt   DateTime
+  usedAt      DateTime?
+  createdAt   DateTime @default(now())
+  
+  tenant      Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  invitedBy   User     @relation("InvitedBy", fields: [invitedById], references: [id])
+  
+  @@index([token])
+  @@index([email])
+  @@map("invitations")
 }
 
 // ============================================

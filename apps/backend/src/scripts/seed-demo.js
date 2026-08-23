@@ -1,4 +1,4 @@
-const { PrismaClient } = require("@prisma/client");
+﻿const { PrismaClient } = require("@prisma/client");
 const crypto = require("node:crypto");
 const bcrypt = require("bcryptjs");
 const { logger } = require("../lib/logger.js");
@@ -31,31 +31,31 @@ const SEED_CONFIG = {
 
 const DEMO_USERS = [
   {
-    email: "admin@beecarbonit.com",
+    email: "admin@BeeCarbonat.com",
     fullName: "Admin Demo",
     role: "OWNER",
     passwordPlaintext: "admin123", // À retirer en production
   },
   {
-    email: "facility@beecarbonit.com",
+    email: "facility@BeeCarbonat.com",
     fullName: "Marie Dupont",
     role: "ADMIN",
     passwordPlaintext: "manager123",
   },
   {
-    email: "tech@beecarbonit.com",
+    email: "tech@BeeCarbonat.com",
     fullName: "Pierre Martin",
     role: "MEMBER",
     passwordPlaintext: "tech123",
   },
   {
-    email: "viewer@beecarbonit.com",
+    email: "viewer@BeeCarbonat.com",
     fullName: "Sophie Bernard",
     role: "VIEWER",
     passwordPlaintext: "view123",
   },
   {
-    email: "demo@beecarbonit.com",
+    email: "demo@BeeCarbonat.com",
     fullName: "Demo User",
     role: "DEMO",
     passwordPlaintext: "demo123",
@@ -446,7 +446,7 @@ async function main() {
     where: { slug: DEMO_TENANT_SLUG },
     create: {
       id: "demo-tenant-uuid",
-      name: "BeeCarbonIT Demo Buildings",
+      name: "BeeCarbonat Demo Buildings",
       slug: DEMO_TENANT_SLUG,
       status: "ACTIVE",
       config: { 
@@ -563,10 +563,10 @@ async function main() {
 
   console.log("\n🎉 Seed terminé avec succès!");
   console.log("\n📋 Comptes démo créés:");
-  console.log("   admin@beecarbonit.com / admin123");
-  console.log("   facility@beecarbonit.com / manager123");
-  console.log("   tech@beecarbonit.com / tech123");
-  console.log("   demo@beecarbonit.com / demo123");
+  console.log("   admin@BeeCarbonat.com / admin123");
+  console.log("   facility@BeeCarbonat.com / manager123");
+  console.log("   tech@BeeCarbonat.com / tech123");
+  console.log("   demo@BeeCarbonat.com / demo123");
 }
 
 main()

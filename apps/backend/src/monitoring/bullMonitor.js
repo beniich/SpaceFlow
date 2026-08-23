@@ -1,4 +1,4 @@
-const { createBullBoard } = require("@bull-board/api");
+﻿const { createBullBoard } = require("@bull-board/api");
 const { BullMQAdapter } = require("@bull-board/api/bullMQAdapter");
 const { ExpressAdapter } = require("@bull-board/express");
 const { Queue } = require("bullmq");
@@ -28,7 +28,7 @@ createBullBoard({
   serverAdapter,
   options: {
     uiConfig: {
-      boardTitle: "BeeCarbonIT Worker Dashboard",
+      boardTitle: "BeeCarbonat Worker Dashboard",
       menuLogo: "🔧",
       theme: "dark",
       favIcon: { default: "/favicon.ico" },

@@ -1,5 +1,5 @@
 /**
- * Jest configuration for CAFM backend
+ * Jest configuration for BeeCarbonat backend
  */
 module.exports = {
   testEnvironment: 'node',
@@ -19,7 +19,16 @@ module.exports = {
       statements: 70,
     },
   },
+  setupFilesAfterFramework: [],
   setupFilesAfterEnv: ['./src/__tests__/setup.js'],
   verbose: true,
   testTimeout: 15000,
+  // Mapper uuid ESM -> version CJS compatible Jest
+  moduleNameMapper: {
+    '^uuid$': require.resolve('uuid'),
+  },
+  // Forcer la transformation de uuid (ESM natif)
+  transformIgnorePatterns: [
+    '/node_modules/(?!(uuid)/)',
+  ],
 };

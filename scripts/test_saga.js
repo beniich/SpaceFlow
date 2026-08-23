@@ -1,9 +1,9 @@
-const axios = require('axios');
+﻿const axios = require('axios');
 
 const GATEWAY_URL = 'http://localhost:5001';
 
 // Test User Credentials (must exist in DB)
-const USER_EMAIL = 'admin@reclamtrack.com'; // Adjust if needed
+const USER_EMAIL = 'admin@BeeCarbonat.com'; // Adjust if needed
 const USER_PASSWORD = 'password123'; // Adjust if needed
 
 const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));

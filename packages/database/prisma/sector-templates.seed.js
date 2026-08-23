@@ -1,6 +1,6 @@
-/**
+﻿/**
  * sector-templates.seed.js — Données initiales pour les référentiels sectoriels
- * Horizon 4 beecarbonit
+ * Horizon 4 BeeCarbonat
  *
  * 5 verticals : Retail, Santé, Education, Industrie, Public
  */

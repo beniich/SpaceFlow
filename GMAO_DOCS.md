@@ -1,14 +1,14 @@
-> ⚠️ **DOCUMENTATION OBSOLÈTE**
+﻿> ⚠️ **DOCUMENTATION OBSOLÈTE**
 > 
 > Ce document mentionne MongoDB, qui n'est plus utilisé.
 > La base de données actuelle est **PostgreSQL 16**.
 > 
 > Consultez `README.md` et `ARCHITECTURE.md` pour la documentation à jour.
 
-# ReclamTrack GMAO Industrielle — Documentation Technique & Déploiement
+# BeeCarbonat GMAO Industrielle — Documentation Technique & Déploiement
 
 ## 📌 Présentation
-ReclamTrack a évolué d'une simple plateforme de gestion de réclamations vers un système complet de **GMAO (Gestion de Maintenance Assistée par Ordinateur)** conforme aux standards industriels. Cette transformation ajoute le suivi d'actifs, la maintenance préventive/corrective, et l'analytique de fiabilité.
+BeeCarbonat a évolué d'une simple plateforme de gestion de réclamations vers un système complet de **GMAO (Gestion de Maintenance Assistée par Ordinateur)** conforme aux standards industriels. Cette transformation ajoute le suivi d'actifs, la maintenance préventive/corrective, et l'analytique de fiabilité.
 
 ---
 
@@ -54,7 +54,7 @@ PORT=5000
 MONGODB_URI=mongodb://your_prod_uri
 JWT_SECRET=your_secure_secret
 # GMAO Specific
-QR_BASE_URL=https://app.reclamtrack.com/scan/
+QR_BASE_URL=https://app.BeeCarbonat.com/scan/
 ```
 
 ### Installation & Build

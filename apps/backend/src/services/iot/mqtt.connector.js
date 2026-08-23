@@ -1,5 +1,5 @@
-/**
- * mqtt.connector.js — Connecteur IoT MQTT (Horizon 3 beecarbonit)
+﻿/**
+ * mqtt.connector.js — Connecteur IoT MQTT (Horizon 3 BeeCarbonat)
  * Protocoles : MQTT (capteurs modernes), extensible vers BACnet / LoRaWAN
  *
  * Pattern : subscribe → parse → corrélation asset → persist IoTReading
@@ -25,7 +25,7 @@ class MQTTConnector {
     this.client = mqtt.connect(this.cfg.brokerUrl, {
       username:     this.cfg.username,
       password:     this.cfg.password,
-      clientId:     `beecarbonit-${this.connectorId}-${Date.now()}`,
+      clientId:     `BeeCarbonat-${this.connectorId}-${Date.now()}`,
       reconnectPeriod: 5000,
       connectTimeout: 10_000,
     });
@@ -35,7 +35,7 @@ class MQTTConnector {
       this.running = true;
 
       // Subscribe à tous les topics configurés
-      const topics = this.cfg.topics || ['beecarbonit/#'];
+      const topics = this.cfg.topics || ['BeeCarbonat/#'];
       this.client.subscribe(topics, { qos: this.cfg.qos || 1 });
 
       await prisma.ioTConnector.update({

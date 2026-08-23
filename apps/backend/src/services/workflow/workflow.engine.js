@@ -1,6 +1,6 @@
-/**
+﻿/**
  * workflow.engine.js — Moteur d'exécution de workflows no-code
- * Horizon 4 beecarbonit
+ * Horizon 4 BeeCarbonat
  *
  * Responsabilités :
  *  - Evaluer les conditions booléennes
@@ -110,7 +110,7 @@ const ACTION_HANDLERS = {
 
     const { to, subject, html } = config;
     const result = await resend.emails.send({
-      from: process.env.FROM_EMAIL || 'noreply@beecarbonit.com',
+      from: process.env.FROM_EMAIL || 'noreply@BeeCarbonat.com',
       to,
       subject: interpolate(subject, triggerData),
       html: interpolate(html, triggerData),

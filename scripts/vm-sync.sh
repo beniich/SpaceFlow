@@ -1,18 +1,18 @@
-#!/bin/bash
+﻿#!/bin/bash
 # ================================================================
-# ReclamTrack - Script de synchronisation automatique VM ↔ GitHub
+# BeeCarbonat - Script de synchronisation automatique VM ↔ GitHub
 # Auteur: Tarik / Antigravity
 # Usage: bash vm-sync.sh [branch]
 # Exemple: bash vm-sync.sh main
 # ================================================================
 
-REPO_DIR="$HOME/reclamtrack"   # Dossier du projet dans la VM
+REPO_DIR="$HOME/BeeCarbonat"   # Dossier du projet dans la VM
 REMOTE="terix85"               # Remote SSH GitHub
 BRANCH="${1:-main}"            # Branche (par défaut: main)
 LOG_FILE="$HOME/vm-sync.log"   # Fichier de log
 
 echo "=================================================" | tee -a "$LOG_FILE"
-echo " ReclamTrack - Sync VM ↔ GitHub - $(date)" | tee -a "$LOG_FILE"
+echo " BeeCarbonat - Sync VM ↔ GitHub - $(date)" | tee -a "$LOG_FILE"
 echo "=================================================" | tee -a "$LOG_FILE"
 
 # --- 1. Vérification SSH GitHub ---
@@ -29,7 +29,7 @@ echo "✅ Connexion SSH GitHub OK" | tee -a "$LOG_FILE"
 echo "[2/4] Vérification du dossier projet..." | tee -a "$LOG_FILE"
 if [ ! -d "$REPO_DIR" ]; then
     echo "📦 Clonage du dépôt depuis GitHub..." | tee -a "$LOG_FILE"
-    git clone git@github.com:terix85/reclamtrackvm.git "$REPO_DIR"
+    git clone git@github.com:terix85/BeeCarbonatvm.git "$REPO_DIR"
     if [ $? -ne 0 ]; then
         echo "❌ ERREUR: Clonage échoué." | tee -a "$LOG_FILE"
         exit 1

@@ -11,11 +11,12 @@ const authMiddleware = async (req, res, next) => {
 
   try {
     // --- BYPASS POUR LE DASHBOARD LOCAL / DEMO ---
-    const isDevelopment = process.env.NODE_ENV === 'development';
-    const demoModeForced = process.env.ENABLE_DEMO_MODE === 'true';
+    const isProduction = process.env.NODE_ENV === 'production';
+    const bypassEnabled = process.env.ALLOW_DEMO_BYPASS === 'true';
 
     if (idToken === 'jwt-demo-token' || idToken === 'jwt-local-tarik-offline') {
-      if (!isDevelopment && !demoModeForced) {
+      if (isProduction || !bypassEnabled) {
+        console.warn(`[AUTH] Tentative d'utilisation de bypass en ${process.env.NODE_ENV}`);
         return res.status(401).json({ 
           error: 'BYPASS_DISABLED',
           message: 'Demo bypass disabled in this environment'
