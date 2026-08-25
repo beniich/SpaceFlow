@@ -1,149 +1,103 @@
-﻿# 🚀 BeeCarbonat - GMAO Industrielle v3.0
+# 🐝 BeeCarbonIT (SpaceFlow) — GMAO SaaS & Smart Facility Management v3.5
 
-> Application de gestion des réclamations transformée en système GMAO complet (Gestion de Maintenance Assistée par Ordinateur).
+> Plateforme de Gestion de Maintenance Assistée par Ordinateur (GMAO / CAFM) nouvelle génération, intégrant Digital Twin, IA conversationnelle, maintenance prédictive, facturation multi-tenant Stripe et une application mobile native terrain.
 
-## 📦 Structure
+---
 
-## Stack technique
-
-- **Base de données** : PostgreSQL 16 (Neon serverless en prod, Docker local en dev)
-- **ORM** : Prisma 5
-- **Cache / Queue** : Redis 7 + BullMQ
-- **Backend** : Express.js 4 (monolithique)
-- **Frontend** : React 18 + Vite 5 (SPA)
-
-## Architecture
-
-L'application suit un modèle **monolithique modulaire** :
+## 🏗️ Architecture Globale
 
 ```
-┌─────────────┐      ┌──────────────────┐
-│   Nginx     │─────▶│  Frontend (SPA)  │
-│   :443      │      │  React + Vite    │
-└─────────────┘      └──────────────────┘
-       │
-       │ /api/
-       ▼
-┌─────────────┐      ┌──────────────────┐
-│  Backend    │─────▶│  PostgreSQL 16   │
-│  Express    │      │  (Neon/Docker)   │
-│  :5000      │      └──────────────────┘
-└─────────────┘      ┌──────────────────┐
-       │────────────▶│  Redis 7         │
-                     │  (BullMQ)        │
-                     └──────────────────┘
+[📱 Mobile Native (iOS / Android)] ──┐
+[🌐 Web App (React 18 + Vite)] ─────┼──▶ [Nginx Reverse Proxy] ──▶ [Backend API (Express 4)] ──┬──▶ [PostgreSQL 16 (Neon)]
+[💻 SDK JS / Intégrations API] ─────┘                                                          ├──▶ [Redis 7 (Upstash / BullMQ)]
+                                                                                               ├──▶ [Stripe Billing Multi-Tenant]
+                                                                                               └──▶ [Google Gemini 1.5 Pro / Flash]
 ```
 
-## 🚀 Démarrage Rapide
+---
+
+## 📦 Structure du Monorepo
+
+```
+SpaceFlow/
+├── apps/
+│   ├── frontend/         # Web App React 18 + Vite 5 (Tailwind, Multi-Theme, PWA)
+│   ├── backend/          # REST API Express + Prisma + WebSocket + Stripe + Gemini AI
+│   └── mobile/           # App Mobile Expo React Native (Offline Queue, Biométrie, Scan QR)
+├── packages/
+│   ├── database/         # Schéma Prisma partagé & Migrations PostgreSQL
+│   └── sdk-js/           # Client SDK JavaScript/TypeScript (@beecarbonit/sdk)
+└── docs/                 # Documentation technique, Guides & ADRs
+```
+
+---
+
+## 🚀 Fonctionnalités Clés
+
+### 1. 🌐 Web Application (React + Vite)
+- **Thème Professionnel** : Bascule instantanée entre **Mode Clair** (`#ffffff`), **Mode Sobre** (`#000000`) et **Système**, sans FOUC et conforme WCAG AA (ratio 21:1).
+- **Digital Twin & BIM** : Visualisation IFC 3D et jumeau numérique des bâtiments.
+- **Smart Analytics** : Calculs automatiques OEE, MTTR, MTBF et métriques ESG/Carbone.
+- **Monétisation Stripe** : Plans SaaS (Free, Starter, Pro, Business, Enterprise), simulateur ROI et portail client.
+
+### 2. 📱 Mobile Application (Expo / React Native)
+- **Mode Hors-Ligne (Offline-First)** : File d'attente locale MMKV avec synchronisation automatique en tâche de fond dès le retour du réseau.
+- **Scanner QR & Caméra** : Détection et identification immédiate des équipements et ordres de travail.
+- **Sécurité Avancée** : Authentification biométrique (Face ID / Empreinte digitale) + 2FA TOTP.
+- **Capture Terrain** : Création de tickets avec photos compressées et coordonnées GPS.
+
+### 3. 🤖 Moteur IA & Prédictif (Gemini 1.5)
+- **Assistant Conversationnel** : Agent conversationnel multi-tenant avec *Function Calling* pour interroger les tickets, équipements et KPIs.
+- **Auto-Catégorisation** : Classification automatique de la criticité et des pannes (Gemini Flash).
+
+---
+
+## 🛠️ Démarrage Rapide
+
+### Prérequis
+- Node.js >= 18.x
+- Docker & Docker Compose (pour dev local PostgreSQL / Redis)
+- Expo CLI (`npm install -g eas-cli`)
 
 ### Installation
+```bash
+# 1. Cloner le repository
+git clone https://github.com/beniich/SpaceFlow.git
+cd SpaceFlow
 
-# 1. Cloner
-git clone https://github.com/yourorg/beecarbonat.git
-cd beecarbonat
-
-# 2. Configurer
+# 2. Configurer les variables d'environnement
 cp .env.example .env
-# Éditer .env avec vos valeurs
+cp apps/backend/.env.example apps/backend/.env
 
-# 3. Installer
+# 3. Installer les dépendances
 npm install
-npm run build -w @BeeCarbonat/database
 
-# 4. Lancer (dev)
-docker compose up -d postgres redis
-cd apps/backend && npm run dev
-cd apps/frontend && npm run dev
+# 4. Générer le client Prisma
+npm run db:generate --workspace=@BeeCarbonat/database
 
-# 5. Lancer (prod)
-docker compose up -d
+# 5. Démarrer en mode développement
+# Web Frontend : http://localhost:3000 (ou 5173)
+# Backend API   : http://localhost:5000
+npm run dev
+```
 
-## Architecture microservices (future)
-
-Le dossier `_archive/microservices/` contient des stubs pour une future
-décomposition en microservices. Actuellement, le monolithe Express gère
-l'ensemble des routes.
-
----
-
-## 🏗️ Rappel des Phases de Transformation (v3.0)
-
-1.  **Asset Management** : Hiérarchie complète des équipements.
-2.  **Work Orders** : Gestion des interventions correctives et préventives.
-3.  **Preventive Maintenance** : Calendriers Gantt et gammes opératoires.
-4.  **Inventory MRO** : Gestion du stock de pièces critiques.
-5.  **Industrial Analytics** : Dashboard OEE, MTBF et MTTR.
-6.  **Tech Portal** : Interface mobile avec scan QR Code.
-7.  **Smart Flow** : Conversion automatique Ticket -> Ordre de Travail.
-8.  **Digital Twin** : Lien interactif entre schémas techniques et maintenance.
-
----
-
-## 📚 Documentation
-
-- [GMAO_DOCS.md](GMAO_DOCS.md) - Documentation Maintenance Industrielle exhaustive
-- [ARCHITECTURE.md](ARCHITECTURE.md) - Architecture détaillée
-- [INTEGRATION_COMPLETE.md](INTEGRATION_COMPLETE.md) - Guide d'intégration
-
-## ⚙️ Configuration
-
-### Backend (.env)
-
-```env
-PORT=5000
-DATABASE_URL=postgresql://localhost:5432/beecarbonat
-JWT_SECRET=your_secret_key
+### Démarrer l'App Mobile
+```bash
+cd apps/mobile
+npx expo start
+# Scanner le QR code avec l'application Expo Go (iOS ou Android)
 ```
 
 ---
 
-## 🌍 Déploiement en Production (Docker & HTTPS)
+## 📚 Documentation Technique
 
-L'application est prête à être déployée en production à l'aide de **Docker Compose**. La configuration inclut un reverse proxy **Nginx** et la génération automatique de certificats SSL/HTTPS via **Certbot (Let's Encrypt)**.
-
-### 1. Préparation de l'environnement
-
-Copiez le modèle de configuration pour la production et remplissez vos secrets :
-
-```bash
-cp .env.production .env
-```
-
-Éditez le fichier `nginx/default.conf` pour remplacer `localhost` par votre véritable nom de domaine (ex: `votre-domaine.com`).
-Modifiez également `NEXT_PUBLIC_API_URL` dans le `docker-compose.yml` (service `frontend`) avec l'URL de votre API.
-Éditez le fichier `nginx/default.conf` pour remplacer `localhost` par votre véritable nom de domaine (ex: `BeeCarbonat.ricecloud.net`).
-Assurez-vous que votre domaine pointe bien vers l'IP de votre serveur.
-
-Ensuite, lancez la stack :
-
-```bash
-docker-compose up -d --build
-```
-
-Puis générez le certificat :
-
-```bash
-docker-compose run --rm certbot certonly --webroot --webroot-path /var/www/certbot/ -d BeeCarbonat.ricecloud.net --email contact@BeeCarbonat.ricecloud.net --agree-tos --no-eff-email
-```
-
-Une fois le certificat généré, décommentez la section HTTPS dans `nginx/default.conf` et redémarrez Nginx :
-
-```bash
-docker-compose restart nginx
-```
-
-L'application est désormais sécurisée et Certbot renouvellera automatiquement le certificat SSL !
+* [ADR-0006 : Application Mobile Expo](docs/adr/0006-mobile-app.md)
+* [Documentation GMAO Industrielle](GMAO_DOCS.md)
+* [Architecture Système](ARCHITECTURE.md)
+* [Feuille de Route & Roadmap](docs/ROADMAP.md)
 
 ---
 
-## 📝 Changelog
-
-### v3.0.0 (GMAO Update) - 2026-04-14
-
-- ✅ Intégration complète du module GMAO Industriel.
-- ✅ Jumeau numérique interactif dans le Design Studio.
-- ✅ Conversion automatique Flux Complaint -> OT.
-
-### v1.0.0 - 2026-02-12
-
-- ✅ Systèmes Roster et Audit Guards.
+## 📄 Licence
+Propriétaire — BeeCarbonIT. Tous droits réservés.
