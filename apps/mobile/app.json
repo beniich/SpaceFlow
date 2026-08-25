@@ -1,0 +1,65 @@
+{
+  "expo": {
+    "name": "BeeCarbonIT",
+    "slug": "beecarbonit",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "automatic",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#000000"
+    },
+    "assetBundlePatterns": ["**/*"],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "io.beecarbonit.mobile",
+      "infoPlist": {
+        "NSCameraUsageDescription": "BeeCarbonIT utilise la caméra pour scanner les QR codes des équipements et capturer des photos.",
+        "NSLocationWhenInUseUsageDescription": "BeeCarbonIT utilise votre position pour géolocaliser les interventions.",
+        "NSFaceIDUsageDescription": "BeeCarbonIT utilise Face ID pour sécuriser votre compte.",
+        "ITSAppUsesNonExemptEncryption": false
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#000000"
+      },
+      "package": "io.beecarbonit.mobile",
+      "permissions": [
+        "CAMERA",
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_COARSE_LOCATION",
+        "USE_BIOMETRIC",
+        "VIBRATE",
+        "RECEIVE_BOOT_COMPLETED",
+        "INTERNET"
+      ]
+    },
+    "plugins": [
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "BeeCarbonIT a besoin de la caméra pour scanner les QR codes."
+        }
+      ],
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "BeeCarbonIT utilise votre position pour géolocaliser les interventions."
+        }
+      ],
+      "expo-secure-store",
+      "expo-local-authentication",
+      "expo-notifications"
+    ],
+    "extra": {
+      "apiUrl": "https://api.yourdomain.com",
+      "eas": {
+        "projectId": "your-project-id"
+      }
+    }
+  }
+}
