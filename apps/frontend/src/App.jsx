@@ -20,7 +20,7 @@ const Leases = lazy(() => import('./pages/Leases'));
 const Settings = lazy(() => import('./pages/Settings'));
 const Contacts = lazy(() => import('./pages/crm/Contacts'));
 const Deals = lazy(() => import('./pages/crm/Deals'));
-const Pricing = lazy(() => import('./pages/crm/Pricing'));
+const Pricing = lazy(() => import('./pages/Pricing'));
 const CMMS = lazy(() => import('./pages/CMMS'));
 const DigitalTwin = lazy(() => import('./pages/BIMViewer'));
 const ERPIntegration = lazy(() => import('./pages/ERPIntegration'));
@@ -96,6 +96,7 @@ export default function App() {
           <Route path="partner-portal" element={<PartnerPortal />} />
           <Route path="careers" element={<Careers />} />
           <Route path="waste" element={<WasteManagement />} />
+          <Route path="pricing" element={<Pricing />} />
         </Route>
 
         <Route element={<PrivateRoute><Layout /></PrivateRoute>}>

@@ -90,7 +90,13 @@ app.use(helmet({
   },
 }));
 app.use(compression());
-app.use(express.json());
+app.use(express.json({
+  verify: (req, res, buf) => {
+    if (req.originalUrl && req.originalUrl.includes('/webhook')) {
+      req.rawBody = buf;
+    }
+  }
+}));
 
 // ============== SÉCURITÉ GLOBALE ==============
 app.use(securityHeaders);
@@ -168,8 +174,9 @@ const eventsRoutes = require('./routes/events.routes');
 app.use('/api/crm', eventsRoutes);
 global.broadcastSSE = eventsRoutes.broadcast;
 
-// Billing Stripe (webhook)
+// Billing Stripe (Multi-Tenant GMAO & Webhooks)
 const billingRoutes = require('./routes/billing.routes');
+app.use('/api/billing', billingRoutes);
 app.use('/api/crm/billing', billingRoutes);
 
 // Sentry error handler

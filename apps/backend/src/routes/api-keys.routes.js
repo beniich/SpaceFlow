@@ -4,6 +4,7 @@ const crypto = require('crypto');
 const { prisma } = require('../config/database');
 const { authMiddleware } = require('../middleware/auth.middleware');
 const { tenantMiddleware } = require('../middleware/tenant.middleware');
+const { requireFeature } = require('../middleware/billing.middleware');
 
 function generateApiKey() {
   const rawKey = `bci_${crypto.randomBytes(24).toString('hex')}`;
@@ -12,7 +13,7 @@ function generateApiKey() {
   return { rawKey, keyHash, prefix };
 }
 
-router.use(authMiddleware, tenantMiddleware);
+router.use(authMiddleware, tenantMiddleware, requireFeature('apiKeys'));
 
 // List API keys for the current tenant
 router.get('/', async (req, res) => {

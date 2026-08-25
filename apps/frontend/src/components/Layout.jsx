@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Outlet, NavLink, useNavigate, useLocation } from 'react-router-dom';
 import {
   Menu, X, Search, Bell, Download, Wifi, WifiOff, HardDrive, RefreshCw,
@@ -8,6 +8,7 @@ import api from '../services/api';
 import { useAuthStore } from '../store/authStore';
 import { useOfflineStatus } from '../hooks/useOfflineStatus';
 import { useLanguage } from '../context/LanguageContext';
+import { useTheme } from '../hooks/useTheme';
 import { ConflictResolutionModal } from './modals';
 import BeeCarbonatLogo from './BeeCarbonatLogo';
 import toast from 'react-hot-toast';
@@ -76,23 +77,12 @@ export default function Layout() {
     return localStorage.getItem('sidebar_collapsed') === 'true';
   });
 
-  // Light Mode / Dark Mode State (Default is Mode Clair as requested)
-  const [isDarkMode, setIsDarkMode] = useState(() => {
-    return localStorage.getItem('theme_mode') === 'dark';
-  });
+  // Theme hook (Mode Clair / Mode Sobre / Système)
+  const { isDark: isDarkMode, toggleTheme } = useTheme();
 
   useEffect(() => {
     localStorage.setItem('sidebar_collapsed', isCollapsed ? 'true' : 'false');
   }, [isCollapsed]);
-
-  useEffect(() => {
-    localStorage.setItem('theme_mode', isDarkMode ? 'dark' : 'light');
-    if (isDarkMode) {
-      document.body.classList.add('dark-mode');
-    } else {
-      document.body.classList.remove('dark-mode');
-    }
-  }, [isDarkMode]);
 
   // Offline Conflict Resolution States
   const [showConflictModal, setShowConflictModal] = useState(false);
@@ -123,7 +113,7 @@ export default function Layout() {
   return (
     <div className={clsx(
       "min-h-screen font-sans antialiased flex flex-col selection:bg-[#ff5500] selection:text-white transition-colors duration-200",
-      isDarkMode ? "bg-[#090A0F] text-[#F8FAFC]" : "bg-[#F4F5F7] text-[#0A0A0C]"
+      isDarkMode ? "bg-black text-white" : "bg-white text-black"
     )}>
       
       {/* ── Fixed Desktop Sidebar ─────────────────────────────────────────── */}
@@ -131,14 +121,14 @@ export default function Layout() {
         "fixed left-0 top-0 h-full z-50 hidden md:flex flex-col transition-all duration-300 ease-in-out border-r shadow-sm backdrop-blur-xl",
         isCollapsed ? "w-[76px]" : "w-[260px]",
         isDarkMode 
-          ? "bg-[#0F1117]/95 border-slate-800 text-slate-200" 
-          : "bg-white/95 border-slate-200/80 text-[#0A0A0C]"
+          ? "bg-black/95 border-zinc-800 text-white" 
+          : "bg-white/95 border-zinc-200 text-black"
       )}>
         {/* Brand Header */}
         <div className={clsx(
           "h-[64px] flex items-center justify-between border-b shrink-0 transition-all duration-300",
           isCollapsed ? "px-3" : "px-5",
-          isDarkMode ? "border-slate-800" : "border-slate-200/80"
+          isDarkMode ? "border-zinc-800" : "border-zinc-200"
         )}>
           <NavLink to="/dashboard" className="flex items-center gap-3 group min-w-0" title="BeeCarbonat">
             <BeeCarbonatLogo size={36} showText={!isCollapsed} />
@@ -151,8 +141,8 @@ export default function Layout() {
             className={clsx(
               "p-1.5 rounded-lg transition-colors cursor-pointer shrink-0",
               isDarkMode 
-                ? "text-slate-400 hover:text-white hover:bg-slate-800" 
-                : "text-slate-500 hover:text-[#0F172A] hover:bg-slate-100"
+                ? "text-zinc-400 hover:text-white hover:bg-zinc-800" 
+                : "text-zinc-600 hover:text-black hover:bg-zinc-100"
             )}
           >
             {isCollapsed ? <PanelLeftOpen size={18} /> : <PanelLeftClose size={18} />}
@@ -166,13 +156,13 @@ export default function Layout() {
               {!isCollapsed && (
                 <div className={clsx(
                   "px-3 py-1 text-[9px] font-mono uppercase tracking-widest font-bold",
-                  isDarkMode ? "text-slate-500" : "text-slate-400"
+                  isDarkMode ? "text-zinc-500" : "text-zinc-400"
                 )}>
                   {t(cat.categoryKey, cat.categoryDefault)}
                 </div>
               )}
               {isCollapsed && catIdx > 0 && (
-                <div className={clsx("my-1 border-t", isDarkMode ? "border-slate-800" : "border-slate-200")} />
+                <div className={clsx("my-1 border-t", isDarkMode ? "border-zinc-800" : "border-zinc-200")} />
               )}
               {cat.items.map((item) => {
                 const isActive = location.pathname === item.to;
@@ -188,14 +178,14 @@ export default function Layout() {
                       isActive
                         ? 'bg-[#FF5500] text-white font-bold shadow-[0_2px_10px_rgba(255,85,0,0.3)]'
                         : isDarkMode
-                          ? 'text-slate-400 hover:text-white hover:bg-slate-800/60'
-                          : 'text-slate-600 hover:text-[#0F172A] hover:bg-slate-100'
+                          ? 'text-zinc-400 hover:text-white hover:bg-zinc-900'
+                          : 'text-zinc-700 hover:text-black hover:bg-zinc-100'
                     )}
                   >
                     <span className="material-symbols-outlined text-[18px] group-hover:scale-110 transition-transform shrink-0">
                       {item.icon}
                     </span>
-                    {!isCollapsed && <span className="truncate">{itemLabel}</span>}
+                    {!isCollapsed && <span className="truncate font-semibold">{itemLabel}</span>}
                   </NavLink>
                 );
               })}
@@ -206,24 +196,27 @@ export default function Layout() {
         {/* User Card */}
         <div className={clsx(
           "p-3 mt-auto border-t shrink-0",
-          isDarkMode ? "border-slate-800" : "border-slate-200/80"
+          isDarkMode ? "border-zinc-800" : "border-zinc-200"
         )}>
           <div className={clsx(
             "p-2.5 rounded-xl flex items-center justify-between gap-2 border transition-all",
             isDarkMode 
-              ? "bg-slate-900/60 border-slate-800 text-slate-200" 
-              : "bg-slate-50 border-slate-200/90 text-[#0A0A0C]"
+              ? "bg-zinc-900 border-zinc-800 text-zinc-100" 
+              : "bg-zinc-50 border-zinc-200 text-black"
           )}>
             <div className="flex items-center gap-2.5 min-w-0" title={`${user?.firstName || 'System'} ${user?.lastName || 'Admin'}`}>
-              <div className="w-8 h-8 rounded-lg bg-[#0F172A] text-white flex items-center justify-center font-bold text-xs shadow shrink-0">
-                <span className="material-symbols-outlined text-cyan-400 text-[18px]">person</span>
+              <div className={clsx(
+                "w-8 h-8 rounded-lg flex items-center justify-center font-bold text-xs shadow shrink-0",
+                isDarkMode ? "bg-zinc-800 text-cyan-400" : "bg-zinc-200 text-zinc-800"
+              )}>
+                <span className="material-symbols-outlined text-[18px]">person</span>
               </div>
               {!isCollapsed && (
                 <div className="flex flex-col min-w-0">
                   <span className="font-mono text-[11px] font-bold truncate">
                     {user?.firstName ? `${user.firstName} ${user.lastName || ''}` : 'System Admin'}
                   </span>
-                  <span className="text-[9px] text-slate-500 uppercase font-mono tracking-wider truncate">
+                  <span className="text-[9px] text-zinc-500 uppercase font-mono tracking-wider truncate">
                     {user?.role === 'ADMIN' ? 'Tier 01 Operator' : (user?.role || 'Tier 01 Operator')}
                   </span>
                 </div>
@@ -235,7 +228,7 @@ export default function Layout() {
                 title="Déconnexion"
                 className={clsx(
                   "p-1.5 rounded-lg transition-colors cursor-pointer",
-                  isDarkMode ? "text-slate-400 hover:text-rose-400 hover:bg-slate-800" : "text-slate-500 hover:text-rose-600 hover:bg-slate-200/60"
+                  isDarkMode ? "text-zinc-400 hover:text-rose-400 hover:bg-zinc-800" : "text-zinc-500 hover:text-rose-600 hover:bg-zinc-200"
                 )}
               >
                 <span className="material-symbols-outlined text-[18px]">logout</span>
@@ -248,22 +241,31 @@ export default function Layout() {
       {/* ── Mobile Sidebar (Drawer) ───────────────────────────────────────── */}
       {sidebarOpen && (
         <div
-          className="fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-50 md:hidden"
+          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 md:hidden"
           onClick={closeSidebar}
         />
       )}
       <aside
         className={clsx(
           'fixed inset-y-0 left-0 z-50 w-[280px] flex flex-col transition-transform duration-300 md:hidden border-r shadow-2xl',
-          isDarkMode ? "bg-[#0F1117] border-slate-800 text-white" : "bg-white border-slate-200 text-[#0A0A0C]",
+          isDarkMode ? "bg-black border-zinc-800 text-white" : "bg-white border-zinc-200 text-black",
           sidebarOpen ? 'translate-x-0' : '-translate-x-full'
         )}
       >
-        <div className="h-[64px] flex items-center justify-between px-5 border-b border-slate-200 dark:border-slate-800">
+        <div className={clsx(
+          "h-[64px] flex items-center justify-between px-5 border-b",
+          isDarkMode ? "border-zinc-800" : "border-zinc-200"
+        )}>
           <div className="flex items-center gap-3">
             <BeeCarbonatLogo size={32} showText={true} />
           </div>
-          <button onClick={closeSidebar} className="p-1.5 text-slate-400 hover:text-slate-600 dark:hover:text-white">
+          <button 
+            onClick={closeSidebar} 
+            className={clsx(
+              "p-1.5 rounded-lg transition-colors",
+              isDarkMode ? "text-zinc-400 hover:text-white hover:bg-zinc-800" : "text-zinc-500 hover:text-black hover:bg-zinc-100"
+            )}
+          >
             <X className="w-5 h-5" />
           </button>
         </div>
@@ -271,7 +273,10 @@ export default function Layout() {
         <nav className="flex-1 py-4 px-4 flex flex-col gap-4 overflow-y-auto custom-scrollbar">
           {navCategories.map((cat) => (
             <div key={`mobile-${cat.categoryKey}`} className="flex flex-col gap-1">
-              <div className="px-3 py-1 text-[9px] font-mono uppercase tracking-widest font-bold text-slate-400">
+              <div className={clsx(
+                "px-3 py-1 text-[9px] font-mono uppercase tracking-widest font-bold",
+                isDarkMode ? "text-zinc-500" : "text-zinc-400"
+              )}>
                 {t(cat.categoryKey, cat.categoryDefault)}
               </div>
               {cat.items.map((item) => (
@@ -280,12 +285,16 @@ export default function Layout() {
                   to={item.to}
                   onClick={closeSidebar}
                   className={({ isActive }) => clsx(
-                    'flex items-center px-3.5 py-2.5 rounded-xl font-mono text-[11px] uppercase tracking-wider',
-                    isActive ? 'bg-[#FF5500] text-white font-bold' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800'
+                    'flex items-center px-3.5 py-2.5 rounded-xl font-mono text-[11px] uppercase tracking-wider transition-all',
+                    isActive 
+                      ? 'bg-[#FF5500] text-white font-bold shadow-md' 
+                      : isDarkMode 
+                        ? 'text-zinc-300 hover:bg-zinc-900 hover:text-white' 
+                        : 'text-zinc-700 hover:bg-zinc-100 hover:text-black'
                   )}
                 >
                   <span className="material-symbols-outlined mr-3 text-[18px]">{item.icon}</span>
-                  {t(item.labelKey, item.defaultLabel)}
+                  <span className="font-semibold">{t(item.labelKey, item.defaultLabel)}</span>
                 </NavLink>
               ))}
             </div>
@@ -304,8 +313,8 @@ export default function Layout() {
           "fixed top-0 right-0 h-[64px] z-40 px-6 flex items-center justify-between border-b backdrop-blur-xl transition-all duration-300 ease-in-out left-0",
           isCollapsed ? "md:left-[76px]" : "md:left-[260px]",
           isDarkMode 
-            ? "bg-[#090A0F]/90 border-slate-800 text-white" 
-            : "bg-white/90 border-slate-200/80 text-[#0A0A0C]"
+            ? "bg-black/90 border-zinc-800 text-white" 
+            : "bg-white/90 border-zinc-200 text-black"
         )}>
           <div className="flex items-center gap-4">
             <button
@@ -319,14 +328,14 @@ export default function Layout() {
             <div className={clsx(
               "flex items-center gap-2 border px-3 py-1.5 rounded-xl font-mono text-xs font-semibold shadow-xs transition-colors",
               isDarkMode 
-                ? "bg-slate-900/80 border-slate-800 text-slate-200" 
-                : "bg-slate-50 border-slate-200/90 text-[#0F172A]"
+                ? "bg-zinc-900 border-zinc-800 text-zinc-200" 
+                : "bg-white border-zinc-200 text-black"
             )}>
               <span className="material-symbols-outlined text-[18px] text-[#0F172A] dark:text-[#00F0FF]">apartment</span>
               <select className="bg-transparent focus:outline-none cursor-pointer">
-                <option value="paris" className={isDarkMode ? "bg-slate-900" : "bg-white"}>{t('header_paris_hq', 'Paris HQ - Bâtiment Alpha')}</option>
-                <option value="lyon" className={isDarkMode ? "bg-slate-900" : "bg-white"}>{t('header_lyon_hub', 'Lyon - Hub Béta')}</option>
-                <option value="berlin" className={isDarkMode ? "bg-slate-900" : "bg-white"}>{t('header_berlin_campus', 'Berlin - Tech Campus')}</option>
+                <option value="paris" className={isDarkMode ? "bg-black text-white" : "bg-white text-black"}>{t('header_paris_hq', 'Paris HQ - Bâtiment Alpha')}</option>
+                <option value="lyon" className={isDarkMode ? "bg-black text-white" : "bg-white text-black"}>{t('header_lyon_hub', 'Lyon - Hub Béta')}</option>
+                <option value="berlin" className={isDarkMode ? "bg-black text-white" : "bg-white text-black"}>{t('header_berlin_campus', 'Berlin - Tech Campus')}</option>
               </select>
             </div>
           </div>
@@ -336,8 +345,8 @@ export default function Layout() {
             <div className={clsx(
               "flex items-center gap-1.5 border px-2.5 py-1.5 rounded-xl font-mono text-xs font-bold transition-colors shadow-xs",
               isDarkMode 
-                ? "bg-slate-900 border-slate-800 text-slate-200" 
-                : "bg-slate-100 border-slate-200 text-[#0F172A]"
+                ? "bg-zinc-900 border-zinc-800 text-zinc-200" 
+                : "bg-white border-zinc-200 text-black"
             )}>
               <Globe size={15} className="text-[#FF5500] shrink-0" />
               <select
@@ -346,25 +355,25 @@ export default function Layout() {
                 className="bg-transparent focus:outline-none cursor-pointer font-bold pr-1"
                 aria-label="Sélectionner la langue / Select language"
               >
-                <option value="fr" className={isDarkMode ? "bg-slate-900 text-white" : "bg-white text-slate-900"}>🇫🇷 FR - Français</option>
-                <option value="en" className={isDarkMode ? "bg-slate-900 text-white" : "bg-white text-slate-900"}>🇬🇧 EN - English</option>
-                <option value="es" className={isDarkMode ? "bg-slate-900 text-white" : "bg-white text-slate-900"}>🇪🇸 ES - Español</option>
+                <option value="fr" className={isDarkMode ? "bg-black text-white" : "bg-white text-black"}>🇫🇷 FR - Français</option>
+                <option value="en" className={isDarkMode ? "bg-black text-white" : "bg-white text-black"}>🇬🇧 EN - English</option>
+                <option value="es" className={isDarkMode ? "bg-black text-white" : "bg-white text-black"}>🇪🇸 ES - Español</option>
               </select>
             </div>
 
             {/* Mode Switcher Button (Mode Clair / Mode Sombre) */}
             <button
-              onClick={() => setIsDarkMode(!isDarkMode)}
-              title={isDarkMode ? "Activer le Mode Clair (Off-White 95%)" : "Activer le Mode Sombre"}
+              onClick={toggleTheme}
+              title={isDarkMode ? "Activer le Mode Clair (Blanc pur)" : "Activer le Mode Sobre (Noir pur)"}
               className={clsx(
                 "flex items-center gap-2 px-3 py-1.5 rounded-xl border text-xs font-mono font-bold transition-all cursor-pointer",
                 isDarkMode 
-                  ? "bg-slate-900 border-slate-800 text-amber-400 hover:bg-slate-800" 
-                  : "bg-slate-100 border-slate-200 text-[#0F172A] hover:bg-slate-200/80"
+                  ? "bg-zinc-900 border-zinc-800 text-amber-400 hover:bg-zinc-800" 
+                  : "bg-zinc-100 border-zinc-200 text-black hover:bg-zinc-200"
               )}
             >
               {isDarkMode ? <Sun size={15} /> : <Moon size={15} />}
-              <span className="hidden sm:inline">{isDarkMode ? t('dark_mode', 'Mode Sombre') : t('light_mode', 'Mode Clair')}</span>
+              <span className="hidden sm:inline">{isDarkMode ? t('dark_mode', 'Mode Sobre') : t('light_mode', 'Mode Clair')}</span>
             </button>
 
             {/* Online Sync Status Indicator */}
@@ -372,7 +381,7 @@ export default function Layout() {
               onClick={handleManualSync}
               className={clsx(
                 "flex items-center gap-2 px-3 py-1.5 rounded-full border cursor-pointer transition-colors shadow-xs",
-                isDarkMode ? "bg-slate-900/80 border-slate-800" : "bg-slate-100/80 border-slate-200"
+                isDarkMode ? "bg-zinc-900 border-zinc-800" : "bg-zinc-100 border-zinc-200"
               )}
               title="Cliquer pour synchroniser manuellement"
             >
@@ -397,7 +406,7 @@ export default function Layout() {
               onClick={() => navigate('/spaces')}
               className={clsx(
                 "p-2 rounded-xl transition-colors cursor-pointer",
-                isDarkMode ? "text-slate-400 hover:text-white hover:bg-slate-800" : "text-slate-600 hover:text-[#0F172A] hover:bg-slate-100"
+                isDarkMode ? "text-zinc-400 hover:text-white hover:bg-zinc-800" : "text-zinc-600 hover:text-black hover:bg-zinc-100"
               )}
               title={t('search_placeholder', 'Rechercher des espaces ou équipements')}
             >
@@ -409,7 +418,7 @@ export default function Layout() {
               onClick={() => navigate('/notifications')}
               className={clsx(
                 "p-2 rounded-xl transition-colors relative cursor-pointer",
-                isDarkMode ? "text-slate-400 hover:text-white hover:bg-slate-800" : "text-slate-600 hover:text-[#0F172A] hover:bg-slate-100"
+                isDarkMode ? "text-zinc-400 hover:text-white hover:bg-zinc-800" : "text-zinc-600 hover:text-black hover:bg-zinc-100"
               )}
               title="Notifications système"
             >
@@ -422,7 +431,7 @@ export default function Layout() {
         {/* Dynamic Main Body Content */}
         <main className={clsx(
           "relative pt-[64px] flex-1 min-h-screen transition-colors duration-200",
-          isDarkMode ? "bg-[#090A0F]" : "bg-[#F4F5F7]"
+          isDarkMode ? "bg-black text-white" : "bg-white text-black"
         )}>
           <Outlet />
         </main>

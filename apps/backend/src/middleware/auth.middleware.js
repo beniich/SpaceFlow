@@ -37,7 +37,7 @@ const authMiddleware = async (req, res, next) => {
     // 2. Récupère le rôle réel depuis Prisma (source unique de vérité)
     const user = await prisma.user.findUnique({
       where: { email: decoded.email },
-      select: { id: true, role: true, email: true }
+      select: { id: true, role: true, email: true, tenantId: true }
     });
 
     if (!user) {

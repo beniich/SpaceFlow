@@ -127,8 +127,8 @@ void main() {
   }, []);
 
   return (
-    <div className="absolute inset-0 w-full h-full opacity-40 pointer-events-none mix-blend-screen overflow-hidden z-0">
-      <canvas ref={canvasRef} className="block w-full h-full" />
+    <div className="hidden dark:block absolute inset-0 w-full h-full opacity-40 pointer-events-none mix-blend-screen overflow-hidden z-0 webgl-bg-container">
+      <canvas ref={canvasRef} className="webgl-shader-bg block w-full h-full" />
     </div>
   );
 }

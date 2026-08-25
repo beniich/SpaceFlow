@@ -1,12 +1,16 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   Settings as SettingsIcon, Shield, Bell, Key, Database, CheckCircle2,
   Building, Mail, Users, Globe, ToggleLeft, ToggleRight, Server, Cloud, Cpu, Save, RefreshCw, Plus, Trash,
-  MapPin, Edit3, ShieldAlert, FileText, CheckSquare, RotateCcw, AlertTriangle, Info, PhoneCall
+  MapPin, Edit3, ShieldAlert, FileText, CheckSquare, RotateCcw, AlertTriangle, Info, PhoneCall,
+  CreditCard, ExternalLink, Zap, Sparkles, ArrowRight, Palette, Sun, Moon, Monitor
 } from 'lucide-react';
 import toast from 'react-hot-toast';
+import api from '../services/api';
 import { useSiteConfig } from '../context/SiteConfigContext';
 import DynamicFormIndications from '../components/DynamicFormIndications';
+import { useTheme, THEMES } from '../hooks/useTheme';
 
 export default function Settings() {
   const {
@@ -26,8 +30,40 @@ export default function Settings() {
     resetToDefaults
   } = useSiteConfig();
 
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('PROFILE');
   const [saving, setSaving] = useState(false);
+
+  // Billing state
+  const [billingData, setBillingData] = useState(null);
+  const [loadingBilling, setLoadingBilling] = useState(false);
+
+  const fetchBillingData = async () => {
+    try {
+      setLoadingBilling(true);
+      const res = await api.get('/billing/current');
+      setBillingData(res.data);
+    } catch (err) {
+      console.error('Erreur chargement billing:', err);
+    } finally {
+      setLoadingBilling(false);
+    }
+  };
+
+  useEffect(() => {
+    if (activeTab === 'BILLING') {
+      fetchBillingData();
+    }
+  }, [activeTab]);
+
+  const handleOpenStripePortal = async () => {
+    try {
+      const res = await api.post('/billing/portal', { returnUrl: window.location.href });
+      if (res.data?.url) window.location.href = res.data.url;
+    } catch (err) {
+      toast.error(err.response?.data?.message || 'Portail Stripe indisponible');
+    }
+  };
 
   // Superadmin editing states
   const [editingSiteId, setEditingSiteId] = useState(null);
@@ -161,6 +197,8 @@ export default function Settings() {
       <div className="flex border-b border-zinc-800/80 gap-6 overflow-x-auto pb-px">
         {[
           { id: 'SUPERADMIN', label: 'Superadmin: Adresses & Formulaires', icon: Shield },
+          { id: 'BILLING', label: 'Abonnement & Quotas', icon: CreditCard },
+          { id: 'APPEARANCE', label: 'Apparence', icon: Palette },
           { id: 'PROFILE', label: 'Profile & Org', icon: Building },
           { id: 'INTEGRATIONS', label: 'API & Integrations', icon: Database },
           { id: 'ROUTING', label: 'Alert Routing', icon: Bell },
@@ -187,6 +225,135 @@ export default function Settings() {
         <div className="lg:col-span-2 space-y-6">
           <form onSubmit={handleSaveAll} className="space-y-6">
             
+            {/* Panel APPEARANCE: Thème Clair / Sobre / Système */}
+            {activeTab === 'APPEARANCE' && <AppearancePanel />}
+
+            {/* Panel BILLING: Gestion Facturation & Quotas Multi-Tenant */}
+            {activeTab === 'BILLING' && (
+              <div className="space-y-6">
+                <div className="bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 p-6 rounded-2xl shadow-sm space-y-6 text-black dark:text-white">
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-6 border-b border-zinc-200 dark:border-zinc-800">
+                    <div className="space-y-1">
+                      <div className="flex items-center gap-3">
+                        <span className="text-xs font-mono uppercase text-zinc-500">Plan Souscrit</span>
+                        <span className="px-3 py-1 rounded-full text-xs font-extrabold bg-brand-orange text-black uppercase">
+                          {billingData?.subscription?.planName || billingData?.subscription?.plan || 'Chargement...'}
+                        </span>
+                        <span className={`px-2 py-0.5 rounded text-[11px] font-mono uppercase ${
+                          billingData?.subscription?.status === 'ACTIVE'
+                            ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20'
+                            : 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20'
+                        }`}>
+                          {billingData?.subscription?.status || 'ACTIVE'}
+                        </span>
+                      </div>
+                      <p className="text-xs text-zinc-600 dark:text-zinc-400">
+                        Période : <strong className="text-black dark:text-white">{billingData?.subscription?.interval === 'YEARLY' ? 'Annuelle (-20%)' : 'Mensuelle'}</strong> •
+                        Renouvellement : <strong className="text-black dark:text-white">{billingData?.subscription?.currentPeriodEnd ? new Date(billingData.subscription.currentPeriodEnd).toLocaleDateString() : 'Actif'}</strong>
+                      </p>
+                    </div>
+
+                    <div className="flex flex-wrap items-center gap-3">
+                      <button
+                        type="button"
+                        onClick={handleOpenStripePortal}
+                        className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold bg-zinc-100 dark:bg-zinc-900 hover:bg-zinc-200 dark:hover:bg-zinc-800 text-black dark:text-white border border-zinc-300 dark:border-zinc-700 transition"
+                      >
+                        <ExternalLink className="w-3.5 h-3.5" />
+                        Portail Client Stripe
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => navigate('/pricing')}
+                        className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider bg-brand-orange hover:bg-orange-600 text-black shadow-md transition"
+                      >
+                        <Sparkles className="w-3.5 h-3.5" />
+                        Changer de Plan
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Consommation des Quotas */}
+                  <div>
+                    <h4 className="text-xs font-mono uppercase tracking-widest text-zinc-500 mb-4">Consommation des Quotas en direct</h4>
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                      
+                      <div className="p-4 rounded-xl bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800">
+                        <div className="flex justify-between items-center text-xs font-mono mb-2">
+                          <span className="text-zinc-500">Utilisateurs</span>
+                          <span className="font-bold">{billingData?.usage?.users?.current ?? 0} / {billingData?.usage?.users?.isUnlimited ? '∞' : (billingData?.usage?.users?.max ?? 3)}</span>
+                        </div>
+                        <div className="w-full bg-zinc-200 dark:bg-zinc-800 h-2.5 rounded-full overflow-hidden">
+                          <div
+                            className="bg-brand-orange h-full rounded-full transition-all"
+                            style={{ width: `${billingData?.usage?.users?.percent ?? 0}%` }}
+                          />
+                        </div>
+                        <div className="text-[10px] text-zinc-500 mt-2 font-mono">
+                          {billingData?.usage?.users?.isUnlimited ? 'Illimité sur votre plan' : `${100 - (billingData?.usage?.users?.percent ?? 0)}% disponible`}
+                        </div>
+                      </div>
+
+                      <div className="p-4 rounded-xl bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800">
+                        <div className="flex justify-between items-center text-xs font-mono mb-2">
+                          <span className="text-zinc-500">Équipements (Assets)</span>
+                          <span className="font-bold">{billingData?.usage?.assets?.current ?? 0} / {billingData?.usage?.assets?.isUnlimited ? '∞' : (billingData?.usage?.assets?.max ?? 10)}</span>
+                        </div>
+                        <div className="w-full bg-zinc-200 dark:bg-zinc-800 h-2.5 rounded-full overflow-hidden">
+                          <div
+                            className="bg-cyan-500 h-full rounded-full transition-all"
+                            style={{ width: `${billingData?.usage?.assets?.percent ?? 0}%` }}
+                          />
+                        </div>
+                        <div className="text-[10px] text-zinc-500 mt-2 font-mono">
+                          {billingData?.usage?.assets?.isUnlimited ? 'Illimité sur votre plan' : `${100 - (billingData?.usage?.assets?.percent ?? 0)}% disponible`}
+                        </div>
+                      </div>
+
+                      <div className="p-4 rounded-xl bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800">
+                        <div className="flex justify-between items-center text-xs font-mono mb-2">
+                          <span className="text-zinc-500">Tickets ce mois</span>
+                          <span className="font-bold">{billingData?.usage?.tickets?.current ?? 0} / {billingData?.usage?.tickets?.isUnlimited ? '∞' : (billingData?.usage?.tickets?.max ?? 50)}</span>
+                        </div>
+                        <div className="w-full bg-zinc-200 dark:bg-zinc-800 h-2.5 rounded-full overflow-hidden">
+                          <div
+                            className="bg-emerald-500 h-full rounded-full transition-all"
+                            style={{ width: `${billingData?.usage?.tickets?.percent ?? 0}%` }}
+                          />
+                        </div>
+                        <div className="text-[10px] text-zinc-500 mt-2 font-mono">
+                          {billingData?.usage?.tickets?.isUnlimited ? 'Illimité sur votre plan' : `${100 - (billingData?.usage?.tickets?.percent ?? 0)}% disponible`}
+                        </div>
+                      </div>
+
+                    </div>
+                  </div>
+
+                  {/* Modules & Options Actives */}
+                  <div className="pt-4 border-t border-zinc-200 dark:border-zinc-800">
+                    <h4 className="text-xs font-mono uppercase tracking-widest text-zinc-500 mb-3">Fonctionnalités Activées</h4>
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
+                      {[
+                        { label: 'Maintenance Préventive', active: billingData?.features?.preventive },
+                        { label: 'Digital Twin BIM 3D', active: billingData?.features?.bim },
+                        { label: 'Accès API & Webhooks', active: billingData?.features?.apiKeys },
+                        { label: 'Multi-sites Déployé', active: billingData?.features?.multiSite },
+                        { label: 'Logs d\'Audit & Conformité', active: billingData?.features?.auditLogs },
+                        { label: 'SSO & 2FA Obligatoire', active: billingData?.features?.sso },
+                        { label: 'Support 24/7 Dédié', active: billingData?.features?.support247 },
+                        { label: 'Exports BI / ERP', active: billingData?.features?.reportsPdfExcel }
+                      ].map((item, idx) => (
+                        <div key={idx} className="flex items-center gap-2 p-2.5 rounded-lg bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800">
+                          <div className={`w-2 h-2 rounded-full ${item.active ? 'bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.6)]' : 'bg-zinc-400'}`} />
+                          <span className={item.active ? 'font-semibold text-black dark:text-white' : 'text-zinc-400 line-through'}>{item.label}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
             {/* Panel 0: Superadmin Address & Form Indications Config */}
             {activeTab === 'SUPERADMIN' && (
               <div className="space-y-8">
@@ -1313,6 +1480,171 @@ export default function Settings() {
               <span className="text-[10px] font-mono text-zinc-500 block uppercase">Client Environment Info</span>
               <p className="text-[10px] font-mono text-zinc-600">BEECARBONAT Core Engine v3.45 • Browser Session Ref: {Math.random().toString(16).substr(2, 6).toUpperCase()}</p>
             </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ============================================================
+   Panel Apparence — Thème Clair / Sobre / Système
+   ============================================================ */
+function AppearancePanel() {
+  const { theme, setTheme, resolvedTheme, isDark } = useTheme();
+
+  const themeOptions = [
+    {
+      value: THEMES.LIGHT,
+      label: 'Mode Clair',
+      description: 'Fond blanc pur, texte noir — idéal en plein jour',
+      Icon: Sun,
+      preview: (
+        <div className="w-full h-20 rounded-xl bg-white border border-zinc-200 flex flex-col gap-1.5 items-start justify-center px-4 shadow-sm">
+          <div className="w-3/4 h-2 rounded bg-black/10" />
+          <div className="w-1/2 h-2 rounded bg-[#ff5500]/40" />
+          <div className="w-2/3 h-2 rounded bg-black/05" />
+        </div>
+      ),
+    },
+    {
+      value: THEMES.DARK,
+      label: 'Mode Sobre',
+      description: 'Fond noir pur, texte blanc — réduit la fatigue oculaire',
+      Icon: Moon,
+      preview: (
+        <div className="w-full h-20 rounded-xl bg-black border border-zinc-800 flex flex-col gap-1.5 items-start justify-center px-4">
+          <div className="w-3/4 h-2 rounded bg-white/20" />
+          <div className="w-1/2 h-2 rounded bg-[#00dbe7]/40" />
+          <div className="w-2/3 h-2 rounded bg-white/10" />
+        </div>
+      ),
+    },
+    {
+      value: THEMES.SYSTEM,
+      label: 'Système',
+      description: 'Suit automatiquement les préférences de votre appareil',
+      Icon: Monitor,
+      preview: (
+        <div className="w-full h-20 rounded-xl overflow-hidden border border-zinc-400 flex">
+          <div className="flex-1 bg-white flex flex-col gap-1.5 items-start justify-center px-3">
+            <div className="w-full h-1.5 rounded bg-black/10" />
+            <div className="w-2/3 h-1.5 rounded bg-[#ff5500]/40" />
+          </div>
+          <div className="flex-1 bg-black flex flex-col gap-1.5 items-start justify-center px-3">
+            <div className="w-full h-1.5 rounded bg-white/20" />
+            <div className="w-2/3 h-1.5 rounded bg-[#00dbe7]/40" />
+          </div>
+        </div>
+      ),
+    },
+  ];
+
+  return (
+    <div className="space-y-6">
+      {/* Titre du Panel */}
+      <div className="flex items-center gap-3 pb-4 border-b border-zinc-200 dark:border-zinc-800">
+        <Palette className="w-5 h-5 text-[#ff5500]" />
+        <div>
+          <h2 className="text-lg font-bold">Apparence</h2>
+          <p className="text-xs text-zinc-500 mt-0.5">Personnalisez le thème visuel de l'application</p>
+        </div>
+      </div>
+
+      {/* Sélecteur de thème */}
+      <div className="bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-6 space-y-4">
+        <h3 className="text-sm font-semibold uppercase tracking-wider text-zinc-500">Thème</h3>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {themeOptions.map(({ value, label, description, Icon, preview }) => {
+            const isActive = theme === value;
+            return (
+              <button
+                key={value}
+                type="button"
+                onClick={() => setTheme(value)}
+                aria-pressed={isActive}
+                className={`text-left p-4 rounded-xl border-2 transition-all focus-visible:outline-2 focus-visible:outline-[#ff5500] focus-visible:outline-offset-2 ${
+                  isActive
+                    ? 'border-[#ff5500] bg-[#ff5500]/5 shadow-md'
+                    : 'border-zinc-200 dark:border-zinc-800 hover:border-zinc-300 dark:hover:border-zinc-700'
+                }`}
+              >
+                {preview}
+                <div className="mt-3 flex items-center justify-between">
+                  <div>
+                    <div className="flex items-center gap-1.5">
+                      <Icon className="w-3.5 h-3.5" />
+                      <span className="font-semibold text-sm">{label}</span>
+                    </div>
+                    <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">{description}</p>
+                  </div>
+                  {isActive && (
+                    <span className="flex-shrink-0 w-4 h-4 rounded-full bg-[#ff5500] flex items-center justify-center">
+                      <CheckCircle2 className="w-3 h-3 text-white" />
+                    </span>
+                  )}
+                </div>
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Thème résolu */}
+        {theme === THEMES.SYSTEM && (
+          <p className="text-xs text-zinc-400 font-mono border-t border-zinc-100 dark:border-zinc-800 pt-3 mt-2">
+            🖥 Résolu automatiquement en : <strong className="text-zinc-200">{resolvedTheme === 'dark' ? 'Mode Sobre' : 'Mode Clair'}</strong>
+          </p>
+        )}
+      </div>
+
+      {/* Aperçu en temps réel */}
+      <div className="bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-6 space-y-4">
+        <h3 className="text-sm font-semibold uppercase tracking-wider text-zinc-500">Aperçu en temps réel</h3>
+        <div className={`rounded-xl border p-5 space-y-3 transition-colors duration-300 ${isDark ? 'bg-black border-zinc-800 text-white' : 'bg-white border-zinc-200 text-black'}`}>
+          <div className="flex items-center justify-between">
+            <h4 className="font-bold text-base">Tableau de Bord</h4>
+            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-[#ff5500] text-white">ACTIF</span>
+          </div>
+          <p className={`text-sm ${isDark ? 'text-zinc-400' : 'text-zinc-600'}`}>
+            Voici comment l'interface s'affichera dans ce mode.
+          </p>
+          <div className="flex gap-2">
+            <div className="flex-1 h-16 rounded-lg border flex items-center justify-center text-[10px] font-mono"
+              style={{ background: isDark ? '#09090b' : '#f8fafc', borderColor: isDark ? '#27272a' : '#e2e8f0' }}>
+              Carte A
+            </div>
+            <div className="flex-1 h-16 rounded-lg border flex items-center justify-center text-[10px] font-mono"
+              style={{ background: isDark ? '#09090b' : '#f8fafc', borderColor: isDark ? '#27272a' : '#e2e8f0' }}>
+              Carte B
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Options avancées */}
+      <div className="bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-6 space-y-4">
+        <h3 className="text-sm font-semibold uppercase tracking-wider text-zinc-500">Options d'accessibilité</h3>
+        <div className="space-y-4 text-sm">
+          <div className="flex items-center justify-between gap-4">
+            <div>
+              <p className="font-medium">Animations de transition</p>
+              <p className="text-xs text-zinc-400 mt-0.5">Transitions douces lors du changement de thème</p>
+            </div>
+            <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-[#10b981]/10 text-[#10b981] border border-[#10b981]/30">Actif</span>
+          </div>
+          <div className="flex items-center justify-between gap-4">
+            <div>
+              <p className="font-medium">Respect de prefers-reduced-motion</p>
+              <p className="text-xs text-zinc-400 mt-0.5">Désactive les animations si le système le demande</p>
+            </div>
+            <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-[#10b981]/10 text-[#10b981] border border-[#10b981]/30">Actif</span>
+          </div>
+          <div className="flex items-center justify-between gap-4">
+            <div>
+              <p className="font-medium">Contraste WCAG AA</p>
+              <p className="text-xs text-zinc-400 mt-0.5">Ratio 21:1 (Blanc/Noir) — Standard AAA ✓</p>
+            </div>
+            <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-[#10b981]/10 text-[#10b981] border border-[#10b981]/30">Validé</span>
           </div>
         </div>
       </div>

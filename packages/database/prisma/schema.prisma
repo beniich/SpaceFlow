@@ -24,6 +24,22 @@ model Tenant {
   createdAt DateTime     @default(now())
   updatedAt DateTime     @updatedAt
 
+  // Subscription & Stripe Billing
+  plan                 SubscriptionPlan    @default(FREE)
+  billingInterval      BillingInterval     @default(MONTHLY)
+  stripeCustomerId     String?             @unique
+  stripeSubscriptionId String?             @unique
+  stripePriceId        String?
+  subscriptionStatus   SubscriptionStatus  @default(ACTIVE)
+  currentPeriodStart   DateTime?
+  currentPeriodEnd     DateTime?
+  cancelAtPeriodEnd    Boolean             @default(false)
+  trialEndsAt          DateTime?
+  maxUsers             Int                 @default(3)
+  maxAssets            Int                 @default(10)
+  maxTicketsPerMonth   Int                 @default(50)
+  features             Json?
+
   users       User[]
   assets      Asset[]
   bimModels   BIMModel[]
@@ -33,9 +49,11 @@ model Tenant {
   Ticket      Ticket[]
   SLAPolicy   SLAPolicy[]
   invitations Invitation[]
+  invoices    SubscriptionInvoice[]
 
   @@index([slug])
   @@index([status])
+  @@index([stripeCustomerId])
 }
 
 enum TenantStatus {
@@ -43,6 +61,29 @@ enum TenantStatus {
   SUSPENDED
   TRIAL
   CANCELLED
+}
+
+enum SubscriptionPlan {
+  FREE
+  STARTER
+  PRO
+  BUSINESS
+  ENTERPRISE
+}
+
+enum BillingInterval {
+  MONTHLY
+  YEARLY
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  TRIALING
+  PAST_DUE
+  CANCELED
+  UNPAID
+  INCOMPLETE
+  PAUSED
 }
 
 model User {
@@ -1050,4 +1091,28 @@ model AssetQRCode {
 
   @@unique([tenantId, assetId])
   @@index([shortCode])
+}
+
+// ============================================
+// BILLING & SUBSCRIPTIONS
+// ============================================
+
+model SubscriptionInvoice {
+  id               String    @id @default(uuid())
+  tenantId         String
+  tenant           Tenant    @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  stripeInvoiceId  String    @unique
+  stripeCustomerId String?
+  amountDue        Int       @default(0) // en centimes
+  amountPaid       Int       @default(0) // en centimes
+  currency         String    @default("eur")
+  status           String    // paid, open, void, uncollectible
+  hostedInvoiceUrl String?
+  invoicePdf       String?
+  periodStart      DateTime?
+  periodEnd        DateTime?
+  createdAt        DateTime  @default(now())
+
+  @@index([tenantId])
+  @@index([stripeInvoiceId])
 }

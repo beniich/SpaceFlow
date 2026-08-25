@@ -19,7 +19,6 @@ module.exports = {
       statements: 70,
     },
   },
-  setupFilesAfterFramework: [],
   setupFilesAfterEnv: ['./src/__tests__/setup.js'],
   verbose: true,
   testTimeout: 15000,

@@ -4,87 +4,327 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-  :root {
-    --brand-orange: #ff5500;
-    --brand-navy: #0f172a;
-    --brand-black: #0a0a0c;
-    --brand-bg-offwhite: #f4f5f7;
-    --brand-card-bg: #ffffff;
-    --brand-cyan: #00dbe7;
-  }
+/* ============================================================
+   🎨 DESIGN TOKENS — BeeCarbonIT Thème Clair / Sobre
+   ============================================================ */
+:root,
+:root.light {
+  /* Surfaces */
+  --bg-base: #ffffff;
+  --bg-elevated: #ffffff;
+  --bg-subtle: #f8fafc;
+  --bg-overlay: rgba(255, 255, 255, 0.95);
 
-  body {
-    @apply antialiased bg-[#f4f5f7] text-[#0a0a0c] transition-colors duration-200;
+  /* Text */
+  --text-primary: #000000;
+  --text-secondary: #334155;
+  --text-muted: #64748b;
+  --text-inverse: #ffffff;
+
+  /* Borders */
+  --border-default: #e2e8f0;
+  --border-strong: #cbd5e1;
+  --border-subtle: #f1f5f9;
+
+  /* Brand */
+  --color-primary: #ff5500;
+  --color-accent: #00dbe7;
+
+  /* Semantic */
+  --color-success: #10b981;
+  --color-warning: #f59e0b;
+  --color-danger: #ef4444;
+  --color-info: #3b82f6;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.07);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.10);
+
+  /* Charts */
+  --chart-grid: #e2e8f0;
+  --chart-axis: #475569;
+}
+
+:root.dark {
+  /* Surfaces */
+  --bg-base: #000000;
+  --bg-elevated: #000000;
+  --bg-subtle: #0a0a0a;
+  --bg-overlay: rgba(0, 0, 0, 0.95);
+
+  /* Text */
+  --text-primary: #ffffff;
+  --text-secondary: #e2e8f0;
+  --text-muted: #94a3b8;
+  --text-inverse: #000000;
+
+  /* Borders */
+  --border-default: #27272a;
+  --border-strong: #3f3f46;
+  --border-subtle: #18181b;
+
+  /* Brand (identique) */
+  --color-primary: #ff5500;
+  --color-accent: #00dbe7;
+
+  /* Semantic (identique) */
+  --color-success: #10b981;
+  --color-warning: #f59e0b;
+  --color-danger: #ef4444;
+  --color-info: #3b82f6;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px rgba(255, 255, 255, 0.03);
+  --shadow-md: 0 4px 6px rgba(255, 255, 255, 0.05);
+  --shadow-lg: 0 10px 15px rgba(255, 255, 255, 0.08);
+
+  /* Charts */
+  --chart-grid: #27272a;
+  --chart-axis: #94a3b8;
+}
+
+/* ============================================================
+   🧱 BASE — Application des tokens
+   ============================================================ */
+@layer base {
+  html, body {
+    background-color: var(--bg-base);
+    color: var(--text-primary);
+    transition: background-color 200ms ease, color 200ms ease;
     font-family: 'Inter', sans-serif;
   }
 
-  body.dark-mode {
-    @apply bg-[#090a0f] text-[#e5e2e1];
+  h1, h2, h3, h4, h5, h6 {
+    color: var(--text-primary);
+  }
+
+  a {
+    color: var(--color-primary);
+    text-decoration: none;
+  }
+
+  a:hover {
+    opacity: 0.8;
+  }
+
+  input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+  textarea,
+  select {
+    background-color: var(--bg-base);
+    color: var(--text-primary);
+    border: 1px solid var(--border-default);
+    transition: border-color 200ms ease;
+  }
+
+  input:focus, textarea:focus, select:focus {
+    border-color: var(--color-primary);
+    outline: none;
+  }
+
+  /* Focus visible accessible */
+  *:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
   }
 }
 
-/* Light Mode Specific Styles (95% Blanc cassé, 2% Bleu marine, 2% Noir, 1% Orange électrique) */
-.light-mode-card {
-  background-color: #ffffff;
-  border: 1px solid rgba(15, 23, 42, 0.1);
-  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.05);
+/* ============================================================
+   🎨 COMPONENTS
+   ============================================================ */
+@layer components {
+  .card {
+    background-color: var(--bg-base);
+    color: var(--text-primary);
+    border: 1px solid var(--border-default);
+    border-radius: 0.75rem;
+    box-shadow: var(--shadow-sm);
+    transition: box-shadow 200ms ease;
+  }
+
+  .card:hover {
+    box-shadow: var(--shadow-md);
+  }
+
+  .btn-primary {
+    background-color: var(--color-primary);
+    color: #ffffff;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    transition: opacity 200ms ease;
+  }
+
+  .btn-primary:hover { opacity: 0.9; }
+
+  .btn-secondary {
+    background-color: var(--bg-base);
+    color: var(--text-primary);
+    border: 1px solid var(--border-default);
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    transition: background-color 200ms ease;
+  }
+
+  .btn-secondary:hover { background-color: var(--bg-subtle); }
+
+  .badge-success {
+    color: var(--color-success);
+    border-color: var(--color-success);
+    background-color: color-mix(in srgb, var(--color-success) 10%, transparent);
+  }
+
+  .badge-warning {
+    color: var(--color-warning);
+    border-color: var(--color-warning);
+    background-color: color-mix(in srgb, var(--color-warning) 10%, transparent);
+  }
+
+  .badge-danger {
+    color: var(--color-danger);
+    border-color: var(--color-danger);
+    background-color: color-mix(in srgb, var(--color-danger) 10%, transparent);
+  }
 }
 
-.light-mode-header {
-  background-color: rgba(255, 255, 255, 0.95);
-  border-bottom: 1px solid rgba(15, 23, 42, 0.1);
+/* ============================================================
+   🔒 OVERRIDES MODE CLAIR — Neutralisation des hardcodes sombres
+   Toutes les pages (Assets, WorkOrders, Settings, etc.) héritent
+   ============================================================ */
+html.light body,
+html.light main,
+html:not(.dark) body,
+html:not(.dark) main {
+  background-color: #ffffff !important;
+  color: #000000 !important;
 }
 
-.glass-panel {
-  background: rgba(255, 255, 255, 0.92);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(15, 23, 42, 0.12);
-  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+html:not(.dark) .bg-zinc-950,
+html:not(.dark) .bg-zinc-900,
+html:not(.dark) .bg-zinc-900\/90,
+html:not(.dark) .bg-zinc-900\/80,
+html:not(.dark) .bg-zinc-900\/60,
+html:not(.dark) .bg-zinc-900\/50,
+html:not(.dark) .bg-slate-950,
+html:not(.dark) .bg-slate-900,
+html:not(.dark) .bg-slate-900\/90,
+html:not(.dark) .bg-slate-900\/80,
+html:not(.dark) .bg-slate-900\/60,
+html:not(.dark) .bg-\[\#09090b\],
+html:not(.dark) .bg-\[\#090A0F\],
+html:not(.dark) .bg-\[\#0b0f14\],
+html:not(.dark) .bg-\[\#070b10\],
+html:not(.dark) .bg-\[\#060a0e\],
+html:not(.dark) .bg-\[\#050b14\],
+html:not(.dark) .bg-\[\#0A0B10\],
+html:not(.dark) .bg-\[\#0D1117\],
+html:not(.dark) .bg-\[\#131313\],
+html:not(.dark) .bg-\[\#08080A\],
+html:not(.dark) .bg-\[\#101012\],
+html:not(.dark) .bg-\[\#0d0d10\],
+html:not(.dark) .bg-surface,
+html:not(.dark) .bg-background {
+  background-color: #ffffff !important;
+  color: #000000 !important;
 }
 
-body.dark-mode .glass-panel {
-  background: rgba(26, 26, 26, 0.7);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: none;
+html:not(.dark) .border-zinc-800,
+html:not(.dark) .border-zinc-800\/80,
+html:not(.dark) .border-zinc-800\/60,
+html:not(.dark) .border-slate-800,
+html:not(.dark) .border-slate-800\/80 {
+  border-color: #e2e8f0 !important;
 }
 
-.neon-glow-primary {
-  box-shadow: 0 0 12px rgba(255, 85, 0, 0.3);
+html:not(.dark) .text-zinc-50,
+html:not(.dark) .text-zinc-100,
+html:not(.dark) .text-zinc-200,
+html:not(.dark) .text-zinc-300,
+html:not(.dark) .text-slate-50,
+html:not(.dark) .text-slate-100,
+html:not(.dark) .text-slate-200,
+html:not(.dark) .text-slate-300,
+html:not(.dark) .text-white {
+  color: #000000 !important;
 }
 
-.neon-glow-primary:hover {
-  box-shadow: 0 0 18px rgba(255, 85, 0, 0.45);
+html:not(.dark) .text-zinc-400,
+html:not(.dark) .text-zinc-500,
+html:not(.dark) .text-slate-400,
+html:not(.dark) .text-slate-500 {
+  color: #475569 !important;
 }
 
-.neon-glow-secondary {
-  box-shadow: 0 0 12px rgba(15, 23, 42, 0.2);
+/* Masquer les shaders WebGL en mode clair */
+html:not(.dark) .webgl-shader-background,
+html:not(.dark) [data-theme-bg="shader"],
+html:not(.dark) .webgl-bg-container {
+  display: none !important;
 }
 
-/* Custom scrollbar for webkit */
-::-webkit-scrollbar {
-  width: 5px;
-  height: 5px;
+/* ============================================================
+   🔒 OVERRIDES MODE SOBRE
+   ============================================================ */
+html.dark body,
+html.dark main {
+  background-color: #000000 !important;
+  color: #ffffff !important;
 }
 
-::-webkit-scrollbar-track {
-  background: rgba(15, 23, 42, 0.03);
+/* ============================================================
+   ♿ ACCESSIBILITÉ — Reduced motion
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
 
-::-webkit-scrollbar-thumb {
-  background: rgba(15, 23, 42, 0.2);
-  border-radius: 4px;
+/* ============================================================
+   🎯 SCROLLBARS
+   ============================================================ */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--bg-subtle); }
+::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+* { scrollbar-width: thin; scrollbar-color: var(--border-strong) var(--bg-subtle); }
+
+.scrollbar-hide::-webkit-scrollbar { display: none; }
+.scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* ============================================================
+   🎨 TRANSITION DOUCE — Changement de thème
+   ============================================================ */
+html, body,
+.card,
+button,
+input,
+select,
+textarea,
+aside, header, main, nav, section, article {
+  transition:
+    background-color 200ms cubic-bezier(0.4, 0, 0.2, 1),
+    color 200ms cubic-bezier(0.4, 0, 0.2, 1),
+    border-color 200ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-::-webkit-scrollbar-thumb:hover {
-  background: rgba(15, 23, 42, 0.35);
-}
+/* ============================================================
+   ♿ CONTRASTE ÉLEVÉ (prefers-contrast: high)
+   ============================================================ */
+@media (prefers-contrast: high) {
+  :root.light {
+    --text-secondary: #1e293b;
+    --text-muted: #0f172a;
+    --border-default: #000000;
+    --border-strong: #000000;
+  }
 
-.scrollbar-hide::-webkit-scrollbar {
-  display: none;
-}
-.scrollbar-hide {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
+  :root.dark {
+    --text-secondary: #ffffff;
+    --text-muted: #f1f5f9;
+    --border-default: #ffffff;
+    --border-strong: #ffffff;
+  }
 }
