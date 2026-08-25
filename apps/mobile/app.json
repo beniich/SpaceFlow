@@ -53,10 +53,18 @@
       ],
       "expo-secure-store",
       "expo-local-authentication",
-      "expo-notifications"
+      "expo-notifications",
+      "expo-store-review",
+      "sentry-expo"
     ],
+    "updates": {
+      "url": "https://u.expo.dev/your-project-id"
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
     "extra": {
-      "apiUrl": "https://api.yourdomain.com",
+      "apiUrl": "https://api.beecarbonit.com",
       "eas": {
         "projectId": "your-project-id"
       }
