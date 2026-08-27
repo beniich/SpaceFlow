@@ -1426,7 +1426,7 @@ export default function LandingPage() {
           {/* Col 1 */}
           <div className="space-y-4">
             <button onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="flex items-center gap-2 text-left">
-              <BeeCarbonitLogo size={28} showText={true} />
+              <BeeCarbonatLogo size={28} showText={true} />
             </button>
             <p className="text-muted-foreground text-[11px] leading-relaxed max-w-xs">
               The precision engineering standard for facility management. Empowering global infrastructure since 2024.
