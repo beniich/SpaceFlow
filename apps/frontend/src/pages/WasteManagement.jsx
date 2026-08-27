@@ -16,18 +16,18 @@ export default function WasteManagement() {
   };
 
   return (
-    <div className="min-h-screen bg-[#070b10] text-slate-100 p-4 sm:p-6 lg:p-8 font-sans relative">
+    <div className="min-h-screen bg-[#070b10] text-foreground p-4 sm:p-6 lg:p-8 font-sans relative">
       {/* Top Header */}
-      <div className="max-w-7xl mx-auto mb-6 flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-800 pb-4">
+      <div className="max-w-7xl mx-auto mb-6 flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-border pb-4">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-[#00dbe7]/20 border border-[#00dbe7]/40 flex items-center justify-center text-[#00dbe7]">
             <Recycle className="w-6 h-6 animate-spin" style={{ animationDuration: '10s' }} />
           </div>
           <div>
-            <h1 className="text-2xl font-extrabold tracking-tight text-white flex items-center gap-2">
-              BeeCarbonat <span className="text-slate-400 font-normal">Waste - Circular Flow</span>
+            <h1 className="text-2xl font-extrabold tracking-tight text-foreground flex items-center gap-2">
+              BeeCarbonat <span className="text-muted-foreground font-normal">Waste - Circular Flow</span>
             </h1>
-            <p className="text-xs text-slate-400 font-mono">
+            <p className="text-xs text-muted-foreground font-mono">
               Gestion circulaire des déchets & valorisation énergétique des matières
             </p>
           </div>
@@ -43,8 +43,8 @@ export default function WasteManagement() {
       {/* Main Grid */}
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6">
         {/* Left Mini Sidebar Controls */}
-        <div className="lg:col-span-3 p-4 rounded-2xl bg-slate-900/60 border border-slate-800 backdrop-blur-xl space-y-4">
-          <div className="text-xs font-mono uppercase tracking-widest text-[#00dbe7] border-b border-slate-800 pb-2">
+        <div className="lg:col-span-3 p-4 rounded-2xl bg-surface/60 border border-border backdrop-blur-xl space-y-4">
+          <div className="text-xs font-mono uppercase tracking-widest text-[#00dbe7] border-b border-border pb-2">
             Facility Overview
           </div>
 
@@ -52,18 +52,18 @@ export default function WasteManagement() {
             {['Facility Overview', 'Flow Controls', 'Sensor Network', 'Energy Monitor', 'Alerts', 'Live Feed'].map((item) => (
               <button
                 key={item}
-                className="w-full text-left px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-800/80 hover:text-white transition flex items-center justify-between"
+                className="w-full text-left px-3 py-2 rounded-lg text-muted hover:bg-surface-alt/80 hover:text-foreground transition flex items-center justify-between"
               >
                 <span>{item}</span>
               </button>
             ))}
           </div>
 
-          <div className="pt-4 border-t border-slate-800">
+          <div className="pt-4 border-t border-border">
             <button
               onClick={handleSimulate}
               disabled={simulationRunning}
-              className="w-full py-2.5 rounded-xl bg-gradient-to-r from-[#f38020] to-orange-600 hover:opacity-90 text-xs font-bold text-white transition font-mono flex items-center justify-center gap-2 shadow-lg shadow-orange-500/20"
+              className="w-full py-2.5 rounded-xl bg-gradient-to-r from-[#f38020] to-orange-600 hover:opacity-90 text-xs font-bold text-foreground transition font-mono flex items-center justify-center gap-2 shadow-lg shadow-orange-500/20"
             >
               <Play className="w-4 h-4 fill-white" />
               {simulationRunning ? 'Calcul en cours...' : 'Simulate Future Flow'}
@@ -72,7 +72,7 @@ export default function WasteManagement() {
         </div>
 
         {/* Central Isometric 3D Sorting Conveyor Network */}
-        <div className="lg:col-span-6 relative min-h-[440px] rounded-2xl bg-slate-950 border border-slate-800 p-6 flex flex-col justify-between overflow-hidden">
+        <div className="lg:col-span-6 relative min-h-[440px] rounded-2xl bg-background border border-border p-6 flex flex-col justify-between overflow-hidden">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(0,219,231,0.1)_0,transparent_70%)] pointer-events-none" />
 
           {/* Conveyor Grid SVG Graphic */}
@@ -106,7 +106,7 @@ export default function WasteManagement() {
               </g>
             </svg>
 
-            <div className="absolute top-4 left-4 text-xs font-mono text-slate-400 bg-slate-900/80 px-3 py-1 rounded-lg border border-slate-800">
+            <div className="absolute top-4 left-4 text-xs font-mono text-muted-foreground bg-surface/80 px-3 py-1 rounded-lg border border-border">
               Station sélectionnée: <span className="text-[#00dbe7] font-bold">{selectedHub}</span>
             </div>
           </div>
@@ -115,29 +115,29 @@ export default function WasteManagement() {
         {/* Right Column: Efficiency Stats & High Priority Maintenance */}
         <div className="lg:col-span-3 space-y-4">
           {/* Efficiency Stats */}
-          <div className="p-5 rounded-2xl bg-slate-900/60 border border-slate-800 backdrop-blur-xl space-y-3">
-            <span className="text-[10px] font-mono text-slate-400 uppercase tracking-widest">EFFICIENCY STATS</span>
+          <div className="p-5 rounded-2xl bg-surface/60 border border-border backdrop-blur-xl space-y-3">
+            <span className="text-[10px] font-mono text-muted-foreground uppercase tracking-widest">EFFICIENCY STATS</span>
 
             <div className="space-y-2 text-xs font-mono">
               <div>
-                <div className="flex justify-between text-slate-300">
+                <div className="flex justify-between text-muted">
                   <span>Material Recovery Rate:</span>
                   <span className="text-emerald-400 font-bold">94.5% (↑1.2%)</span>
                 </div>
-                <div className="w-full bg-slate-800 h-1.5 rounded-full mt-1">
+                <div className="w-full bg-surface-alt h-1.5 rounded-full mt-1">
                   <div className="bg-emerald-400 h-full rounded-full" style={{ width: '94.5%' }} />
                 </div>
               </div>
 
-              <div className="pt-2 border-t border-slate-800">
-                <div className="flex justify-between text-slate-300">
+              <div className="pt-2 border-t border-border">
+                <div className="flex justify-between text-muted">
                   <span>Carbon Offset:</span>
                   <span className="text-[#00dbe7] font-bold">1,240 Tons/M</span>
                 </div>
               </div>
 
-              <div className="pt-2 border-t border-slate-800">
-                <div className="flex justify-between text-slate-300">
+              <div className="pt-2 border-t border-border">
+                <div className="flex justify-between text-muted">
                   <span>Self-Sufficiency:</span>
                   <span className="text-[#f38020] font-bold">88%</span>
                 </div>
@@ -146,8 +146,8 @@ export default function WasteManagement() {
           </div>
 
           {/* High-Priority Maintenance */}
-          <div className="p-5 rounded-2xl bg-slate-900/60 border border-slate-800 backdrop-blur-xl space-y-3">
-            <span className="text-[10px] font-mono text-slate-400 uppercase tracking-widest text-amber-400 flex items-center gap-1.5">
+          <div className="p-5 rounded-2xl bg-surface/60 border border-border backdrop-blur-xl space-y-3">
+            <span className="text-[10px] font-mono text-muted-foreground uppercase tracking-widest text-amber-400 flex items-center gap-1.5">
               <ShieldAlert className="w-3.5 h-3.5" /> HIGH-PRIORITY MAINTENANCE
             </span>
 
@@ -157,7 +157,7 @@ export default function WasteManagement() {
                   <span>Plastic Sorter 3A</span>
                   <span className="text-[9px] uppercase px-1.5 py-0.5 rounded bg-red-500/20 text-red-400">Critical</span>
                 </div>
-                <div className="text-[10px] text-slate-400 mt-0.5">Conveyor Belt Jam</div>
+                <div className="text-[10px] text-muted-foreground mt-0.5">Conveyor Belt Jam</div>
               </div>
 
               <div className="p-2.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-300">
@@ -165,7 +165,7 @@ export default function WasteManagement() {
                   <span>Bio-Digester 2B</span>
                   <span className="text-[9px] uppercase px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-400">Warning</span>
                 </div>
-                <div className="text-[10px] text-slate-400 mt-0.5">Temp Fluctuation</div>
+                <div className="text-[10px] text-muted-foreground mt-0.5">Temp Fluctuation</div>
               </div>
             </div>
           </div>

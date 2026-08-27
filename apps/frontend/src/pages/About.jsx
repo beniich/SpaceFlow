@@ -6,22 +6,22 @@ export default function About() {
   const [activeTab, setActiveTab] = useState('philosophy');
 
   return (
-    <div className="min-h-screen bg-[#0b0f14] text-slate-100 p-4 sm:p-6 lg:p-8 font-sans relative overflow-hidden">
+    <div className="min-h-screen bg-surface text-foreground p-4 sm:p-6 lg:p-8 font-sans relative overflow-hidden">
       {/* Background Tech Mesh Circuit Effect */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(0,219,231,0.08)_0,transparent_70%)] pointer-events-none" />
       <div className="absolute top-0 right-0 w-96 h-96 bg-[#f38020]/10 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute bottom-0 left-0 w-96 h-96 bg-[#00dbe7]/10 rounded-full blur-3xl pointer-events-none" />
 
       {/* Header Bar */}
-      <div className="max-w-7xl mx-auto flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8 border-b border-slate-800 pb-6 relative z-10">
+      <div className="max-w-7xl mx-auto flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8 border-b border-border pb-6 relative z-10">
         <div>
           <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-widest text-[#00dbe7] mb-1">
             <Sparkles className="w-4 h-4 animate-pulse" /> Mission Control / Digital Roots
           </div>
           <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight">
-            <span className="text-[#f38020]">BeeCarbonat</span> About - <span className="text-white">Digital Roots</span>
+            <span className="text-[#f38020]">BeeCarbonat</span> About - <span className="text-foreground">Digital Roots</span>
           </h1>
-          <p className="text-sm text-slate-400 mt-1 max-w-2xl">
+          <p className="text-sm text-muted-foreground mt-1 max-w-2xl">
             Where digital innovation meets ecological sustainability. Trace every byte, optimize every joule, and power a carbon-neutral infrastructure.
           </p>
         </div>
@@ -29,13 +29,13 @@ export default function About() {
         <div className="flex items-center gap-3">
           <Link
             to="/impact"
-            className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-slate-200 transition flex items-center gap-2 border border-slate-700"
+            className="px-4 py-2 rounded-xl bg-surface-alt hover:bg-slate-700 text-xs font-semibold text-slate-200 transition flex items-center gap-2 border border-border"
           >
             <Leaf className="w-4 h-4 text-emerald-400" /> Impact Report
           </Link>
           <Link
             to="/dashboard"
-            className="px-4 py-2 rounded-xl bg-gradient-to-r from-[#f38020] to-orange-600 hover:opacity-90 text-xs font-bold text-white transition shadow-lg shadow-orange-500/20"
+            className="px-4 py-2 rounded-xl bg-gradient-to-r from-[#f38020] to-orange-600 hover:opacity-90 text-xs font-bold text-foreground transition shadow-lg shadow-orange-500/20"
           >
             Dashboard Exec
           </Link>
@@ -45,7 +45,7 @@ export default function About() {
       {/* Main Interactive Digital Tree Visualizer Container */}
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10">
         {/* Left Column - Digital Tree Graphic & Cards */}
-        <div className="lg:col-span-7 relative min-h-[500px] flex items-center justify-center p-6 rounded-2xl bg-slate-900/40 border border-slate-800/80 backdrop-blur-xl">
+        <div className="lg:col-span-7 relative min-h-[500px] flex items-center justify-center p-6 rounded-2xl bg-surface/40 border border-border/80 backdrop-blur-xl">
           {/* Futuristic Circuit Tree Canvas Artwork */}
           <div className="relative w-full max-w-lg aspect-square flex items-center justify-center">
             {/* SVG Glowing Tree Roots */}
@@ -100,8 +100,8 @@ export default function About() {
             onClick={() => setActiveTab('philosophy')}
             className={`cursor-pointer p-6 rounded-2xl border transition-all duration-300 backdrop-blur-xl ${
               activeTab === 'philosophy'
-                ? 'bg-slate-900/80 border-[#f38020]/60 shadow-[0_0_30px_rgba(243,128,32,0.15)] scale-[1.02]'
-                : 'bg-slate-900/40 border-slate-800 hover:border-slate-700'
+                ? 'bg-surface/80 border-[#f38020]/60 shadow-[0_0_30px_rgba(243,128,32,0.15)] scale-[1.02]'
+                : 'bg-surface/40 border-border hover:border-border'
             }`}
           >
             <div className="flex items-center gap-3 mb-3">
@@ -110,10 +110,10 @@ export default function About() {
               </div>
               <div>
                 <span className="text-[10px] font-mono uppercase tracking-widest text-[#f38020]">Core Mission</span>
-                <h3 className="text-lg font-bold text-white tracking-wide">THE CARBONIT PHILOSOPHY.</h3>
+                <h3 className="text-lg font-bold text-foreground tracking-wide">THE CARBONIT PHILOSOPHY.</h3>
               </div>
             </div>
-            <p className="text-sm text-slate-300 leading-relaxed font-light">
+            <p className="text-sm text-muted leading-relaxed font-light">
               Our mission at <span className="text-[#f38020] font-medium">BeeCarbonat</span> is to intertwine digital innovation with ecological sustainability, creating a carbon-neutral future through smart facility management and AI-driven telemetry.
             </p>
           </div>
@@ -123,8 +123,8 @@ export default function About() {
             onClick={() => setActiveTab('roots')}
             className={`cursor-pointer p-6 rounded-2xl border transition-all duration-300 backdrop-blur-xl ${
               activeTab === 'roots'
-                ? 'bg-slate-900/80 border-[#00dbe7]/60 shadow-[0_0_30px_rgba(0,219,231,0.15)] scale-[1.02]'
-                : 'bg-slate-900/40 border-slate-800 hover:border-slate-700'
+                ? 'bg-surface/80 border-[#00dbe7]/60 shadow-[0_0_30px_rgba(0,219,231,0.15)] scale-[1.02]'
+                : 'bg-surface/40 border-border hover:border-border'
             }`}
           >
             <div className="flex items-center gap-3 mb-3">
@@ -133,26 +133,26 @@ export default function About() {
               </div>
               <div>
                 <span className="text-[10px] font-mono uppercase tracking-widest text-[#00dbe7]">Infrastructure</span>
-                <h3 className="text-lg font-bold text-white tracking-wide">DIGITAL ROOTS.</h3>
+                <h3 className="text-lg font-bold text-foreground tracking-wide">DIGITAL ROOTS.</h3>
               </div>
             </div>
-            <p className="text-sm text-slate-300 leading-relaxed font-light">
+            <p className="text-sm text-muted leading-relaxed font-light">
               We trace every byte and every joule, optimizing energy flows to nurture a greener planet, just as roots nourish a tree. Real-time IoT sensors synchronize building assets with zero carbon latency.
             </p>
           </div>
 
           {/* Card 3: Quantum Security & Sustainability */}
-          <div className="p-6 rounded-2xl bg-slate-900/40 border border-slate-800 backdrop-blur-xl space-y-3">
-            <div className="flex items-center justify-between text-xs font-mono text-slate-400">
+          <div className="p-6 rounded-2xl bg-surface/40 border border-border backdrop-blur-xl space-y-3">
+            <div className="flex items-center justify-between text-xs font-mono text-muted-foreground">
               <span className="flex items-center gap-1.5"><ShieldCheck className="w-4 h-4 text-emerald-400" /> Security Layer: Quantum-Safe</span>
               <span className="text-[#00dbe7]">100% Uptime</span>
             </div>
-            <div className="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
+            <div className="w-full bg-surface-alt h-2 rounded-full overflow-hidden">
               <div className="bg-gradient-to-r from-[#f38020] to-[#00dbe7] h-full w-[94%]" />
             </div>
-            <p className="text-xs text-slate-400 flex items-center justify-between">
+            <p className="text-xs text-muted-foreground flex items-center justify-between">
               <span>Energy Efficiency Index</span>
-              <span className="font-mono text-white font-semibold">98.4 / 100</span>
+              <span className="font-mono text-foreground font-semibold">98.4 / 100</span>
             </p>
           </div>
         </div>
@@ -162,7 +162,7 @@ export default function About() {
       <div className="mt-12 text-center relative z-10">
         <Link
           to="/case-studies"
-          className="inline-flex items-center gap-2 text-xs font-mono uppercase tracking-widest text-slate-400 hover:text-white transition"
+          className="inline-flex items-center gap-2 text-xs font-mono uppercase tracking-widest text-muted-foreground hover:text-foreground transition"
         >
           <span>Explore Success Stories</span>
           <ArrowDown className="w-4 h-4 text-[#f38020] animate-bounce" />

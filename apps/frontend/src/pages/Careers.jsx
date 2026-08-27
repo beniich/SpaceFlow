@@ -61,21 +61,21 @@ export default function Careers() {
   };
 
   return (
-    <div className="min-h-screen bg-[#070b10] text-slate-100 p-4 sm:p-6 lg:p-12 font-sans relative">
+    <div className="min-h-screen bg-[#070b10] text-foreground p-4 sm:p-6 lg:p-12 font-sans relative">
       {/* Top Header */}
-      <div className="max-w-7xl mx-auto flex items-center justify-between border-b border-slate-800 pb-6 mb-10">
+      <div className="max-w-7xl mx-auto flex items-center justify-between border-b border-border pb-6 mb-10">
         <div className="flex items-center gap-2">
-          <span className="text-xl font-bold tracking-tight text-white">
+          <span className="text-xl font-bold tracking-tight text-foreground">
             <span className="text-[#f38020]">Bee</span><span className="text-[#00dbe7]">Carbonat</span>
           </span>
         </div>
 
-        <div className="hidden md:flex items-center gap-8 text-xs font-mono uppercase tracking-widest text-slate-400">
-          <Link to="/dashboard" className="hover:text-white transition">Home</Link>
-          <Link to="/about" className="hover:text-white transition">About Us</Link>
+        <div className="hidden md:flex items-center gap-8 text-xs font-mono uppercase tracking-widest text-muted-foreground">
+          <Link to="/dashboard" className="hover:text-foreground transition">Home</Link>
+          <Link to="/about" className="hover:text-foreground transition">About Us</Link>
           <span className="text-[#00dbe7] font-bold border-b border-[#00dbe7] pb-1">Careers</span>
-          <Link to="/impact" className="hover:text-white transition">Impact</Link>
-          <Link to="/case-studies" className="hover:text-white transition">Contact</Link>
+          <Link to="/impact" className="hover:text-foreground transition">Impact</Link>
+          <Link to="/case-studies" className="hover:text-foreground transition">Contact</Link>
         </div>
       </div>
 
@@ -84,10 +84,10 @@ export default function Careers() {
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#f38020]/10 border border-[#f38020]/30 text-[#f38020] text-xs font-mono">
           <Sparkles className="w-3.5 h-3.5 animate-pulse" /> FUTURE WORKSPACE
         </div>
-        <h1 className="text-3xl sm:text-5xl font-black tracking-tight text-white">
+        <h1 className="text-3xl sm:text-5xl font-black tracking-tight text-foreground">
           BeeCarbonat Careers - <span className="text-[#00dbe7]">Join the Revolution</span>
         </h1>
-        <p className="text-slate-400 text-sm sm:text-base max-w-2xl mx-auto">
+        <p className="text-muted-foreground text-sm sm:text-base max-w-2xl mx-auto">
           Shape the future of green infrastructure, artificial intelligence, and carbon-neutral facility operations.
         </p>
       </div>
@@ -101,7 +101,7 @@ export default function Careers() {
             className={`px-4 py-2 rounded-xl text-xs font-mono transition backdrop-blur-md ${
               activeCategory === cat
                 ? 'bg-[#00dbe7] text-slate-950 font-bold shadow-lg shadow-cyan-500/20'
-                : 'bg-slate-900/80 text-slate-400 hover:text-white border border-slate-800'
+                : 'bg-surface/80 text-muted-foreground hover:text-foreground border border-border'
             }`}
           >
             {cat}
@@ -114,33 +114,33 @@ export default function Careers() {
         {filteredJobs.map((job) => (
           <div
             key={job.id}
-            className="p-6 rounded-2xl bg-slate-900/60 border border-slate-800 hover:border-[#00dbe7]/50 transition-all duration-300 backdrop-blur-xl flex flex-col justify-between space-y-4 shadow-xl group"
+            className="p-6 rounded-2xl bg-surface/60 border border-border hover:border-[#00dbe7]/50 transition-all duration-300 backdrop-blur-xl flex flex-col justify-between space-y-4 shadow-xl group"
           >
             <div className="space-y-3">
               <div className="flex justify-between items-start">
-                <span className="px-2.5 py-0.5 rounded-full bg-slate-800 text-[10px] font-mono text-slate-300 border border-slate-700">
+                <span className="px-2.5 py-0.5 rounded-full bg-surface-alt text-[10px] font-mono text-muted border border-border">
                   {job.badge}
                 </span>
                 <span className="text-[10px] font-mono text-[#00dbe7]">{job.category}</span>
               </div>
 
-              <h3 className="text-lg font-bold text-white group-hover:text-[#f38020] transition-colors">
+              <h3 className="text-lg font-bold text-foreground group-hover:text-[#f38020] transition-colors">
                 {job.title}
               </h3>
 
-              <div className="flex items-center gap-1.5 text-xs font-mono text-slate-400">
+              <div className="flex items-center gap-1.5 text-xs font-mono text-muted-foreground">
                 <MapPin className="w-3.5 h-3.5 text-[#f38020]" />
                 <span>{job.location}</span>
               </div>
 
-              <p className="text-xs text-slate-400 leading-relaxed">
+              <p className="text-xs text-muted-foreground leading-relaxed">
                 {job.description}
               </p>
             </div>
 
             <button
               onClick={() => setSelectedJob(job)}
-              className="w-full py-2.5 rounded-xl bg-gradient-to-r from-[#f38020] to-orange-600 hover:opacity-90 text-xs font-bold text-white transition tracking-wider uppercase font-mono shadow-lg shadow-orange-500/20 flex items-center justify-center gap-2"
+              className="w-full py-2.5 rounded-xl bg-gradient-to-r from-[#f38020] to-orange-600 hover:opacity-90 text-xs font-bold text-foreground transition tracking-wider uppercase font-mono shadow-lg shadow-orange-500/20 flex items-center justify-center gap-2"
             >
               <span>Apply Now</span>
               <ArrowRight className="w-4 h-4" />
@@ -152,37 +152,37 @@ export default function Careers() {
       {/* Application Modal */}
       {selectedJob && (
         <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
-          <div className="bg-slate-900 border border-slate-700 rounded-3xl max-w-md w-full p-6 space-y-5">
-            <div className="flex justify-between items-center border-b border-slate-800 pb-3">
+          <div className="bg-surface border border-border rounded-3xl max-w-md w-full p-6 space-y-5">
+            <div className="flex justify-between items-center border-b border-border pb-3">
               <div>
                 <span className="text-[10px] font-mono text-[#00dbe7] uppercase">CANDIDATURE POSTE</span>
-                <h3 className="text-lg font-bold text-white">{selectedJob.title}</h3>
+                <h3 className="text-lg font-bold text-foreground">{selectedJob.title}</h3>
               </div>
-              <button onClick={() => setSelectedJob(null)} className="text-slate-400 hover:text-white text-sm">✕</button>
+              <button onClick={() => setSelectedJob(null)} className="text-muted-foreground hover:text-foreground text-sm">✕</button>
             </div>
 
             <form onSubmit={handleApplySubmit} className="space-y-4">
               <div>
-                <label className="text-xs font-mono text-slate-400 block mb-1">Nom complet</label>
+                <label className="text-xs font-mono text-muted-foreground block mb-1">Nom complet</label>
                 <input
                   type="text"
                   required
                   value={applicantName}
                   onChange={(e) => setApplicantName(e.target.value)}
                   placeholder="Jean Dupont"
-                  className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-[#f38020]"
+                  className="w-full bg-background border border-border rounded-xl px-3 py-2 text-sm text-foreground focus:outline-none focus:border-[#f38020]"
                 />
               </div>
 
               <div>
-                <label className="text-xs font-mono text-slate-400 block mb-1">Adresse Email</label>
+                <label className="text-xs font-mono text-muted-foreground block mb-1">Adresse Email</label>
                 <input
                   type="email"
                   required
                   value={applicantEmail}
                   onChange={(e) => setApplicantEmail(e.target.value)}
                   placeholder="jean.dupont@example.com"
-                  className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-[#f38020]"
+                  className="w-full bg-background border border-border rounded-xl px-3 py-2 text-sm text-foreground focus:outline-none focus:border-[#f38020]"
                 />
               </div>
 

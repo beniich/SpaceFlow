@@ -6,6 +6,7 @@ import { initSentry } from './sentry.js'
 import ErrorBoundary from './components/ErrorBoundary.jsx'
 import { LanguageProvider } from './context/LanguageContext.jsx'
 import { SiteConfigProvider } from './context/SiteConfigContext.jsx'
+import { ThemeProvider } from './context/ThemeContext.jsx'
 
 initSentry();
 
@@ -18,7 +19,9 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     <ErrorBoundary>
       <LanguageProvider>
         <SiteConfigProvider>
-          <App />
+          <ThemeProvider>
+            <App />
+          </ThemeProvider>
         </SiteConfigProvider>
       </LanguageProvider>
     </ErrorBoundary>

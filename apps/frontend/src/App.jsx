@@ -3,6 +3,7 @@ import { Toaster } from 'react-hot-toast';
 import { useAuthStore } from './store/authStore';
 import { lazy, Suspense } from 'react';
 import Layout from './components/Layout';
+import PublicLayout from './components/PublicLayout';
 
 // Lazy loaded pages
 const Login = lazy(() => import('./pages/Login'));
@@ -84,7 +85,7 @@ export default function App() {
         <Route path="/qr/:code" element={<QRScanResult />} />
         <Route path="/scan" element={<QRSmartScannerModal />} />
         
-        <Route element={<Layout />}>
+        <Route element={<PublicLayout />}>
           {/* Integrated BeeCarbonat Smart Infrastructure Pages - PUBLIC */}
           <Route path="about" element={<About />} />
           <Route path="market" element={<CarbonMarket />} />
@@ -145,6 +146,9 @@ export default function App() {
           {/* Display */}
           <Route path="screensaver" element={<ScreenSaver />} />
         </Route>
+
+        {/* Catch-all fallback */}
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
       </Suspense>
     </BrowserRouter>

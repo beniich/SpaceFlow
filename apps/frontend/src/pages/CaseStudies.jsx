@@ -50,29 +50,29 @@ export default function CaseStudies() {
   const [selectedCase, setSelectedCase] = useState(null);
 
   return (
-    <div className="min-h-screen bg-[#070b10] text-slate-100 p-4 sm:p-6 lg:p-12 font-sans relative">
+    <div className="min-h-screen bg-[#070b10] text-foreground p-4 sm:p-6 lg:p-12 font-sans relative">
       {/* Background Tech Network */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(0,219,231,0.1)_0,transparent_60%)] pointer-events-none" />
 
       {/* Top Navigation */}
-      <div className="max-w-7xl mx-auto flex items-center justify-between border-b border-slate-800 pb-6 mb-12">
+      <div className="max-w-7xl mx-auto flex items-center justify-between border-b border-border pb-6 mb-12">
         <div className="flex items-center gap-2">
-          <span className="text-xl font-bold tracking-tight text-white">
+          <span className="text-xl font-bold tracking-tight text-foreground">
             <span className="text-[#f38020]">Bee</span><span className="text-[#00dbe7]">Carbonat</span>
           </span>
         </div>
 
-        <div className="hidden md:flex items-center gap-8 text-xs font-mono uppercase tracking-widest text-slate-400">
-          <Link to="/dashboard" className="hover:text-white transition">Home</Link>
-          <Link to="/market" className="hover:text-white transition">Solutions</Link>
+        <div className="hidden md:flex items-center gap-8 text-xs font-mono uppercase tracking-widest text-muted-foreground">
+          <Link to="/dashboard" className="hover:text-foreground transition">Home</Link>
+          <Link to="/market" className="hover:text-foreground transition">Solutions</Link>
           <span className="text-[#00dbe7] font-bold border-b border-[#00dbe7] pb-1">Case Studies</span>
-          <Link to="/about" className="hover:text-white transition">About Us</Link>
-          <Link to="/careers" className="hover:text-white transition">Careers</Link>
+          <Link to="/about" className="hover:text-foreground transition">About Us</Link>
+          <Link to="/careers" className="hover:text-foreground transition">Careers</Link>
         </div>
 
         <Link
           to="/partner-portal"
-          className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-slate-200 border border-slate-700 transition"
+          className="px-4 py-2 rounded-xl bg-surface-alt hover:bg-slate-700 text-xs font-semibold text-slate-200 border border-border transition"
         >
           Partner Portal
         </Link>
@@ -83,10 +83,10 @@ export default function CaseStudies() {
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#00dbe7]/10 border border-[#00dbe7]/30 text-[#00dbe7] text-xs font-mono">
           <Sparkles className="w-3.5 h-3.5 animate-pulse" /> GLOBAL PROJECT SHOWCASE
         </div>
-        <h1 className="text-3xl sm:text-5xl font-black tracking-tight text-white">
+        <h1 className="text-3xl sm:text-5xl font-black tracking-tight text-foreground">
           Success Stories: Powering Our Future, <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#f38020] to-[#00dbe7]">Carbon-Free</span>
         </h1>
-        <p className="text-slate-400 text-sm sm:text-base max-w-2xl mx-auto">
+        <p className="text-muted-foreground text-sm sm:text-base max-w-2xl mx-auto">
           Explore how our innovative smart city and CAFM projects are transforming infrastructure, reducing emissions, and driving sustainability worldwide.
         </p>
       </div>
@@ -98,11 +98,11 @@ export default function CaseStudies() {
           return (
             <div
               key={project.id}
-              className={`p-6 rounded-2xl bg-gradient-to-b ${project.gradient} border border-slate-800 hover:border-slate-600 transition-all duration-300 backdrop-blur-xl flex flex-col justify-between group hover:scale-[1.02] shadow-xl`}
+              className={`p-6 rounded-2xl bg-gradient-to-b ${project.gradient} border border-border hover:border-slate-600 transition-all duration-300 backdrop-blur-xl flex flex-col justify-between group hover:scale-[1.02] shadow-xl`}
             >
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <div className="w-10 h-10 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-center text-white">
+                  <div className="w-10 h-10 rounded-xl bg-surface border border-border flex items-center justify-center text-foreground">
                     <IconComp className="w-5 h-5 text-[#00dbe7]" />
                   </div>
                   <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-mono border ${project.badgeColor}`}>
@@ -111,15 +111,15 @@ export default function CaseStudies() {
                 </div>
 
                 <div>
-                  <h3 className="text-lg font-bold text-white group-hover:text-[#00dbe7] transition-colors">
+                  <h3 className="text-lg font-bold text-foreground group-hover:text-[#00dbe7] transition-colors">
                     {project.title}
                   </h3>
                   <div className="mt-3 space-y-1">
-                    <div className="flex justify-between text-xs font-mono text-slate-400">
+                    <div className="flex justify-between text-xs font-mono text-muted-foreground">
                       <span>Project Completion:</span>
-                      <span className="text-white font-bold">{project.completion}%</span>
+                      <span className="text-foreground font-bold">{project.completion}%</span>
                     </div>
-                    <div className="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
+                    <div className="w-full bg-surface-alt h-2 rounded-full overflow-hidden">
                       <div
                         className="bg-gradient-to-r from-[#f38020] to-[#00dbe7] h-full rounded-full transition-all duration-1000"
                         style={{ width: `${project.completion}%` }}
@@ -128,7 +128,7 @@ export default function CaseStudies() {
                   </div>
                 </div>
 
-                <p className="text-xs text-slate-400 leading-relaxed font-light">
+                <p className="text-xs text-muted-foreground leading-relaxed font-light">
                   {project.description}
                 </p>
               </div>
@@ -153,30 +153,30 @@ export default function CaseStudies() {
       {/* Modal Detail View if Clicked */}
       {selectedCase && (
         <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
-          <div className="bg-slate-900 border border-slate-700 rounded-2xl max-w-lg w-full p-6 space-y-4">
-            <div className="flex justify-between items-center border-b border-slate-800 pb-3">
-              <h3 className="text-lg font-bold text-white">{selectedCase.title}</h3>
+          <div className="bg-surface border border-border rounded-2xl max-w-lg w-full p-6 space-y-4">
+            <div className="flex justify-between items-center border-b border-border pb-3">
+              <h3 className="text-lg font-bold text-foreground">{selectedCase.title}</h3>
               <button
                 onClick={() => setSelectedCase(null)}
-                className="text-slate-400 hover:text-white text-sm font-mono"
+                className="text-muted-foreground hover:text-foreground text-sm font-mono"
               >
                 ✕
               </button>
             </div>
-            <p className="text-sm text-slate-300">{selectedCase.description}</p>
-            <div className="p-4 rounded-xl bg-slate-950 border border-slate-800 text-xs font-mono space-y-2">
+            <p className="text-sm text-muted">{selectedCase.description}</p>
+            <div className="p-4 rounded-xl bg-background border border-border text-xs font-mono space-y-2">
               <div className="flex justify-between">
-                <span className="text-slate-400">Avancement Global:</span>
+                <span className="text-muted-foreground">Avancement Global:</span>
                 <span className="text-[#00dbe7] font-bold">{selectedCase.completion}%</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-slate-400">Émissions de CO2 Évitées:</span>
+                <span className="text-muted-foreground">Émissions de CO2 Évitées:</span>
                 <span className="text-emerald-400 font-bold">12,400 Tonnes/An</span>
               </div>
             </div>
             <button
               onClick={() => setSelectedCase(null)}
-              className="w-full py-2 rounded-xl bg-[#f38020] text-white text-xs font-bold hover:bg-orange-600 transition"
+              className="w-full py-2 rounded-xl bg-[#f38020] text-foreground text-xs font-bold hover:bg-orange-600 transition"
             >
               Fermer
             </button>
@@ -185,7 +185,7 @@ export default function CaseStudies() {
       )}
 
       {/* Footer */}
-      <div className="max-w-7xl mx-auto border-t border-slate-800 pt-8 text-center text-xs font-mono text-slate-500">
+      <div className="max-w-7xl mx-auto border-t border-border pt-8 text-center text-xs font-mono text-muted-foreground">
         © 2026 BeeCarbonat Facilities. All rights reserved. Powered by CAFM PRO.
       </div>
     </div>

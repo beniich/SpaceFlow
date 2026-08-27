@@ -10,18 +10,18 @@ export default function LightingCityPulse() {
   const [scheduleMode, setScheduleMode] = useState(true);
 
   return (
-    <div className="min-h-screen bg-[#0b0f14] text-slate-100 p-4 sm:p-6 lg:p-8 font-sans relative">
+    <div className="min-h-screen bg-surface text-foreground p-4 sm:p-6 lg:p-8 font-sans relative">
       {/* Top Title Bar */}
-      <div className="max-w-7xl mx-auto mb-6 flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-800 pb-4">
+      <div className="max-w-7xl mx-auto mb-6 flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-border pb-4">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-[#f38020]/20 border border-[#f38020]/40 flex items-center justify-center text-[#f38020]">
             <Lightbulb className="w-6 h-6 animate-pulse" />
           </div>
           <div>
-            <h1 className="text-2xl font-extrabold tracking-tight text-white flex items-center gap-2">
-              BeeCarbonat <span className="text-slate-400 font-normal">Lighting - City Pulse</span>
+            <h1 className="text-2xl font-extrabold tracking-tight text-foreground flex items-center gap-2">
+              BeeCarbonat <span className="text-muted-foreground font-normal">Lighting - City Pulse</span>
             </h1>
-            <p className="text-xs text-slate-400 font-mono">
+            <p className="text-xs text-muted-foreground font-mono">
               Pilotage dynamique de l'éclairage public et des réseaux urbains intelligents
             </p>
           </div>
@@ -37,22 +37,22 @@ export default function LightingCityPulse() {
       {/* Main 3-Column Layout */}
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6">
         {/* Left Navigation Tree */}
-        <div className="lg:col-span-3 p-4 rounded-2xl bg-slate-900/60 border border-slate-800 backdrop-blur-xl space-y-4">
-          <div className="text-xs font-mono uppercase tracking-widest text-[#00dbe7] border-b border-slate-800 pb-2">
+        <div className="lg:col-span-3 p-4 rounded-2xl bg-surface/60 border border-border backdrop-blur-xl space-y-4">
+          <div className="text-xs font-mono uppercase tracking-widest text-[#00dbe7] border-b border-border pb-2">
             City Grid Hierarchy
           </div>
 
           <div className="space-y-2 text-xs font-mono">
-            <div className="text-slate-300 font-semibold flex items-center gap-1.5">
+            <div className="text-muted font-semibold flex items-center gap-1.5">
               <ChevronRight className="w-4 h-4 text-[#f38020]" /> City Grid
             </div>
-            <div className="pl-4 space-y-1 text-slate-400">
+            <div className="pl-4 space-y-1 text-muted-foreground">
               <div className="flex items-center justify-between text-slate-200">
                 <span>Park Sector A</span>
                 <span className="w-2 h-2 rounded-full bg-emerald-400" />
               </div>
               <div className="pl-4 space-y-1">
-                <div className="text-slate-400">Streetlights</div>
+                <div className="text-muted-foreground">Streetlights</div>
                 <div className="pl-4 space-y-1">
                   {['Lamp 102', 'Lamp 103', 'Lamp 104', 'Lamp 105'].map((lamp) => (
                     <button
@@ -61,7 +61,7 @@ export default function LightingCityPulse() {
                       className={`w-full text-left px-2 py-1 rounded transition flex items-center justify-between ${
                         selectedLamp === lamp
                           ? 'bg-[#f38020]/20 text-[#f38020] font-bold border border-[#f38020]/40'
-                          : 'hover:bg-slate-800/80 text-slate-300'
+                          : 'hover:bg-surface-alt/80 text-muted'
                       }`}
                     >
                       <span>{lamp}</span>
@@ -76,13 +76,13 @@ export default function LightingCityPulse() {
 
         {/* Central 3D Interactive Park View */}
         <div className="lg:col-span-6 space-y-4">
-          <div className="relative h-[420px] rounded-2xl bg-slate-950 border border-slate-800 overflow-hidden flex items-center justify-center">
+          <div className="relative h-[420px] rounded-2xl bg-background border border-border overflow-hidden flex items-center justify-center">
             {/* Background Simulated Night Park Visual */}
             <div className="absolute inset-0 bg-gradient-to-b from-[#060a0f] via-[#0b131f] to-[#04080d]" />
 
             {/* Glowing Lamp Poles Graphic Overlay */}
             <div className="relative w-full h-full p-8 flex flex-col justify-between items-center pointer-events-none">
-              <div className="w-full flex justify-between text-xs font-mono text-slate-400">
+              <div className="w-full flex justify-between text-xs font-mono text-muted-foreground">
                 <span>CHARCOAL TREE • PARK SECTOR A</span>
                 <span className="text-[#00dbe7]">3D VIEW ACTIVE</span>
               </div>
@@ -129,8 +129,8 @@ export default function LightingCityPulse() {
               </div>
 
               {/* On-Screen Floating Glassmorphic Controller Box */}
-              <div className="pointer-events-auto w-full max-w-sm p-4 rounded-xl bg-slate-900/80 border border-slate-700/80 backdrop-blur-xl shadow-2xl space-y-3">
-                <div className="flex items-center justify-between text-xs font-mono text-slate-300">
+              <div className="pointer-events-auto w-full max-w-sm p-4 rounded-xl bg-surface/80 border border-border/80 backdrop-blur-xl shadow-2xl space-y-3">
+                <div className="flex items-center justify-between text-xs font-mono text-muted">
                   <span>Intensity</span>
                   <span className="text-[#f38020] font-bold">{intensity}%</span>
                 </div>
@@ -140,10 +140,10 @@ export default function LightingCityPulse() {
                   max="100"
                   value={intensity}
                   onChange={(e) => setIntensity(parseInt(e.target.value))}
-                  className="w-full accent-[#f38020] bg-slate-800"
+                  className="w-full accent-[#f38020] bg-surface-alt"
                 />
 
-                <div className="flex items-center justify-between text-xs font-mono text-slate-300">
+                <div className="flex items-center justify-between text-xs font-mono text-muted">
                   <span>Color Temp</span>
                   <span className="text-[#00dbe7] font-bold">{colorTemp > 50 ? 'Cool White' : 'Warm Amber'}</span>
                 </div>
@@ -153,10 +153,10 @@ export default function LightingCityPulse() {
                   max="100"
                   value={colorTemp}
                   onChange={(e) => setColorTemp(parseInt(e.target.value))}
-                  className="w-full accent-[#00dbe7] bg-slate-800"
+                  className="w-full accent-[#00dbe7] bg-surface-alt"
                 />
 
-                <div className="flex items-center justify-between pt-2 border-t border-slate-800 text-xs font-mono">
+                <div className="flex items-center justify-between pt-2 border-t border-border text-xs font-mono">
                   <label className="flex items-center gap-2 cursor-pointer">
                     <input
                       type="checkbox"
@@ -182,8 +182,8 @@ export default function LightingCityPulse() {
           </div>
 
           {/* Bottom Timeline Bar */}
-          <div className="p-4 rounded-xl bg-slate-900/60 border border-slate-800 backdrop-blur-xl space-y-2">
-            <div className="flex justify-between text-[10px] font-mono text-slate-400">
+          <div className="p-4 rounded-xl bg-surface/60 border border-border backdrop-blur-xl space-y-2">
+            <div className="flex justify-between text-[10px] font-mono text-muted-foreground">
               <span>16:00</span>
               <span>17:00</span>
               <span>22:00</span>
@@ -193,13 +193,13 @@ export default function LightingCityPulse() {
               <span>12:00</span>
             </div>
             <div className="flex gap-2 h-8 text-xs font-mono font-bold">
-              <div className="flex-1 bg-[#f38020] rounded-lg flex items-center justify-center text-white">
+              <div className="flex-1 bg-[#f38020] rounded-lg flex items-center justify-center text-foreground">
                 Evening 80%
               </div>
-              <div className="flex-1 bg-slate-700/80 rounded-lg flex items-center justify-center text-slate-300">
+              <div className="flex-1 bg-slate-700/80 rounded-lg flex items-center justify-center text-muted">
                 Late Night 30%
               </div>
-              <div className="flex-1 bg-[#f38020] rounded-lg flex items-center justify-center text-white">
+              <div className="flex-1 bg-[#f38020] rounded-lg flex items-center justify-center text-foreground">
                 Evening 80%
               </div>
             </div>
@@ -208,45 +208,45 @@ export default function LightingCityPulse() {
 
         {/* Right Properties Inspector */}
         <div className="lg:col-span-3 space-y-4">
-          <div className="p-5 rounded-2xl bg-slate-900/60 border border-slate-800 backdrop-blur-xl space-y-4">
-            <div className="border-b border-slate-800 pb-2">
-              <span className="text-xs font-mono uppercase tracking-widest text-slate-400">Properties Inspector</span>
-              <div className="text-lg font-bold text-white mt-1">Lamp ID: #SL-A-104</div>
+          <div className="p-5 rounded-2xl bg-surface/60 border border-border backdrop-blur-xl space-y-4">
+            <div className="border-b border-border pb-2">
+              <span className="text-xs font-mono uppercase tracking-widest text-muted-foreground">Properties Inspector</span>
+              <div className="text-lg font-bold text-foreground mt-1">Lamp ID: #SL-A-104</div>
             </div>
 
-            <div className="space-y-3 text-xs font-mono text-slate-300">
+            <div className="space-y-3 text-xs font-mono text-muted">
               <div className="flex justify-between">
-                <span className="text-slate-400">Hauteur:</span>
-                <span className="text-white">30 ft</span>
+                <span className="text-muted-foreground">Hauteur:</span>
+                <span className="text-foreground">30 ft</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-slate-400">Type de mât:</span>
-                <span className="text-white">Pole Space</span>
+                <span className="text-muted-foreground">Type de mât:</span>
+                <span className="text-foreground">Pole Space</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-slate-400">Puissance nominale:</span>
+                <span className="text-muted-foreground">Puissance nominale:</span>
                 <span className="text-[#00dbe7]">120W</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-slate-400">Intensité actuelle:</span>
+                <span className="text-muted-foreground">Intensité actuelle:</span>
                 <span className="text-[#f38020]">{intensity}%</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-slate-400">Installation:</span>
-                <span className="text-white">09/25/2024</span>
+                <span className="text-muted-foreground">Installation:</span>
+                <span className="text-foreground">09/25/2024</span>
               </div>
             </div>
 
-            <div className="border-t border-slate-800 pt-3">
-              <div className="text-[10px] font-mono text-slate-400 mb-1">GUID METADATA</div>
-              <div className="p-2 bg-slate-950 rounded border border-slate-800 text-[10px] font-mono text-slate-300 break-all">
+            <div className="border-t border-border pt-3">
+              <div className="text-[10px] font-mono text-muted-foreground mb-1">GUID METADATA</div>
+              <div className="p-2 bg-background rounded border border-border text-[10px] font-mono text-muted break-all">
                 #GM-4477-4bsa-e2735a
               </div>
             </div>
 
             <button
               onClick={() => toast.success("Ordre de travail pour le lampadaire #SL-A-104 créé")}
-              className="w-full py-2.5 rounded-xl bg-[#f38020] hover:bg-orange-600 text-xs font-bold text-white transition tracking-wider uppercase font-mono shadow-lg shadow-orange-500/20"
+              className="w-full py-2.5 rounded-xl bg-[#f38020] hover:bg-orange-600 text-xs font-bold text-foreground transition tracking-wider uppercase font-mono shadow-lg shadow-orange-500/20"
             >
               Create Work Order
             </button>
