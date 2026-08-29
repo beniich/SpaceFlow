@@ -108,7 +108,13 @@ app.use('/api/crm/auth', require('../apps/backend/src/routes/crm.auth.routes'));
 app.use('/api/crm/contacts', require('../apps/backend/src/routes/crm.contact.routes'));
 app.use('/api/crm/deals', require('../apps/backend/src/routes/crm.deal.routes'));
 const billingRoutes = require('../apps/backend/src/routes/billing.routes');
+app.use('/api/billing', billingRoutes);
 app.use('/api/crm/billing', billingRoutes);
+
+// ── Routes PayPal Subscriptions & Webhook ─────────────────────
+const { router: paypalRoutes, webhookHandler: paypalWebhookHandler } = require('../apps/backend/src/routes/paypal.routes');
+app.use('/api/paypal', paypalRoutes);
+app.post('/pay', express.raw({ type: 'application/json' }), paypalWebhookHandler);
 
 // ── Gestion d'erreurs globale ──────────────────────────────────
 if (process.env.SENTRY_DSN) {
