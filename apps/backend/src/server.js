@@ -55,6 +55,7 @@ const crmDealRoutes = require('./routes/crm.deal.routes');
 const uploadRoutes = require('./routes/upload.routes');
 const workflowRoutes = require('./routes/workflow.routes');
 const marketplaceRoutes = require('./routes/marketplace.routes');
+const { router: paypalRoutes, webhookHandler: paypalWebhookHandler } = require('./routes/paypal.routes');
 const { startIoTSimulation } = require('./services/iot.service');
 
 const allowedOrigins = process.env.NODE_ENV === 'production' 
@@ -92,6 +93,7 @@ app.use(helmet({
 app.use(compression());
 app.use(express.json({
   verify: (req, res, buf) => {
+    // Préserver le raw body pour les webhooks Stripe et PayPal
     if (req.originalUrl && req.originalUrl.includes('/webhook')) {
       req.rawBody = buf;
     }
@@ -178,6 +180,13 @@ global.broadcastSSE = eventsRoutes.broadcast;
 const billingRoutes = require('./routes/billing.routes');
 app.use('/api/billing', billingRoutes);
 app.use('/api/crm/billing', billingRoutes);
+
+// PayPal Subscriptions (Abonnements récurrents + Webhooks)
+app.use('/api/paypal', paypalRoutes);
+
+// Route PayPal Webhook de production : https://beecarbonat.ricecloud.net/pay
+// Enregistrée dans le Dashboard PayPal — Webhook ID: 8LR39165RU9417152
+app.post('/pay', express.raw({ type: 'application/json' }), paypalWebhookHandler);
 
 // Sentry error handler
 if (process.env.SENTRY_DSN) {

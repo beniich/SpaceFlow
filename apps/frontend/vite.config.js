@@ -152,6 +152,8 @@ export default defineConfig({
     host: '0.0.0.0',
     proxy: {
       '/api': 'http://localhost:8081',
+      // Route webhook PayPal de production (https://beecarbonat.ricecloud.net/pay)
+      '/pay': 'http://localhost:8081',
       '/socket.io': {
         target: 'http://localhost:8081',
         ws: true

@@ -8,6 +8,7 @@ generator client {
 datasource db {
   provider   = "postgresql"
   url        = env("DATABASE_URL")
+  directUrl  = env("DATABASE_URL_UNPOOLED")
   extensions = [postgis]
 }
 
@@ -39,6 +40,11 @@ model Tenant {
   maxAssets            Int                 @default(10)
   maxTicketsPerMonth   Int                 @default(50)
   features             Json?
+
+  // PayPal Subscriptions (alternative à Stripe)
+  paypalSubscriptionId String?             @unique
+  paypalPlanKey        String?             // 'PRO' | 'ENTERPRISE'
+
 
   users       User[]
   assets      Asset[]
@@ -417,6 +423,13 @@ model WorkOrder {
   laborCost Float?
   partsCost Float?
   totalCost Float?
+
+  // Nouveaux champs SRE / GMAO Avancée
+  procedureSteps  Json?
+  partsUsed       Json?
+  auditLog        Json?
+  rootCause       String?
+  resolutionNotes String?
 
   tickets Ticket[]
 

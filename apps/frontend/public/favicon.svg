@@ -1,10 +1,33 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-  <rect width="32" height="32" rx="6" fill="#0f172a"/>
-  <g stroke="#06b6d4" stroke-width="2" stroke-linecap="round" fill="none">
-    <path d="M14,14 L9,11 L4,4"/>
-    <path d="M14,16 L8,16 L2,18"/>
-    <path d="M18,14 L23,11 L28,4"/>
-    <path d="M18,16 L24,16 L30,18"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <defs>
+    <linearGradient id="beeGold" x1="0" y1="0" x2="100" y2="100" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stopColor="#FBBF24" />
+      <stop offset="50%" stopColor="#F59E0B" />
+      <stop offset="100%" stopColor="#D97706" />
+    </linearGradient>
+  </defs>
+  
+  <rect width="100" height="100" rx="20" fill="#0D0E12" />
+  
+  <g stroke="url(#beeGold)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none">
+    <!-- Tête -->
+    <circle cx="50" cy="30" r="8" fill="url(#beeGold)" />
+    <!-- Antennes -->
+    <path d="M46 24 L40 16 M54 24 L60 16" />
+    
+    <!-- Corps (Abdomen rayé) -->
+    <path d="M42 42 L58 42" />
+    <path d="M40 52 L60 52" />
+    <path d="M42 62 L58 62" />
+    <path d="M40 36 Q50 90 50 85 Q50 90 60 36 Z" fill="url(#beeGold)" fill-opacity="0.2" />
+    <path d="M50 85 L50 90" stroke-width="3" /> <!-- Dard -->
+    
+    <!-- Ailes Gauche -->
+    <path d="M40 40 Q20 30 25 50 Q30 70 40 50 Z" />
+    <path d="M40 40 Q25 20 15 35 Q10 50 40 45 Z" />
+    
+    <!-- Ailes Droite -->
+    <path d="M60 40 Q80 30 75 50 Q70 70 60 50 Z" />
+    <path d="M60 40 Q75 20 85 35 Q90 50 60 45 Z" />
   </g>
-  <polygon points="16,9 19,15 16,21 13,15" fill="#06b6d4"/>
 </svg>

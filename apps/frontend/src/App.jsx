@@ -54,6 +54,7 @@ const ImpactReport = lazy(() => import('./pages/ImpactReport'));
 const PartnerPortal = lazy(() => import('./pages/PartnerPortal'));
 const Careers = lazy(() => import('./pages/Careers'));
 const WasteManagement = lazy(() => import('./pages/WasteManagement'));
+const PayPalSubscribe = lazy(() => import('./pages/PayPalSubscribe'));
 
 import ErrorBoundary from './components/ErrorBoundary';
 
@@ -98,6 +99,7 @@ export default function App() {
           <Route path="careers" element={<Careers />} />
           <Route path="waste" element={<WasteManagement />} />
           <Route path="pricing" element={<Pricing />} />
+          <Route path="subscribe" element={<PayPalSubscribe />} />
         </Route>
 
         <Route element={<PrivateRoute><Layout /></PrivateRoute>}>

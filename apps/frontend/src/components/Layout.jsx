@@ -430,11 +430,29 @@ export default function Layout() {
 
         {/* Dynamic Main Body Content */}
         <main className={clsx(
-          "relative pt-[64px] flex-1 min-h-screen transition-colors duration-200",
+          "relative pt-[64px] flex-1 transition-colors duration-200",
           isDarkMode ? "bg-black text-white" : "bg-white text-black"
         )}>
           <Outlet />
         </main>
+
+        {/* Global Footer */}
+        <footer className={clsx(
+          "border-t px-6 py-4 flex items-center justify-between text-[10px] font-mono uppercase tracking-widest transition-colors",
+          isDarkMode ? "bg-black border-zinc-800 text-zinc-500" : "bg-white border-zinc-200 text-zinc-500"
+        )}>
+          <div className="flex items-center gap-3">
+            <BeeCarbonatLogo size={20} showText={false} />
+            <span className="font-semibold">BeeCarbonat x Spider CAFM © {new Date().getFullYear()}</span>
+          </div>
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-1.5">
+              <span className={clsx("w-1.5 h-1.5 rounded-full animate-pulse", isOnline ? "bg-emerald-500 shadow-[0_0_5px_#10B981]" : "bg-rose-500")}></span>
+              <span>{isOnline ? "Système En Ligne" : "Hors Ligne"}</span>
+            </div>
+            <span>v2.4.0 Production</span>
+          </div>
+        </footer>
       </div>
 
       {/* Offline Conflict Resolution Modal */}

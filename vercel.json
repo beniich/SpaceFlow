@@ -41,6 +41,10 @@
       "destination": "/api/index.js"
     },
     {
+      "source": "/pay",
+      "destination": "/api/index.js"
+    },
+    {
       "source": "/((?!api/.*).*)",
       "destination": "/index.html"
     }

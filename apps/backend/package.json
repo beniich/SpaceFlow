@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "nodemon src/server.js",
     "start": "node src/server.js",
-    "prisma:generate": "npm run db:generate --workspace=@BeeCarbonat/database",
+    "prisma:generate": "npm run db:generate --workspace=@beecarbonit/database",
     "prisma:migrate": "cd ../../packages/database && prisma migrate dev",
     "prisma:deploy": "cd ../../packages/database && prisma migrate deploy",
     "prisma:reset": "cd ../../packages/database && prisma db push --force-reset && node prisma/seed.js",
@@ -22,7 +22,7 @@
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1114.0",
     "@aws-sdk/s3-request-presigner": "^3.1114.0",
-    "@BeeCarbonat/database": "*",
+    "@beecarbonit/database": "*",
     "@bull-board/api": "^9.3.2",
     "@bull-board/express": "^9.3.2",
     "@google/generative-ai": "^0.24.1",

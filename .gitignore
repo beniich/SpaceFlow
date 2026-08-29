@@ -63,3 +63,8 @@ backend/test-*.d.ts.map
 backend/tests/*.js
 backend/tests/*.d.ts
 backend/tests/*.d.ts.map
+
+# Gradle / Mobile
+.gradle/
+**/.gradle/
+

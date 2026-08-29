@@ -1,47 +1,3 @@
-/**
- * @swagger
- * /api/workorders:
- *   get:
- *     tags: [Work Orders]
- *     summary: Liste des ordres de travail
- *     parameters:
- *       - in: query
- *         name: status
- *         schema:
- *           type: string
- *           enum: [PENDING, IN_PROGRESS, COMPLETED, CANCELLED]
- *       - in: query
- *         name: priority
- *         schema:
- *           type: string
- *           enum: [LOW, MEDIUM, HIGH, CRITICAL]
- *     responses:
- *       200:
- *         description: Liste des WO
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/WorkOrder'
- *
- *   post:
- *     tags: [Work Orders]
- *     summary: Créer un ordre de travail
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/WorkOrderInput'
- *     responses:
- *       201:
- *         description: WO créé
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/WorkOrder'
- */
 const { prisma } = require('../config/database');
 
 exports.getAll = async (req, res) => {
@@ -67,11 +23,40 @@ exports.getAll = async (req, res) => {
   }
 };
 
+exports.getById = async (req, res) => {
+  try {
+    const workOrder = await prisma.workOrder.findUnique({
+      where: { id: req.params.id },
+      include: {
+        asset: true,
+        assignee: true,
+        createdBy: true,
+        tickets: true
+      }
+    });
+    if (!workOrder) return res.status(404).json({ error: 'Ordre de travail non trouvé' });
+    res.json(workOrder);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 exports.create = async (req, res) => {
   try {
-    const workOrder = await prisma.workOrder.create({
-      data: { ...req.body, createdById: req.user.id }
-    });
+    const initialAuditLog = [{
+      timestamp: new Date().toISOString(),
+      user: req.user?.fullName || 'Système',
+      action: 'CRÉATION',
+      details: 'Création de l\'ordre de travail'
+    }];
+    
+    const data = { 
+      ...req.body, 
+      createdById: req.user.id,
+      auditLog: initialAuditLog
+    };
+    
+    const workOrder = await prisma.workOrder.create({ data });
     res.status(201).json(workOrder);
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -80,13 +65,64 @@ exports.create = async (req, res) => {
 
 exports.update = async (req, res) => {
   try {
+    const existingWO = await prisma.workOrder.findUnique({ where: { id: req.params.id } });
+    if (!existingWO) return res.status(404).json({ error: 'WO non trouvé' });
+
+    let auditLog = existingWO.auditLog ? (typeof existingWO.auditLog === 'string' ? JSON.parse(existingWO.auditLog) : existingWO.auditLog) : [];
+    auditLog.push({
+      timestamp: new Date().toISOString(),
+      user: req.user?.fullName || 'Système',
+      action: 'MISE_A_JOUR',
+      details: 'Mise à jour des informations générales'
+    });
+
+    const data = { ...req.body, auditLog };
+
     const workOrder = await prisma.workOrder.update({
       where: { id: req.params.id },
-      data: req.body
+      data
     });
     
-    // Si complété, créer un log de maintenance
-    if (req.body.status === 'COMPLETED' && workOrder.assetId) {
+    res.json(workOrder);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+exports.updateStatus = async (req, res) => {
+  try {
+    const { status, rootCause, resolutionNotes, actualDuration, completedBy } = req.body;
+    
+    const existingWO = await prisma.workOrder.findUnique({ where: { id: req.params.id } });
+    if (!existingWO) return res.status(404).json({ error: 'WO non trouvé' });
+
+    let auditLog = existingWO.auditLog ? (typeof existingWO.auditLog === 'string' ? JSON.parse(existingWO.auditLog) : existingWO.auditLog) : [];
+    auditLog.push({
+      timestamp: new Date().toISOString(),
+      user: req.user?.fullName || 'Système',
+      action: 'CHANGEMENT_STATUT',
+      details: `Statut passé de ${existingWO.status} à ${status}`
+    });
+
+    const data = { 
+      status, 
+      auditLog,
+      ...(rootCause && { rootCause }),
+      ...(resolutionNotes && { resolutionNotes }),
+      ...(actualDuration && { actualDuration })
+    };
+
+    if (status === 'COMPLETED') {
+      data.completedAt = new Date();
+      data.completedBy = completedBy || req.user?.id;
+    }
+
+    const workOrder = await prisma.workOrder.update({
+      where: { id: req.params.id },
+      data
+    });
+
+    if (status === 'COMPLETED' && workOrder.assetId) {
       await prisma.maintenanceLog.create({
         data: {
           tenantId: workOrder.tenantId,
@@ -97,12 +133,11 @@ exports.update = async (req, res) => {
           completedAt: new Date(),
           technicianId: workOrder.assigneeId || req.user?.id || 'system',
           technicianName: req.user?.fullName || 'Système',
-          notes: workOrder.title,
-          laborHours: workOrder.actualDuration ? workOrder.actualDuration / 60 : null,
+          notes: resolutionNotes || workOrder.title,
+          laborHours: actualDuration ? actualDuration / 60 : null,
           totalCost: workOrder.totalCost || null,
         }
       });
-      // Mettre à jour l'actif
       await prisma.asset.update({
         where: { id: workOrder.assetId },
         data: {
@@ -112,7 +147,7 @@ exports.update = async (req, res) => {
         }
       });
     }
-    
+
     res.json(workOrder);
   } catch (error) {
     res.status(400).json({ error: error.message });

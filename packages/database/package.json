@@ -1,5 +1,5 @@
 {
-  "name": "@BeeCarbonat/database",
+  "name": "@beecarbonit/database",
   "version": "1.0.0",
   "private": true,
   "main": "./dist/index.js",
