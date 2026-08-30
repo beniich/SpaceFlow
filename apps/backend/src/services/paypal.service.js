@@ -165,7 +165,16 @@ async function verifyAndSyncPayPalSubscription(subscriptionId, tenantId) {
 
 // ─── 3. Gestion des événements webhook ────────────────────────────────────────
 async function handlePayPalWebhookEvent(event) {
-  const { event_type, resource } = event;
+  const { event_type, resource, id } = event;
+
+  // ── Idempotence: skip si déjà traité ──
+  const existing = await prisma.processedWebhookEvent.findUnique({
+    where: { id }
+  });
+  if (existing) {
+    logger.info({ eventId: id }, '⏭️ Webhook PayPal déjà traité — skip');
+    return;
+  }
 
   switch (event_type) {
     case 'BILLING.SUBSCRIPTION.ACTIVATED': {
@@ -213,6 +222,11 @@ async function handlePayPalWebhookEvent(event) {
     default:
       logger.debug({ event_type }, 'PayPal webhook event non traité');
   }
+
+  // ── Enregistrer l'événement comme traité ──
+  await prisma.processedWebhookEvent.create({
+    data: { id, source: 'paypal', eventType: event_type }
+  });
 }
 
 module.exports = {

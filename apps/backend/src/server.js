@@ -141,6 +141,8 @@ app.get('/api/health', async (req, res) => {
 // Inject Socket.io into requests
 app.set('io', io);
 
+const { requireActiveSubscription } = require('./middleware/billing.middleware');
+
 // Routes CAFM
 app.use('/api/auth', authRoutes);
 app.use('/api/auth/mfa', require('./routes/mfa.routes'));
@@ -152,15 +154,15 @@ app.use('/api/buildings', buildingRoutes);
 app.use('/api/leases', leaseRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/maintenance', maintenanceRoutes);
-app.use('/api/analytics', analyticsRoutes);
+app.use('/api/analytics', requireActiveSubscription, analyticsRoutes);
 app.use('/api/cmms', cmmsRoutes);
-app.use('/api/digitaltwin', digitalTwinRoutes);
+app.use('/api/digitaltwin', requireActiveSubscription, digitalTwinRoutes);
 app.use('/api/notifications', notificationRoutes);
 app.use('/api/tenants', tenantRoutes);
 app.use('/api/export', exportRoutes);
 app.use('/api/erp', erpRoutes);
-app.use('/api/bim', bimRoutes);
-app.use('/api/ai', aiRoutes);
+app.use('/api/bim', requireActiveSubscription, bimRoutes);
+app.use('/api/ai', requireActiveSubscription, aiRoutes);
 app.use('/api/api-keys', apiKeysRoutes);
 app.use('/api/uploads', uploadRoutes);
 app.use('/api/workflows', workflowRoutes);

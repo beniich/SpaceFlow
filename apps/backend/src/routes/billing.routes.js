@@ -233,6 +233,14 @@ router.post('/webhook', express.raw({ type: 'application/json' }), async (req, r
   logger.info({ eventType: event.type, eventId: event.id }, 'Événement Stripe Webhook reçu');
 
   try {
+    const existingEvent = await prisma.processedWebhookEvent.findUnique({
+      where: { id: event.id }
+    });
+    if (existingEvent) {
+      logger.info({ eventId: event.id }, '⏭️ Webhook Stripe déjà traité');
+      return res.json({ received: true, skipped: true });
+    }
+
     switch (event.type) {
       case 'checkout.session.completed': {
         const session = event.data.object;
@@ -323,6 +331,10 @@ router.post('/webhook', express.raw({ type: 'application/json' }), async (req, r
       default:
         logger.debug({ eventType: event.type }, 'Événement Stripe non traité');
     }
+
+    await prisma.processedWebhookEvent.create({
+      data: { id: event.id, source: 'stripe', eventType: event.type }
+    });
 
     res.json({ received: true });
   } catch (err) {

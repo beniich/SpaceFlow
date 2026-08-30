@@ -60,6 +60,15 @@ export default function PayPalSubscribe() {
   const paypalContainerRef = useRef(null);
   const paypalScriptLoaded = useRef(false);
 
+  // ── Preselection from URL query param ────────────────────────────────────
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const planParam = params.get('plan')?.toUpperCase();
+    if (planParam && PLANS_DATA[planParam]) {
+      setSelectedPlan(planParam);
+    }
+  }, []);
+
   // ── Firebase Auth state ──────────────────────────────────────────────────
   useEffect(() => {
     const unsub = onFirebaseAuthStateChanged((currentUser) => setUser(currentUser));

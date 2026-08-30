@@ -134,7 +134,57 @@ const checkQuota = (quotaType) => {
   };
 };
 
+/**
+ * Middleware pour bloquer l'accès si l'abonnement du tenant n'est pas actif.
+ * Gère le grace period : PAST_DUE → warning header, CANCELED → 403.
+ */
+const requireActiveSubscription = async (req, res, next) => {
+  try {
+    const tenantId = req.user?.tenantId || req.headers['x-tenant-id'];
+    if (!tenantId) {
+      return res.status(400).json({ error: 'Tenant context manquant' });
+    }
+
+    const tenant = await prisma.tenant.findUnique({
+      where: { id: tenantId },
+      select: { subscriptionStatus: true, plan: true }
+    });
+
+    if (!tenant) {
+      return res.status(404).json({ error: 'Tenant introuvable' });
+    }
+
+    // FREE plan: toujours autorisé (features limitées par requireFeature/checkQuota)
+    if (tenant.plan === 'FREE') {
+      return next();
+    }
+
+    switch (tenant.subscriptionStatus) {
+      case 'ACTIVE':
+      case 'TRIALING':
+        return next();
+
+      case 'PAST_DUE':
+        // Grace period: accès maintenu + warning header
+        res.set('X-Subscription-Warning', 'past_due');
+        return next();
+
+      default:
+        return res.status(403).json({
+          error: 'SUBSCRIPTION_INACTIVE',
+          status: tenant.subscriptionStatus,
+          message: 'Votre abonnement n\'est plus actif. Veuillez renouveler.',
+          upgradeUrl: '/settings/billing'
+        });
+    }
+  } catch (err) {
+    logger.error({ err: err.message }, 'Erreur vérification statut abonnement');
+    next(err);
+  }
+};
+
 module.exports = {
   requireFeature,
-  checkQuota
+  checkQuota,
+  requireActiveSubscription
 };

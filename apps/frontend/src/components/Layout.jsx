@@ -11,6 +11,7 @@ import { useLanguage } from '../context/LanguageContext';
 import { useTheme } from '../hooks/useTheme';
 import { ConflictResolutionModal } from './modals';
 import BeeCarbonatLogo from './BeeCarbonatLogo';
+import SubscriptionBanner from './SubscriptionBanner';
 import toast from 'react-hot-toast';
 import clsx from 'clsx';
 
@@ -433,6 +434,7 @@ export default function Layout() {
           "relative pt-[64px] flex-1 transition-colors duration-200",
           isDarkMode ? "bg-black text-white" : "bg-white text-black"
         )}>
+          <SubscriptionBanner />
           <Outlet />
         </main>
 

@@ -11,6 +11,9 @@ export const useAuthStore = create(
       loading: false,
       needsVerification: false,
       pendingEmail: null,
+      subscriptionWarning: false,
+
+      setSubscriptionWarning: (status) => set({ subscriptionWarning: status }),
       
       loginWithGoogleFirebase: async () => {
         set({ loading: true });

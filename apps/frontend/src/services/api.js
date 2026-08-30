@@ -15,7 +15,14 @@ api.interceptors.request.use((config) => {
 });
 
 api.interceptors.response.use(
-  (res) => res,
+  (res) => {
+    if (res.headers && res.headers['x-subscription-warning'] === 'past_due') {
+      useAuthStore.getState().setSubscriptionWarning(true);
+    } else {
+      useAuthStore.getState().setSubscriptionWarning(false);
+    }
+    return res;
+  },
   async (err) => {
     if (err.response?.status === 401) {
       useAuthStore.getState().logout();
