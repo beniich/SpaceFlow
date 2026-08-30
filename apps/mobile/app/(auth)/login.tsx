@@ -70,7 +70,7 @@ export default function LoginScreen() {
     >
       <View style={styles.content}>
         <Text style={styles.logo}>🐝</Text>
-        <Text style={styles.title}>BeeCarbonIT</Text>
+        <Text style={styles.title}>BeeCarbonat</Text>
         <Text style={styles.subtitle}>Gestion de maintenance</Text>
 
         <View style={styles.form}>

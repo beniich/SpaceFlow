@@ -18,15 +18,18 @@ import {
 
 import firebaseConfigJson from './firebase-applet-config.json';
 
-// ─── Firebase Config (project: gen-lang-client-0918369522) ───────────────────────────
+// ─── Firebase Config (project: beeconect-b4588) ───────────────────────────
 const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY || firebaseConfigJson.apiKey || 'AIzaSyBTjKiXdnoI-dwhFgSlgeGQSLmR_pErimI',
-  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || firebaseConfigJson.authDomain || 'gen-lang-client-0918369522.firebaseapp.com',
-  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || firebaseConfigJson.projectId || 'gen-lang-client-0918369522',
-  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || firebaseConfigJson.storageBucket || 'gen-lang-client-0918369522.firebasestorage.app',
-  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || firebaseConfigJson.messagingSenderId || '5178671633',
-  appId: import.meta.env.VITE_FIREBASE_APP_ID || firebaseConfigJson.appId || '1:5178671633:web:56c3bd4637bb742d8367b0',
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY || firebaseConfigJson.apiKey || 'AIzaSyAKAM1PixOT1v1dIYVq_b9w_5OMFbzSuqg',
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || firebaseConfigJson.authDomain || 'beeconect-b4588.firebaseapp.com',
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || firebaseConfigJson.projectId || 'beeconect-b4588',
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || firebaseConfigJson.storageBucket || 'beeconect-b4588.firebasestorage.app',
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || firebaseConfigJson.messagingSenderId || '57940408713',
+  appId: import.meta.env.VITE_FIREBASE_APP_ID || firebaseConfigJson.appId || '1:57940408713:web:98a6250e85402de9a08958',
+  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID || firebaseConfigJson.measurementId || 'G-8BV1R1F9FB',
 };
+
+import { getAnalytics, isSupported } from 'firebase/analytics';
 
 // Singleton: éviter double-initialisation en HMR
 export const firebaseApp = getApps().length === 0
@@ -34,7 +37,17 @@ export const firebaseApp = getApps().length === 0
   : getApps()[0];
 
 export const firebaseAuth = getAuth(firebaseApp);
-export const firestore = getFirestore(firebaseApp, firebaseConfigJson.firestoreDatabaseId);
+export const firestore = getFirestore(firebaseApp, firebaseConfigJson.firestoreDatabaseId || '(default)');
+
+// Analytics (navigateur uniquement)
+export let analytics = null;
+if (typeof window !== 'undefined') {
+  isSupported().then((supported) => {
+    if (supported) {
+      analytics = getAnalytics(firebaseApp);
+    }
+  }).catch(() => {});
+}
 
 // Test connection on boot - handled silently
 async function testConnection() {

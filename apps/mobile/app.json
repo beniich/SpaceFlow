@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "BeeCarbonIT",
-    "slug": "beecarbonit",
+    "name": "BeeCarbonat",
+    "slug": "beecarbonat",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -14,11 +14,11 @@
     "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "io.beecarbonit.mobile",
+      "bundleIdentifier": "io.beecarbonat.mobile",
       "infoPlist": {
-        "NSCameraUsageDescription": "BeeCarbonIT utilise la caméra pour scanner les QR codes des équipements et capturer des photos.",
-        "NSLocationWhenInUseUsageDescription": "BeeCarbonIT utilise votre position pour géolocaliser les interventions.",
-        "NSFaceIDUsageDescription": "BeeCarbonIT utilise Face ID pour sécuriser votre compte.",
+        "NSCameraUsageDescription": "BeeCarbonat utilise la caméra pour scanner les QR codes des équipements et capturer des photos.",
+        "NSLocationWhenInUseUsageDescription": "BeeCarbonat utilise votre position pour géolocaliser les interventions.",
+        "NSFaceIDUsageDescription": "BeeCarbonat utilise Face ID pour sécuriser votre compte.",
         "ITSAppUsesNonExemptEncryption": false
       }
     },
@@ -27,7 +27,7 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#000000"
       },
-      "package": "io.beecarbonit.mobile",
+      "package": "io.beecarbonat.mobile",
       "permissions": [
         "CAMERA",
         "ACCESS_FINE_LOCATION",
@@ -42,13 +42,13 @@
       [
         "expo-camera",
         {
-          "cameraPermission": "BeeCarbonIT a besoin de la caméra pour scanner les QR codes."
+          "cameraPermission": "BeeCarbonat a besoin de la caméra pour scanner les QR codes."
         }
       ],
       [
         "expo-location",
         {
-          "locationAlwaysAndWhenInUsePermission": "BeeCarbonIT utilise votre position pour géolocaliser les interventions."
+          "locationAlwaysAndWhenInUsePermission": "BeeCarbonat utilise votre position pour géolocaliser les interventions."
         }
       ],
       "expo-secure-store",
@@ -64,7 +64,7 @@
       "policy": "appVersion"
     },
     "extra": {
-      "apiUrl": "https://api.beecarbonit.com",
+      "apiUrl": "https://beecarbonat.ricecloud.net/api",
       "eas": {
         "projectId": "your-project-id"
       }

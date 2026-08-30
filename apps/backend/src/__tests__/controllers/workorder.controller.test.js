@@ -100,16 +100,14 @@ describe('WorkOrder Controller', () => {
   });
 
   describe('update()', () => {
-    it('met \u00e0 jour le statut COMPLETED d\u2019un WO + cr\u00e9e maintenance log', async () => {
-      const updatedWO = mockWO({ status: 'COMPLETED', completedAt: new Date(), assetId: 'asset-1' });
+    it('met à jour un WO existant', async () => {
+      const existingWO = mockWO({ id: 'wo-uuid-1', title: 'Ancien titre' });
+      const updatedWO = mockWO({ id: 'wo-uuid-1', title: 'Nouveau titre' });
+
+      prisma.workOrder.findUnique.mockResolvedValue(existingWO);
       prisma.workOrder.update.mockResolvedValue(updatedWO);
 
-      // Mock maintenanceLog and asset.update
-      prisma.asset.update = jest.fn().mockResolvedValue({});
-      const mockPrisma = require('../../config/database');
-      mockPrisma.maintenanceLog = { create: jest.fn().mockResolvedValue({}) };
-
-      const req = mockReq({ status: 'COMPLETED', actualCost: 480 }, { id: 'wo-uuid-1' });
+      const req = mockReq({ title: 'Nouveau titre' }, { id: 'wo-uuid-1' });
       const res = mockRes();
 
       await workorderController.update(req, res);
@@ -119,17 +117,53 @@ describe('WorkOrder Controller', () => {
           where: { id: 'wo-uuid-1' },
         })
       );
+      expect(res.json).toHaveBeenCalledWith(updatedWO);
     });
 
-    it('retourne 400 si update invalide', async () => {
-      prisma.workOrder.update.mockRejectedValue(new Error('not found'));
+    it('retourne 404 si le WO n\'existe pas', async () => {
+      prisma.workOrder.findUnique.mockResolvedValue(null);
 
-      const req = mockReq({ status: 'INVALID' }, { id: 'ghost' });
+      const req = mockReq({ title: 'Titre' }, { id: 'inconnu' });
+      const res = mockRes();
+
+      await workorderController.update(req, res);
+
+      expect(res.status).toHaveBeenCalledWith(404);
+    });
+
+    it('retourne 400 en cas d\'erreur de mise à jour', async () => {
+      const existingWO = mockWO({ id: 'wo-uuid-1' });
+      prisma.workOrder.findUnique.mockResolvedValue(existingWO);
+      prisma.workOrder.update.mockRejectedValue(new Error('Erreur DB'));
+
+      const req = mockReq({ title: 'Titre' }, { id: 'wo-uuid-1' });
       const res = mockRes();
 
       await workorderController.update(req, res);
 
       expect(res.status).toHaveBeenCalledWith(400);
+    });
+  });
+
+  describe('updateStatus()', () => {
+    it('met à jour le statut COMPLETED d’un WO + crée maintenance log', async () => {
+      const existingWO = mockWO({ id: 'wo-uuid-1', status: 'IN_PROGRESS', assetId: 'asset-1' });
+      const completedWO = mockWO({ id: 'wo-uuid-1', status: 'COMPLETED', completedAt: new Date(), assetId: 'asset-1' });
+
+      prisma.workOrder.findUnique.mockResolvedValue(existingWO);
+      prisma.workOrder.update.mockResolvedValue(completedWO);
+      prisma.maintenanceLog = { create: jest.fn().mockResolvedValue({}) };
+
+      const req = mockReq({ status: 'COMPLETED', actualDuration: 120, resolutionNotes: 'Terminé' }, { id: 'wo-uuid-1' });
+      const res = mockRes();
+
+      await workorderController.updateStatus(req, res);
+
+      expect(prisma.workOrder.update).toHaveBeenCalledWith(
+        expect.objectContaining({
+          where: { id: 'wo-uuid-1' },
+        })
+      );
     });
   });
 });

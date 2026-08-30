@@ -1,6 +1,6 @@
-# 🐝 BeeCarbonIT (SpaceFlow) — GMAO SaaS & Smart Facility Management v3.5
+# 🐝 BeeCarbonat — GMAO SaaS & Smart Facility Management v3.5
 
-> Plateforme de Gestion de Maintenance Assistée par Ordinateur (GMAO / CAFM) nouvelle génération, intégrant Digital Twin, IA conversationnelle, maintenance prédictive, facturation multi-tenant Stripe et une application mobile native terrain.
+> Plateforme de Gestion de Maintenance Assistée par Ordinateur (GMAO / CAFM) nouvelle génération, intégrant Digital Twin, IA conversationnelle, maintenance prédictive, facturation multi-tenant Stripe/PayPal et une application mobile native terrain.
 
 ---
 
@@ -10,7 +10,7 @@
 [📱 Mobile Native (iOS / Android)] ──┐
 [🌐 Web App (React 18 + Vite)] ─────┼──▶ [Nginx Reverse Proxy] ──▶ [Backend API (Express 4)] ──┬──▶ [PostgreSQL 16 (Neon)]
 [💻 SDK JS / Intégrations API] ─────┘                                                          ├──▶ [Redis 7 (Upstash / BullMQ)]
-                                                                                               ├──▶ [Stripe Billing Multi-Tenant]
+                                                                                               ├──▶ [Stripe / PayPal Billing Multi-Tenant]
                                                                                                └──▶ [Google Gemini 1.5 Pro / Flash]
 ```
 
@@ -19,14 +19,14 @@
 ## 📦 Structure du Monorepo
 
 ```
-SpaceFlow/
+beecarbonat/
 ├── apps/
 │   ├── frontend/         # Web App React 18 + Vite 5 (Tailwind, Multi-Theme, PWA)
-│   ├── backend/          # REST API Express + Prisma + WebSocket + Stripe + Gemini AI
+│   ├── backend/          # REST API Express + Prisma + WebSocket + Stripe/PayPal + Gemini AI
 │   └── mobile/           # App Mobile Expo React Native (Offline Queue, Biométrie, Scan QR)
 ├── packages/
 │   ├── database/         # Schéma Prisma partagé & Migrations PostgreSQL
-│   └── sdk-js/           # Client SDK JavaScript/TypeScript (@beecarbonit/sdk)
+│   └── sdk-js/           # Client SDK JavaScript/TypeScript (@beecarbonat/sdk)
 └── docs/                 # Documentation technique, Guides & ADRs
 ```
 
@@ -38,7 +38,7 @@ SpaceFlow/
 - **Thème Professionnel** : Bascule instantanée entre **Mode Clair** (`#ffffff`), **Mode Sobre** (`#000000`) et **Système**, sans FOUC et conforme WCAG AA (ratio 21:1).
 - **Digital Twin & BIM** : Visualisation IFC 3D et jumeau numérique des bâtiments.
 - **Smart Analytics** : Calculs automatiques OEE, MTTR, MTBF et métriques ESG/Carbone.
-- **Monétisation Stripe** : Plans SaaS (Free, Starter, Pro, Business, Enterprise), simulateur ROI et portail client.
+- **Monétisation Stripe & PayPal** : Plans SaaS (Free, Starter, Pro, Business, Enterprise), simulateur ROI et portail client.
 
 ### 2. 📱 Mobile Application (Expo / React Native)
 - **Mode Hors-Ligne (Offline-First)** : File d'attente locale MMKV avec synchronisation automatique en tâche de fond dès le retour du réseau.
@@ -63,7 +63,7 @@ SpaceFlow/
 ```bash
 # 1. Cloner le repository
 git clone https://github.com/beniich/SpaceFlow.git
-cd SpaceFlow
+cd beecarbonat
 
 # 2. Configurer les variables d'environnement
 cp .env.example .env
@@ -73,7 +73,7 @@ cp apps/backend/.env.example apps/backend/.env
 npm install
 
 # 4. Générer le client Prisma
-npm run db:generate --workspace=@BeeCarbonat/database
+npm run db:generate --workspace=@beecarbonat/database
 
 # 5. Démarrer en mode développement
 # Web Frontend : http://localhost:3000 (ou 5173)
@@ -92,7 +92,6 @@ npx expo start
 
 ## 📚 Documentation Technique
 
-* [ADR-0006 : Application Mobile Expo](docs/adr/0006-mobile-app.md)
 * [Documentation GMAO Industrielle](GMAO_DOCS.md)
 * [Architecture Système](ARCHITECTURE.md)
 * [Feuille de Route & Roadmap](docs/ROADMAP.md)
@@ -100,4 +99,5 @@ npx expo start
 ---
 
 ## 📄 Licence
-Propriétaire — BeeCarbonIT. Tous droits réservés.
+Propriétaire — BeeCarbonat. Tous droits réservés.
+

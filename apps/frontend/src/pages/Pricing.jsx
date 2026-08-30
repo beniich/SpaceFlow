@@ -104,7 +104,7 @@ export default function Pricing() {
     }
 
     if (planKey === 'ENTERPRISE') {
-      window.location.href = 'mailto:contact@beecarbonit.com?subject=Demande%20devis%20BeeCarbonIT%20Enterprise';
+      window.location.href = 'mailto:contact@beecarbonat.com?subject=Demande%20devis%20BeeCarbonat%20Enterprise';
       return;
     }
 

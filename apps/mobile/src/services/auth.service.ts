@@ -66,7 +66,7 @@ export const authService = {
 
   async authenticateWithBiometric(): Promise<boolean> {
     const result = await LocalAuthentication.authenticateAsync({
-      promptMessage: 'Déverrouiller BeeCarbonIT',
+      promptMessage: 'Déverrouiller BeeCarbonat',
     });
     return result.success;
   },

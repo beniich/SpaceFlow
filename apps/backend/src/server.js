@@ -14,8 +14,22 @@ const Sentry = require('@sentry/node');
 const app = express();
 app.set('trust proxy', 1);
 const server = http.createServer(app);
+const allowedOrigins = process.env.NODE_ENV === 'production' 
+  ? (process.env.CORS_ORIGIN ? process.env.CORS_ORIGIN.split(',') : []) 
+  : [process.env.CORS_ORIGIN || 'http://localhost:5173'];
+
 const io = new Server(server, {
-  cors: { origin: ['http://localhost:3000', 'http://localhost:3001', 'http://localhost:5173'], credentials: true }
+  cors: { 
+    origin: function (origin, callback) {
+      if (process.env.NODE_ENV === 'production') {
+        if (!origin || allowedOrigins.indexOf(origin) === -1) {
+          return callback(new Error('CORS Policy: Access Denied'), false);
+        }
+      }
+      return callback(null, true);
+    },
+    credentials: true 
+  }
 });
 
 if (process.env.SENTRY_DSN) {
@@ -58,9 +72,7 @@ const marketplaceRoutes = require('./routes/marketplace.routes');
 const { router: paypalRoutes, webhookHandler: paypalWebhookHandler } = require('./routes/paypal.routes');
 const { startIoTSimulation } = require('./services/iot.service');
 
-const allowedOrigins = process.env.NODE_ENV === 'production' 
-  ? (process.env.CORS_ORIGIN ? process.env.CORS_ORIGIN.split(',') : []) 
-  : [process.env.CORS_ORIGIN || 'http://localhost:5173'];
+
 
 app.use(cors({
   origin: function (origin, callback) {

@@ -22,7 +22,7 @@ const getStripe = () => {
   return stripeInstance;
 };
 
-// ─── PLANS DE SOUSCRIPTION GMAO BEECARBONIT ──────────────────────────────────
+// ─── PLANS DE SOUSCRIPTION GMAO BEECARBONAT ──────────────────────────────────
 const PLANS = {
   FREE: {
     key: 'FREE',

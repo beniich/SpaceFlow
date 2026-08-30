@@ -48,7 +48,7 @@ class AIAssistant {
     this.model = genai.getGenerativeModel({
       model: 'gemini-1.5-pro',
       tools: [{ functionDeclarations: tools }],
-      systemInstruction: `Tu es un assistant IA pour BeeCarbonIT, une plateforme de gestion de maintenance (GMAO / CAFM).
+      systemInstruction: `Tu es un assistant IA pour BeeCarbonat, une plateforme de gestion de maintenance (GMAO / CAFM).
 Tu aides les utilisateurs à comprendre leurs données de maintenance. Sois concis, précis, et utilise des emojis pour structurer tes réponses.
 Tu peux :
 - Analyser les tickets et Work Orders
@@ -67,7 +67,7 @@ Tu ne peux PAS :
     try {
       if (!process.env.GEMINI_API_KEY) {
         return {
-          response: "🤖 Mode Démo IA : L'assistant BeeCarbonIT est prêt. Veuillez configurer GEMINI_API_KEY pour activer les réponses en temps réel.",
+          response: "🤖 Mode Démo IA : L'assistant BeeCarbonat est prêt. Veuillez configurer GEMINI_API_KEY pour activer les réponses en temps réel.",
           functionCalls: [],
           history: [...history, { role: 'user', content: message }, { role: 'model', content: "Mode Démo" }],
         };

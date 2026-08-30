@@ -1,7 +1,7 @@
 const { Resend } = require('resend');
 
 const resend = new Resend(process.env.RESEND_API_KEY || 're_dummy_key');
-const FROM_EMAIL = 'CAFM <noreply@cafm.com>';
+const FROM_EMAIL = process.env.FROM_EMAIL || 'BeeCarbonat <noreply@beecarbonat.ricecloud.net>';
 
 class EmailService {
   /**
@@ -63,6 +63,31 @@ class EmailService {
         <h2>${alert.title}</h2>
         <p>${alert.message}</p>
         <p><strong>Sévérité:</strong> ${alert.severity}</p>
+      `
+    });
+  }
+  async sendPasswordReset(email, resetUrl) {
+    return this.send({
+      to: email,
+      subject: '🔒 Réinitialisation de votre mot de passe',
+      html: `
+        <h2>Demande de réinitialisation de mot de passe</h2>
+        <p>Vous avez demandé la réinitialisation de votre mot de passe BeeCarbonat. Cliquez sur le lien ci-dessous pour créer un nouveau mot de passe :</p>
+        <p><a href="${resetUrl}" style="padding:10px 20px;background:#00dbe7;color:#05070a;text-decoration:none;border-radius:5px;display:inline-block;">Réinitialiser mon mot de passe</a></p>
+        <p>Si vous n'êtes pas à l'origine de cette demande, vous pouvez ignorer cet email.</p>
+        <p>Ce lien expirera dans 1 heure.</p>
+      `
+    });
+  }
+
+  async sendVerificationEmail(email, verificationUrl) {
+    return this.send({
+      to: email,
+      subject: '✅ Vérifiez votre adresse email',
+      html: `
+        <h2>Bienvenue sur BeeCarbonat !</h2>
+        <p>Pour finaliser la création de votre compte, veuillez vérifier votre adresse email en cliquant sur le lien ci-dessous :</p>
+        <p><a href="${verificationUrl}" style="padding:10px 20px;background:#00dbe7;color:#05070a;text-decoration:none;border-radius:5px;display:inline-block;">Vérifier mon email</a></p>
       `
     });
   }

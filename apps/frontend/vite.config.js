@@ -138,14 +138,15 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks: {
-          'react-vendor': ['react', 'react-dom', 'react-router-dom'],
-          'three-vendor': ['three'],
-          'charts-vendor': ['recharts', 'chart.js'],
-          'ui-core': ['lucide-react', 'react-hot-toast', 'date-fns']
+          'vendor-react': ['react', 'react-dom', 'react-router-dom'],
+          'vendor-bim': ['three', 'web-ifc', 'web-ifc-three'],
+          'vendor-charts': ['recharts', 'chart.js'],
+          'vendor-state': ['@tanstack/react-query', 'zustand'],
+          'vendor-ui': ['lucide-react', 'react-hot-toast', 'date-fns', 'clsx']
         }
       }
     },
-    chunkSizeWarningLimit: 600
+    chunkSizeWarningLimit: 1000
   },
   server: {
     port: 3000,

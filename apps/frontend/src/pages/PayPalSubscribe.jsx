@@ -1,7 +1,7 @@
 /**
  * PayPalSubscribe.jsx
  * Page /subscribe — Abonnements PayPal Récurrents + Google Auth Firebase.
- * Logo BeeCarbonIt en header/footer, sélection plan Pro / Enterprise.
+ * Logo BeeCarbonat en header/footer, sélection plan Pro / Enterprise.
  */
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
@@ -281,7 +281,7 @@ export default function PayPalSubscribe() {
           <h1 className="text-3xl sm:text-5xl font-extrabold mb-4 tracking-tight">
             Abonnements{' '}
             <span className="bg-gradient-to-r from-amber-400 to-orange-400 bg-clip-text text-transparent">
-              BeeCarbonIt Pro
+              BeeCarbonat Pro
             </span>
           </h1>
           <p className="text-zinc-400 max-w-md mx-auto text-sm leading-relaxed">
@@ -461,7 +461,7 @@ export default function PayPalSubscribe() {
 
           <div className="flex items-center gap-2.5">
             <BeeIcon className="w-4 h-4 text-amber-500" />
-            <span className="text-zinc-300 font-semibold">BeeCarbonIt Platform</span>
+            <span className="text-zinc-300 font-semibold">BeeCarbonat Platform</span>
             <span className="text-zinc-600">·</span>
             <span>Paiements chiffrés SSL 256-bit via PayPal Vault</span>
           </div>
@@ -469,7 +469,7 @@ export default function PayPalSubscribe() {
           <div className="flex items-center gap-4">
             <a href="/pricing" className="hover:text-zinc-300 transition-colors">Tarifs Stripe</a>
             <span>·</span>
-            <span>© 2026 BeeCarbonIt</span>
+            <span>© 2026 BeeCarbonat</span>
           </div>
 
         </div>

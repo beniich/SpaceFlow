@@ -1,7 +1,7 @@
 {
-  "name": "@beecarbonit/sdk",
+  "name": "@beecarbonat/sdk",
   "version": "1.0.0",
-  "description": "JavaScript/TypeScript SDK for BeeCarbonIT GMAO REST API",
+  "description": "JavaScript/TypeScript SDK for BeeCarbonat GMAO REST API",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {

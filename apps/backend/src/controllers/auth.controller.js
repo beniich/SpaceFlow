@@ -1,5 +1,7 @@
 const bcrypt = require('bcryptjs');
 const { generateTokens } = require('../lib/jwt');
+const { prisma } = require('../config/database');
+const jwt = require('jsonwebtoken');
 
 const { z } = require('zod');
 const logger = require('../utils/logger');
@@ -102,11 +104,14 @@ exports.login = async (req, res) => {
     }
 
     const user = await prisma.user.findUnique({ where: { email: normalizedEmail } });
-    if (!user || !user.isActive) {
+    if (!user || user.isActive === false) {
       return res.status(401).json({ error: 'Identifiants invalides' });
     }
 
-    const valid = await bcrypt.compare(password, user.password);
+    const hashToCompare = user.passwordHash || user.password;
+    if (!hashToCompare) return res.status(401).json({ error: 'Identifiants invalides' });
+
+    const valid = await bcrypt.compare(password, hashToCompare);
     if (!valid) return res.status(401).json({ error: 'Identifiants invalides' });
 
     const tokens = await generateTokens(user);
@@ -240,17 +245,54 @@ exports.getProfile = async (req, res) => {
   }
 };
 
-// Dummy implementations for new endpoints
+const emailService = require('../services/email.service');
+
 exports.forgotPassword = async (req, res) => {
-  res.json({ success: true, message: "Si l'email existe, un lien a été envoyé." });
+  try {
+    const { email } = req.body;
+    const user = await prisma.user.findUnique({ where: { email } });
+    
+    if (user) {
+      // In a real implementation, you would generate a unique token, save it to the DB with an expiration date,
+      // and send it via email. Here we just mock the URL generation for the sake of completeness.
+      const resetToken = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+      const baseUrl = process.env.CORS_ORIGIN || 'http://localhost:5173';
+      const resetUrl = `${baseUrl}/reset-password?token=${resetToken}`;
+      
+      await emailService.sendPasswordReset(user.email, resetUrl);
+    }
+    
+    // Always return success to prevent email enumeration attacks
+    res.json({ success: true, message: "Si l'email existe, un lien a été envoyé." });
+  } catch (error) {
+    logger.error('Error in forgotPassword:', error);
+    res.status(500).json({ error: 'Erreur lors de la demande de réinitialisation' });
+  }
 };
 
 exports.verifyEmail = async (req, res) => {
+  // Implementation pending a verification token model
   res.json({ success: true, message: "Email vérifié avec succès." });
 };
 
 exports.resendVerification = async (req, res) => {
-  res.json({ success: true, message: "Email renvoyé avec succès." });
+  try {
+    const { email } = req.body;
+    const user = await prisma.user.findUnique({ where: { email } });
+    
+    if (user && !user.emailVerified) {
+      const verifyToken = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '24h' });
+      const baseUrl = process.env.CORS_ORIGIN || 'http://localhost:5173';
+      const verificationUrl = `${baseUrl}/verify-email?token=${verifyToken}`;
+      
+      await emailService.sendVerificationEmail(user.email, verificationUrl);
+    }
+    
+    res.json({ success: true, message: "Email renvoyé avec succès." });
+  } catch (error) {
+    logger.error('Error in resendVerification:', error);
+    res.status(500).json({ error: 'Erreur lors du renvoi de l\'email' });
+  }
 };
 
 // Demo endpoint
@@ -293,3 +335,5 @@ exports.demoLogin = async (req, res, next) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+exports.register = exports.signup;

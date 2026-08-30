@@ -1,12 +1,12 @@
 ---
-description: Gestion des fichiers dans l'application ReclamTrack — conventions, création, modification, suppression, documentation des corrections
+description: Gestion des fichiers dans l'application BeeCarbonat — conventions, création, modification, suppression, documentation des corrections
 ---
 
-# 🗂️ Agent de Gestion des Fichiers — ReclamTrack
+# 🗂️ Agent de Gestion des Fichiers — BeeCarbonat
 
 // turbo-all
 
-Ce workflow définit les règles strictes que l'agent doit suivre pour **créer, modifier, supprimer ou renommer** des fichiers dans le projet ReclamTrack. Il couvre le backend, le frontend et le dossier shared.
+Ce workflow définit les règles strictes que l'agent doit suivre pour **créer, modifier, supprimer ou renommer** des fichiers dans le projet BeeCarbonat. Il couvre le backend, le frontend, le mobile et les packages partagés.
 
 ---
 

@@ -1,4 +1,8 @@
 // Global test setup
+process.env.JWT_SECRET = 'test-secret-32-chars-minimum-required-yes';
+process.env.NODE_ENV = 'test';
+process.env.ALLOW_DEMO_BYPASS = 'false';
+
 jest.setTimeout(15000);
 
 // Mock Prisma globally
@@ -73,6 +77,11 @@ jest.mock('../config/database', () => ({
       create: jest.fn(),
       update: jest.fn(),
     },
+    processedWebhookEvent: {
+      findUnique: jest.fn(),
+      create: jest.fn(),
+      deleteMany: jest.fn(),
+    },
     invitation: {
       findUnique: jest.fn(),
       update: jest.fn(),
@@ -108,3 +117,13 @@ jest.mock('@sentry/node', () => ({
   httpIntegration: jest.fn(() => ({})),
   expressIntegration: jest.fn(() => ({})),
 }));
+
+// Mock Firebase Admin Service
+jest.mock('../services/firebase-admin.service', () => ({
+  verifyFirebaseToken: jest.fn().mockResolvedValue({
+    email: 'admin@cafm.com',
+    name: 'Admin User',
+    uid: 'firebase-uid-admin-1',
+  }),
+}));
+

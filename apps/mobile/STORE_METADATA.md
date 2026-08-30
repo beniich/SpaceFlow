@@ -1,6 +1,6 @@
 # 📱 Métadonnées Officielles Stores (App Store & Google Play)
 
-Ce document centralise toutes les informations requises pour la soumission de l'application **BeeCarbonIT (SpaceFlow)** sur l'App Store (Apple) et le Google Play Store (Google).
+Ce document centralise toutes les informations requises pour la soumission de l'application **BeeCarbonat** sur l'App Store (Apple) et le Google Play Store (Google).
 
 ---
 
@@ -8,20 +8,20 @@ Ce document centralise toutes les informations requises pour la soumission de l'
 
 | Champ | Contenu | Limite |
 |---|---|---|
-| **Nom de l'app** | BeeCarbonIT - Maintenance Intelligente | 30 car. |
+| **Nom de l'app** | BeeCarbonat - Maintenance Intelligente | 30 car. |
 | **Sous-titre** | GMAO terrain pour équipes industrie | 30 car. |
 | **Catégorie principale** | Business | - |
 | **Catégorie secondaire** | Productivity | - |
-| **Bundle ID** | `io.beecarbonit.mobile` | - |
-| **SKU** | `beecarbonit-ios` | - |
+| **Bundle ID** | `io.beecarbonat.mobile` | - |
+| **SKU** | `beecarbonat-ios` | - |
 | **Mots-clés (Keywords)** | `gmao,maintenance,cmms,industrie,work order,ticket,asset,scanner qr,terrain,offline` | 100 car. |
-| **URL de support** | `https://support.beecarbonit.com` | URL valide |
-| **URL marketing** | `https://beecarbonit.com` | URL valide |
-| **Politique de confidentialité** | `https://beecarbonit.com/privacy` | URL valide |
+| **URL de support** | `https://beecarbonat.ricecloud.net` | URL valide |
+| **URL marketing** | `https://beecarbonat.ricecloud.net` | URL valide |
+| **Politique de confidentialité** | `https://beecarbonat.ricecloud.net/privacy` | URL valide |
 
 ### Description App Store (FR)
 ```text
-🐝 BeeCarbonIT est la plateforme de gestion de maintenance (GMAO) qui digitalise vos interventions terrain. Conçue pour les techniciens et managers de l'industrie 4.0, elle offre tous les outils pour gérer vos équipements, ordres de travail et tickets en mobilité complète.
+🐝 BeeCarbonat est la plateforme de gestion de maintenance (GMAO) qui digitalise vos interventions terrain. Conçue pour les techniciens et managers de l'industrie 4.0, elle offre tous les outils pour gérer vos équipements, ordres de travail et tickets en mobilité complète.
 
 📱 FONCTIONNALITÉS TERRAIN
 • Scanner QR codes : Identifiez instantanément vos équipements et machines.
@@ -49,12 +49,12 @@ Ce document centralise toutes les informations requises pour la soumission de l'
 
 | Champ | Contenu | Limite |
 |---|---|---|
-| **Nom de l'app** | BeeCarbonIT | 30 car. |
+| **Nom de l'app** | BeeCarbonat | 30 car. |
 | **Description courte** | GMAO intelligente et maintenance terrain pour équipes industrielles | 80 car. |
-| **Package Name** | `io.beecarbonit.mobile` | - |
+| **Package Name** | `io.beecarbonat.mobile` | - |
 | **Catégorie** | Entreprise / Outils de productivité | - |
-| **Email de contact** | `support@beecarbonit.com` | - |
-| **URL de confidentialité** | `https://beecarbonit.com/privacy` | - |
+| **Email de contact** | `support@beecarbonat.com` | - |
+| **URL de confidentialité** | `https://beecarbonat.ricecloud.net/privacy` | - |
 
 ---
 

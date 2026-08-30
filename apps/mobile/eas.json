@@ -7,7 +7,7 @@
       "node": "20.0.0",
       "yarn": "1.22.22",
       "env": {
-        "EXPO_PUBLIC_API_URL": "https://api.beecarbonit.com"
+        "EXPO_PUBLIC_API_URL": "https://beecarbonat.ricecloud.net/api"
       }
     },
     "development": {
@@ -28,7 +28,7 @@
         "simulator": false
       },
       "env": {
-        "EXPO_PUBLIC_API_URL": "https://api-staging.beecarbonit.com"
+        "EXPO_PUBLIC_API_URL": "https://beecarbonat.ricecloud.net/api"
       }
     },
     "production": {
@@ -38,14 +38,14 @@
         "resourceClass": "m1-medium"
       },
       "env": {
-        "EXPO_PUBLIC_API_URL": "https://api.beecarbonit.com"
+        "EXPO_PUBLIC_API_URL": "https://beecarbonat.ricecloud.net/api"
       }
     }
   },
   "submit": {
     "production": {
       "ios": {
-        "appleId": "apple-dev@beecarbonit.com",
+        "appleId": "apple-dev@beecarbonat.com",
         "ascAppId": "YOUR_ASC_APP_ID",
         "appleTeamId": "YOUR_APPLE_TEAM_ID"
       },

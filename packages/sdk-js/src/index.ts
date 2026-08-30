@@ -1,18 +1,18 @@
 import axios, { AxiosInstance } from 'axios';
 
-export interface BeeCarbonITConfig {
+export interface BeeCarbonatConfig {
   apiKey?: string;
   accessToken?: string;
   baseURL?: string;
 }
 
-export class BeeCarbonITClient {
+export class BeeCarbonatClient {
   private http: AxiosInstance;
   private refreshToken?: string;
 
-  constructor(config: BeeCarbonITConfig) {
+  constructor(config: BeeCarbonatConfig) {
     this.http = axios.create({
-      baseURL: config.baseURL || 'https://api.beecarbonit.com',
+      baseURL: config.baseURL || 'https://beecarbonat.ricecloud.net',
       timeout: 15000,
       headers: {
         'Content-Type': 'application/json',
@@ -73,4 +73,4 @@ export class BeeCarbonITClient {
   };
 }
 
-export default BeeCarbonITClient;
+export default BeeCarbonatClient;
