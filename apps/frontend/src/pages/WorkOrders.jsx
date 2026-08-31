@@ -11,6 +11,7 @@ import { useLanguage } from '../context/LanguageContext';
 import { useSiteConfig } from '../context/SiteConfigContext';
 import DynamicFormIndications from '../components/DynamicFormIndications';
 import api from '../services/api';
+import { workorderService } from '../services/workorder.service';
 
 const initialWOs = [
   { 
@@ -84,30 +85,47 @@ export default function WorkOrders() {
   const [workOrders, setWorkOrders] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const formatWOs = (data) => {
+    return data.map(wo => ({
+      id: wo.id,
+      title: wo.title,
+      asset: wo.asset?.name || wo.asset?.type || wo.asset || '—',
+      priority: wo.priority,
+      assigned: wo.assignee?.fullName || wo.assigned || 'Non assigné',
+      avatar: wo.assignee?.fullName ? wo.assignee.fullName.split(' ').map(n => n[0]).join('') : (wo.avatar || 'NA'),
+      date: wo.scheduledAt ? new Date(wo.scheduledAt).toISOString().split('T')[0] : (wo.date || '—'),
+      status: wo.status,
+      location: wo.asset ? `${wo.asset.zone || ''} • ${wo.asset.floor || ''}` : (wo.location || '—'),
+      description: wo.description || '—',
+      hasConflict: wo.hasConflict || false,
+      _isOfflineQueued: wo._isOfflineQueued || false
+    }));
+  };
+
   const fetchWorkOrders = async () => {
     try {
       setLoading(true);
-      const { data } = await api.get('/workorders');
-      if (data && data.length > 0) {
-        const formatted = data.map(wo => ({
-          id: wo.id,
-          title: wo.title,
-          asset: wo.asset?.name || wo.asset?.type || '—',
-          priority: wo.priority,
-          assigned: wo.assignee?.fullName || 'Non assigné',
-          avatar: wo.assignee?.fullName ? wo.assignee.fullName.split(' ').map(n => n[0]).join('') : 'NA',
-          date: wo.scheduledAt ? new Date(wo.scheduledAt).toISOString().split('T')[0] : '—',
-          status: wo.status,
-          location: wo.asset ? `${wo.asset.zone || ''} • ${wo.asset.floor || ''}` : '—',
-          description: wo.description || '—'
-        }));
-        setWorkOrders(formatted);
+      // Lecture instantanée IndexedDB + callback SWR si mise à jour serveur
+      const localData = await workorderService.getWorkOrders((serverData) => {
+        if (serverData && serverData.length > 0) {
+          setWorkOrders(formatWOs(serverData));
+        }
+      });
+
+      if (localData && localData.length > 0) {
+        setWorkOrders(formatWOs(localData));
       } else {
-        setWorkOrders(initialWOs);
+        // Premier chargement si cache vide
+        const { data } = await api.get('/workorders');
+        if (data && data.length > 0) {
+          setWorkOrders(formatWOs(data));
+        } else {
+          setWorkOrders(initialWOs);
+        }
       }
     } catch (err) {
       console.error(err);
-      toast.error('Erreur API WorkOrders, fallback aux mocks');
+      toast.error('Erreur chargement, utilisation des données locales');
       setWorkOrders(initialWOs);
     } finally {
       setLoading(false);

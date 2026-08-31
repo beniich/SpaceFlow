@@ -22,15 +22,16 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: oven-sh/setup-bun@v2
+      - uses: actions/setup-node@v4
         with:
-          bun-version: latest
+          node-version: '20'
+          cache: 'npm'
 
       - name: Install deps
-        run: bun install --frozen-lockfile
+        run: npm ci
 
       - name: npm audit — ${{ matrix.workspace }}
-        run: npm audit --audit-level=high --prefix ${{ matrix.workspace }}
+        run: npm audit --audit-level=high --prefix apps/${{ matrix.workspace }}
         continue-on-error: true
 
   secret-scan:

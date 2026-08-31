@@ -1,0 +1,29 @@
+groups:
+  - name: beecarbonat_api_alerts
+    rules:
+      - alert: HighErrorRate5xx
+        expr: rate(http_requests_total{status=~"5.."}[5m]) / rate(http_requests_total[5m]) * 100 > 5
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Taux d'erreurs HTTP 5xx élevé sur l'API (> 5%)"
+          description: "L'API BeeCarbonat retourne plus de 5% d'erreurs serveur depuis 2 minutes."
+
+      - alert: HighLatencyP95
+        expr: histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket[5m])) by (le)) > 2
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Latence P95 supérieure à 2 secondes"
+          description: "95% des requêtes dépassent 2 secondes de temps de réponse."
+
+      - alert: ServiceDown
+        expr: up == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Service inaccessible"
+          description: "Une instance cible ne répond plus aux probes Prometheus."

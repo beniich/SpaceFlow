@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
 import api from '../services/api';
+import { assetService } from '../services/asset.service';
 import {
   Search, Plus, Filter, Package, ThermometerSun, Edit, Trash2, QrCode, Tag, Camera,
   CheckCircle2, LayoutGrid, Info, HelpCircle, ChevronRight, Pin, MapPin, Thermometer,
@@ -219,64 +220,77 @@ export default function Assets() {
   const [selectedAsset, setSelectedAsset] = useState(null);
 
   useEffect(() => {
-    const fetchAssets = async () => {
-      try {
-        setLoading(true);
-        const { data } = await api.get('/assets');
-        
-        if (data && data.length > 0) {
-          // Construct a simple virtual hierarchy from flat assets
-          const siteNode = {
-            id: 'SITE-REAL',
-            type: 'SITE',
-            name: 'Site Principal (API)',
-            code: 'SITE',
+    const processHierarchy = (data) => {
+      if (!data || data.length === 0) {
+        setHierarchy(initialHierarchy);
+        return;
+      }
+      const siteNode = {
+        id: 'SITE-REAL',
+        type: 'SITE',
+        name: 'Site Principal',
+        code: 'SITE',
+        expanded: true,
+        children: []
+      };
+      
+      const bldgs = {};
+      data.forEach(asset => {
+        const bldgName = asset.building?.name || 'Bâtiment Principal';
+        if (!bldgs[bldgName]) {
+          bldgs[bldgName] = {
+            id: `BLD-${bldgName.replace(/\s+/g, '')}`,
+            type: 'BUILDING',
+            name: bldgName,
+            code: bldgName.substring(0, 3).toUpperCase(),
             expanded: true,
             children: []
           };
-          
-          // Group by building
-          const bldgs = {};
-          data.forEach(asset => {
-            const bldgName = asset.building?.name || 'Bâtiment Principal';
-            if (!bldgs[bldgName]) {
-              bldgs[bldgName] = {
-                id: `BLD-${bldgName.replace(/\s+/g, '')}`,
-                type: 'BUILDING',
-                name: bldgName,
-                code: bldgName.substring(0, 3).toUpperCase(),
-                expanded: true,
-                children: []
-              };
-            }
-            
-            bldgs[bldgName].children.push({
-              id: asset.id,
-              type: 'EQUIPMENT',
-              name: asset.name,
-              code: asset.type || asset.category || 'EQ',
-              status: asset.status || 'OPERATIONAL',
-              category: asset.category || 'Maintenance',
-              cobieClass: asset.assetType || 'N/A',
-              bimRef: asset.bimUrl || null,
-              ...asset
-            });
-          });
-          
-          siteNode.children = Object.values(bldgs);
-          setAssetTree([siteNode]);
+        }
+        
+        bldgs[bldgName].children.push({
+          id: asset.id,
+          type: 'EQUIPMENT',
+          name: asset.name,
+          code: asset.type || asset.category || 'EQ',
+          status: asset.status || 'OPERATIONAL',
+          category: asset.category || 'Maintenance',
+          cobieClass: asset.assetType || 'N/A',
+          bimRef: asset.bimUrl || null,
+          hasConflict: asset.hasConflict || false,
+          _isOfflineQueued: asset._isOfflineQueued || false,
+          ...asset
+        });
+      });
+      
+      siteNode.children = Object.values(bldgs);
+      setHierarchy([siteNode]);
+    };
+
+    const fetchAssets = async () => {
+      try {
+        setLoading(true);
+        // Lecture locale Dexie (0ms) + mise à jour en arrière-plan SWR
+        const localData = await assetService.getAssets((serverData) => {
+          if (serverData && serverData.length > 0) {
+            processHierarchy(serverData);
+          }
+        });
+
+        if (localData && localData.length > 0) {
+          processHierarchy(localData);
         } else {
-          setAssetTree(MOCK_HIERARCHY); // fallback
+          const { data } = await api.get('/assets');
+          processHierarchy(data);
         }
       } catch (err) {
-        console.error(err);
-        toast.error('Erreur de connexion API, fallback aux mocks');
-        setAssetTree(MOCK_HIERARCHY);
+        console.error('Erreur chargement assets:', err);
+        setHierarchy(initialHierarchy);
       } finally {
         setLoading(false);
       }
     };
-    
+
     fetchAssets();
   }, []);
 
