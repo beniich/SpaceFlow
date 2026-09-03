@@ -23,6 +23,7 @@ const Contacts = lazy(() => import('./pages/crm/Contacts'));
 const Deals = lazy(() => import('./pages/crm/Deals'));
 const Pricing = lazy(() => import('./pages/Pricing'));
 const CMMS = lazy(() => import('./pages/CMMS'));
+const EnterpriseWorkOrders = lazy(() => import('./pages/EnterpriseWorkOrders'));
 const DigitalTwin = lazy(() => import('./pages/BIMViewer'));
 const ERPIntegration = lazy(() => import('./pages/ERPIntegration'));
 const BIMViewer = lazy(() => import('./pages/BIMViewer'));
@@ -127,6 +128,7 @@ export default function App() {
           
           {/* CMMS / ERP / BIM */}
           <Route path="cmms" element={<CMMS />} />
+          <Route path="enterprise-wo" element={<EnterpriseWorkOrders />} />
           <Route path="digital-twin" element={<DigitalTwin />} />
           <Route path="bim" element={<BIMViewer />} />
           <Route path="erp" element={<ERPIntegration />} />

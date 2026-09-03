@@ -40,8 +40,8 @@ const navCategories = [
       { to: '/air-quality', labelKey: 'nav_air_quality', defaultLabel: 'Air Quality & AQI', icon: 'air' },
       { to: '/impact', labelKey: 'nav_impact', defaultLabel: 'Environmental Impact Report', icon: 'nature_people' },
       { to: '/energy', labelKey: 'nav_energy', defaultLabel: 'Energy & ESG Copilot', icon: 'eco' },
-      { to: '/bim', labelKey: 'nav_bim', defaultLabel: 'BIM & 3D Viewer', icon: 'view_in_3d' },
-      { to: '/digital-twin', labelKey: 'nav_digital_twin', defaultLabel: 'Digital Twin', icon: 'view_in_ar' },
+      { to: '/bim', labelKey: 'nav_bim', defaultLabel: 'BIM & 3D Viewer', icon: '3d_rotation' },
+      { to: '/digital-twin', labelKey: 'nav_digital_twin', defaultLabel: 'Digital Twin', icon: 'deployed_code' },
       { to: '/predictive-maintenance', labelKey: 'nav_predictive_ai', defaultLabel: 'Predictive AI & Health', icon: 'psychology' },
       { to: '/tenants', labelKey: 'nav_tenants', defaultLabel: 'Occupants & Tenant Care', icon: 'person_pin' },
     ]
@@ -119,17 +119,17 @@ export default function Layout() {
       
       {/* ── Fixed Desktop Sidebar ─────────────────────────────────────────── */}
       <aside className={clsx(
-        "fixed left-0 top-0 h-full z-50 hidden md:flex flex-col transition-all duration-300 ease-in-out border-r shadow-sm backdrop-blur-xl",
+        "fixed left-0 top-0 h-full z-50 hidden md:flex flex-col transition-all duration-300 ease-in-out border-r shadow-xs backdrop-blur-xl",
         isCollapsed ? "w-[76px]" : "w-[260px]",
         isDarkMode 
-          ? "bg-black/95 border-zinc-800 text-white" 
+          ? "bg-[#000000] border-[#222222] text-[#ededed]" 
           : "bg-white/95 border-zinc-200 text-black"
       )}>
         {/* Brand Header */}
         <div className={clsx(
           "h-[64px] flex items-center justify-between border-b shrink-0 transition-all duration-300",
           isCollapsed ? "px-3" : "px-5",
-          isDarkMode ? "border-zinc-800" : "border-zinc-200"
+          isDarkMode ? "border-[#222222]" : "border-zinc-200"
         )}>
           <NavLink to="/dashboard" className="flex items-center gap-3 group min-w-0" title="BeeCarbonat">
             <BeeCarbonatLogo size={36} showText={!isCollapsed} />
@@ -140,10 +140,10 @@ export default function Layout() {
             onClick={() => setIsCollapsed(!isCollapsed)}
             title={isCollapsed ? "Agrandir la barre latérale" : "Réduire la barre latérale"}
             className={clsx(
-              "p-1.5 rounded-lg transition-colors cursor-pointer shrink-0",
+              "p-1.5 rounded-lg border transition-all cursor-pointer shrink-0",
               isDarkMode 
-                ? "text-zinc-400 hover:text-white hover:bg-zinc-800" 
-                : "text-zinc-600 hover:text-black hover:bg-zinc-100"
+                ? "text-[#f59e0b] border-[rgba(245,158,11,0.3)] bg-[#0a0a0a] hover:bg-[#161616] hover:border-[#f59e0b] hover:shadow-[0_0_12px_rgba(245,158,11,0.3)]" 
+                : "text-amber-800 border-amber-300 bg-amber-50 hover:bg-amber-100 hover:border-amber-500"
             )}
           >
             {isCollapsed ? <PanelLeftOpen size={18} /> : <PanelLeftClose size={18} />}
@@ -157,13 +157,13 @@ export default function Layout() {
               {!isCollapsed && (
                 <div className={clsx(
                   "px-3 py-1 text-[9px] font-mono uppercase tracking-widest font-bold",
-                  isDarkMode ? "text-zinc-500" : "text-zinc-400"
+                  isDarkMode ? "text-[#a1a1a1]" : "text-zinc-500"
                 )}>
                   {t(cat.categoryKey, cat.categoryDefault)}
                 </div>
               )}
               {isCollapsed && catIdx > 0 && (
-                <div className={clsx("my-1 border-t", isDarkMode ? "border-zinc-800" : "border-zinc-200")} />
+                <div className={clsx("my-1 border-t", isDarkMode ? "border-[#222222]" : "border-zinc-200")} />
               )}
               {cat.items.map((item) => {
                 const isActive = location.pathname === item.to;
@@ -174,19 +174,27 @@ export default function Layout() {
                     to={item.to}
                     title={isCollapsed ? itemLabel : undefined}
                     className={clsx(
-                      'flex items-center rounded-xl transition-all group font-mono text-[11px] uppercase tracking-wider relative',
+                      'flex items-center rounded-lg transition-all group font-mono text-[11px] uppercase tracking-wider relative border',
                       isCollapsed ? 'justify-center p-2.5' : 'px-3 py-2 gap-3',
                       isActive
-                        ? 'bg-[#FF5500] text-white font-bold shadow-[0_2px_10px_rgba(255,85,0,0.3)]'
+                        ? isDarkMode
+                          ? 'bg-[#111111] text-[#fef08a] font-bold border-[#f59e0b] shadow-[0_0_15px_rgba(245,158,11,0.25)]'
+                          : 'bg-amber-50 text-amber-950 font-bold border-amber-500 shadow-[0_0_15px_rgba(245,158,11,0.2)]'
                         : isDarkMode
-                          ? 'text-zinc-400 hover:text-white hover:bg-zinc-900'
-                          : 'text-zinc-700 hover:text-black hover:bg-zinc-100'
+                          ? 'text-[#a1a1a1] hover:text-[#fef08a] hover:bg-[#0a0a0a] hover:border-[rgba(245,158,11,0.25)] border-transparent'
+                          : 'text-zinc-700 hover:text-black hover:bg-zinc-100 border-transparent'
                     )}
                   >
-                    <span className="material-symbols-outlined text-[18px] group-hover:scale-110 transition-transform shrink-0">
+                    <span className={clsx(
+                      "material-symbols-outlined text-[18px] group-hover:scale-105 transition-transform shrink-0",
+                      isActive ? "text-[#f59e0b] drop-shadow-[0_0_8px_rgba(245,158,11,0.6)]" : ""
+                    )}>
                       {item.icon}
                     </span>
-                    {!isCollapsed && <span className="truncate font-semibold">{itemLabel}</span>}
+                    {!isCollapsed && <span className="truncate font-semibold flex-1">{itemLabel}</span>}
+                    {!isCollapsed && isActive && (
+                      <span className="w-2 h-2 rounded-full bg-[#f59e0b] gold-pulse-dot shrink-0 ml-auto" />
+                    )}
                   </NavLink>
                 );
               })}
@@ -197,18 +205,18 @@ export default function Layout() {
         {/* User Card */}
         <div className={clsx(
           "p-3 mt-auto border-t shrink-0",
-          isDarkMode ? "border-zinc-800" : "border-zinc-200"
+          isDarkMode ? "border-[#222222]" : "border-zinc-200"
         )}>
           <div className={clsx(
-            "p-2.5 rounded-xl flex items-center justify-between gap-2 border transition-all",
+            "p-2.5 rounded-lg flex items-center justify-between gap-2 border transition-all",
             isDarkMode 
-              ? "bg-zinc-900 border-zinc-800 text-zinc-100" 
+              ? "bg-[#0a0a0a] border-[#222222] text-[#ededed]" 
               : "bg-zinc-50 border-zinc-200 text-black"
           )}>
             <div className="flex items-center gap-2.5 min-w-0" title={`${user?.firstName || 'System'} ${user?.lastName || 'Admin'}`}>
               <div className={clsx(
-                "w-8 h-8 rounded-lg flex items-center justify-center font-bold text-xs shadow shrink-0",
-                isDarkMode ? "bg-zinc-800 text-cyan-400" : "bg-zinc-200 text-zinc-800"
+                "w-8 h-8 rounded-md flex items-center justify-center font-bold text-xs shadow-xs shrink-0",
+                isDarkMode ? "bg-[#161616] text-[#ededed] border border-[#222222]" : "bg-zinc-200 text-zinc-800"
               )}>
                 <span className="material-symbols-outlined text-[18px]">person</span>
               </div>
@@ -217,7 +225,7 @@ export default function Layout() {
                   <span className="font-mono text-[11px] font-bold truncate">
                     {user?.firstName ? `${user.firstName} ${user.lastName || ''}` : 'System Admin'}
                   </span>
-                  <span className="text-[9px] text-zinc-500 uppercase font-mono tracking-wider truncate">
+                  <span className="text-[9px] text-[#707070] uppercase font-mono tracking-wider truncate">
                     {user?.role === 'ADMIN' ? 'Tier 01 Operator' : (user?.role || 'Tier 01 Operator')}
                   </span>
                 </div>
@@ -228,8 +236,8 @@ export default function Layout() {
                 onClick={handleLogout}
                 title="Déconnexion"
                 className={clsx(
-                  "p-1.5 rounded-lg transition-colors cursor-pointer",
-                  isDarkMode ? "text-zinc-400 hover:text-rose-400 hover:bg-zinc-800" : "text-zinc-500 hover:text-rose-600 hover:bg-zinc-200"
+                  "p-1.5 rounded-md transition-colors cursor-pointer",
+                  isDarkMode ? "text-[#707070] hover:text-rose-400 hover:bg-[#161616]" : "text-zinc-500 hover:text-rose-600 hover:bg-zinc-200"
                 )}
               >
                 <span className="material-symbols-outlined text-[18px]">logout</span>
@@ -314,29 +322,29 @@ export default function Layout() {
           "fixed top-0 right-0 h-[64px] z-40 px-6 flex items-center justify-between border-b backdrop-blur-xl transition-all duration-300 ease-in-out left-0",
           isCollapsed ? "md:left-[76px]" : "md:left-[260px]",
           isDarkMode 
-            ? "bg-black/90 border-zinc-800 text-white" 
+            ? "bg-[#000000]/90 border-[#222222] text-[#ededed]" 
             : "bg-white/90 border-zinc-200 text-black"
         )}>
           <div className="flex items-center gap-4">
             <button
               onClick={() => setSidebarOpen(true)}
-              className="md:hidden p-1.5 text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white rounded-lg"
+              className="md:hidden p-1.5 text-slate-500 hover:text-slate-900 dark:text-[#a1a1a1] dark:hover:text-[#ededed] rounded-lg"
             >
               <Menu className="w-5 h-5" />
             </button>
             
             {/* Site Context Selector */}
             <div className={clsx(
-              "flex items-center gap-2 border px-3 py-1.5 rounded-xl font-mono text-xs font-semibold shadow-xs transition-colors",
+              "flex items-center gap-2 border px-3 py-1.5 rounded-lg font-mono text-xs font-semibold shadow-xs transition-colors",
               isDarkMode 
-                ? "bg-zinc-900 border-zinc-800 text-zinc-200" 
+                ? "bg-[#0a0a0a] border-[#222222] text-[#ededed]" 
                 : "bg-white border-zinc-200 text-black"
             )}>
-              <span className="material-symbols-outlined text-[18px] text-[#0F172A] dark:text-[#00F0FF]">apartment</span>
+              <span className="material-symbols-outlined text-[18px] text-[#0F172A] dark:text-[#ededed]">apartment</span>
               <select className="bg-transparent focus:outline-none cursor-pointer">
-                <option value="paris" className={isDarkMode ? "bg-black text-white" : "bg-white text-black"}>{t('header_paris_hq', 'Paris HQ - Bâtiment Alpha')}</option>
-                <option value="lyon" className={isDarkMode ? "bg-black text-white" : "bg-white text-black"}>{t('header_lyon_hub', 'Lyon - Hub Béta')}</option>
-                <option value="berlin" className={isDarkMode ? "bg-black text-white" : "bg-white text-black"}>{t('header_berlin_campus', 'Berlin - Tech Campus')}</option>
+                <option value="paris" className={isDarkMode ? "bg-[#000000] text-[#ededed]" : "bg-white text-black"}>{t('header_paris_hq', 'Paris HQ - Bâtiment Alpha')}</option>
+                <option value="lyon" className={isDarkMode ? "bg-[#000000] text-[#ededed]" : "bg-white text-black"}>{t('header_lyon_hub', 'Lyon - Hub Béta')}</option>
+                <option value="berlin" className={isDarkMode ? "bg-[#000000] text-[#ededed]" : "bg-white text-black"}>{t('header_berlin_campus', 'Berlin - Tech Campus')}</option>
               </select>
             </div>
           </div>
@@ -344,21 +352,21 @@ export default function Layout() {
           <div className="flex items-center gap-2.5 sm:gap-3">
             {/* 🌐 3-Language Selector (Français, English, Español) */}
             <div className={clsx(
-              "flex items-center gap-1.5 border px-2.5 py-1.5 rounded-xl font-mono text-xs font-bold transition-colors shadow-xs",
+              "flex items-center gap-1.5 border px-2.5 py-1.5 rounded-lg font-mono text-xs font-semibold transition-colors shadow-xs",
               isDarkMode 
-                ? "bg-zinc-900 border-zinc-800 text-zinc-200" 
+                ? "bg-[#0a0a0a] border-[#222222] text-[#ededed]" 
                 : "bg-white border-zinc-200 text-black"
             )}>
-              <Globe size={15} className="text-[#FF5500] shrink-0" />
+              <Globe size={15} className="text-[#a1a1a1] shrink-0" />
               <select
                 value={language}
                 onChange={(e) => setLanguage(e.target.value)}
-                className="bg-transparent focus:outline-none cursor-pointer font-bold pr-1"
+                className="bg-transparent focus:outline-none cursor-pointer font-medium pr-1"
                 aria-label="Sélectionner la langue / Select language"
               >
-                <option value="fr" className={isDarkMode ? "bg-black text-white" : "bg-white text-black"}>🇫🇷 FR - Français</option>
-                <option value="en" className={isDarkMode ? "bg-black text-white" : "bg-white text-black"}>🇬🇧 EN - English</option>
-                <option value="es" className={isDarkMode ? "bg-black text-white" : "bg-white text-black"}>🇪🇸 ES - Español</option>
+                <option value="fr" className={isDarkMode ? "bg-[#000000] text-[#ededed]" : "bg-white text-black"}>FR</option>
+                <option value="en" className={isDarkMode ? "bg-[#000000] text-[#ededed]" : "bg-white text-black"}>EN</option>
+                <option value="es" className={isDarkMode ? "bg-[#000000] text-[#ededed]" : "bg-white text-black"}>ES</option>
               </select>
             </div>
 
@@ -367,9 +375,9 @@ export default function Layout() {
               onClick={toggleTheme}
               title={isDarkMode ? "Activer le Mode Clair (Blanc pur)" : "Activer le Mode Sobre (Noir pur)"}
               className={clsx(
-                "flex items-center gap-2 px-3 py-1.5 rounded-xl border text-xs font-mono font-bold transition-all cursor-pointer",
+                "flex items-center gap-2 px-3 py-1.5 rounded-lg border text-xs font-mono font-medium transition-all cursor-pointer",
                 isDarkMode 
-                  ? "bg-zinc-900 border-zinc-800 text-amber-400 hover:bg-zinc-800" 
+                  ? "bg-[#0a0a0a] border-[#222222] text-[#ededed] hover:border-[#333333] hover:bg-[#111111]" 
                   : "bg-zinc-100 border-zinc-200 text-black hover:bg-zinc-200"
               )}
             >
@@ -381,22 +389,22 @@ export default function Layout() {
             <div 
               onClick={handleManualSync}
               className={clsx(
-                "flex items-center gap-2 px-3 py-1.5 rounded-full border cursor-pointer transition-colors shadow-xs",
-                isDarkMode ? "bg-zinc-900 border-zinc-800" : "bg-zinc-100 border-zinc-200"
+                "flex items-center gap-2 px-3 py-1.5 rounded-lg border cursor-pointer transition-colors shadow-xs",
+                isDarkMode ? "bg-[#0a0a0a] border-[#222222] text-[#ededed]" : "bg-zinc-100 border-zinc-200 text-black"
               )}
               title="Cliquer pour synchroniser manuellement"
             >
               <span className={clsx(
-                "w-2 h-2 rounded-full",
+                "w-1.5 h-1.5 rounded-full",
                 isOnline 
-                  ? "bg-emerald-500 shadow-[0_0_8px_#10B981] animate-pulse" 
-                  : "bg-rose-500 shadow-[0_0_8px_#ef4444]"
+                  ? "bg-[#ededed]" 
+                  : "bg-[#555555]"
               )} />
-              <span className="font-mono text-[10px] uppercase tracking-wider hidden sm:inline font-bold">
-                {isOnline ? t('system_sync_online', 'Système Synchro: En ligne') : t('system_sync_offline', 'Mode Hors Ligne')}
+              <span className="font-mono text-[10px] uppercase tracking-wider hidden sm:inline font-medium">
+                {isOnline ? t('system_sync_online', 'En ligne') : t('system_sync_offline', 'Hors Ligne')}
               </span>
               {pendingSyncCount > 0 && (
-                <span className="px-1.5 py-0.2 bg-[#FF5500] text-white font-mono text-[9px] font-bold rounded-full">
+                <span className="px-1.5 py-0.2 bg-[#ededed] text-black font-mono text-[9px] font-bold rounded-full">
                   {pendingSyncCount}
                 </span>
               )}
@@ -406,25 +414,25 @@ export default function Layout() {
             <button
               onClick={() => navigate('/spaces')}
               className={clsx(
-                "p-2 rounded-xl transition-colors cursor-pointer",
-                isDarkMode ? "text-zinc-400 hover:text-white hover:bg-zinc-800" : "text-zinc-600 hover:text-black hover:bg-zinc-100"
+                "p-2 rounded-lg border transition-colors cursor-pointer",
+                isDarkMode ? "border-[#222222] bg-[#0a0a0a] text-[#a1a1a1] hover:text-[#ededed] hover:border-[#333333]" : "border-zinc-200 text-zinc-600 hover:text-black hover:bg-zinc-100"
               )}
               title={t('search_placeholder', 'Rechercher des espaces ou équipements')}
             >
-              <span className="material-symbols-outlined text-[20px]">search</span>
+              <span className="material-symbols-outlined text-[18px]">search</span>
             </button>
 
             {/* Notifications */}
             <button
               onClick={() => navigate('/notifications')}
               className={clsx(
-                "p-2 rounded-xl transition-colors relative cursor-pointer",
-                isDarkMode ? "text-zinc-400 hover:text-white hover:bg-zinc-800" : "text-zinc-600 hover:text-black hover:bg-zinc-100"
+                "p-2 rounded-lg border transition-colors relative cursor-pointer",
+                isDarkMode ? "border-[#222222] bg-[#0a0a0a] text-[#a1a1a1] hover:text-[#ededed] hover:border-[#333333]" : "border-zinc-200 text-zinc-600 hover:text-black hover:bg-zinc-100"
               )}
               title="Notifications système"
             >
-              <span className="material-symbols-outlined text-[20px]">notifications</span>
-              <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-[#FF5500] rounded-full shadow-[0_0_6px_#FF5500]"></span>
+              <span className="material-symbols-outlined text-[18px]">notifications</span>
+              <span className="absolute top-2 right-2 w-1.5 h-1.5 bg-[#ededed] rounded-full"></span>
             </button>
           </div>
         </header>
@@ -432,7 +440,7 @@ export default function Layout() {
         {/* Dynamic Main Body Content */}
         <main className={clsx(
           "relative pt-[64px] flex-1 transition-colors duration-200",
-          isDarkMode ? "bg-black text-white" : "bg-white text-black"
+          isDarkMode ? "bg-[#000000] text-[#ededed]" : "bg-white text-black"
         )}>
           <SubscriptionBanner />
           <Outlet />
@@ -441,18 +449,18 @@ export default function Layout() {
         {/* Global Footer */}
         <footer className={clsx(
           "border-t px-6 py-4 flex items-center justify-between text-[10px] font-mono uppercase tracking-widest transition-colors",
-          isDarkMode ? "bg-black border-zinc-800 text-zinc-500" : "bg-white border-zinc-200 text-zinc-500"
+          isDarkMode ? "bg-[#000000] border-[#222222] text-[#707070]" : "bg-white border-zinc-200 text-zinc-500"
         )}>
           <div className="flex items-center gap-3">
             <BeeCarbonatLogo size={20} showText={false} />
-            <span className="font-semibold">BeeCarbonat x Spider CAFM © {new Date().getFullYear()}</span>
+            <span className="font-semibold text-[#a1a1a1]">BeeCarbonat x Spider CAFM © {new Date().getFullYear()}</span>
           </div>
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-1.5">
-              <span className={clsx("w-1.5 h-1.5 rounded-full animate-pulse", isOnline ? "bg-emerald-500 shadow-[0_0_5px_#10B981]" : "bg-rose-500")}></span>
+              <span className={clsx("w-1.5 h-1.5 rounded-full", isOnline ? "bg-emerald-500" : "bg-rose-500")}></span>
               <span>{isOnline ? "Système En Ligne" : "Hors Ligne"}</span>
             </div>
-            <span>v2.4.0 Production</span>
+            <span>v2.4.0</span>
           </div>
         </footer>
       </div>

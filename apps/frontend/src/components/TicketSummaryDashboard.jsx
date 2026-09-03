@@ -13,21 +13,21 @@ import api from '../services/api';
 
 // Enum definitions matching Prisma schema
 const STATUSES = [
-  { key: 'SUBMITTED', labelKey: 'status_submitted', defaultLabel: 'Soumis', color: 'bg-blue-500/10 text-blue-400 border-blue-500/30' },
-  { key: 'TRIAGED', labelKey: 'status_triaged', defaultLabel: 'Validé FM', color: 'bg-purple-500/10 text-purple-400 border-purple-500/30' },
-  { key: 'ASSIGNED', labelKey: 'status_assigned', defaultLabel: 'Assigné', color: 'bg-cyan-500/10 text-cyan-400 border-cyan-500/30' },
-  { key: 'IN_PROGRESS', labelKey: 'status_in_progress', defaultLabel: 'En cours', color: 'bg-amber-500/10 text-amber-400 border-amber-500/30' },
-  { key: 'TECH_CLOSED', labelKey: 'status_tech_closed', defaultLabel: 'Clôture Tech', color: 'bg-indigo-500/10 text-indigo-400 border-indigo-500/30' },
-  { key: 'QAP_PASSED', labelKey: 'status_qap_passed', defaultLabel: 'Validé QA', color: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30' },
-  { key: 'CLOSED', labelKey: 'status_closed', defaultLabel: 'Clôturé', color: 'bg-slate-800 text-slate-400 border-slate-700' }
+  { key: 'SUBMITTED', labelKey: 'status_submitted', defaultLabel: 'Soumis', color: 'bg-[#161616] text-[#ededed] border-[#222222]' },
+  { key: 'TRIAGED', labelKey: 'status_triaged', defaultLabel: 'Validé FM', color: 'bg-[#161616] text-[#ededed] border-[#222222]' },
+  { key: 'ASSIGNED', labelKey: 'status_assigned', defaultLabel: 'Assigné', color: 'bg-[#161616] text-[#ededed] border-[#222222]' },
+  { key: 'IN_PROGRESS', labelKey: 'status_in_progress', defaultLabel: 'En cours', color: 'bg-[#161616] text-[#ededed] border-[#222222]' },
+  { key: 'TECH_CLOSED', labelKey: 'status_tech_closed', defaultLabel: 'Clôture Tech', color: 'bg-[#161616] text-[#ededed] border-[#222222]' },
+  { key: 'QAP_PASSED', labelKey: 'status_qap_passed', defaultLabel: 'Validé QA', color: 'bg-[#161616] text-[#ededed] border-[#222222]' },
+  { key: 'CLOSED', labelKey: 'status_closed', defaultLabel: 'Clôturé', color: 'bg-[#000000] text-[#707070] border-[#222222]' }
 ];
 
 const SEVERITIES = [
-  { key: 'EMERGENCY', labelKey: 'sev_emergency', defaultLabel: 'Danger Immédiat', color: 'text-rose-500 bg-rose-500/20 border-rose-500/40 animate-pulse', priorityNum: 1 },
-  { key: 'CRITICAL', labelKey: 'sev_critical', defaultLabel: 'Critique', color: 'text-rose-400 bg-rose-500/10 border-rose-500/30', priorityNum: 2 },
-  { key: 'HIGH', labelKey: 'sev_high', defaultLabel: 'Haute', color: 'text-amber-400 bg-amber-500/10 border-amber-500/30', priorityNum: 3 },
-  { key: 'MEDIUM', labelKey: 'sev_medium', defaultLabel: 'Moyenne', color: 'text-blue-400 bg-blue-500/10 border-blue-500/30', priorityNum: 4 },
-  { key: 'LOW', labelKey: 'sev_low', defaultLabel: 'Basse', color: 'text-slate-400 bg-slate-800 border-slate-700', priorityNum: 5 }
+  { key: 'EMERGENCY', labelKey: 'sev_emergency', defaultLabel: 'Danger Immédiat', color: 'text-[#ededed] bg-[#161616] border-[#333333]', priorityNum: 1 },
+  { key: 'CRITICAL', labelKey: 'sev_critical', defaultLabel: 'Critique', color: 'text-[#ededed] bg-[#161616] border-[#222222]', priorityNum: 2 },
+  { key: 'HIGH', labelKey: 'sev_high', defaultLabel: 'Haute', color: 'text-[#ededed] bg-[#161616] border-[#222222]', priorityNum: 3 },
+  { key: 'MEDIUM', labelKey: 'sev_medium', defaultLabel: 'Moyenne', color: 'text-[#a1a1a1] bg-[#161616] border-[#222222]', priorityNum: 4 },
+  { key: 'LOW', labelKey: 'sev_low', defaultLabel: 'Basse', color: 'text-[#707070] bg-[#000000] border-[#222222]', priorityNum: 5 }
 ];
 
 const INITIAL_TICKETS = [
@@ -288,52 +288,52 @@ export default function TicketSummaryDashboard() {
   };
 
   return (
-    <div className="w-full bg-[#090A0F] text-slate-100 p-4 sm:p-6 rounded-2xl font-sans space-y-6">
+    <div className="w-full bg-[#000000] text-[#ededed] p-4 sm:p-6 rounded-xl font-sans space-y-6">
       
       {/* ================= HEADER & OVERVIEW BAR ================= */}
-      <div className="bg-[#12141D] border border-slate-800 p-5 rounded-2xl flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 shadow-xl">
+      <div className="bg-[#0a0a0a] border border-[#222222] p-5 rounded-xl flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 shadow-xs">
         <div className="flex items-center gap-3">
-          <div className="p-3 bg-cyan-500/10 border border-cyan-500/30 rounded-xl text-cyan-400">
-            <Ticket className="w-6 h-6" />
+          <div className="p-2.5 bg-[#161616] border border-[#222222] rounded-lg text-[#ededed]">
+            <Ticket className="w-5 h-5" />
           </div>
           <div>
-            <h1 className="text-xl font-bold text-white tracking-tight flex items-center gap-2">
-              {t('ticket_board_title', 'Tableau de Bord des Réclamations & Tickets Ouverts')}
+            <h1 className="text-lg font-bold text-[#ededed] tracking-tight flex items-center gap-2">
+              {t('ticket_board_title', 'Tableau de Bord des Réclamations & Tickets')}
             </h1>
-            <p className="text-xs text-slate-400 font-mono">
-              {t('ticket_board_subtitle', 'Synthèse d\'avancement par Statut et Sévérité pour Facility Managers')}
+            <p className="text-xs text-[#707070] font-mono">
+              {t('ticket_board_subtitle', 'Synthèse d\'avancement par Statut et Sévérité')}
             </p>
           </div>
         </div>
 
         {/* View mode switcher & actions */}
         <div className="flex flex-wrap items-center gap-3 w-full lg:w-auto justify-end">
-          <div className="bg-[#090A0F] border border-slate-800 rounded-xl p-1 flex items-center text-xs font-mono">
+          <div className="bg-[#000000] border border-[#222222] rounded-lg p-1 flex items-center text-xs font-mono">
             <button
               onClick={() => setViewMode('MATRIX')}
               className={clsx(
-                "px-3 py-1.5 rounded-lg font-bold transition-all flex items-center gap-1.5",
-                viewMode === 'MATRIX' ? "bg-cyan-500 text-slate-950 shadow" : "text-slate-400 hover:text-white"
+                "px-3 py-1.5 rounded-md font-semibold transition-all flex items-center gap-1.5 cursor-pointer",
+                viewMode === 'MATRIX' ? "bg-[#161616] text-[#ededed] border border-[#333333] shadow-xs" : "text-[#707070] hover:text-[#ededed]"
               )}
             >
-              <Layers className="w-3.5 h-3.5" /> {t('matrix_synthesis', 'Matrice Synthèse')}
+              <Layers className="w-3.5 h-3.5" /> {t('matrix_synthesis', 'Matrice')}
             </button>
             <button
               onClick={() => setViewMode('LIST')}
               className={clsx(
-                "px-3 py-1.5 rounded-lg font-bold transition-all flex items-center gap-1.5",
-                viewMode === 'LIST' ? "bg-cyan-500 text-slate-950 shadow" : "text-slate-400 hover:text-white"
+                "px-3 py-1.5 rounded-md font-semibold transition-all flex items-center gap-1.5 cursor-pointer",
+                viewMode === 'LIST' ? "bg-[#161616] text-[#ededed] border border-[#333333] shadow-xs" : "text-[#707070] hover:text-[#ededed]"
               )}
             >
-              <FileText className="w-3.5 h-3.5" /> {t('grid_list', 'Liste Détaillée')} ({filteredTickets.length})
+              <FileText className="w-3.5 h-3.5" /> {t('grid_list', 'Liste')} ({filteredTickets.length})
             </button>
           </div>
 
           <button
             onClick={() => setShowCreateTicketModal(true)}
-            className="flex items-center gap-1.5 px-3.5 py-2 bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-mono text-xs font-bold rounded-xl transition-all shadow-[0_0_15px_rgba(6,182,212,0.2)] cursor-pointer"
+            className="flex items-center gap-1.5 px-3.5 py-1.5 bg-[#ededed] hover:bg-white text-black font-mono text-xs font-semibold rounded-lg transition-all shadow-xs cursor-pointer"
           >
-            <Plus className="w-4 h-4" /> Déclarer une Réclamation
+            <Plus className="w-3.5 h-3.5" /> Nouveau Ticket
           </button>
 
           <button 
@@ -341,10 +341,10 @@ export default function TicketSummaryDashboard() {
               fetchTickets();
               toast.success('Données réactualisées');
             }}
-            className="p-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl border border-slate-700 transition-all cursor-pointer"
+            className="p-2 bg-[#0a0a0a] hover:bg-[#161616] text-[#a1a1a1] hover:text-[#ededed] rounded-lg border border-[#222222] transition-all cursor-pointer"
             title={t('refresh', 'Rafraîchir')}
           >
-            <RefreshCw className="w-4 h-4" />
+            <RefreshCw className="w-3.5 h-3.5" />
           </button>
         </div>
       </div>
@@ -353,63 +353,63 @@ export default function TicketSummaryDashboard() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         
         {/* Total Open Tickets */}
-        <div className="bg-[#12141D] border border-slate-800 hover:border-cyan-500/40 p-5 rounded-2xl flex flex-col justify-between gap-3 shadow-lg transition-all">
-          <div className="flex items-center justify-between text-xs font-mono text-slate-400 uppercase tracking-wider">
+        <div className="bg-[#0a0a0a] border border-[rgba(245,158,11,0.3)] hover:border-[#f59e0b] p-5 rounded-xl flex flex-col justify-between gap-3 shadow-[0_0_15px_rgba(245,158,11,0.05)] hover:shadow-[0_0_20px_rgba(245,158,11,0.15)] transition-all">
+          <div className="flex items-center justify-between text-xs font-mono text-[#a1a1a1] uppercase tracking-wider">
             <span>{t('dash_open_tickets', 'Tickets Ouverts')}</span>
-            <Ticket className="w-4 h-4 text-cyan-400" />
+            <Ticket className="w-4 h-4 text-[#f59e0b]" />
           </div>
           <div className="flex items-baseline justify-between">
-            <span className="text-3xl font-extrabold text-white">{openTickets.length}</span>
-            <span className="text-xs font-mono text-cyan-400">{t('total_requests', 'Total en cours')}</span>
+            <span className="text-3xl font-extrabold text-[#ededed]">{openTickets.length}</span>
+            <span className="text-xs font-mono text-[#f59e0b]">{t('total_requests', 'En cours')}</span>
           </div>
-          <div className="text-[11px] font-mono text-slate-400 pt-2 border-t border-slate-800/80">
-            {tickets.filter(t => t.status === 'SUBMITTED').length} {t('status_submitted', 'Nouveaux en attente de triage')}
+          <div className="text-[11px] font-mono text-[#707070] pt-2 border-t border-[#161616]">
+            {tickets.filter(t => t.status === 'SUBMITTED').length} {t('status_submitted', 'En attente')}
           </div>
         </div>
 
         {/* Emergencies & Critical */}
-        <div className="bg-[#12141D] border border-rose-500/30 bg-rose-500/5 p-5 rounded-2xl flex flex-col justify-between gap-3 shadow-lg transition-all">
-          <div className="flex items-center justify-between text-xs font-mono text-rose-400 uppercase tracking-wider">
+        <div className="bg-[#0a0a0a] border border-[rgba(245,158,11,0.3)] hover:border-[#f59e0b] p-5 rounded-xl flex flex-col justify-between gap-3 shadow-[0_0_15px_rgba(245,158,11,0.05)] hover:shadow-[0_0_20px_rgba(245,158,11,0.15)] transition-all">
+          <div className="flex items-center justify-between text-xs font-mono text-[#fef08a] uppercase tracking-wider">
             <span>{t('emergencies_critical', 'Urgences & Critiques')}</span>
-            <ShieldAlert className="w-4 h-4 text-rose-400 animate-pulse" />
+            <ShieldAlert className="w-4 h-4 text-[#f59e0b]" />
           </div>
           <div className="flex items-baseline justify-between">
-            <span className="text-3xl font-extrabold text-rose-400">{criticalCount}</span>
-            <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-rose-500/20 text-rose-300 border border-rose-500/40">
+            <span className="text-3xl font-extrabold text-[#ededed]">{criticalCount}</span>
+            <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-[#161616] text-[#fef08a] border border-[#f59e0b]">
               P1 / P2
             </span>
           </div>
-          <div className="text-[11px] font-mono text-rose-300/80 pt-2 border-t border-rose-500/20">
+          <div className="text-[11px] font-mono text-[#fef08a] pt-2 border-t border-[#161616]">
             SLA &lt; 30 min
           </div>
         </div>
 
         {/* SLA Breach Risk */}
-        <div className="bg-[#12141D] border border-amber-500/30 bg-amber-500/5 p-5 rounded-2xl flex flex-col justify-between gap-3 shadow-lg transition-all">
-          <div className="flex items-center justify-between text-xs font-mono text-amber-400 uppercase tracking-wider">
-            <span>{t('sla_breach_risk', 'Risque Dépassement SLA')}</span>
-            <Clock className="w-4 h-4 text-amber-400" />
+        <div className="bg-[#0a0a0a] border border-[rgba(245,158,11,0.3)] hover:border-[#f59e0b] p-5 rounded-xl flex flex-col justify-between gap-3 shadow-[0_0_15px_rgba(245,158,11,0.05)] hover:shadow-[0_0_20px_rgba(245,158,11,0.15)] transition-all">
+          <div className="flex items-center justify-between text-xs font-mono text-[#fef08a] uppercase tracking-wider">
+            <span>{t('sla_breach_risk', 'Risque SLA')}</span>
+            <Clock className="w-4 h-4 text-[#f59e0b]" />
           </div>
           <div className="flex items-baseline justify-between">
-            <span className="text-3xl font-extrabold text-amber-400">{slaRiskCount}</span>
-            <span className="text-xs font-mono text-amber-400">&lt; 60 min</span>
+            <span className="text-3xl font-extrabold text-[#ededed]">{slaRiskCount}</span>
+            <span className="text-xs font-mono text-[#f59e0b]">&lt; 60 min</span>
           </div>
-          <div className="text-[11px] font-mono text-amber-300/80 pt-2 border-t border-amber-500/20">
-            Escalation Active
+          <div className="text-[11px] font-mono text-[#a1a1a1] pt-2 border-t border-[#161616]">
+            Escalade active
           </div>
         </div>
 
         {/* Resolution Rate */}
-        <div className="bg-[#12141D] border border-emerald-500/30 bg-emerald-500/5 p-5 rounded-2xl flex flex-col justify-between gap-3 shadow-lg transition-all">
-          <div className="flex items-center justify-between text-xs font-mono text-emerald-400 uppercase tracking-wider">
-            <span>{t('sla_resolution_rate', 'Taux de Résolution SLA')}</span>
-            <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+        <div className="bg-[#0a0a0a] border border-[rgba(245,158,11,0.3)] hover:border-[#f59e0b] p-5 rounded-xl flex flex-col justify-between gap-3 shadow-[0_0_15px_rgba(245,158,11,0.05)] hover:shadow-[0_0_20px_rgba(245,158,11,0.15)] transition-all">
+          <div className="flex items-center justify-between text-xs font-mono text-[#fef08a] uppercase tracking-wider">
+            <span>{t('sla_resolution_rate', 'Résolution SLA')}</span>
+            <CheckCircle2 className="w-4 h-4 text-[#f59e0b]" />
           </div>
           <div className="flex items-baseline justify-between">
-            <span className="text-3xl font-extrabold text-emerald-400">96.4%</span>
-            <span className="text-xs font-mono text-emerald-400">+1.2%</span>
+            <span className="text-3xl font-extrabold text-[#ededed]">96.4%</span>
+            <span className="text-xs font-mono text-[#f59e0b]">+1.2%</span>
           </div>
-          <div className="text-[11px] font-mono text-slate-400 pt-2 border-t border-emerald-500/20">
+          <div className="text-[11px] font-mono text-[#707070] pt-2 border-t border-[#161616]">
             MTTR: 2.1h
           </div>
         </div>
@@ -485,22 +485,17 @@ export default function TicketSummaryDashboard() {
                             }}
                             className={clsx(
                               "p-3 text-center transition-all cursor-pointer font-bold text-sm",
-                              count > 0 ? "text-white hover:bg-cyan-500/20" : "text-slate-600 hover:bg-slate-800/50",
-                              isSelectedCell && "ring-2 ring-cyan-400 bg-cyan-500/30"
+                              count > 0 ? "text-[#ededed] hover:bg-[#161616]" : "text-[#444444] hover:bg-[#0a0a0a]",
+                              isSelectedCell && "ring-1 ring-[#ededed] bg-[#161616]"
                             )}
                           >
                             <div className="flex items-center justify-center">
                               {count > 0 ? (
-                                <span className={clsx(
-                                  "w-8 h-8 rounded-xl flex items-center justify-center font-extrabold border shadow-inner",
-                                  sev.key === 'EMERGENCY' || sev.key === 'CRITICAL' ? "bg-rose-500/20 text-rose-300 border-rose-500/40" :
-                                  sev.key === 'HIGH' ? "bg-amber-500/20 text-amber-300 border-amber-500/40" :
-                                  "bg-slate-800 text-cyan-300 border-slate-700"
-                                )}>
+                                <span className="w-8 h-8 rounded-lg flex items-center justify-center font-bold border border-[#222222] bg-[#161616] text-[#ededed]">
                                   {count}
                                 </span>
                               ) : (
-                                <span className="text-slate-700">-</span>
+                                <span className="text-[#333333]">-</span>
                               )}
                             </div>
                           </td>
@@ -521,17 +516,17 @@ export default function TicketSummaryDashboard() {
       )}
 
       {/* ================= FILTERS & SEARCH BAR ================= */}
-      <div className="bg-[#12141D] border border-slate-800 p-4 rounded-2xl flex flex-col md:flex-row items-center justify-between gap-4 shadow-lg">
+      <div className="bg-[#0a0a0a] border border-[rgba(245,158,11,0.3)] p-4 rounded-xl flex flex-col md:flex-row items-center justify-between gap-4 shadow-[0_0_15px_rgba(245,158,11,0.05)]">
         <div className="flex flex-wrap items-center gap-3 w-full md:w-auto">
           {/* Search */}
           <div className="relative flex-1 sm:w-64">
-            <Search className="w-4 h-4 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2" />
+            <Search className="w-4 h-4 text-[#f59e0b] absolute left-3 top-1/2 -translate-y-1/2" />
             <input 
               type="text" 
               placeholder="Rechercher ticket, réf, bâtiment..." 
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-[#090A0F] border border-slate-800 text-xs text-white pl-9 pr-3 py-2 rounded-xl focus:border-cyan-500 focus:outline-none font-mono"
+              className="w-full bg-[#000000] border border-[rgba(245,158,11,0.3)] text-xs text-[#ededed] pl-9 pr-3 py-2 rounded-lg focus:border-[#f59e0b] focus:outline-none font-mono"
             />
           </div>
 
@@ -539,7 +534,7 @@ export default function TicketSummaryDashboard() {
           <select 
             value={selectedStatus}
             onChange={(e) => setSelectedStatus(e.target.value)}
-            className="bg-[#090A0F] border border-slate-800 text-xs text-slate-300 px-3 py-2 rounded-xl focus:border-cyan-500 focus:outline-none font-mono cursor-pointer"
+            className="bg-[#000000] border border-[rgba(245,158,11,0.3)] text-xs text-[#ededed] px-3 py-2 rounded-lg focus:border-[#f59e0b] focus:outline-none font-mono cursor-pointer"
           >
             <option value="ALL">Tous les Statuts</option>
             {STATUSES.map(s => (
@@ -551,7 +546,7 @@ export default function TicketSummaryDashboard() {
           <select 
             value={selectedSeverity}
             onChange={(e) => setSelectedSeverity(e.target.value)}
-            className="bg-[#090A0F] border border-slate-800 text-xs text-slate-300 px-3 py-2 rounded-xl focus:border-cyan-500 focus:outline-none font-mono cursor-pointer"
+            className="bg-[#000000] border border-[rgba(245,158,11,0.3)] text-xs text-[#ededed] px-3 py-2 rounded-lg focus:border-[#f59e0b] focus:outline-none font-mono cursor-pointer"
           >
             <option value="ALL">Toutes Sévérités</option>
             {SEVERITIES.map(s => (
@@ -563,7 +558,7 @@ export default function TicketSummaryDashboard() {
           <select 
             value={selectedCategory}
             onChange={(e) => setSelectedCategory(e.target.value)}
-            className="bg-[#090A0F] border border-slate-800 text-xs text-slate-300 px-3 py-2 rounded-xl focus:border-cyan-500 focus:outline-none font-mono cursor-pointer"
+            className="bg-[#000000] border border-[rgba(245,158,11,0.3)] text-xs text-[#ededed] px-3 py-2 rounded-lg focus:border-[#f59e0b] focus:outline-none font-mono cursor-pointer"
           >
             <option value="ALL">Toutes Catégories</option>
             <option value="HVAC">CVC / Climatisation</option>
@@ -583,7 +578,7 @@ export default function TicketSummaryDashboard() {
               setSelectedCategory('ALL');
               setSearchQuery('');
             }}
-            className="text-xs font-mono text-cyan-400 hover:underline flex items-center gap-1 cursor-pointer"
+            className="text-xs font-mono text-[#f59e0b] hover:underline flex items-center gap-1 cursor-pointer"
           >
             <X className="w-3.5 h-3.5" /> Réinitialiser les filtres
           </button>
@@ -591,13 +586,13 @@ export default function TicketSummaryDashboard() {
       </div>
 
       {/* ================= DETAILED TICKETS LIST ================= */}
-      <section className="bg-[#12141D] border border-slate-800 rounded-2xl p-5 shadow-xl space-y-4">
-        <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-          <h3 className="text-sm font-bold text-white flex items-center gap-2">
-            <FileText className="w-4 h-4 text-cyan-400" />
+      <section className="bg-[#0a0a0a] border border-[rgba(245,158,11,0.3)] rounded-xl p-5 shadow-[0_0_15px_rgba(245,158,11,0.05)] space-y-4">
+        <div className="flex items-center justify-between border-b border-[#161616] pb-3">
+          <h3 className="text-sm font-bold text-[#ededed] flex items-center gap-2">
+            <FileText className="w-4 h-4 text-[#f59e0b]" />
             Liste des Réclamations Ouvertes ({filteredTickets.length})
           </h3>
-          <span className="text-xs font-mono text-slate-400">
+          <span className="text-xs font-mono text-[#707070]">
             Trié par urgence &amp; délai SLA
           </span>
         </div>

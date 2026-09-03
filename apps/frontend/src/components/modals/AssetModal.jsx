@@ -121,7 +121,7 @@ export default function AssetModal({ open, onClose, asset, onSuccess }) {
             type="submit"
             form="asset-form"
             disabled={saving}
-            className="px-4 py-2 bg-cyan-500 hover:bg-cyan-400 text-zinc-950 font-mono font-bold text-xs uppercase rounded-lg disabled:opacity-50 transition"
+            className="px-4 py-2 bg-[#ededed] hover:bg-[#ffffff] text-[#000000] font-mono font-bold text-xs uppercase rounded-lg disabled:opacity-50 transition"
           >
             {saving ? 'Sauvegarde...' : 'Sauvegarder'}
           </button>
@@ -136,7 +136,7 @@ export default function AssetModal({ open, onClose, asset, onSuccess }) {
               required
               value={form.name}
               onChange={(e) => setForm({ ...form, name: e.target.value })}
-              className="w-full px-3 py-2 bg-zinc-950 border border-zinc-700 text-zinc-100 placeholder-zinc-600 rounded-lg focus:outline-none focus:border-cyan-500"
+              className="w-full px-3 py-2 bg-zinc-950 border border-zinc-700 text-zinc-100 placeholder-zinc-600 rounded-lg focus:outline-none focus:border-[#ededed]"
               placeholder="HVAC Zone A"
             />
           </div>
@@ -146,7 +146,7 @@ export default function AssetModal({ open, onClose, asset, onSuccess }) {
               required
               value={form.category}
               onChange={(e) => setForm({ ...form, category: e.target.value })}
-              className="w-full px-3 py-2 bg-zinc-950 border border-zinc-700 text-zinc-100 rounded-lg focus:outline-none focus:border-cyan-500"
+              className="w-full px-3 py-2 bg-zinc-950 border border-zinc-700 text-zinc-100 rounded-lg focus:outline-none focus:border-[#ededed]"
             >
               {categories.map((c) => (
                 <option key={c} value={c}>{c}</option>
@@ -162,7 +162,7 @@ export default function AssetModal({ open, onClose, asset, onSuccess }) {
               required
               value={form.serialNumber}
               onChange={(e) => setForm({ ...form, serialNumber: e.target.value })}
-              className="w-full px-3 py-2 bg-zinc-950 border border-zinc-700 text-zinc-100 rounded-lg focus:outline-none focus:border-cyan-500"
+              className="w-full px-3 py-2 bg-zinc-950 border border-zinc-700 text-zinc-100 rounded-lg focus:outline-none focus:border-[#ededed]"
             />
           </div>
           <div>
@@ -170,7 +170,7 @@ export default function AssetModal({ open, onClose, asset, onSuccess }) {
             <input
               value={form.manufacturer}
               onChange={(e) => setForm({ ...form, manufacturer: e.target.value })}
-              className="w-full px-3 py-2 bg-zinc-950 border border-zinc-700 text-zinc-100 rounded-lg focus:outline-none focus:border-cyan-500"
+              className="w-full px-3 py-2 bg-zinc-950 border border-zinc-700 text-zinc-100 rounded-lg focus:outline-none focus:border-[#ededed]"
             />
           </div>
         </div>
@@ -180,7 +180,7 @@ export default function AssetModal({ open, onClose, asset, onSuccess }) {
           <input
             value={form.model}
             onChange={(e) => setForm({ ...form, model: e.target.value })}
-            className="w-full px-3 py-2 bg-zinc-950 border border-zinc-700 text-zinc-100 rounded-lg focus:outline-none focus:border-cyan-500"
+            className="w-full px-3 py-2 bg-zinc-950 border border-zinc-700 text-zinc-100 rounded-lg focus:outline-none focus:border-[#ededed]"
           />
         </div>
 
@@ -191,7 +191,7 @@ export default function AssetModal({ open, onClose, asset, onSuccess }) {
               type="date"
               value={form.purchaseDate}
               onChange={(e) => setForm({ ...form, purchaseDate: e.target.value })}
-              className="w-full px-3 py-2 bg-zinc-950 border border-zinc-700 text-zinc-100 rounded-lg focus:outline-none focus:border-cyan-500"
+              className="w-full px-3 py-2 bg-zinc-950 border border-zinc-700 text-zinc-100 rounded-lg focus:outline-none focus:border-[#ededed]"
             />
           </div>
           <div>
@@ -202,7 +202,7 @@ export default function AssetModal({ open, onClose, asset, onSuccess }) {
               step="0.01"
               value={form.purchasePrice}
               onChange={(e) => setForm({ ...form, purchasePrice: parseFloat(e.target.value) || 0 })}
-              className="w-full px-3 py-2 bg-zinc-950 border border-zinc-700 text-zinc-100 rounded-lg focus:outline-none focus:border-cyan-500"
+              className="w-full px-3 py-2 bg-zinc-950 border border-zinc-700 text-zinc-100 rounded-lg focus:outline-none focus:border-[#ededed]"
             />
           </div>
           <div>
@@ -211,7 +211,7 @@ export default function AssetModal({ open, onClose, asset, onSuccess }) {
               type="date"
               value={form.warrantyEnd}
               onChange={(e) => setForm({ ...form, warrantyEnd: e.target.value })}
-              className="w-full px-3 py-2 bg-zinc-950 border border-zinc-700 text-zinc-100 rounded-lg focus:outline-none focus:border-cyan-500"
+              className="w-full px-3 py-2 bg-zinc-950 border border-zinc-700 text-zinc-100 rounded-lg focus:outline-none focus:border-[#ededed]"
             />
           </div>
         </div>
@@ -223,7 +223,7 @@ export default function AssetModal({ open, onClose, asset, onSuccess }) {
               required
               value={form.buildingId}
               onChange={(e) => setForm({ ...form, buildingId: e.target.value })}
-              className="w-full px-3 py-2 bg-zinc-950 border border-zinc-700 text-zinc-100 rounded-lg focus:outline-none focus:border-cyan-500"
+              className="w-full px-3 py-2 bg-zinc-950 border border-zinc-700 text-zinc-100 rounded-lg focus:outline-none focus:border-[#ededed]"
             >
               <option value="">Sélectionner...</option>
               {buildings.map((b) => (
@@ -237,7 +237,7 @@ export default function AssetModal({ open, onClose, asset, onSuccess }) {
               value={form.location}
               onChange={(e) => setForm({ ...form, location: e.target.value })}
               placeholder="Étage 3, Zone B"
-              className="w-full px-3 py-2 bg-zinc-950 border border-zinc-700 text-zinc-100 placeholder-zinc-600 rounded-lg focus:outline-none focus:border-cyan-500"
+              className="w-full px-3 py-2 bg-zinc-950 border border-zinc-700 text-zinc-100 placeholder-zinc-600 rounded-lg focus:outline-none focus:border-[#ededed]"
             />
           </div>
         </div>
@@ -247,7 +247,7 @@ export default function AssetModal({ open, onClose, asset, onSuccess }) {
           <select
             value={form.status}
             onChange={(e) => setForm({ ...form, status: e.target.value })}
-            className="w-full px-3 py-2 bg-zinc-950 border border-zinc-700 text-zinc-100 rounded-lg focus:outline-none focus:border-cyan-500"
+            className="w-full px-3 py-2 bg-zinc-950 border border-zinc-700 text-zinc-100 rounded-lg focus:outline-none focus:border-[#ededed]"
           >
             {statuses.map((s) => (
               <option key={s.value} value={s.value}>{s.label}</option>

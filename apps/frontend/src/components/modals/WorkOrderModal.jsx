@@ -259,7 +259,7 @@ export default function WorkOrderModal({
 
         <div className="flex flex-1 overflow-hidden">
           {/* Sidebar Tabs */}
-          <div className="w-48 border-r border-slate-800 bg-slate-900/30 flex flex-col p-2 space-y-1">
+          <div className="w-48 border-r border-[#222222] bg-[#000000] flex flex-col p-2 space-y-1">
             {[
               { id: 'general', label: 'Général', icon: <Wrench className="w-4 h-4" /> },
               { id: 'procedure', label: 'Procédure', icon: <ShieldCheck className="w-4 h-4" /> },
@@ -271,7 +271,7 @@ export default function WorkOrderModal({
                 key={tab.id}
                 type="button"
                 onClick={() => setActiveTab(tab.id)}
-                className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-bold transition-all ${activeTab === tab.id ? 'bg-amber-500 text-slate-950 shadow-[0_0_10px_rgba(245,158,11,0.3)]' : 'text-slate-400 hover:text-white hover:bg-slate-800/50'}`}
+                className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-xs font-bold transition-all ${activeTab === tab.id ? 'bg-[#161616] text-[#ededed] border border-[#333333]' : 'text-[#707070] hover:text-[#ededed] hover:bg-[#0a0a0a]'}`}
               >
                 {tab.icon}
                 {tab.label}
@@ -280,21 +280,21 @@ export default function WorkOrderModal({
           </div>
 
           {/* Form Content */}
-          <form id="wo-form" onSubmit={handleSubmit} className="flex-1 overflow-y-auto p-6 bg-slate-900/50">
+          <form id="wo-form" onSubmit={handleSubmit} className="flex-1 overflow-y-auto p-6 bg-[#0a0a0a]">
             {activeTab === 'general' && (
               <div className="space-y-5 animate-in fade-in slide-in-from-right-4 duration-300">
                 <div>
-                  <label className="block text-xs text-slate-400 font-mono mb-1.5 uppercase tracking-wider">Titre de l'intervention *</label>
-                  <input type="text" required value={title} onChange={(e) => setTitle(e.target.value)} className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-white placeholder-slate-600 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition-all font-sans text-sm" placeholder="Ex: Inspection pompe CVC" />
+                  <label className="block text-xs text-[#707070] font-mono mb-1.5 uppercase tracking-wider">Titre de l'intervention *</label>
+                  <input type="text" required value={title} onChange={(e) => setTitle(e.target.value)} className="w-full bg-[#000000] border border-[#222222] rounded-lg px-4 py-2.5 text-[#ededed] placeholder-[#555555] focus:outline-none focus:border-[#ededed] transition-all font-sans text-sm" placeholder="Ex: Inspection pompe CVC" />
                 </div>
                 <div>
-                  <label className="block text-xs text-slate-400 font-mono mb-1.5 uppercase tracking-wider">Description</label>
-                  <textarea rows={3} value={description} onChange={(e) => setDescription(e.target.value)} className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-amber-500 text-sm" />
+                  <label className="block text-xs text-[#707070] font-mono mb-1.5 uppercase tracking-wider">Description</label>
+                  <textarea rows={3} value={description} onChange={(e) => setDescription(e.target.value)} className="w-full bg-[#000000] border border-[#222222] rounded-lg px-4 py-2.5 text-[#ededed] focus:outline-none focus:border-[#ededed] text-sm" />
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-xs text-slate-400 font-mono mb-1.5 uppercase tracking-wider">Priorité</label>
-                    <select value={priority} onChange={(e) => setPriority(e.target.value)} className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-amber-500 text-sm">
+                    <label className="block text-xs text-[#707070] font-mono mb-1.5 uppercase tracking-wider">Priorité</label>
+                    <select value={priority} onChange={(e) => setPriority(e.target.value)} className="w-full bg-[#000000] border border-[#222222] rounded-lg px-4 py-2.5 text-[#ededed] focus:outline-none focus:border-[#ededed] text-sm">
                       <option value="LOW">Basse</option>
                       <option value="MEDIUM">Moyenne</option>
                       <option value="HIGH">Haute</option>
@@ -302,8 +302,8 @@ export default function WorkOrderModal({
                     </select>
                   </div>
                   <div>
-                    <label className="block text-xs text-slate-400 font-mono mb-1.5 uppercase tracking-wider">Type / Catégorie</label>
-                    <select value={category} onChange={(e) => setCategory(e.target.value)} className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-amber-500 text-sm">
+                    <label className="block text-xs text-[#707070] font-mono mb-1.5 uppercase tracking-wider">Type / Catégorie</label>
+                    <select value={category} onChange={(e) => setCategory(e.target.value)} className="w-full bg-[#000000] border border-[#222222] rounded-lg px-4 py-2.5 text-[#ededed] focus:outline-none focus:border-[#ededed] text-sm">
                       <option value="PREVENTIVE">Préventif</option>
                       <option value="CORRECTIVE">Correctif</option>
                       <option value="PREDICTIVE">Prédictif</option>
@@ -312,8 +312,8 @@ export default function WorkOrderModal({
                     </select>
                   </div>
                   <div>
-                    <label className="block text-xs text-slate-400 font-mono mb-1.5 uppercase tracking-wider">Statut</label>
-                    <select value={status} onChange={(e) => setStatus(e.target.value)} className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-amber-500 text-sm">
+                    <label className="block text-xs text-[#707070] font-mono mb-1.5 uppercase tracking-wider">Statut</label>
+                    <select value={status} onChange={(e) => setStatus(e.target.value)} className="w-full bg-[#000000] border border-[#222222] rounded-lg px-4 py-2.5 text-[#ededed] focus:outline-none focus:border-[#ededed] text-sm">
                       <option value="PENDING">En attente</option>
                       <option value="IN_PROGRESS">En cours</option>
                       <option value="COMPLETED">Complété</option>
@@ -448,46 +448,46 @@ export default function WorkOrderModal({
 
             {activeTab === 'closure' && (
               <div className="space-y-5 animate-in fade-in duration-300">
-                <div className="p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-xl">
-                  <h4 className="text-sm font-bold text-emerald-400 mb-2">Clôture d'intervention</h4>
-                  <p className="text-xs text-slate-400">Renseignez le diagnostic final et le temps effectif avant de passer le statut à "Complété".</p>
+                <div className="p-4 bg-[#111111] border border-[#222222] rounded-lg">
+                  <h4 className="text-sm font-bold text-[#ededed] mb-2">Clôture d'intervention</h4>
+                  <p className="text-xs text-[#707070]">Renseignez le diagnostic final et le temps effectif avant de passer le statut à "Complété".</p>
                 </div>
                 <div>
-                  <label className="block text-xs text-slate-400 font-mono mb-1.5 uppercase tracking-wider">Cause Racine (Root Cause)</label>
-                  <textarea rows={2} value={rootCause} onChange={(e) => setRootCause(e.target.value)} className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-emerald-500 text-sm" placeholder="Ex: Défaillance joint d'étanchéité suite usure thermique" />
+                  <label className="block text-xs text-[#707070] font-mono mb-1.5 uppercase tracking-wider">Cause Racine (Root Cause)</label>
+                  <textarea rows={2} value={rootCause} onChange={(e) => setRootCause(e.target.value)} className="w-full bg-[#000000] border border-[#222222] rounded-lg px-4 py-2.5 text-[#ededed] focus:outline-none focus:border-[#ededed] text-sm" placeholder="Ex: Défaillance joint d'étanchéité suite usure thermique" />
                 </div>
                 <div>
-                  <label className="block text-xs text-slate-400 font-mono mb-1.5 uppercase tracking-wider">Notes de Résolution</label>
-                  <textarea rows={3} value={resolutionNotes} onChange={(e) => setResolutionNotes(e.target.value)} className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-emerald-500 text-sm" placeholder="Ex: Remplacement effectué, test pression OK. Recommandé monitoring vibrations." />
+                  <label className="block text-xs text-[#707070] font-mono mb-1.5 uppercase tracking-wider">Notes de Résolution</label>
+                  <textarea rows={3} value={resolutionNotes} onChange={(e) => setResolutionNotes(e.target.value)} className="w-full bg-[#000000] border border-[#222222] rounded-lg px-4 py-2.5 text-[#ededed] focus:outline-none focus:border-[#ededed] text-sm" placeholder="Ex: Remplacement effectué, test pression OK. Recommandé monitoring vibrations." />
                 </div>
                 <div>
-                  <label className="block text-xs text-slate-400 font-mono mb-1.5 uppercase tracking-wider">Durée effective (Minutes)</label>
-                  <input type="number" min="0" value={actualDuration} onChange={(e) => setActualDuration(e.target.value)} className="w-full sm:w-1/3 bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-emerald-500 text-sm" />
+                  <label className="block text-xs text-[#707070] font-mono mb-1.5 uppercase tracking-wider">Durée effective (Minutes)</label>
+                  <input type="number" min="0" value={actualDuration} onChange={(e) => setActualDuration(e.target.value)} className="w-full sm:w-1/3 bg-[#000000] border border-[#222222] rounded-lg px-4 py-2.5 text-[#ededed] focus:outline-none focus:border-[#ededed] text-sm" />
                 </div>
               </div>
             )}
 
             {activeTab === 'history' && (
               <div className="space-y-4 animate-in fade-in duration-300">
-                <h4 className="text-sm font-bold text-white tracking-widest uppercase mb-4">Journal d'audit</h4>
+                <h4 className="text-sm font-bold text-[#ededed] tracking-widest uppercase mb-4">Journal d'audit</h4>
                 {auditLog.length === 0 ? (
-                  <div className="text-center py-8 text-slate-500 text-sm">Aucun historique disponible.</div>
+                  <div className="text-center py-8 text-[#707070] text-sm">Aucun historique disponible.</div>
                 ) : (
-                  <div className="space-y-4 relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-slate-800 before:to-transparent">
+                  <div className="space-y-4 relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-[#222222] before:to-transparent">
                     {auditLog.map((log, idx) => (
                       <div key={idx} className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
-                        <div className="flex items-center justify-center w-10 h-10 rounded-full border border-slate-800 bg-slate-900 text-slate-500 group-[.is-active]:text-emerald-500 group-[.is-active]:bg-emerald-500/10 shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2">
+                        <div className="flex items-center justify-center w-10 h-10 rounded-full border border-[#333333] bg-[#161616] text-[#ededed] shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2">
                           <CheckCircle2 className="w-5 h-5" />
                         </div>
-                        <div className="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] p-4 rounded-xl border border-slate-800 bg-slate-900/50 shadow">
+                        <div className="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] p-4 rounded-lg border border-[#222222] bg-[#111111] shadow">
                           <div className="flex items-center justify-between space-x-2 mb-1">
-                            <div className="font-bold text-white text-sm">{log.action}</div>
-                            <time className="font-mono text-[10px] text-amber-500">
+                            <div className="font-bold text-[#ededed] text-sm">{log.action}</div>
+                            <time className="font-mono text-[10px] text-[#707070]">
                               {new Date(log.timestamp).toLocaleString('fr-FR')}
                             </time>
                           </div>
-                          <div className="text-slate-400 text-xs">{log.details}</div>
-                          <div className="text-slate-500 text-[10px] mt-2 font-mono uppercase">Par : {log.user}</div>
+                          <div className="text-[#a1a1a1] text-xs">{log.details}</div>
+                          <div className="text-[#707070] text-[10px] mt-2 font-mono uppercase">Par : {log.user}</div>
                         </div>
                       </div>
                     ))}
@@ -499,15 +499,15 @@ export default function WorkOrderModal({
         </div>
 
         {/* Footer Actions */}
-        <div className="p-4 border-t border-slate-800 flex items-center justify-between bg-slate-900/50 shrink-0">
-          <div className="text-[10px] text-slate-500 font-mono uppercase tracking-widest">
+        <div className="p-4 border-t border-[#222222] flex items-center justify-between bg-[#000000] shrink-0">
+          <div className="text-[10px] text-[#707070] font-mono uppercase tracking-widest">
             {workOrder ? `ID: ${workOrder.id}` : 'Nouveau brouillon'}
           </div>
           <div className="flex space-x-3">
             <button
               type="button"
               onClick={onClose}
-              className="px-5 py-2 text-xs font-bold text-slate-300 bg-slate-800 hover:bg-slate-700 hover:text-white rounded-xl transition-colors"
+              className="px-5 py-2 text-xs font-bold text-[#a1a1a1] bg-[#161616] hover:bg-[#222222] hover:text-[#ededed] border border-[#222222] rounded-lg transition-colors"
             >
               Annuler
             </button>
@@ -515,7 +515,7 @@ export default function WorkOrderModal({
               type="submit"
               form="wo-form"
               disabled={saving}
-              className="px-5 py-2 text-xs font-bold text-slate-900 bg-amber-500 hover:bg-amber-400 rounded-xl transition-colors disabled:opacity-50 shadow-[0_0_15px_rgba(245,158,11,0.2)]"
+              className="px-5 py-2 text-xs font-bold text-[#000000] bg-[#ededed] hover:bg-[#ffffff] rounded-lg transition-colors disabled:opacity-50"
             >
               {saving ? 'Sauvegarde...' : 'Enregistrer & Dispatcher'}
             </button>

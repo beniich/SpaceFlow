@@ -337,3 +337,65 @@ exports.demoLogin = async (req, res, next) => {
 };
 
 exports.register = exports.signup;
+
+// ─── Google Auth & Gmail API Integration ────────────────────────────────────
+const { OAuth2Client } = require('google-auth-library');
+let googleClient = null;
+if (process.env.GOOGLE_CLIENT_ID) {
+  googleClient = new OAuth2Client(
+    process.env.GOOGLE_CLIENT_ID,
+    process.env.GOOGLE_CLIENT_SECRET,
+    process.env.GOOGLE_REDIRECT_URI
+  );
+}
+
+exports.googleAuthUrl = (req, res) => {
+  if (!googleClient) return res.status(500).json({ error: 'Google Auth non configuré' });
+  const url = googleClient.generateAuthUrl({
+    access_type: 'offline',
+    scope: [
+      'https://www.googleapis.com/auth/userinfo.profile',
+      'https://www.googleapis.com/auth/userinfo.email',
+      'https://www.googleapis.com/auth/gmail.send'
+    ]
+  });
+  res.json({ url });
+};
+
+exports.googleCallback = async (req, res) => {
+  try {
+    const { code } = req.query;
+    if (!googleClient || !code) return res.status(400).json({ error: 'Requête invalide' });
+    
+    const { tokens } = await googleClient.getToken(code);
+    googleClient.setCredentials(tokens);
+    
+    // Obtenir les infos utilisateur
+    const ticket = await googleClient.verifyIdToken({
+      idToken: tokens.id_token,
+      audience: process.env.GOOGLE_CLIENT_ID,
+    });
+    const payload = ticket.getPayload();
+    
+    let user = await prisma.user.findUnique({ where: { email: payload.email } });
+    if (!user) {
+      user = await prisma.user.create({
+        data: {
+          email: payload.email,
+          fullName: payload.name,
+          role: 'VIEWER',
+          passwordHash: await bcrypt.hash('google-auth-' + Math.random(), 10)
+        }
+      });
+    }
+    
+    const appTokens = await generateTokens(user);
+    
+    // Redirection vers le dashboard frontend
+    const baseUrl = process.env.CORS_ORIGIN || 'http://localhost:5173';
+    res.redirect(`${baseUrl}/dashboard?token=${appTokens.accessToken}`);
+  } catch (error) {
+    console.error('Google callback error:', error);
+    res.status(500).json({ error: 'Erreur authentification Google' });
+  }
+};
